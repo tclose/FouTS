@@ -1,0 +1,7 @@
+Implement tensor classes
+Extend reader and writer classes.
+Extend gradient tester to hessian tester
+Extend unzip to flatten and zip to unflatten
+implement hessian calculations.
+
+

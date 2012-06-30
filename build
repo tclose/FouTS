@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#TARGET='src/bts/fibre/base.o'
+#TARGET='bin/stress_tester'
+
+if [ ${#TARGET} -gt 0 ]; then
+   
+  echo
+  echo "WARNING!! Only building for target $TARGET"
+  echo
+  
+
+fi
+
+/home/tclose/Code/MRtrix/build $TARGET $@
+

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#CMD_TARGET='dummy'
+#OBJ_TARGET='fibre/tractlet/set/walker'
+
+if [ ${#CMD_TARGET} -gt 0 ]; then
+
+  echo
+  echo "WARNING!! Only building for target $CMD_TARGET"
+  echo
+  
+  TARGET=bin/${CMD_TARGET}__debug
+
+elif [ ${#OBJ_TARGET} -gt 0 ]; then
+
+  echo
+  echo "WARNING!! Only building for target $OBJ_TARGET"
+  echo
+  
+  TARGET=src/bts/${OBJ_TARGET}__debug.o
+    
+fi
+  
+echo $TARGET  
+
+/home/tclose/Code/MRtrix/build debug $TARGET $@ 

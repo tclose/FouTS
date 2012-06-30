@@ -1,0 +1,79 @@
+#!/bin/bash
+
+new_sphere_r=0.34
+length_reject_threshold=0.005
+inclusion_radius=0.13 
+perturb=0.0075
+degree=3
+ref_image_degree=20
+neigh_size=3
+vox_size=0.15
+
+new_sphere_d=0.78
+inclusion_diameter=0.26 
+
+
+neigh_pattern=${1##*/}
+base_path=${1%/$neigh_pattern}
+output_path=$2
+
+for neigh_path in `ls $1*`; do 
+
+  neigh_file=${neigh_path##*/}
+
+  neigh=${neigh_file:$(( ${#neigh_pattern} + 1 )):$(( ${#neigh_file} - 5 - ${#neigh_pattern} ))}
+  echo $neigh
+
+  
+
+#  rm -r $base_path/$neigh
+
+#  mkdir $base_path/$neigh
+#  mkdir $base_path/$neigh/images
+#  mkdir $base_path/$neigh/metropolis_hastings
+#  mkdir $base_path/$neigh/strands
+
+
+#  mkdir $base_path/$neigh/metropolis_hastings/A
+
+
+#  cp $base_path/$neigh_file $base_path/$neigh/strands/cube.tck
+
+
+#  trim_tcks $base_path/$neigh/strands/cube.tck $base_path/$neigh/strands/ball.tck -new_sphere_r ${new_sphere_r} -length_reject_threshold ${length_reject_threshold}
+
+#  peel_tcks $base_path/$neigh/strands/ball.tck $base_path/$neigh/strands/peeled.tck -inclusion_radius $inclusion_radius
+
+#  tck2fourier $base_path/$neigh/strands/peeled.tck $base_path/$neigh/strands/peeled.frr -degree ${degree}
+ 
+#  perturb_fouriers $base_path/$neigh/strands/peeled.frr $base_path/$neigh/metropolis_hastings/A/initial.frr -perturb $perturb
+
+#  rm  $base_path/$neigh/images/tophat.mif 
+
+#  tck2fourier $base_path/$neigh/strands/$neigh_pattern.tck $base_path/$neigh/strands/cube_for_ref.frr -degree $ref_image_degree
+
+#  expected_image $base_path/$neigh/strands/cube_for_ref.frr /data/home/tclose/Data/Gradient_directions/encoding_60.b $base_path/$neigh/images/tophat.mif -vox_size ${vox_size} -num_voxels 3 -points 100
+
+# tck2fourier  $base_path/$neigh/strands/sphere_0.78.tck  $base_path/$neigh/strands/ball.frr -degree 3
+
+# cp $base_path/$neigh/strands/ball.frr $output_path/ball_combined/$neigh.frr
+
+#echo $neigh_count
+
+#mv $base_path/$neigh/strands/cube_1.05.tck $base_path/$neigh/strands/cube.tck
+
+#mv $base_path/$neigh/strands/sphere_0.78.tck $base_path/$neigh/strands/ball.tck
+
+#rm $base_path/$neigh/strands/cube_1.05-frr_20.frr
+
+#rm $base_path/$neigh/strands/sphere_0.78*
+
+#tcks2fouriers $base_path/$neigh/strands/ball.tck $base_path/$neigh/strands/ball.frr -degree 3
+  
+ln -s $base_path/$neigh/strands /data/home/tclose/Data/Tractography/chunked/vox_0.15/strands/$neigh_count
+
+#ls $base_path/$neigh/strands
+
+#neigh_count=$(( $neigh_count + 1 ))
+
+done

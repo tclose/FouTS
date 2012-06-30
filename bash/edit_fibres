@@ -1,0 +1,28 @@
+#!/bin/bash 
+
+if [ $# == 0 ]; then
+  echo "No arguments supplied to $0 (at least 1 required)."
+  exit -1
+elif [ $# == 1 ]; then
+  OUTPUT_LOCATION=$1
+elif [ $# == 2 ]; then
+  OUTPUT_LOCATION=$2
+else
+  echo "Too many arguments ($#) supplied to $0 (max 2, input and output locations)."
+  exit -1
+fi
+
+
+TEMP_TXT_FILE=/tmp/${1##*/}.txt
+
+#Export fibres file to a temporary text equivalent.
+select_fibres $1 $TEMP_TXT_FILE
+
+#Edit with vi
+vi $TEMP_TXT_FILE 
+
+#Import fibres back to output location
+select_fibres $TEMP_TXT_FILE $OUTPUT_LOCATION
+
+#Cleanup temporary file
+rm $TEMP_TXT_FILE

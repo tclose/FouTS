@@ -1,0 +1,19 @@
+set.prop_names(): [ PROP_1 PROP_2 PROP_3 PROP_4 PROP_5 ]
+set.elem_prop_index(ELEM_PROP_1): 0
+set.num_elem_props(): 5
+set.has_prop(PROP_2): 1
+set.has_elem_prop(ELEM_PROP_7): 0
+set.prop_names(): [ PROP_1 PROP_2 PROP_3 PROP_4 PROP_5 ]
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_1 EXT_ELEM_PROP_2 EXT_ELEM_PROP_3 EXT_ELEM_PROP_4 EXT_ELEM_PROP_5 ]
+set.prop_names(): [ PROP_1 PROP_2 PROP_3 PROP_5 ]
+set.get_extend_elem_prop(EXT_ELEM_PROP_2,0): Boogle 2-0
+set.prop_index(PROP_2): 1
+set.has_extend_elem_prop(EXT_ELEM_PROP_3): 1
+set.elem_prop_name(1): ELEM_PROP_2
+set.prop(PROP_5): 411
+set.prop_index(PROP_1): 0
+set.num_props(): 4
+set.size(): 2
+set.size(): 2
+set.num_extend_elem_props(): 6
+set.num_extend_elem_props(): 6

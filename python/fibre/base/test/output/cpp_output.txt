@@ -1,0 +1,4273 @@
+
+
+-------------------------------------
+            INITIAL SET             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_3: 3.301
+PROP_4: 4.401
+PROP_5: 5.501
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-0, EXT_ELEM_PROP_2: Ooogle 2-0, EXT_ELEM_PROP_3: Ooogle 3-0, EXT_ELEM_PROP_4: Ooogle 4-0, EXT_ELEM_PROP_5: Ooogle 5-0}
+
+ELEM_PROP_1: 0.101
+ELEM_PROP_2: 0.201
+ELEM_PROP_3: 0.301
+ELEM_PROP_4: 0.401
+ELEM_PROP_5: 0.501
+[ 1, 2, 3 ]
+[ 11, 12, 13 ]
+[ 21, 22, 23 ]
+[ 31, 32, 33 ]
+[ 41, 42, 43 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-1, EXT_ELEM_PROP_2: Ooogle 2-1, EXT_ELEM_PROP_3: Ooogle 3-1, EXT_ELEM_PROP_4: Ooogle 4-1, EXT_ELEM_PROP_5: Ooogle 5-1}
+
+ELEM_PROP_1: 100.101
+ELEM_PROP_2: 100.201
+ELEM_PROP_3: 100.301
+ELEM_PROP_4: 100.401
+ELEM_PROP_5: 100.501
+[ 101, 102, 103 ]
+[ 111, 112, 113 ]
+[ 121, 122, 123 ]
+[ 131, 132, 133 ]
+[ 141, 142, 143 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-2, EXT_ELEM_PROP_2: Ooogle 2-2, EXT_ELEM_PROP_3: Ooogle 3-2, EXT_ELEM_PROP_4: Ooogle 4-2, EXT_ELEM_PROP_5: Ooogle 5-2}
+
+ELEM_PROP_1: 200.101
+ELEM_PROP_2: 200.201
+ELEM_PROP_3: 200.301
+ELEM_PROP_4: 200.401
+ELEM_PROP_5: 200.501
+[ 201, 202, 203 ]
+[ 211, 212, 213 ]
+[ 221, 222, 223 ]
+[ 231, 232, 233 ]
+[ 241, 242, 243 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-3, EXT_ELEM_PROP_2: Ooogle 2-3, EXT_ELEM_PROP_3: Ooogle 3-3, EXT_ELEM_PROP_4: Ooogle 4-3, EXT_ELEM_PROP_5: Ooogle 5-3}
+
+ELEM_PROP_1: 300.101
+ELEM_PROP_2: 300.201
+ELEM_PROP_3: 300.301
+ELEM_PROP_4: 300.401
+ELEM_PROP_5: 300.501
+[ 301, 302, 303 ]
+[ 311, 312, 313 ]
+[ 321, 322, 323 ]
+[ 331, 332, 333 ]
+[ 341, 342, 343 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-4, EXT_ELEM_PROP_2: Ooogle 2-4, EXT_ELEM_PROP_3: Ooogle 3-4, EXT_ELEM_PROP_4: Ooogle 4-4, EXT_ELEM_PROP_5: Ooogle 5-4}
+
+ELEM_PROP_1: 400.101
+ELEM_PROP_2: 400.201
+ELEM_PROP_3: 400.301
+ELEM_PROP_4: 400.401
+ELEM_PROP_5: 400.501
+[ 401, 402, 403 ]
+[ 411, 412, 413 ]
+[ 421, 422, 423 ]
+[ 431, 432, 433 ]
+[ 441, 442, 443 ]
+
+
+
+
+
+-------------------------------------
+            SECOND SET             
+-------------------------------------
+
+PROP_1: -1.101
+PROP_2: -2.201
+PROP_3: -3.301
+PROP_4: -4.401
+PROP_5: -5.501
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-0, EXT_ELEM_PROP_6: Boogle 6-0, EXT_ELEM_PROP_7: Boogle 7-0, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+ELEM_PROP_1: -0.101
+ELEM_PROP_2: -0.201
+ELEM_PROP_3: -0.301
+ELEM_PROP_4: -0.401
+ELEM_PROP_5: -0.501
+[ -1, -2, -3 ]
+[ -11, -12, -13 ]
+[ -21, -22, -23 ]
+[ -31, -32, -33 ]
+[ -41, -42, -43 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-1, EXT_ELEM_PROP_6: Boogle 6-1, EXT_ELEM_PROP_7: Boogle 7-1, EXT_ELEM_PROP_8: Boogle 8-1, EXT_ELEM_PROP_9: Boogle 9-1}
+
+ELEM_PROP_1: -100.101
+ELEM_PROP_2: -100.201
+ELEM_PROP_3: -100.301
+ELEM_PROP_4: -100.401
+ELEM_PROP_5: -100.501
+[ -101, -102, -103 ]
+[ -111, -112, -113 ]
+[ -121, -122, -123 ]
+[ -131, -132, -133 ]
+[ -141, -142, -143 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-2, EXT_ELEM_PROP_6: Boogle 6-2, EXT_ELEM_PROP_7: Boogle 7-2, EXT_ELEM_PROP_8: Boogle 8-2, EXT_ELEM_PROP_9: Boogle 9-2}
+
+ELEM_PROP_1: -200.101
+ELEM_PROP_2: -200.201
+ELEM_PROP_3: -200.301
+ELEM_PROP_4: -200.401
+ELEM_PROP_5: -200.501
+[ -201, -202, -203 ]
+[ -211, -212, -213 ]
+[ -221, -222, -223 ]
+[ -231, -232, -233 ]
+[ -241, -242, -243 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-3, EXT_ELEM_PROP_6: Boogle 6-3, EXT_ELEM_PROP_7: Boogle 7-3, EXT_ELEM_PROP_8: Boogle 8-3, EXT_ELEM_PROP_9: Boogle 9-3}
+
+ELEM_PROP_1: -300.101
+ELEM_PROP_2: -300.201
+ELEM_PROP_3: -300.301
+ELEM_PROP_4: -300.401
+ELEM_PROP_5: -300.501
+[ -301, -302, -303 ]
+[ -311, -312, -313 ]
+[ -321, -322, -323 ]
+[ -331, -332, -333 ]
+[ -341, -342, -343 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: Boogle 7-4, EXT_ELEM_PROP_8: Boogle 8-4, EXT_ELEM_PROP_9: Boogle 9-4}
+
+ELEM_PROP_1: -400.101
+ELEM_PROP_2: -400.201
+ELEM_PROP_3: -400.301
+ELEM_PROP_4: -400.401
+ELEM_PROP_5: -400.501
+[ -401, -402, -403 ]
+[ -411, -412, -413 ]
+[ -421, -422, -423 ]
+[ -431, -432, -433 ]
+[ -441, -442, -443 ]
+
+
+
+set.num_elem_props(): 5
+set.elem_prop_index(ELEM_PROP_4): 3
+set.has_extend_elem_prop(EXT_ELEM_PROP_7): 0
+set.num_props(): 6
+
+
+-------------------------------------
+            5 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-0, EXT_ELEM_PROP_2: Ooogle 2-0, EXT_ELEM_PROP_3: Ooogle 3-0, EXT_ELEM_PROP_4: Ooogle 4-0, EXT_ELEM_PROP_5: Ooogle 5-0}
+
+ELEM_PROP_1: 0.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 0.301
+ELEM_PROP_4: 0.401
+ELEM_PROP_5: 0.501
+[ 1, 2, 3 ]
+[ 11, 12, 13 ]
+[ 21, 22, 23 ]
+[ 31, 32, 33 ]
+[ 41, 42, 43 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN}
+
+ELEM_PROP_1: 1009
+ELEM_PROP_2: 669
+ELEM_PROP_3: 1009
+ELEM_PROP_4: 1009
+ELEM_PROP_5: 1009
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-1, EXT_ELEM_PROP_2: Ooogle 2-1, EXT_ELEM_PROP_3: Ooogle 3-1, EXT_ELEM_PROP_4: Ooogle 4-1, EXT_ELEM_PROP_5: Ooogle 5-1}
+
+ELEM_PROP_1: 100.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 100.301
+ELEM_PROP_4: 100.401
+ELEM_PROP_5: 100.501
+[ 101, 102, 103 ]
+[ 111, 112, 113 ]
+[ 121, 122, 123 ]
+[ 131, 132, 133 ]
+[ 141, 142, 143 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-2, EXT_ELEM_PROP_2: Ooogle 2-2, EXT_ELEM_PROP_3: Ooogle 3-2, EXT_ELEM_PROP_4: Ooogle 4-2, EXT_ELEM_PROP_5: Ooogle 5-2}
+
+ELEM_PROP_1: 200.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 200.301
+ELEM_PROP_4: 200.401
+ELEM_PROP_5: 200.501
+[ 201, 202, 203 ]
+[ 211, 212, 213 ]
+[ 221, 222, 223 ]
+[ 231, 232, 233 ]
+[ 241, 242, 243 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-3, EXT_ELEM_PROP_2: Ooogle 2-3, EXT_ELEM_PROP_3: Ooogle 3-3, EXT_ELEM_PROP_4: Ooogle 4-3, EXT_ELEM_PROP_5: Ooogle 5-3}
+
+ELEM_PROP_1: 300.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 300.301
+ELEM_PROP_4: 300.401
+ELEM_PROP_5: 300.501
+[ 301, 302, 303 ]
+[ 311, 312, 313 ]
+[ 321, 322, 323 ]
+[ 331, 332, 333 ]
+[ 341, 342, 343 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-4, EXT_ELEM_PROP_2: Ooogle 2-4, EXT_ELEM_PROP_3: Ooogle 3-4, EXT_ELEM_PROP_4: Ooogle 4-4, EXT_ELEM_PROP_5: Ooogle 5-4}
+
+ELEM_PROP_1: 400.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 400.301
+ELEM_PROP_4: 400.401
+ELEM_PROP_5: 400.501
+[ 401, 402, 403 ]
+[ 411, 412, 413 ]
+[ 421, 422, 423 ]
+[ 431, 432, 433 ]
+[ 441, 442, 443 ]
+
+
+
+set.bsize(): 120
+set.size(): 6
+set.num_extend_elem_props(): 5
+set.prop(PROP_9): 419
+set.elem_prop_keys(): [ ELEM_PROP_1 ELEM_PROP_2 ELEM_PROP_3 ELEM_PROP_4 ELEM_PROP_5 ]
+
+
+-------------------------------------
+            10 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-0, EXT_ELEM_PROP_2: Ooogle 2-0, EXT_ELEM_PROP_3: Ooogle 3-0, EXT_ELEM_PROP_4: Ooogle 4-0, EXT_ELEM_PROP_5: Ooogle 5-0}
+
+ELEM_PROP_1: 0.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 0.301
+ELEM_PROP_4: 463
+ELEM_PROP_5: 661
+[ 1, 2, 3 ]
+[ 11, 12, 13 ]
+[ 21, 22, 23 ]
+[ 31, 32, 33 ]
+[ 41, 42, 43 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN}
+
+ELEM_PROP_1: 1009
+ELEM_PROP_2: 669
+ELEM_PROP_3: 1009
+ELEM_PROP_4: 463
+ELEM_PROP_5: 661
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN}
+
+ELEM_PROP_1: 100.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 100.301
+ELEM_PROP_4: 463
+ELEM_PROP_5: 661
+[ 101, 102, 103 ]
+[ 111, 112, 113 ]
+[ 121, 122, 123 ]
+[ 131, 132, 133 ]
+[ 141, 142, 143 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-2, EXT_ELEM_PROP_2: Ooogle 2-2, EXT_ELEM_PROP_3: Ooogle 3-2, EXT_ELEM_PROP_4: Ooogle 4-2, EXT_ELEM_PROP_5: Ooogle 5-2}
+
+ELEM_PROP_1: 200.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 200.301
+ELEM_PROP_4: 463
+ELEM_PROP_5: 661
+[ 201, 202, 203 ]
+[ 211, 212, 213 ]
+[ 221, 222, 223 ]
+[ 231, 232, 233 ]
+[ 241, 242, 243 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-3, EXT_ELEM_PROP_2: Ooogle 2-3, EXT_ELEM_PROP_3: Ooogle 3-3, EXT_ELEM_PROP_4: Ooogle 4-3, EXT_ELEM_PROP_5: Ooogle 5-3}
+
+ELEM_PROP_1: 300.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 300.301
+ELEM_PROP_4: 463
+ELEM_PROP_5: 661
+[ 301, 302, 303 ]
+[ 311, 312, 313 ]
+[ 321, 322, 323 ]
+[ 331, 332, 333 ]
+[ 341, 342, 343 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-4, EXT_ELEM_PROP_2: Ooogle 2-4, EXT_ELEM_PROP_3: Ooogle 3-4, EXT_ELEM_PROP_4: Ooogle 4-4, EXT_ELEM_PROP_5: Ooogle 5-4}
+
+ELEM_PROP_1: 400.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 400.301
+ELEM_PROP_4: 463
+ELEM_PROP_5: 661
+[ 401, 402, 403 ]
+[ 411, 412, 413 ]
+[ 421, 422, 423 ]
+[ 431, 432, 433 ]
+[ 441, 442, 443 ]
+
+
+
+set.prop_index(PROP_2): 1
+set.vsize(): 158
+set.num_props(): 6
+set.num_extend_elem_props(): 5
+set.prop_index(PROP_2): 1
+
+
+-------------------------------------
+            15 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-0, EXT_ELEM_PROP_2: Ooogle 2-0, EXT_ELEM_PROP_3: Ooogle 3-0, EXT_ELEM_PROP_4: Ooogle 4-0, EXT_ELEM_PROP_5: Ooogle 5-0}
+
+ELEM_PROP_1: 0.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 0.301
+ELEM_PROP_4: 815
+ELEM_PROP_5: 661
+[ 1, 2, 3 ]
+[ 11, 12, 13 ]
+[ 21, 22, 23 ]
+[ 31, 32, 33 ]
+[ 41, 42, 43 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN}
+
+ELEM_PROP_1: 1009
+ELEM_PROP_2: 1009
+ELEM_PROP_3: 1009
+ELEM_PROP_4: 1009
+ELEM_PROP_5: 1009
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN}
+
+ELEM_PROP_1: 100.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 100.301
+ELEM_PROP_4: 815
+ELEM_PROP_5: 661
+[ 101, 102, 103 ]
+[ 111, 112, 113 ]
+[ 121, 122, 123 ]
+[ 131, 132, 133 ]
+[ 141, 142, 143 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-2, EXT_ELEM_PROP_2: Ooogle 2-2, EXT_ELEM_PROP_3: Ooogle 3-2, EXT_ELEM_PROP_4: Ooogle 4-2, EXT_ELEM_PROP_5: Ooogle 5-2}
+
+ELEM_PROP_1: 200.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 200.301
+ELEM_PROP_4: 815
+ELEM_PROP_5: 661
+[ 201, 202, 203 ]
+[ 211, 212, 213 ]
+[ 221, 222, 223 ]
+[ 231, 232, 233 ]
+[ 241, 242, 243 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-3, EXT_ELEM_PROP_2: Ooogle 2-3, EXT_ELEM_PROP_3: Ooogle 3-3, EXT_ELEM_PROP_4: Ooogle 4-3, EXT_ELEM_PROP_5: Ooogle 5-3}
+
+ELEM_PROP_1: 300.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 300.301
+ELEM_PROP_4: 815
+ELEM_PROP_5: 661
+[ 301, 302, 303 ]
+[ 311, 312, 313 ]
+[ 321, 322, 323 ]
+[ 331, 332, 333 ]
+[ 341, 342, 343 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-4, EXT_ELEM_PROP_2: Ooogle 2-4, EXT_ELEM_PROP_3: Ooogle 3-4, EXT_ELEM_PROP_4: Ooogle 4-4, EXT_ELEM_PROP_5: Ooogle 5-4}
+
+ELEM_PROP_1: 400.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 400.301
+ELEM_PROP_4: 815
+ELEM_PROP_5: 661
+[ 401, 402, 403 ]
+[ 411, 412, 413 ]
+[ 421, 422, 423 ]
+[ 431, 432, 433 ]
+[ 441, 442, 443 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_3: 3.341, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: 5.541}
+
+ELEM_PROP_1: 1001
+ELEM_PROP_2: 1001
+ELEM_PROP_3: 1001
+ELEM_PROP_4: 815
+ELEM_PROP_5: 1001
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+
+
+
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_1 EXT_ELEM_PROP_2 EXT_ELEM_PROP_3 EXT_ELEM_PROP_4 EXT_ELEM_PROP_5 ]
+set.prop_keys(): [ PROP_1 PROP_2 PROP_4 PROP_5 PROP_6 PROP_7 PROP_9 ]
+set.prop_keys(): [ PROP_1 PROP_2 PROP_4 PROP_5 PROP_6 PROP_7 PROP_9 ]
+set.elem_prop_keys(): [ ELEM_PROP_1 ELEM_PROP_2 ELEM_PROP_3 ELEM_PROP_4 ELEM_PROP_5 ]
+
+
+-------------------------------------
+            20 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-0, EXT_ELEM_PROP_2: Ooogle 2-0, EXT_ELEM_PROP_3: Ooogle 3-0, EXT_ELEM_PROP_4: Ooogle 4-0, EXT_ELEM_PROP_5: Ooogle 5-0}
+
+ELEM_PROP_1: 0.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 0.301
+ELEM_PROP_4: 815
+ELEM_PROP_5: 661
+[ 1, 2, 3 ]
+[ 11, 12, 13 ]
+[ 21, 22, 23 ]
+[ 31, 32, 33 ]
+[ 41, 42, 43 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN}
+
+ELEM_PROP_1: 1009
+ELEM_PROP_2: 1009
+ELEM_PROP_3: 1009
+ELEM_PROP_4: 1009
+ELEM_PROP_5: 1009
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-2, EXT_ELEM_PROP_2: Ooogle 2-2, EXT_ELEM_PROP_3: Ooogle 3-2, EXT_ELEM_PROP_4: Ooogle 4-2, EXT_ELEM_PROP_5: Ooogle 5-2}
+
+ELEM_PROP_1: 200.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 200.301
+ELEM_PROP_4: 815
+ELEM_PROP_5: 661
+[ 201, 202, 203 ]
+[ 211, 212, 213 ]
+[ 221, 222, 223 ]
+[ 231, 232, 233 ]
+[ 241, 242, 243 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_3: 3.341, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: 5.541}
+
+ELEM_PROP_1: 300.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 300.301
+ELEM_PROP_4: 815
+ELEM_PROP_5: 661
+[ 301, 302, 303 ]
+[ 311, 312, 313 ]
+[ 321, 322, 323 ]
+[ 331, 332, 333 ]
+[ 341, 342, 343 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-4, EXT_ELEM_PROP_2: Ooogle 2-4, EXT_ELEM_PROP_3: Ooogle 3-4, EXT_ELEM_PROP_4: Ooogle 4-4, EXT_ELEM_PROP_5: Ooogle 5-4}
+
+ELEM_PROP_1: 400.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 400.301
+ELEM_PROP_4: 815
+ELEM_PROP_5: 661
+[ 401, 402, 403 ]
+[ 411, 412, 413 ]
+[ 421, 422, 423 ]
+[ 431, 432, 433 ]
+[ 441, 442, 443 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_3: 3.341, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: 5.541}
+
+ELEM_PROP_1: 1001
+ELEM_PROP_2: 1001
+ELEM_PROP_3: 1001
+ELEM_PROP_4: 815
+ELEM_PROP_5: 1001
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: 1.181, EXT_ELEM_PROP_2: 2.281, EXT_ELEM_PROP_3: 3.381, EXT_ELEM_PROP_4: 4.481, EXT_ELEM_PROP_5: 5.581}
+
+ELEM_PROP_1: 1007
+ELEM_PROP_2: 1007
+ELEM_PROP_3: 1007
+ELEM_PROP_4: 1007
+ELEM_PROP_5: 1007
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+
+
+
+set.elem_prop_index(ELEM_PROP_4): 3
+set.elem_prop_index(ELEM_PROP_4): 3
+
+
+-------------------------------------
+            25 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-0, EXT_ELEM_PROP_2: Ooogle 2-0, EXT_ELEM_PROP_3: Ooogle 3-0, EXT_ELEM_PROP_4: Ooogle 4-0, EXT_ELEM_PROP_5: Ooogle 5-0}
+
+ELEM_PROP_1: 0.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 0.301
+ELEM_PROP_4: 815
+ELEM_PROP_5: 661
+[ 1, 2, 3 ]
+[ 11, 12, 13 ]
+[ 21, 22, 23 ]
+[ 31, 32, 33 ]
+[ 41, 42, 43 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN}
+
+ELEM_PROP_1: 1003
+ELEM_PROP_2: 1003
+ELEM_PROP_3: 1003
+ELEM_PROP_4: 1003
+ELEM_PROP_5: 1003
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+
+
+
+set.prop(PROP_4): 4.401
+
+
+-------------------------------------
+            30 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-0, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: Ooogle 2-0, EXT_ELEM_PROP_3: Ooogle 3-0, EXT_ELEM_PROP_4: Ooogle 4-0, EXT_ELEM_PROP_5: Ooogle 5-0, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 0.101
+ELEM_PROP_2: 669
+ELEM_PROP_3: 0.301
+ELEM_PROP_4: 734
+ELEM_PROP_5: 661
+[ 1, 2, 3 ]
+[ 11, 12, 13 ]
+[ 21, 22, 23 ]
+[ 31, 32, 33 ]
+[ 41, 42, 43 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 886, 886, 886 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 1003
+ELEM_PROP_2: 1003
+ELEM_PROP_3: 1003
+ELEM_PROP_4: 734
+ELEM_PROP_5: 1003
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 886, 886, 886 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 1009
+ELEM_PROP_2: 1009
+ELEM_PROP_3: 1009
+ELEM_PROP_4: 734
+ELEM_PROP_5: 1009
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 886, 886, 886 ]
+
+
+
+set.num_extend_elem_props(): 10
+set.num_props(): 7
+set.num_extend_elem_props(): 10
+
+
+-------------------------------------
+            35 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: Ooogle 1-0, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: Ooogle 2-0, EXT_ELEM_PROP_3: 733, EXT_ELEM_PROP_4: Ooogle 4-0, EXT_ELEM_PROP_5: Ooogle 5-0, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 0.101
+ELEM_PROP_2: 669
+ELEM_PROP_4: 734
+ELEM_PROP_5: 661
+[ 1, 2, 3 ]
+[ 11, 12, 13 ]
+[ 21, 22, 23 ]
+[ 31, 32, 33 ]
+[ 41, 42, 43 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 886, 886, 886 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 1006
+ELEM_PROP_2: 1006
+ELEM_PROP_4: 1006
+ELEM_PROP_5: 1006
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 1005
+ELEM_PROP_2: 1005
+ELEM_PROP_4: 1005
+ELEM_PROP_5: 1005
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 1003
+ELEM_PROP_2: 1003
+ELEM_PROP_4: 734
+ELEM_PROP_5: 1003
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 511, 511, 511 ]
+[ 886, 886, 886 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 1009
+ELEM_PROP_2: 1009
+ELEM_PROP_4: 734
+ELEM_PROP_5: 1009
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 886, 886, 886 ]
+
+
+
+set.prop(PROP_7): 434
+
+
+-------------------------------------
+            40 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 1006
+ELEM_PROP_2: 1006
+ELEM_PROP_4: 1006
+ELEM_PROP_5: 1006
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: NaN, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 1009
+ELEM_PROP_2: 1009
+ELEM_PROP_4: 734
+ELEM_PROP_5: 1009
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 886, 886, 886 ]
+
+
+
+set.num_props(): 7
+set.get_extend_elem_prop(EXT_ELEM_PROP_9,0): NaN
+set.has_elem_prop(ELEM_PROP_9): 0
+
+
+-------------------------------------
+            45 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 1006
+ELEM_PROP_2: 1006
+ELEM_PROP_4: 1006
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_1: 1009
+ELEM_PROP_2: 1009
+ELEM_PROP_4: 734
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 886, 886, 886 ]
+
+
+
+set.vsize(): 61
+set.elem_prop_index(ELEM_PROP_4): 1
+set.vsize(): 59
+
+
+-------------------------------------
+            50 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_2: 1006
+ELEM_PROP_4: 1006
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_2: 1009
+ELEM_PROP_4: 734
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 886, 886, 886 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_2: 1008
+ELEM_PROP_4: 1008
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+
+
+
+
+
+-------------------------------------
+            55 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_2: 1006
+ELEM_PROP_4: 776
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-1, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: Boogle 7-1, EXT_ELEM_PROP_9: Boogle 9-1}
+
+ELEM_PROP_2: 1009
+ELEM_PROP_4: 776
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_3: 3.331, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_7: 7.731, EXT_ELEM_PROP_9: 9.931}
+
+ELEM_PROP_2: 1009
+ELEM_PROP_4: 1009
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+
+set.size(): 3
+set.num_props(): 7
+set.num_extend_elem_props(): 7
+set.has_elem_prop(ELEM_PROP_7): 0
+
+
+-------------------------------------
+            60 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_7: 7.711, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+ELEM_PROP_2: 1005
+ELEM_PROP_4: 1005
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_2: 1006
+ELEM_PROP_4: 776
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-1, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: Boogle 7-1, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: Boogle 9-1}
+
+ELEM_PROP_2: 1009
+ELEM_PROP_4: 776
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_3: 3.331, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_7: 7.731, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: 9.931}
+
+ELEM_PROP_2: 1009
+ELEM_PROP_4: 1009
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: NaN}
+
+ELEM_PROP_2: 1003
+ELEM_PROP_4: 1003
+[ 1003, 1003, 1003 ]
+[ 1003, 1003, 1003 ]
+
+
+
+set.get_extend_elem_prop(EXT_ELEM_PROP_3,3): 3.331
+set.num_elem_props(): 2
+set.vsize(): 42
+
+
+-------------------------------------
+            65 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_7: 7.711, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: NaN}
+
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-0, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: Boogle 7-0, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_3: 3.331, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_7: 7.731, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: 9.931}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: NaN}
+
+[ 1003, 1003, 1003 ]
+[ 1003, 1003, 1003 ]
+
+
+
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_10 EXT_ELEM_PROP_3 EXT_ELEM_PROP_4 EXT_ELEM_PROP_5 EXT_ELEM_PROP_7 EXT_ELEM_PROP_8 EXT_ELEM_PROP_9 ]
+set.prop_index(PROP_4): 2
+set.num_elem_props(): 0
+set.bsize(): 30
+set.has_extend_elem_prop(EXT_ELEM_PROP_3): 1
+set.num_extend_elem_props(): 6
+set.num_props(): 7
+
+
+-------------------------------------
+            70 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-0, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_3: 3.331, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: 9.931}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: NaN}
+
+[ 1003, 1003, 1003 ]
+[ 1003, 1003, 1003 ]
+
+
+
+set.has_extend_elem_prop(EXT_ELEM_PROP_8): 1
+set.vsize(): 55
+
+
+-------------------------------------
+            75 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: Boogle 7-4, EXT_ELEM_PROP_8: Boogle 8-4, EXT_ELEM_PROP_9: Boogle 9-4}
+
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-0, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_3: 3.331, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: 9.931}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-3, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: Boogle 6-3, EXT_ELEM_PROP_7: Boogle 7-3, EXT_ELEM_PROP_8: Boogle 8-3, EXT_ELEM_PROP_9: Boogle 9-3}
+
+[ 1003, 1003, 1003 ]
+[ 1003, 1003, 1003 ]
+
+
+
+set.num_props(): 7
+
+
+-------------------------------------
+            80 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_5: 5.501
+PROP_6: 984
+PROP_7: 434
+PROP_8: 140
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: 138, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: Boogle 7-4, EXT_ELEM_PROP_8: Boogle 8-4, EXT_ELEM_PROP_9: Boogle 9-4}
+
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-0, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_3: 3.331, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: 9.931}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_10: 11.061, EXT_ELEM_PROP_3: 3.361, EXT_ELEM_PROP_4: 4.461, EXT_ELEM_PROP_5: 5.561, EXT_ELEM_PROP_6: 6.661, EXT_ELEM_PROP_7: 7.761, EXT_ELEM_PROP_8: 8.861, EXT_ELEM_PROP_9: 9.961}
+
+[ 1003, 1003, 1003 ]
+[ 1003, 1003, 1003 ]
+
+
+
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_10 EXT_ELEM_PROP_3 EXT_ELEM_PROP_4 EXT_ELEM_PROP_5 EXT_ELEM_PROP_6 EXT_ELEM_PROP_7 EXT_ELEM_PROP_8 EXT_ELEM_PROP_9 ]
+
+
+-------------------------------------
+            85 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_6: 984
+PROP_7: 434
+PROP_8: 140
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1003, 1003, 1003 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: 138, EXT_ELEM_PROP_5: 667, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: Boogle 7-4, EXT_ELEM_PROP_8: Boogle 8-4, EXT_ELEM_PROP_9: Boogle 9-4}
+
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-0, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: NaN, EXT_ELEM_PROP_5: NaN, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: 3.331, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: -99, EXT_ELEM_PROP_9: 9.931}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_10: 11.061, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: 3.361, EXT_ELEM_PROP_4: 4.461, EXT_ELEM_PROP_5: 5.561, EXT_ELEM_PROP_6: 6.661, EXT_ELEM_PROP_7: 7.761, EXT_ELEM_PROP_8: 8.861, EXT_ELEM_PROP_9: 9.961}
+
+[ 1003, 1003, 1003 ]
+[ 1003, 1003, 1003 ]
+
+
+
+set.num_extend_elem_props(): 8
+
+
+-------------------------------------
+            90 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_4: 4.401
+PROP_6: 984
+PROP_7: 434
+PROP_8: 140
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: 3.311, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+
+
+
+set.elem_prop_keys(): []
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_10 EXT_ELEM_PROP_2 EXT_ELEM_PROP_3 EXT_ELEM_PROP_4 EXT_ELEM_PROP_5 EXT_ELEM_PROP_6 EXT_ELEM_PROP_7 EXT_ELEM_PROP_8 EXT_ELEM_PROP_9 ]
+
+
+-------------------------------------
+            95 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_2: 2.201
+PROP_6: 984
+PROP_7: 434
+PROP_8: 140
+PROP_9: 419
+
+
+set.num_extend_elem_props(): 7
+set.vsize(): 32
+set.prop_index(PROP_9): 7
+set.num_extend_elem_props(): 7
+
+
+-------------------------------------
+            100 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 2.201
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_8: 140
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_2: 2.231, EXT_ELEM_PROP_3: 3.331, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_6: 6.631, EXT_ELEM_PROP_7: 7.731, EXT_ELEM_PROP_8: 8.831}
+
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+
+
+
+set.prop_keys(): [ PROP_1 PROP_10 PROP_2 PROP_4 PROP_5 PROP_6 PROP_7 PROP_8 PROP_9 ]
+set.has_extend_elem_prop(EXT_ELEM_PROP_2): 1
+set.num_elem_props(): 0
+set.has_extend_elem_prop(EXT_ELEM_PROP_10): 1
+set.num_props(): 10
+set.get_extend_elem_prop(EXT_ELEM_PROP_10,2): NaN
+
+
+-------------------------------------
+            105 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 2.201
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_8: 140
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_2: 2.231, EXT_ELEM_PROP_3: 3.331, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_6: 6.631, EXT_ELEM_PROP_7: 7.731, EXT_ELEM_PROP_8: 308}
+
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+
+
+
+set.get_extend_elem_prop(EXT_ELEM_PROP_3,0): 3.331
+set.prop_keys(): [ PROP_1 PROP_10 PROP_2 PROP_3 PROP_4 PROP_5 PROP_6 PROP_7 PROP_8 PROP_9 ]
+set.size(): 2
+set.num_extend_elem_props(): 7
+set.prop(PROP_1): 1.101
+set.size(): 2
+set.bsize(): 48
+set.elem_prop_keys(): []
+
+
+-------------------------------------
+            110 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 2.201
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_8: 140
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_2: 2.231, EXT_ELEM_PROP_3: 3.331, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_6: 6.631, EXT_ELEM_PROP_7: 7.731, EXT_ELEM_PROP_8: 308}
+
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 179, 179, 179 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: 11.051, EXT_ELEM_PROP_2: 2.251, EXT_ELEM_PROP_3: 3.351, EXT_ELEM_PROP_4: 4.451, EXT_ELEM_PROP_6: 6.651, EXT_ELEM_PROP_7: 7.751, EXT_ELEM_PROP_8: 8.851}
+
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 179, 179, 179 ]
+
+
+
+set.get_extend_elem_prop(EXT_ELEM_PROP_10,1): 11.051
+set.bsize(): 54
+set.prop(PROP_3): 22
+set.num_extend_elem_props(): 7
+set.num_extend_elem_props(): 7
+set.num_props(): 10
+
+
+-------------------------------------
+            115 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_8: 140
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.051, EXT_ELEM_PROP_2: 2.251, EXT_ELEM_PROP_3: 3.351, EXT_ELEM_PROP_4: 4.451, EXT_ELEM_PROP_6: 6.651, EXT_ELEM_PROP_7: 7.751, EXT_ELEM_PROP_8: 8.851}
+
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 1006, 1006, 1006 ]
+[ 179, 179, 179 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_3: 3.341, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_6: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: -99}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+
+set.elem_prop_keys(): []
+
+
+-------------------------------------
+            120 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_8: 140
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_3: 3.341, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: Boogle 7-4, EXT_ELEM_PROP_8: Boogle 8-4}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+
+set.num_elem_props(): 0
+set.prop_index(PROP_10): 1
+set.size(): 2
+
+
+-------------------------------------
+            125 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_3: 3.341, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_8: 8.841}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_3: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_8: Boogle 8-4}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+
+set.size(): 2
+set.get_extend_elem_prop(EXT_ELEM_PROP_2,0): 2.241
+
+
+-------------------------------------
+            130 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: Boogle 8-4, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+
+set.num_elem_props(): 0
+set.size(): 3
+set.num_elem_props(): 0
+set.elem_prop_keys(): []
+
+
+-------------------------------------
+            135 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: Boogle 8-4, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: 9.941}
+
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: 1.181, EXT_ELEM_PROP_10: 11.081, EXT_ELEM_PROP_2: 2.281, EXT_ELEM_PROP_4: 4.481, EXT_ELEM_PROP_5: 5.581, EXT_ELEM_PROP_6: 6.681, EXT_ELEM_PROP_7: 7.781, EXT_ELEM_PROP_8: 8.881, EXT_ELEM_PROP_9: 9.981}
+
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: 1.131, EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_2: 2.231, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_6: 6.631, EXT_ELEM_PROP_7: 7.731, EXT_ELEM_PROP_8: 8.831, EXT_ELEM_PROP_9: 9.931}
+
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 192, 192, 192 ]
+
+
+
+set.prop(PROP_3): 22
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_1 EXT_ELEM_PROP_10 EXT_ELEM_PROP_2 EXT_ELEM_PROP_4 EXT_ELEM_PROP_5 EXT_ELEM_PROP_6 EXT_ELEM_PROP_7 EXT_ELEM_PROP_8 EXT_ELEM_PROP_9 ]
+set.size(): 7
+set.has_elem_prop(ELEM_PROP_3): 0
+set.vsize(): 176
+set.bsize(): 168
+set.prop(PROP_5): 902
+set.has_extend_elem_prop(EXT_ELEM_PROP_4): 1
+set.bsize(): 168
+
+
+-------------------------------------
+            140 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: Boogle 8-4, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: 9.941}
+
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: 1.181, EXT_ELEM_PROP_10: 11.081, EXT_ELEM_PROP_2: 2.281, EXT_ELEM_PROP_4: 4.481, EXT_ELEM_PROP_5: 5.581, EXT_ELEM_PROP_6: 6.681, EXT_ELEM_PROP_7: 7.781, EXT_ELEM_PROP_8: 8.881, EXT_ELEM_PROP_9: 9.981}
+
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: 1.131, EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_2: 2.231, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_6: 6.631, EXT_ELEM_PROP_7: 7.731, EXT_ELEM_PROP_8: 8.831, EXT_ELEM_PROP_9: 9.931}
+
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+
+
+
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_1 EXT_ELEM_PROP_10 EXT_ELEM_PROP_2 EXT_ELEM_PROP_4 EXT_ELEM_PROP_5 EXT_ELEM_PROP_6 EXT_ELEM_PROP_7 EXT_ELEM_PROP_8 EXT_ELEM_PROP_9 ]
+set.num_extend_elem_props(): 9
+set.elem_prop_keys(): []
+set.prop_index(PROP_3): 2
+
+
+-------------------------------------
+            145 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: Boogle 8-4, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: 9.941}
+
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: 1.111, EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_2: 2.211, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: 6.611, EXT_ELEM_PROP_7: 7.711, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: 1.131, EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_2: 2.231, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_6: 6.631, EXT_ELEM_PROP_7: 7.731, EXT_ELEM_PROP_8: 8.831, EXT_ELEM_PROP_9: 9.931}
+
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+
+
+--------------------
+        8
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 561, 561, 561 ]
+[ 561, 561, 561 ]
+[ 561, 561, 561 ]
+[ 561, 561, 561 ]
+[ 561, 561, 561 ]
+[ 561, 561, 561 ]
+
+
+--------------------
+        9
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+
+set.num_props(): 8
+
+
+-------------------------------------
+            150 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: Boogle 8-4, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: 9.941}
+
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: 1.111, EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_2: 2.211, EXT_ELEM_PROP_4: 4.411, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: 6.611, EXT_ELEM_PROP_7: 7.711, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 1001, 1001, 1001 ]
+[ 192, 192, 192 ]
+[ 192, 192, 192 ]
+
+
+--------------------
+        8
+--------------------
+{EXT_ELEM_PROP_1: 1.131, EXT_ELEM_PROP_10: 11.031, EXT_ELEM_PROP_2: 2.231, EXT_ELEM_PROP_4: 4.431, EXT_ELEM_PROP_5: 5.531, EXT_ELEM_PROP_6: 6.631, EXT_ELEM_PROP_7: 7.731, EXT_ELEM_PROP_8: 8.831, EXT_ELEM_PROP_9: 9.931}
+
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+
+
+--------------------
+        9
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 561, 561, 561 ]
+[ 561, 561, 561 ]
+[ 561, 561, 561 ]
+[ 561, 561, 561 ]
+[ 561, 561, 561 ]
+[ 561, 561, 561 ]
+
+
+--------------------
+        10
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        11
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+
+
+--------------------
+        12
+--------------------
+{EXT_ELEM_PROP_1: 1.151, EXT_ELEM_PROP_10: 11.051, EXT_ELEM_PROP_2: 2.251, EXT_ELEM_PROP_4: 4.451, EXT_ELEM_PROP_5: 5.551, EXT_ELEM_PROP_6: 6.651, EXT_ELEM_PROP_7: 7.751, EXT_ELEM_PROP_8: 8.851, EXT_ELEM_PROP_9: 9.951}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+
+set.elem_prop_keys(): []
+set.has_elem_prop(ELEM_PROP_10): 0
+set.vsize(): 242
+set.has_prop(PROP_8): 0
+
+
+-------------------------------------
+            155 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_8: 147
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: Boogle 8-4, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+
+set.get_extend_elem_prop(EXT_ELEM_PROP_5,3): -99
+
+
+-------------------------------------
+            160 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_8: 147
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: 640, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_2: 2.241, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_2: -99, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+
+set.num_props(): 10
+set.has_extend_elem_prop(EXT_ELEM_PROP_9): 1
+set.elem_prop_keys(): []
+set.prop_keys(): [ PROP_1 PROP_10 PROP_2 PROP_3 PROP_4 PROP_5 PROP_6 PROP_7 PROP_8 PROP_9 ]
+set.prop(PROP_9): 419
+set.size(): 8
+
+
+-------------------------------------
+            165 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_8: 147
+PROP_9: 419
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-4, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+
+
+
+-------------------------------------
+            170 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 11.041, EXT_ELEM_PROP_4: 4.441, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1002, 1002, 1002 ]
+[ 1002, 1002, 1002 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1010, 1010, 1010 ]
+[ 1010, 1010, 1010 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1004, 1004, 1004 ]
+[ 1004, 1004, 1004 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-4, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1009, 1009, 1009 ]
+[ 1009, 1009, 1009 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 245, 245, 245 ]
+[ 245, 245, 245 ]
+
+
+--------------------
+        8
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_4: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+
+
+
+set.num_props(): 8
+set.size(): 1
+set.prop_index(PROP_3): 3
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_1 EXT_ELEM_PROP_10 EXT_ELEM_PROP_4 EXT_ELEM_PROP_5 EXT_ELEM_PROP_7 EXT_ELEM_PROP_8 EXT_ELEM_PROP_9 ]
+
+
+-------------------------------------
+            175 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+
+
+set.num_extend_elem_props(): 6
+
+
+-------------------------------------
+            180 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+
+
+set.bsize(): 0
+set.elem_prop_keys(): []
+set.bsize(): 0
+set.size(): 0
+set.prop_keys(): [ PROP_1 PROP_10 PROP_2 PROP_3 PROP_4 PROP_5 PROP_6 PROP_7 ]
+set.elem_prop_keys(): []
+set.prop_keys(): [ PROP_1 PROP_10 PROP_2 PROP_3 PROP_4 PROP_5 PROP_6 PROP_7 PROP_8 PROP_9 ]
+
+
+-------------------------------------
+            185 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_8: 859
+PROP_9: 835
+
+
+set.has_prop(PROP_9): 1
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_1 EXT_ELEM_PROP_10 EXT_ELEM_PROP_5 EXT_ELEM_PROP_8 EXT_ELEM_PROP_9 ]
+set.has_prop(PROP_2): 1
+set.has_extend_elem_prop(EXT_ELEM_PROP_8): 1
+set.has_extend_elem_prop(EXT_ELEM_PROP_3): 0
+set.num_extend_elem_props(): 5
+set.bsize(): 0
+set.get_extend_elem_prop(EXT_ELEM_PROP_9,6): NaN
+
+
+-------------------------------------
+            190 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 984
+PROP_7: 434
+PROP_8: 859
+PROP_9: 835
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+
+
+--------------------
+        8
+--------------------
+{EXT_ELEM_PROP_1: 1.171, EXT_ELEM_PROP_10: 11.071, EXT_ELEM_PROP_5: 5.571, EXT_ELEM_PROP_7: 7.771, EXT_ELEM_PROP_8: 8.871, EXT_ELEM_PROP_9: 9.971}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+
+
+--------------------
+        9
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+
+
+
+set.bsize(): 270
+set.prop_keys(): [ PROP_1 PROP_10 PROP_2 PROP_3 PROP_4 PROP_5 PROP_6 PROP_7 PROP_8 PROP_9 ]
+
+
+-------------------------------------
+            195 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 153
+PROP_7: 434
+PROP_8: 859
+PROP_9: 835
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: 493, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        8
+--------------------
+{EXT_ELEM_PROP_1: 1.171, EXT_ELEM_PROP_10: 11.071, EXT_ELEM_PROP_5: 5.571, EXT_ELEM_PROP_7: 7.771, EXT_ELEM_PROP_8: 8.871, EXT_ELEM_PROP_9: 9.971}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        9
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+
+set.num_extend_elem_props(): 6
+set.prop_index(PROP_3): 3
+set.get_extend_elem_prop(EXT_ELEM_PROP_5,4): -99
+set.prop_index(PROP_10): 1
+
+
+-------------------------------------
+            200 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 153
+PROP_7: 434
+PROP_8: 859
+PROP_9: 835
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: 1.111, EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: 6.611, EXT_ELEM_PROP_7: 7.711, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: 1.171, EXT_ELEM_PROP_10: 11.071, EXT_ELEM_PROP_5: 5.571, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: 7.771, EXT_ELEM_PROP_8: 8.871, EXT_ELEM_PROP_9: 9.971}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+
+set.num_props(): 10
+set.size(): 8
+set.has_extend_elem_prop(EXT_ELEM_PROP_2): 0
+set.has_extend_elem_prop(EXT_ELEM_PROP_1): 1
+set.get_extend_elem_prop(EXT_ELEM_PROP_9,3): NaN
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_1 EXT_ELEM_PROP_10 EXT_ELEM_PROP_5 EXT_ELEM_PROP_6 EXT_ELEM_PROP_7 EXT_ELEM_PROP_8 EXT_ELEM_PROP_9 ]
+set.has_prop(PROP_2): 1
+set.num_elem_props(): 0
+set.has_prop(PROP_1): 1
+set.num_extend_elem_props(): 7
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_1 EXT_ELEM_PROP_10 EXT_ELEM_PROP_5 EXT_ELEM_PROP_6 EXT_ELEM_PROP_7 EXT_ELEM_PROP_8 EXT_ELEM_PROP_9 ]
+set.num_props(): 10
+set.elem_prop_keys(): []
+set.num_elem_props(): 0
+
+
+-------------------------------------
+            205 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 153
+PROP_7: 434
+PROP_8: 859
+PROP_9: 835
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-0, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-0, EXT_ELEM_PROP_7: Boogle 7-0, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: 1.111, EXT_ELEM_PROP_10: 11.011, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: 6.611, EXT_ELEM_PROP_7: 7.711, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: 1.171, EXT_ELEM_PROP_10: 11.071, EXT_ELEM_PROP_5: 5.571, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: 7.771, EXT_ELEM_PROP_8: 8.871, EXT_ELEM_PROP_9: 9.971}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+[ 337, 337, 337 ]
+
+
+
+set.num_elem_props(): 0
+
+
+-------------------------------------
+            210 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 779
+PROP_5: 902
+PROP_6: 153
+PROP_7: 434
+PROP_8: 859
+PROP_9: 835
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-0, EXT_ELEM_PROP_7: Boogle 7-0, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: 1.111, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: 6.611, EXT_ELEM_PROP_7: 7.711, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: 1.171, EXT_ELEM_PROP_5: 5.571, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: 7.771, EXT_ELEM_PROP_8: 8.871, EXT_ELEM_PROP_9: 9.971}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        8
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: 9.941}
+
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+
+set.bsize(): 135
+set.vsize(): 145
+set.has_extend_elem_prop(EXT_ELEM_PROP_1): 1
+set.num_extend_elem_props(): 6
+set.prop_index(PROP_7): 7
+set.num_extend_elem_props(): 6
+set.num_elem_props(): 0
+set.num_extend_elem_props(): 6
+
+
+-------------------------------------
+            215 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_5: 902
+PROP_6: 153
+PROP_7: 434
+PROP_8: 859
+PROP_9: 835
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: 9.941}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-0, EXT_ELEM_PROP_7: Boogle 7-0, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: 1.111, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: 6.611, EXT_ELEM_PROP_7: 7.711, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+[ 1008, 1008, 1008 ]
+
+
+--------------------
+        6
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        7
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        8
+--------------------
+{EXT_ELEM_PROP_1: 1.171, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: 5.571, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: 7.771, EXT_ELEM_PROP_8: 8.871, EXT_ELEM_PROP_9: 9.971}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        9
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: 9.941}
+
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+
+set.num_elem_props(): 0
+
+
+-------------------------------------
+            220 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_5: 902
+PROP_6: 153
+PROP_8: 859
+PROP_9: 835
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: 9.941}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-0, EXT_ELEM_PROP_7: Boogle 7-0, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: 1.111, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: 6.611, EXT_ELEM_PROP_7: 7.711, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+
+set.size(): 4
+
+
+-------------------------------------
+            225 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 364
+PROP_5: 902
+PROP_6: 153
+PROP_7: 495
+PROP_8: 859
+PROP_9: 835
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: 6.641, EXT_ELEM_PROP_7: 7.741, EXT_ELEM_PROP_8: 8.841, EXT_ELEM_PROP_9: 9.941}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-0, EXT_ELEM_PROP_7: Boogle 7-0, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: 1.111, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: 6.611, EXT_ELEM_PROP_7: 7.711, EXT_ELEM_PROP_8: 8.811, EXT_ELEM_PROP_9: 9.911}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: -99, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+
+
+
+set.size(): 5
+set.vsize(): 88
+set.get_extend_elem_prop(EXT_ELEM_PROP_5,3): -99
+set.prop_keys(): [ PROP_1 PROP_10 PROP_2 PROP_3 PROP_4 PROP_5 PROP_6 PROP_7 PROP_8 PROP_9 ]
+set.bsize(): 78
+set.get_extend_elem_prop_header(): [ EXT_ELEM_PROP_1 EXT_ELEM_PROP_10 EXT_ELEM_PROP_5 EXT_ELEM_PROP_6 EXT_ELEM_PROP_7 EXT_ELEM_PROP_8 EXT_ELEM_PROP_9 ]
+set.prop(PROP_10): 182
+
+
+-------------------------------------
+            230 MODFICATIONS             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 364
+PROP_5: 902
+PROP_6: 153
+PROP_7: 495
+PROP_8: 859
+PROP_9: 835
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_10: Boogle 10-0, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: Boogle 6-0, EXT_ELEM_PROP_7: Boogle 7-0, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-1, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-1, EXT_ELEM_PROP_7: Boogle 7-1, EXT_ELEM_PROP_8: Boogle 8-1, EXT_ELEM_PROP_9: Boogle 9-1}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: 1.111, EXT_ELEM_PROP_10: Boogle 10-2, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: Boogle 6-2, EXT_ELEM_PROP_7: Boogle 7-2, EXT_ELEM_PROP_8: Boogle 8-2, EXT_ELEM_PROP_9: Boogle 9-2}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-3, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-3, EXT_ELEM_PROP_7: Boogle 7-3, EXT_ELEM_PROP_8: Boogle 8-3, EXT_ELEM_PROP_9: Boogle 9-3}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-3, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-3, EXT_ELEM_PROP_7: Boogle 7-3, EXT_ELEM_PROP_8: Boogle 8-3, EXT_ELEM_PROP_9: Boogle 9-3}
+
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+
+
+
+set.prop_index(PROP_10): 1
+set.has_elem_prop(ELEM_PROP_8): 0
+set.bsize(): 78
+set.bsize(): 78
+
+
+-------------------------------------
+             FINAL PRINT             
+-------------------------------------
+
+PROP_1: 1.101
+PROP_10: 182
+PROP_2: 692
+PROP_3: 22
+PROP_4: 364
+PROP_5: 902
+PROP_6: 153
+PROP_7: 495
+PROP_8: 859
+PROP_9: 835
+
+--------------------
+        0
+--------------------
+{EXT_ELEM_PROP_1: 1.141, EXT_ELEM_PROP_10: Boogle 10-0, EXT_ELEM_PROP_5: 5.541, EXT_ELEM_PROP_6: Boogle 6-0, EXT_ELEM_PROP_7: Boogle 7-0, EXT_ELEM_PROP_8: Boogle 8-0, EXT_ELEM_PROP_9: Boogle 9-0}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        1
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: 898, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-1, EXT_ELEM_PROP_7: Boogle 7-1, EXT_ELEM_PROP_8: Boogle 8-1, EXT_ELEM_PROP_9: Boogle 9-1}
+
+[ 1005, 1005, 1005 ]
+[ 1005, 1005, 1005 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        2
+--------------------
+{EXT_ELEM_PROP_1: 1.111, EXT_ELEM_PROP_10: Boogle 10-2, EXT_ELEM_PROP_5: 5.511, EXT_ELEM_PROP_6: Boogle 6-2, EXT_ELEM_PROP_7: Boogle 7-2, EXT_ELEM_PROP_8: Boogle 8-2, EXT_ELEM_PROP_9: Boogle 9-2}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        3
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-3, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-3, EXT_ELEM_PROP_7: Boogle 7-3, EXT_ELEM_PROP_8: Boogle 8-3, EXT_ELEM_PROP_9: Boogle 9-3}
+
+[ 576, 576, 576 ]
+[ 576, 576, 576 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+[ 359, 359, 359 ]
+
+
+--------------------
+        4
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: Boogle 10-3, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: Boogle 6-3, EXT_ELEM_PROP_7: Boogle 7-3, EXT_ELEM_PROP_8: Boogle 8-3, EXT_ELEM_PROP_9: Boogle 9-3}
+
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+[ 1007, 1007, 1007 ]
+
+
+--------------------
+        5
+--------------------
+{EXT_ELEM_PROP_1: -99, EXT_ELEM_PROP_10: NaN, EXT_ELEM_PROP_5: -99, EXT_ELEM_PROP_6: NaN, EXT_ELEM_PROP_7: NaN, EXT_ELEM_PROP_8: NaN, EXT_ELEM_PROP_9: NaN}
+
+
+

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+export neigh_count=0
+
+neigh_size=3
+vox_size=0.15
+extent=3
+neigh_bounds=0.61
+cube_size=1.05
+
+input_dir=/data/home/tclose/Data/Fifty_phantoms/
+output_dir=/data/home/tclose/Data/Tractography/chunked
+
+for collection_path in `ls $input_dir`; do
+  
+  extension=${collection_path##*.}
+
+  if [ $extension = "tck" ]; then
+    coll_name=${collection_path##*/}
+    coll_name=${coll_name%.*}
+
+    echo "--$coll_name--"
+  
+#    rm -r $output_dir/${coll_name}/vox_${vox_size}
+#    mkdir $output_dir/${coll_name}/vox_${vox_size}
+
+#    chunk_strands $input_dir/$collection_path $output_dir/${coll_name}/vox_${vox_size}/cube_${cube_size}.tck -extent $extent -voxel_size $vox_size -map_to_origin -save_separate -half_offset -neigh_bounds $neigh_bounds
+    
+#    rm -r $output_dir/${coll_name}/vox_${vox_size}/ball_combined
+#    mkdir $output_dir/${coll_name}/vox_${vox_size}/ball_combined
+
+    process_neighbourhoods $output_dir/${coll_name}/vox_${vox_size}/cube_${cube_size} $output_dir/${coll_name}/vox_${vox_size}
+
+#   ls $output_dir/${coll_name}/vox_${vox_size}/prepared_strands $output_dir/prepared_strands/${coll_name}.frr
+
+    #combine_strands $output_dir/${coll_name}/vox_${vox_size}/ball_combined $output_dir/ball_combined/${coll_name}.frr
+
+  fi
+
+done
+
+
+#combine_strands $output_dir/ball_combined/ $output_dir/ball_combined.frr

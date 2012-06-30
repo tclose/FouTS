@@ -1,0 +1,25 @@
+#!/bin/bash
+
+DIR=$1
+
+if [ "${#DIR}" = 0 ]; then
+  DIR='.'
+fi
+
+for f in `ls $DIR/*.tckx`; do 
+ 
+  if [ -h $f ]; then
+    file=`readlink $f`
+  else
+    file=$f
+  fi
+
+  if [ `grep -c "density" $file` = 0 ]; then
+
+    sed -i 's/^/1\t/g' $file
+
+    sed -i 's/1\t%%% Extended Properties File %%% - keys: /%%% Extended Properties File %%% - keys: density\t/g' $file
+
+  fi
+
+done

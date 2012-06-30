@@ -1,0 +1,21 @@
+#!/bin/bash
+
+for dir in `ls $1`; do
+
+  rm phantom/$dir/*
+
+  for filename in `ls $1/$dir`; do
+
+    ext_pos=$(( ${#filename}-1 ))
+    ext=${filename:$ext_pos}
+
+    if [ $ext = 'c' ]; then
+      ln -s $1/$dir/$filename phantom/$dir/${filename}pp
+
+    elif [ $ext = 'h' ]; then 
+      ln -s $1/$dir/$filename phantom/$dir/$filename
+
+    fi
+
+  done
+done

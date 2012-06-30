@@ -1,0 +1,55 @@
+set.prop_names(): ['PROP_1', 'PROP_2', 'PROP_3', 'PROP_4', 'PROP_5']
+set.elem_prop_index(ELEM_PROP_1): 0
+set.num_elem_props(): 5
+set.has_prop(PROP_2): True
+set.has_elem_prop(ELEM_PROP_7): 0
+set.prop_names(): ['PROP_1', 'PROP_2', 'PROP_3', 'PROP_4', 'PROP_5']
+set.get_extend_elem_prop_header(): ['EXT_ELEM_PROP_5', 'EXT_ELEM_PROP_4', 'EXT_ELEM_PROP_1', 'EXT_ELEM_PROP_3', 'EXT_ELEM_PROP_2']
+set.prop_names(): ['PROP_1', 'PROP_2', 'PROP_3', 'PROP_5']
+set.get_extend_elem_prop(EXT_ELEM_PROP_2,0): Ooogle 2-0
+set.prop_index(PROP_2): 1
+set.has_extend_elem_prop(EXT_ELEM_PROP_3): 1
+set.elem_prop_name(1): ELEM_PROP_2
+set.prop(PROP_5): 5.5
+set.prop_index(PROP_1): 0
+set.num_props(): 4
+set.size(): 2
+set.size(): 2
+set.num_extend_elem_props(): 6
+set.num_extend_elem_props(): 6
+set.vsize(): 82
+set.num_props(): 4
+set.prop(PROP_5): 5.5
+set.num_elem_props(): 5
+set.prop_index(PROP_2): 1
+set.has_extend_elem_prop(EXT_ELEM_PROP_9): 0
+set.has_extend_elem_prop(EXT_ELEM_PROP_1): 1
+set.has_extend_elem_prop(EXT_ELEM_PROP_1): 1
+set.num_props(): 4
+set.has_prop(PROP_5): True
+set.has_extend_elem_prop(EXT_ELEM_PROP_3): 1
+set.num_props(): 4
+set.has_prop(PROP_6): False
+set.num_extend_elem_props(): 10
+set.prop_names(): ['PROP_1', 'PROP_2', 'PROP_3', 'PROP_5']
+set.has_elem_prop(ELEM_PROP_7): 0
+set.has_prop(PROP_3): True
+set.bsize(): 75
+set.elem_prop_name(0): ELEM_PROP_1
+set.num_elem_props(): 4
+set.prop_index(PROP_5): 3
+set.prop_index(PROP_1): 0
+set.num_elem_props(): 4
+set.prop_index(PROP_2): 1
+set.vsize(): 4
+
+
+-------------------------------------
+             FINAL PRINT             
+-------------------------------------
+
+PROP_1: 1.1
+PROP_2: 2.2
+PROP_3: 3.3
+PROP_5: 5.5
+

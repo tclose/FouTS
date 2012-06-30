@@ -1,0 +1,32 @@
+MR::Math::Matrix(points, point_conv, strand.matrix()) 
+MR::Math::Matrix(tang, tang_conv, strand.matrix()) 
+
+(VoxelSize, ResponseFunction, parameters to Image class)
+
+BTS::Image<Interpolator>::Neighbourhood::reserve() --set initially to some reasonable number
+BTS::Image<Interpolator>::Neighbourhood::add_section(points.row(x), tang.row(x), *strand, point_conv.row(x), tang_conv.row(x)) (maybe include pointers to intermediately generated structures as well)
+
+BTS::Image<Interpolator>::Neighbourhood::calculate_intensities()
+	internally store points in a Nx3 matrix and tangents in a Nx3 matrices
+	have the list of voxel centres as Lx3 matrix and dw orientations as a 3xQ matrix  
+	Then should have a LxNx3 distance array, Nx1 length vector, and a NxQ angle matrix.  
+
+	response_functions as a NxQ matrix (will need to to column-wise multiplication and collecting on angle matrix) to produce another NxQ response matrix. 
+
+	columnwise multiplication of length_vector and angle matrix produces another NxQ matrix (probably could be incorporated into response function step I think)
+
+	interpolation function operates on LxNx3 to produce LxN interpolation intensities
+
+	matrix multiplication produces LxQ intensity matrix.
+
+BTS::Image<Interpolator>::collate_neighbourhoods(Neighbourhood)
+
+	takes LxQ matrices from neighbourhoods and collates them into L'xQ image data matrix.
+
+BTS::Image<Interpolator>::Neighbourood::calculate_gradients_hessians
+	Then take collated intensities and put them back into the calculate the gradient + Hessian
+	 reusing the precalculated interpolation and response matrices.
+
+
+	BTS::Image<Interpolator>::collate_gradients_hessians(Neighbourhood)
+		this is done per neighbourhood calculation to prevent large memory allocation problems
