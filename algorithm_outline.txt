@@ -30,3 +30,5 @@ BTS::Image<Interpolator>::Neighbourood::calculate_gradients_hessians
 
 	BTS::Image<Interpolator>::collate_gradients_hessians(Neighbourhood)
 		this is done per neighbourhood calculation to prevent large memory allocation problems
+		
+		testing
