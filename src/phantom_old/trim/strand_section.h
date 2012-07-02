@@ -1,1 +1,0 @@
-/home/tclose/Code/Phantom/phantom/trim/strand_section.h
