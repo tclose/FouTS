@@ -1,0 +1,27 @@
+- Store pointers to voxel neighbourhoods std::vector< std::vector< std::vector< std::vector<*Voxel> > > >
+
+- multiply x coord by inverse of voxel size.
+- add negative offset of each vector (i.e. if x goes from -2*voxel_size to 5*voxel_size, then the x_offset would be 2.0)
+- cast the value to size_t
+- check to see if new coord is out of bounds (i.e. negative or greater than vector size), 
+  - if so add enough new elements to the vectors to reach it.
+- Repeat for y 
+- For z repeat the look up procedure
+  - If elements are missing, new neighbourhoods and new voxels need to be initialised. The generated image should be 
+    made big enough to avoid this happening often.
+  - Copy the segment to each of the voxels in the neighbourhood as rows in its segment matrix.
+
+NB: This procedure could be performed in multiple threads if a lock was placed on the lookup/increment of the number of 
+segments for each voxel (and the resulting reallocation of the voxels vector and segment matrix if required however this
+should be rare as long as they are initialised large enough).
+  
+These voxels can then be processed independently in separate threads and their gradients, hessians collected back into 
+the master matrices when they return.
+  
+Side note, all the transformations can be pregenerated for the Fourier tract conversion in one conversion matrix. An index
+to the constructed rows of this matrix (and the tangent matrix) can then be passed to the voxels alongside the segment 
+and the intensity value.
+
+Base intensity and SNR should be used to prescale the reference image so that direct comparisons can be made with the 
+generated intensities. The acs values of the tractlets can also be scaled I suppose.
+
