@@ -20,8 +20,8 @@
 
 */
 
-#ifndef __bts_image2_reference_h__
-#define __bts_image2_reference_h__
+#ifndef __bts_image2_voxel_reference_h__
+#define __bts_image2_voxel_reference_h__
 
 namespace BTS {
 
@@ -38,9 +38,13 @@ namespace BTS {
         //Protected member variables
         protected:
 
+          MR::Math::Vector<double> values;
 
         //Public member functions
         public:
+
+          size_t size() const
+            { return values.size(); }
 
 
         //Protected member functions

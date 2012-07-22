@@ -23,6 +23,9 @@
 #ifndef __bts_image2_reference_h__
 #define __bts_image2_reference_h__
 
+#include <map>
+
+#include "bts/image2/index.h"
 #include "bts/image2/voxel/reference.h"
 
 namespace BTS {
@@ -38,7 +41,7 @@ namespace BTS {
       //Protected member variables
       protected:
 
-        std::map<>
+        std::map<Index,T> voxels;
 
       //Public member functions
       public:

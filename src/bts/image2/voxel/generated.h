@@ -20,10 +20,11 @@
 
 */
 
-#ifndef __bts_image2_generated_h__
-#define __bts_image2_generated_h__
+#ifndef __bts_image2_voxel_generated_h__
+#define __bts_image2_voxel_generated_h__
 
 #include "bts/image2/voxel/reference.h"
+#include "bts/image2/interpolator.h"
 
 namespace BTS {
 
@@ -36,10 +37,14 @@ namespace BTS {
         //Public static variables, nested classes and typedefs
         public:
 
-
         //Protected member variables
         protected:
 
+          Reference* ref;
+          Interpolator* interp;
+          MR::Math::Matrix<double> segments;
+          MR::Math::Vector<size_t> strand_is;
+          MR::Math::Vector<size_t> seg_is;
 
         //Public member functions
         public:
