@@ -44,27 +44,31 @@ namespace BTS {
 		      public:
 		        int offset;
 
+		      public:
+
 		        T& operator[](size_t index) {
-		          T* value;
-		          // If Lookup hasn't been initialised, append a new row and set the offset to the new index.
-		          if (!size()) {
-		            offset = index;
-		            value = &push_back(T());
-		          // Else if the index is within range, return the
-		          } else if (index >= offset && (index - offset) < size())
-		            value = &this->std::vector<int>::operator[](index - offset);
-		          else {
-		            int index_diff = offset - index;
+              int index_diff;
+              //If Lookup hasn't been initialised yet, manually set the index diff to one.
+              if (size())
+                index_diff = offset - index;
+              else {
+                index_diff = 1;
+                offset = index;
+		          }
+		          // If Lookup isn't big enough, append new rows, shifting the current elements if necessary (i.e. if index
+              // < offset), and set the offset to the new index.
+		          if (index < offset || index_diff >= size()) {
 		            resize(size() + abs(index_diff));
 		            // If the new index is below the current one, shift all the indices up by one (could be really expensive
 		            // I suppose), but it is meant to be expensive write, fast read as this case hopefully shouldn't happen
 		            // very often.
-		            if (index_diff < 0)
-		              for (size_t i = size(); i > size() + index_diff; --i)
+		            if (index_diff < 0) {
+		              for (int i = size()-1; i >= size() + index_diff; --i)
 		                this->std::vector<int>::operator[](index) = this->std::vector<int>::operator[](index+index_diff);
-		            value = &this->std::vector<int>::operator[](index - offset);
+		              offset = index;
+		            }
 		          }
-		          return *value;
+              return this->std::vector<int>::operator[](index - offset);
 		        }
 
 		    };
@@ -81,20 +85,27 @@ namespace BTS {
 			//Public member functions
 			public:
 
+		    Voxel&         operator[](int x, int y, int z) {
+		      return operator[](Index(x,y,z));
+        }
 
+		    Voxel&         operator[](const Index& index) {
+		      return voxels[index];
+	      }
 		
 			//Protected member functions
 			protected:
 
 		    std::vector<Voxel*>& find_neighbourhood(Coord pos) {
-		      Index neigh_index((int)floor(pos[X]-0.5),(int)floor(pos[Y]-0.5),(int)floor(pos[Z]-0.5));
+		      Index neigh_index((int)(pos[X]-0.5),(int)(pos[Y]-0.5),(int)(pos[Z]-0.5));
 		      std::vector<Voxel*>& neigh = neigh_lookup[neigh_index[X]][neigh_index[Y]][neigh_index[Z]];
 		      if (!neigh.size()) {
 	          neigh.resize(neigh_size[X] * neigh_size[Y] * neigh_size[Z]);
-	          for (size_t x = 0; x < neigh_size[X]; ++x)
-	            for (size_t y = 0; y < neigh_size[Y]; ++y)
-	              for (size_t z = 0; z < neigh_size[Z]; ++z)
-	                neigh[i] = operator[]((int)floor(pos[X]) )
+	          for (int x = -neigh_size[X]; x < neigh_size[X]; ++x)
+	            for (int y = -neigh_size[Y]; y < neigh_size[Y]; ++y)
+	              for (int z = -neigh_size[Z]; z < neigh_size[Z]; ++z)
+	                neigh[x * neigh_size[Y] * neigh_size[Z] + y * neigh_size[Z] t] =
+	                                               operator[](neigh_index[X] + x, neigh_index[Y] + y, neigh_index[Z] + z);
 		      }
 		      return neigh;
 		    }
