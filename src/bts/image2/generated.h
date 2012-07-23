@@ -25,6 +25,7 @@
 
 #include "bts/image2/reference.h"
 #include "bts/image2/voxel/generated.h"
+#include "bts/image2/index.h"
 
 namespace BTS {
 
@@ -47,11 +48,9 @@ namespace BTS {
 		      public:
 
 		        T& operator[](size_t index) {
-              int index_diff;
+              int index_diff = offset - index;
               //If Lookup hasn't been initialised yet, manually set the index diff to one.
-              if (size())
-                index_diff = offset - index;
-              else {
+              if (!size()) {
                 index_diff = 1;
                 offset = index;
 		          }
@@ -75,7 +74,16 @@ namespace BTS {
 
 			//Protected member variables
 			protected:
+//        size_t num_encodings;
+//        Triple<size_t> dims;
+//        Triple<double> voxel_size;
+//        Triple<double> offset;
+//        std::map<Index,T> voxels;
+//        T empty_voxel;
 
+		    Reference* reference;
+		    Diffusion::Model diff_model;
+		    Interpolator* interpolator;
 		    MR::Math::Matrix<double> position_matrix;
         MR::Math::Matrix<double> tangent_matrix;
 
@@ -85,29 +93,49 @@ namespace BTS {
 			//Public member functions
 			public:
 
+
+
 		    Voxel&         operator[](int x, int y, int z) {
 		      return operator[](Index(x,y,z));
         }
 
 		    Voxel&         operator[](const Index& index) {
-		      return voxels[index];
+		      Voxel& voxel = voxels[index];
+		      if (!voxel.size())
+		        initialise_voxel(voxel, index);
+		      return voxel;
 	      }
 		
 			//Protected member functions
 			protected:
 
-		    std::vector<Voxel*>& find_neighbourhood(Coord pos) {
-		      Index neigh_index((int)(pos[X]-0.5),(int)(pos[Y]-0.5),(int)(pos[Z]-0.5));
-		      std::vector<Voxel*>& neigh = neigh_lookup[neigh_index[X]][neigh_index[Y]][neigh_index[Z]];
-		      if (!neigh.size()) {
-	          neigh.resize(neigh_size[X] * neigh_size[Y] * neigh_size[Z]);
-	          for (int x = -neigh_size[X]; x < neigh_size[X]; ++x)
-	            for (int y = -neigh_size[Y]; y < neigh_size[Y]; ++y)
-	              for (int z = -neigh_size[Z]; z < neigh_size[Z]; ++z)
-	                neigh[x * neigh_size[Y] * neigh_size[Z] + y * neigh_size[Z] t] =
-	                                               operator[](neigh_index[X] + x, neigh_index[Y] + y, neigh_index[Z] + z);
-		      }
+		    std::vector<Voxel*>&  find_neighbourhood(Coord pos) {
+		      size_t x_index = (int)(pos[X]-0.5);
+		      size_t y_index = (int)(pos[Y]-0.5);
+          size_t z_index = (int)(pos[Z]-0.5);
+		      std::vector<Voxel*>& neigh = neigh_lookup[x_index][y_index][z_index];
+		      if (!neigh.size())
+		        initialise_neighbourhood(neigh, Index(x_index,y_index,z_index));
 		      return neigh;
+		    }
+
+		    std::vector<Voxel*>&  initialise_neighbourhood(std::vector<Voxel*>& neigh, const Index& index) {
+          neigh.resize(neigh_size[X] * neigh_size[Y] * neigh_size[Z]);
+          size_t count = 0;
+          for (int x = -neigh_size[X]; x < neigh_size[X]; ++x)
+            for (int y = -neigh_size[Y]; y < neigh_size[Y]; ++y)
+              for (int z = -neigh_size[Z]; z < neigh_size[Z]; ++z)
+                neigh[count++] = operator[](index[X] + x, index[Y] + y, index[Z] + z);
+          return neigh;
+		    }
+
+
+		    Voxel& initialise_voxel(Voxel& voxel, const Index& index) {
+		      Voxel* voxel_reference = 0;
+		      if (reference)
+		        voxel_reference = &(*reference)[index];
+		      voxel.initialise(num_encodings, diff_model, interpolator, voxel_reference)
+		      return voxel;
 		    }
 
 		};

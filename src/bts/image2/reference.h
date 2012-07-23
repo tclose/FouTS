@@ -41,11 +41,35 @@ namespace BTS {
       //Protected member variables
       protected:
 
+        size_t num_encodings;
+        Triple<size_t> dims;
+        Triple<double> voxel_size;
+        Triple<double> offset;
         std::map<Index,T> voxels;
+        T empty_voxel;
 
       //Public member functions
       public:
 
+        Reference_tpl(size_t num_encodings, const Triple<size_t>& dims, const Triple<double>& voxel_size,
+                                                                                         const Triple<double>& offset) :
+                     num_encodings(num_encodings),
+                     dims(dims),
+                     voxel_size(voxel_size),
+                     offset(offset),
+                     empty_voxel(num_encodings, 0.0) {}
+
+        T&         operator[](int x, int y, int z) const {
+          return operator[](Index(x,y,z));
+        }
+
+        T&         operator[](const Index& index) const {
+          typename std::map<Index,T>::iterator voxel_it = voxels.find(index);
+          if (voxel_it != voxels.end())
+             return *voxel_it;
+          else
+            return empty_voxel;
+        }
 
       //Protected member functions
       protected:
@@ -67,7 +91,7 @@ namespace BTS {
 			//Public member functions
 			public:
 
-		
+
 			//Protected member functions
 			protected:
 

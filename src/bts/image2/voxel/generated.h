@@ -41,13 +41,24 @@ namespace BTS {
         protected:
 
           Reference* ref;
+          Diffusion::Model* diff_model;
           Interpolator* interp;
+          size_t num_segs;
           MR::Math::Matrix<double> segments;
-          MR::Math::Vector<size_t> strand_is;
+          MR::Math::Vector<size_t> fibre_is;
           MR::Math::Vector<size_t> seg_is;
 
         //Public member functions
         public:
+
+          void initialise(size_t num_encodings, Diffusion::Model* diffusion_model, Interpolator* interpolator,
+                                                                                       Reference* reference = 0) {
+            Reference::initialise(num_encodings);
+            ref = reference;
+            diff_model = diffusion_model;
+            interp = interpolator;
+            num_segs = 0;
+          }
 
 
         //Protected member functions

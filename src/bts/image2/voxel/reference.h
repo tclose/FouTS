@@ -47,6 +47,11 @@ namespace BTS {
             { return values.size(); }
 
 
+          void initialise(size_t num_encodings) {
+            values.resize(num_encodings);
+          }
+
+
         //Protected member functions
         protected:
 

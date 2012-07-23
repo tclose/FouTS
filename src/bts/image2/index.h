@@ -27,25 +27,28 @@ namespace BTS {
 
   namespace Image2 {
 
-    class Index : public Triple<int> {
 
-      //Public static variables, nested classes and typedefs
-      public:
+    typedef Triple<int> Index;
 
-
-      //Protected member variables
-      protected:
-
-
-      //Public member functions
-      public:
-
-
-      //Protected member functions
-      protected:
-
-
-    };
+//    class Index : public Triple<int> {
+//
+//      //Public static variables, nested classes and typedefs
+//      public:
+//
+//
+//      //Protected member variables
+//      protected:
+//
+//
+//      //Public member functions
+//      public:
+//
+//
+//      //Protected member functions
+//      protected:
+//
+//
+//    };
 
   }
 
