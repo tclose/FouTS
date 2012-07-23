@@ -38,16 +38,20 @@ namespace BTS {
         //Protected member variables
         protected:
 
+          Coord centre;
           MR::Math::Vector<double> values;
 
         //Public member functions
         public:
 
-          size_t size() const
+          Reference() { centre.invalidate(); }
+
+          size_t num_encodings() const
             { return values.size(); }
 
 
-          void initialise(size_t num_encodings) {
+          void initialise(size_t num_encodings, const Coord& voxel_centre) {
+            Coord centre = voxel_centre;
             values.resize(num_encodings);
           }
 

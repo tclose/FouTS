@@ -25,6 +25,7 @@
 
 #include "bts/image2/voxel/reference.h"
 #include "bts/image2/interpolator.h"
+#include "bts/fibre/segment.h"
 
 namespace BTS {
 
@@ -37,6 +38,8 @@ namespace BTS {
         //Public static variables, nested classes and typedefs
         public:
 
+          static const size_t SEGMENTS_BLOCK_SIZE = 100;
+
         //Protected member variables
         protected:
 
@@ -45,25 +48,88 @@ namespace BTS {
           Interpolator* interp;
           size_t num_segs;
           MR::Math::Matrix<double> segments;
-          MR::Math::Vector<size_t> fibre_is;
-          MR::Math::Vector<size_t> seg_is;
+          MR::Math::Vector<size_t> fibre_indices;
+          MR::Math::Vector<size_t> seg_indices;
+          MR::Math::Matrix<double> diff_weights;
 
         //Public member functions
         public:
 
-          void initialise(size_t num_encodings, Diffusion::Model* diffusion_model, Interpolator* interpolator,
-                                                                                       Reference* reference = 0) {
-            Reference::initialise(num_encodings);
+          void initialise(size_t num_encodings, const Coord& voxel_centre, Diffusion::Model* diffusion_model,
+                                                                 Interpolator* interpolator, Reference* reference = 0) {
+            Reference::initialise(num_encodings, voxel_centre);
             ref = reference;
             diff_model = diffusion_model;
             interp = interpolator;
             num_segs = 0;
           }
 
+          void add_segment(const Fibre::Segment& segment, size_t fibre_index, size_t seg_index) {
+            assert(segments.columns() == segment.size() || !segments.columns());
+            //Mutex to start here
+            size_t next_index = num_segs++;
+            if (num_segs > segments.rows()) {
+              size_t new_num_rows = segments.rows() + SEGMENTS_BLOCK_SIZE;
+              segments.resize(new_num_rows, segment.size());
+              work.resize(new_num_rows, 5);
+              diff_weights.resize(new_num_rows,num_encodings())
+              fibre_indices.resize(new_num_rows);
+              seg_indices.resize(new_num_rows);
+            }
+            //Mutex to end here
+            segments.row(next_index) = segment;
+            fibre_indices[next_index] = fibre_index;
+            seg_indices[next_index] = seg_index;
+
+          }
+
+          void  clear_segments() {
+            segments.clear();
+            fibre_indices.clear();
+            seg_indices.clear();
+            num_segs = 0;
+          }
+
+          void   calc_intensities() {
+            MR::Math::Vector<double> interpolations = work.column(3).sub(0,num_segs);
+            interp->interpolate(interpolations, seg_positions, centre, work.sub(0,num_segs,0,3));
+            MR::Math::Vector<double> lengths = seg_lengths(); //Has to be called after interpolate as it returns the values in the first column of the work vector
+
+            diff_model->weights(diff_weights, seg_tangents);
+
+
+          }
 
         //Protected member functions
         protected:
 
+          const MR::Math::Matrix<double>  seg_positions() const
+            { return segments.sub(0,num_segs,0,3); }
+
+          const MR::Math::Matrix<double>  seg_tangents() const
+            { return segments.sub(0,num_segs,3,6); }
+
+          const MR::Math::Vector<double>  seg_intensities() const
+            { return segments.column(6).sub(0,num_segs); }
+
+          /*! Returns the lengths of the segments (from their tangents) in the first column of the work
+           *  matrix (so be careful not to reuse the work matrix before you read them).
+           *
+           * @return The lengths of the stored segments
+           */
+          MR::Math::Vector<double> seg_lengths() {
+            MR::Math::Matrix<double> lengths_work = work.sub(0,num_segs,0,3);
+            MR::Math::Vector<double> lengths = lengths_work.column(X);
+            lengths_work = seg_tangents();
+            lengths_work.column(X) *= lengths_work.column(X);
+            lengths_work.column(Y) *= lengths_work.column(Y);
+            lengths_work.column(Z) *= lengths_work.column(Z);
+            lengths += lengths_work.column(Y); // lengths is column(X) to start with
+            lengths += lengths_work.column(Z);
+            for (size_t i = 0; i < lengths.size(); ++i)
+              lengths[i] = sqrt(lengths[i]);
+            return lengths;
+          }
 
       };
 
