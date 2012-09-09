@@ -40,6 +40,10 @@ namespace BTS {
 			//Public member functions
 			public:
 
+		    virtual ~Interpolator() {}
+
+		    virtual void interpolate(MR::Math::Vector<double> intensities, MR::Math::Matrix<double> positions, Coord centre,
+                                                                                       MR::Math::Matrix<double> work) {}
 		
 			//Protected member functions
 			protected:

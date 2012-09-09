@@ -203,11 +203,11 @@ namespace BTS {
         }
       
 
-        const static double                  default_strand_volume_fraction = 0.2262 * .0005 * 1e5 * 2.0;
+        const static double                 default_strand_volume_fraction = 0.2262 * .0005 * 1e5 * 2.0;
 
-        size_t                                num_encodings() const
+        size_t                              num_encodings() const
           { return responses.size(); }
-        size_t                                size() const
+        size_t                              size() const
           { return responses.size(); }
         
         Response&                           operator[](size_t index)
@@ -228,6 +228,9 @@ namespace BTS {
         
         bool                                includes_isotropic() const
           { return includes_iso; }
+
+        MR::Math::Vector<double>            weightings(MR::Math::Vector<double> weightings,
+                                                                                MR::Math::Matrix<double> orientations);
 
       protected:
 

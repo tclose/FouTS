@@ -270,7 +270,12 @@ namespace BTS {
     }
 
 
+    MR::Math::Vector<double>            Model::weightings(MR::Math::Vector<double> weightings,
+                                                                    MR::Math::Matrix<double> orientations) {
 
+      //TODO: Implement this function
+      return weightings;
+    }
 
 
     void                                Model::init (const MR::Math::Matrix<double>& encodings_matrix, const MR::Math::Matrix<double>& response_SHs, bool include_isotropic) {
