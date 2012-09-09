@@ -20,15 +20,11 @@ BTS::Image<Interpolator>::Neighbourhood::calculate_intensities()
 	matrix multiplication produces LxQ intensity matrix.
 
 BTS::Image<Interpolator>::collate_neighbourhoods(Neighbourhood)
-
 	takes LxQ matrices from neighbourhoods and collates them into L'xQ image data matrix.
 
 BTS::Image<Interpolator>::Neighbourood::calculate_gradients_hessians
 	Then take collated intensities and put them back into the calculate the gradient + Hessian
 	 reusing the precalculated interpolation and response matrices.
 
-
-	BTS::Image<Interpolator>::collate_gradients_hessians(Neighbourhood)
+BTS::Image<Interpolator>::collate_gradients_hessians(Neighbourhood)
 		this is done per neighbourhood calculation to prevent large memory allocation problems
-		
-		testing

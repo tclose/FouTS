@@ -93,8 +93,6 @@ namespace BTS {
             MR::Math::Vector<double> interpolations = work.column(3).sub(0,num_segs);
             interp->interpolate(interpolations, seg_positions, centre, work.sub(0,num_segs,0,3));
             MR::Math::mult(segments.sub(6, ))
-
-
           }
 
         //Protected member functions
