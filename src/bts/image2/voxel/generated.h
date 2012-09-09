@@ -48,9 +48,9 @@ namespace BTS {
           Interpolator* interp;
           size_t num_segs;
           MR::Math::Matrix<double> segments;
+          MR::Math::Matrix<double> work;
           MR::Math::Vector<size_t> fibre_indices;
           MR::Math::Vector<size_t> seg_indices;
-          MR::Math::Matrix<double> diff_weights;
 
         //Public member functions
         public:
@@ -72,7 +72,6 @@ namespace BTS {
               size_t new_num_rows = segments.rows() + SEGMENTS_BLOCK_SIZE;
               segments.resize(new_num_rows, segment.size());
               work.resize(new_num_rows, 5);
-              diff_weights.resize(new_num_rows,num_encodings())
               fibre_indices.resize(new_num_rows);
               seg_indices.resize(new_num_rows);
             }
@@ -90,12 +89,10 @@ namespace BTS {
             num_segs = 0;
           }
 
-          void   calc_intensities() {
+          void  calc_intensities() {
             MR::Math::Vector<double> interpolations = work.column(3).sub(0,num_segs);
             interp->interpolate(interpolations, seg_positions, centre, work.sub(0,num_segs,0,3));
-            MR::Math::Vector<double> lengths = seg_lengths(); //Has to be called after interpolate as it returns the values in the first column of the work vector
-
-            diff_model->weights(diff_weights, seg_tangents);
+            MR::Math::mult(segments.sub(6, ))
 
 
           }
