@@ -29,25 +29,13 @@ namespace BTS {
 
 		class Interpolator {
 
-			//Public static variables, nested classes and typedefs
-			public:
-
-
-			//Protected member variables
-			protected:
-
-
 			//Public member functions
 			public:
 
 		    virtual ~Interpolator() {}
 
-		    virtual void interpolate(MR::Math::Vector<double> intensities, MR::Math::Matrix<double> positions, Coord centre,
-                                                                                       MR::Math::Matrix<double> work) {}
-		
-			//Protected member functions
-			protected:
-
+		    virtual MR::Math::Vector<double> interpolate(MR::Math::Matrix<double> positions, Coord centre,
+                                                    MR::Math::Vector<double> output, MR::Math::Matrix<double> work) = 0;
 
 		};
 

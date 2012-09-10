@@ -86,8 +86,8 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cmd"/>
 						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
+						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cmd"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -183,8 +183,8 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cmd"/>
+						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -280,8 +280,8 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cmd"/>
+						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
