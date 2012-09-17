@@ -40,8 +40,8 @@ namespace BTS {
 
 
 #include "math/vector.h"
-#include "bts/utilities/reader.h"
-#include "bts/utilities/writer.h"
+//#include "bts/utilities/reader.h"
+//#include "bts/utilities/writer.h"
 
 
 namespace BTS {
@@ -56,8 +56,8 @@ namespace BTS {
         typedef Proposal::Walker Walker;
         typedef Proposal::Momentum Momentum;
         typedef std::map<std::string, std::string> Properties;
-        typedef Utilities::Reader<MCMC::State> Reader;
-        typedef Utilities::Writer<MCMC::State> Writer;
+ //       typedef Utilities::Reader<MCMC::State> Reader;
+  //      typedef Utilities::Writer<MCMC::State> Writer;
 
         template <typename T> class Tensor_tpl;
         class Tensor;

@@ -43,14 +43,50 @@ namespace BTS {
         { create(location); }
 
         template <typename U> Writer( const std::string& location,
+                                      const U& template_or_reader)
+          { create(location); }
+
+        template <typename U> Writer( const std::string& location,
                                       const U& template_or_reader,
-                                      const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+                                      const Header& key_list)
+          { create(location); }
+
+
+        template <typename U> Writer( const std::string& location,
+                                      const U& template_or_reader,
+                                      const Header& key_list,
+                                      const Header& elem_key_list)
+          { create(location); }
+
+        ~Writer()
+          { close(); }
+
+        //!Used in template functions, ignores properties.
+        template <typename U> void create( const std::string& location,
+                                      const U& template_or_reader)
+          { create(location); }
+
+        template <typename U> void create( const std::string& location,
+                                      const U& template_or_reader,
+                                      const Header& key_list)
+          { create(location); }
+
+
+        template <typename U> void create( const std::string& location,
+                                      const U& template_or_reader,
+                                      const Header& key_list,
+                                      const Header& elem_key_list)
+          { create(location); }
+
+        template <typename U> Writer( const std::string& location,
+                                      const U& template_or_reader,
+                                      const std::map<std::string,std::string>& properties ) 
           { create(location); }
 
         template <typename U> Writer( const std::string& location,
                                       const U& template_or_reader,
                                       const Header& key_list,
-                                      const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+                                      const std::map<std::string,std::string>& properties)
           { create(location); }
 
 
@@ -58,7 +94,7 @@ namespace BTS {
                                       const U& template_or_reader,
                                       const Header& key_list,
                                       const Header& elem_key_list,
-                                      const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+                                      const std::map<std::string,std::string>& properties)
           { create(location); }
 
         ~Writer()
@@ -67,13 +103,13 @@ namespace BTS {
         //!Used in template functions, ignores properties.
         template <typename U> void create( const std::string& location,
                                       const U& template_or_reader,
-                                      const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+                                      const std::map<std::string,std::string>& properties)
           { create(location); }
 
         template <typename U> void create( const std::string& location,
                                       const U& template_or_reader,
                                       const Header& key_list,
-                                      const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+                                      const std::map<std::string,std::string>& properties)
           { create(location); }
 
 
@@ -81,7 +117,7 @@ namespace BTS {
                                       const U& template_or_reader,
                                       const Header& key_list,
                                       const Header& elem_key_list,
-                                      const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+                                      const std::map<std::string,std::string>& properties)
           { create(location); }
 
 
