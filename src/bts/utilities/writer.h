@@ -23,6 +23,8 @@
 #ifndef __bts_utilities_writer_h__
 #define __bts_utilities_writer_h__
 
+#include <string>
+#include <map>
 #include "bts/utilities/common.h"
 
 namespace BTS {

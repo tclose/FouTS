@@ -2,3 +2,4 @@
 /backup
 .svn
 /data
+*.o
