@@ -3,3 +3,4 @@
 .svn
 /data
 *.o
+*.pyc
