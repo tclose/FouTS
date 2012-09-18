@@ -31,6 +31,8 @@ namespace BTS {
 
   namespace Utilities {
 
+    class Props : public std::map<std::string,std::string> {};
+
     template <typename T> class Writer {
 
       public:
@@ -42,6 +44,11 @@ namespace BTS {
         Writer(const std::string& location)
         { create(location); }
 
+        template <typename U> Writer( const std::string& location,
+                                      const U& template_or_reader
+                                      const Props& props = Props())
+          { create(location); }
+        
         template <typename U> Writer( const std::string& location,
                                       const U& template_or_reader)
           { create(location); }
