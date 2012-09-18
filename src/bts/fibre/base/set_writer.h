@@ -29,6 +29,7 @@
 #include "bts/fibre/base/set.h"
 #include "bts/fibre/base/writer.h"
 #include "bts/fibre/base/set_reader.h"
+#include "bts/fibre/properties.h"
 
 
 namespace BTS { 
@@ -57,14 +58,14 @@ namespace BTS {
 
           template <typename U> SetWriter (const std::string& location,
                                            const U& set_or_reader,
-                                           const std::map<std::string,std::string>& file_props = std::map<std::string,std::string>())
+                                           const std::map<std::string,std::string>& file_props = Properties())
            { create (location, set_or_reader, file_props); }
 
 
           template <typename U> SetWriter (const std::string& location,
                                              const U& set_or_reader,
                                              const std::vector<std::string>& extend_prop_keys,
-                                             const std::map<std::string,std::string>& file_props = std::map<std::string,std::string>())
+                                             const std::map<std::string,std::string>& file_props = Properties())
             { create( location, set_or_reader, extend_prop_keys, file_props); }
 
 
@@ -72,7 +73,7 @@ namespace BTS {
                                            const U& set_or_reader,
                                            const std::vector<std::string>& extend_prop_keys,
                                            const std::vector<std::string>& extend_elem_prop_keys,
-                                           const std::map<std::string,std::string>& file_props = std::map<std::string,std::string>())
+                                           const std::map<std::string,std::string>& file_props = Properties())
             { create( location, set_or_reader, extend_prop_keys, extend_elem_prop_keys, file_props); }
 
 
@@ -82,7 +83,7 @@ namespace BTS {
 
           template <typename U> void create (const std::string& location,
                                              const U& set_or_reader,
-                                             const std::map<std::string,std::string>& file_props = std::map<std::string,std::string>()) {
+                                             const std::map<std::string,std::string>& file_props = Properties()) {
             create( location,
                     Object::select_props<T>(set_or_reader.prop_keys()),
                     Object::select_props<typename T::Element>(set_or_reader.elem_prop_keys()),
@@ -95,7 +96,7 @@ namespace BTS {
           template <typename U> void create (const std::string& location,
                                              const U& set_or_reader,
                                              const std::vector<std::string>& extend_prop_keys,
-                                             const std::map<std::string,std::string>& file_props = std::map<std::string,std::string>()) {
+                                             const std::map<std::string,std::string>& file_props = Properties()) {
             create( location,
                     Object::select_props<T>(set_or_reader.prop_keys()),
                     Object::select_props<typename T::Element>(set_or_reader.elem_prop_keys()),
@@ -109,7 +110,7 @@ namespace BTS {
                                              const U& set_or_reader,
                                              const std::vector<std::string>& extend_prop_keys,
                                              const std::vector<std::string>& extend_elem_prop_keys,
-                                             const std::map<std::string,std::string>& file_props = std::map<std::string,std::string>()) {
+                                             const std::map<std::string,std::string>& file_props = Properties()) {
             create( location,
                     Object::select_props<T>(set_or_reader.prop_keys()),
                     Object::select_props<typename T::Element>(set_or_reader.elem_prop_keys()),
@@ -137,7 +138,7 @@ namespace BTS {
                         const std::vector<const char*>& elem_props,
                         const std::vector<std::string> extend_prop_keys = std::vector<std::string>(),
                         const std::vector<std::string> extend_elem_prop_keys = std::vector<std::string>(),
-                        const std::map<std::string,std::string>& file_props = std::map<std::string,std::string>());
+                        const std::map<std::string,std::string>& file_props = Properties());
 
           static std::string    row_seperator(size_t count)
           { return "--- END " + str(count) + " ---"; }
@@ -158,14 +159,14 @@ namespace BTS {
 
           template <typename U> SetTextWriter (const std::string& location,
                                            const U& set_or_reader,
-                                           const std::map<std::string,std::string>& file_props = std::map<std::string,std::string>())
+                                           const std::map<std::string,std::string>& file_props = Properties())
                            : SetWriter<T>(location, set_or_reader, file_props) {}
 
 
           template <typename U> SetTextWriter (const std::string& location,
                                              const U& set_or_reader,
                                              const std::vector<std::string>& extend_prop_keys,
-                                             const std::map<std::string,std::string>& file_props = std::map<std::string,std::string>())
+                                             const std::map<std::string,std::string>& file_props = Properties())
                            : SetWriter<T>(location, set_or_reader, extend_prop_keys, file_props) {}
 
 
@@ -173,7 +174,7 @@ namespace BTS {
                                            const U& set_or_reader,
                                            const std::vector<std::string>& extend_prop_keys,
                                            const std::vector<std::string>& extend_elem_prop_keys,
-                                           const std::map<std::string,std::string>& file_props = std::map<std::string,std::string>())
+                                           const std::map<std::string,std::string>& file_props = Properties())
                            : SetWriter<T>(location, set_or_reader, extend_prop_keys, extend_elem_prop_keys, file_props) {}
 
 

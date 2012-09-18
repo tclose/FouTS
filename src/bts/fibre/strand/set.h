@@ -38,6 +38,7 @@
 
 #include "bts/fibre/base/set_reader.h"
 #include "bts/fibre/base/set_writer.h"
+#include "bts/fibre/properties.h"
 
 #include "k_means/KMlocal.h"	// k-means algorithms
 
@@ -108,7 +109,7 @@ namespace BTS {
          *
          * @param extended_props The extended properties of the set
          */
-        Set (const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (const std::map<std::string,std::string>& extended_props = Properties())
           : Fibre::Base::Set<Strand>(std::vector<const char*>(), std::vector<const char*>(), extended_props) {}
 
 
@@ -118,7 +119,7 @@ namespace BTS {
          * @param elem_props The element properties
          * @param extended_props The extended properties of the set
          */
-        Set (const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = Properties())
           : Fibre::Base::Set<Strand>(props, elem_props, extended_props) {}
 
 
@@ -128,7 +129,7 @@ namespace BTS {
          * @param degree The (fixed) degree of the the strands in the strand set (can be freed using the 'free_elem_degree()' function)
          * @param extended_props The extended properties of the set
          */
-        Set (size_t size, size_t degree, const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (size_t size, size_t degree, const std::map<std::string,std::string>& extended_props = Properties())
           : Fibre::Base::Set<Strand>(size, degree, degree * 3, std::vector<const char*>(), std::vector<const char*>(), extended_props) {}
 
 
@@ -140,7 +141,7 @@ namespace BTS {
          * @param degree The (fixed) degree of the the strands in the strand set (can be freed using the 'free_elem_degree()' function)
          * @param extended_props The extended properties of the set
          */
-        Set (size_t size, size_t degree, const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (size_t size, size_t degree, const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = Properties())
           : Fibre::Base::Set<Strand>(size, degree, degree * 3 + elem_props.size(), props, elem_props, extended_props) {}
 
 
@@ -170,16 +171,16 @@ namespace BTS {
         Set (const Tractlet& set, double strands_per_vol);
 
 
-        //        Set (size_t num_strands, const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+        //        Set (size_t num_strands, const std::map<std::string,std::string>& properties = Properties())
         //          : Fibre::Base::Set<Strand>(num_strands, properties, 1.0) {}
         //
-        //        Set (size_t num_strands, double base_intensity, const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+        //        Set (size_t num_strands, double base_intensity, const std::map<std::string,std::string>& properties = Properties())
         //          : Fibre::Base::Set<Strand>(num_strands, properties, base_intensity) {}
         //
-        //        Set (size_t num_strands, size_t degree, double base_intensity = 1.0, const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+        //        Set (size_t num_strands, size_t degree, double base_intensity = 1.0, const std::map<std::string,std::string>& properties = Properties())
         //          : Fibre::Base::Set<Strand>(num_strands, degree, properties, base_intensity) {}
         //
-        //        Set (size_t num_strands, const Strand& default_value, double base_intensity = 1.0, const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+        //        Set (size_t num_strands, const Strand& default_value, double base_intensity = 1.0, const std::map<std::string,std::string>& properties = Properties())
         //          : Fibre::Base::Set<Strand>(num_strands, default_value, properties, base_intensity) {}
 
 

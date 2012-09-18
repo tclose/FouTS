@@ -147,7 +147,7 @@ namespace BTS {
                 size_t elem_vsize,
                 const std::vector<const char*>& props,
                 const std::vector<const char*>& elem_props,
-                const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+                const std::map<std::string,std::string>& extended_props = Properties())
               : Object(size, size * elem_vsize + props.size(), props),
                 vrows(false),
                 rsize(elem_vsize),

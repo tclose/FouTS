@@ -30,7 +30,7 @@ namespace BTS {
 
 	namespace Fibre {
 		
-    class Properties : public std::map<std::string, std::string> {
+    class ExtendedProperties : public std::map<std::string, std::string> {
 
       public:
 
