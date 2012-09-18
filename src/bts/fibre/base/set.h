@@ -32,6 +32,7 @@
 
 #include "bts/fibre/base/object.h"
 #include "bts/coord.h"
+#include "bts/fibre/properties.h"
 
 #define BASE_SET_FUNCTIONS(Derived) \
   Derived&                      resize(size_t size, double fill_value = NAN) \

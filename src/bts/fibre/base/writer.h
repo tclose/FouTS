@@ -43,7 +43,7 @@ namespace BTS {
 
 #include "bts/file.h"
 
-#include "bts/fibre/properties/extended.h"
+
 #include "bts/fibre/base/reader.h"
 #include "bts/fibre/properties.h"
 

@@ -114,7 +114,6 @@ namespace BTS {
     class Strand;
     class Track;
     class Tractlet;
-    class Properties
 
     namespace Base {
 

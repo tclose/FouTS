@@ -31,8 +31,6 @@ namespace BTS {
 
   namespace Utilities {
 
-    class Props : public std::map<std::string,std::string> {};
-
     template <typename T> class Writer {
 
       public:
@@ -44,10 +42,8 @@ namespace BTS {
         Writer(const std::string& location)
         { create(location); }
 
-        template <typename U> Writer( const std::string& location,
-                                      const U& template_or_reader
-                                      const Props& props = Props())
-          { create(location); }
+        ~Writer()
+          { close(); }
         
         template <typename U> Writer( const std::string& location,
                                       const U& template_or_reader)
@@ -64,9 +60,6 @@ namespace BTS {
                                       const Header& key_list,
                                       const Header& elem_key_list)
           { create(location); }
-
-        ~Writer()
-          { close(); }
 
         //!Used in template functions, ignores properties.
         template <typename U> void create( const std::string& location,
@@ -104,8 +97,6 @@ namespace BTS {
                                       const std::map<std::string,std::string>& properties)
           { create(location); }
 
-        ~Writer()
-          { close(); }
 
         //!Used in template functions, ignores properties.
         template <typename U> void create( const std::string& location,

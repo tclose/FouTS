@@ -31,7 +31,7 @@
 #include "bts/fibre/strand/set.h"
 #include "bts/fibre/track/set.h"
 #include "bts/fibre/tractlet/set.h"
-#include "bts/fibre/properties/extended.h"
+
 
 
 #include "bts/diffusion/model.h"

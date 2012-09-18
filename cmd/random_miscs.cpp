@@ -42,7 +42,7 @@ extern "C" {
 #include "bts/mcmc/state.h"
 //#include "bts/mcmc/state/writer.h"
 
-#include "bts/fibre/properties/extended.h"
+
 #include "bts/fibre/strand.h"
 
 
