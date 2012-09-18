@@ -24,6 +24,7 @@
 #include "bts/cmd.h"
 #include "bts/common.h"
 
+#include "bts/fibre/base/object.h"
 //#include "bts/fibre/strand/set.h"
 
 //#include "bts/fibre/strand/set.h"

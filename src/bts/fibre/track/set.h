@@ -149,7 +149,7 @@ namespace BTS {
 
         BASE_GENERAL_FUNCTIONS(Set);
 
-        BASE_SET_FUNCTIONS(Set, Track);
+        BASE_SET_FUNCTIONS(Set);
 
 
         Strand::Set                       to_strands(size_t degree) const;

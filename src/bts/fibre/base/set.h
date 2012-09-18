@@ -34,12 +34,12 @@
 #include "bts/coord.h"
 #include "bts/fibre/properties.h"
 
-#define BASE_SET_FUNCTIONS(Derived, Element) \
+#define BASE_SET_FUNCTIONS(Derived) \
   Derived&                      resize(size_t size, double fill_value = NAN) \
-    { assert(!var_elem_degrees()); Base::Set<Element>::resize(size, fill_value, 0, 0); return *this; } \
+    { assert(!var_elem_degrees()); Base::Set<Derived::Element>::resize(size, fill_value, 0, 0); return *this; } \
 \
-  Derived&                      resize(size_t size, const Element& elem) \
-    { Base::Set<Element>::resize(size,elem); return *this; } \
+  Derived&                      resize(size_t size, const Derived::Element& elem) \
+    { Base::Set<Derived::Element>::resize(size,elem); return *this; } \
 
 
 namespace BTS {
@@ -243,7 +243,7 @@ namespace BTS {
 
           ~Set () {
 
-            if (this->GSLVector<double>::owner) {
+            if (is_owner()) {
               delete elem_props;
 
               if (ext_props) delete ext_props;

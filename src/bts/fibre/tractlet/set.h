@@ -148,7 +148,7 @@ namespace BTS {
 
         BASE_GENERAL_FUNCTIONS(Set);
 
-        BASE_SET_FUNCTIONS(Set, Tractlet);
+        BASE_SET_FUNCTIONS(Set);
 
         size_t                                      max_degree() const;
 

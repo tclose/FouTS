@@ -190,7 +190,7 @@ namespace BTS {
 
         BASE_GENERAL_FUNCTIONS(Set);
 
-        BASE_SET_FUNCTIONS(Set, Strand);
+        BASE_SET_FUNCTIONS(Set);
 
         Track::Set                                  to_tracks (size_t num_points) const;
 
