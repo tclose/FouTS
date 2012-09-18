@@ -146,11 +146,9 @@ namespace BTS {
 
         Set (const Track::Set& set, size_t degree, size_t num_tractlets, const std::string& cluster_save_location = "");
 
-
         BASE_GENERAL_FUNCTIONS(Set);
 
-        BASE_SET_FUNCTIONS(Set);
-
+        BASE_SET_FUNCTIONS(Set, Tractlet);
 
         size_t                                      max_degree() const;
 

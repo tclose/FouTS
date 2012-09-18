@@ -34,12 +34,12 @@
 #include "bts/coord.h"
 #include "bts/fibre/properties.h"
 
-#define BASE_SET_FUNCTIONS(Derived) \
+#define BASE_SET_FUNCTIONS(Derived, Element) \
   Derived&                      resize(size_t size, double fill_value = NAN) \
-    { assert(!var_elem_degrees()); Base::Set<typename Derived::Element>::resize(size, fill_value, 0, 0); return *this; } \
+    { assert(!var_elem_degrees()); Base::Set<Element>::resize(size, fill_value, 0, 0); return *this; } \
 \
-  Derived&                      resize(size_t size, const typename Derived::Element& elem) \
-    { Base::Set<typename Derived::Element>::resize(size,elem); return *this; } \
+  Derived&                      resize(size_t size, const Element& elem) \
+    { Base::Set<Element>::resize(size,elem); return *this; } \
 
 
 namespace BTS {
