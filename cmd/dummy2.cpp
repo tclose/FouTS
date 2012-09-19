@@ -25,14 +25,14 @@
 #include "bts/common.h"
 
 #include "bts/fibre/base/object.h"
-//#include "bts/fibre/strand/set.h"
+#include "bts/fibre/strand/set.h"
 
-//#include "bts/fibre/strand/set.h"
-//#include "bts/fibre/track/set.h"
-//#include "bts/fibre/tractlet/set.h"
-//#include "bts/fibre/tractlet/section.h"
-//#include "bts/fibre/base/set_reader.h"
-//#include "bts/fibre/base/set_writer.h"
+#include "bts/fibre/strand/set.h"
+#include "bts/fibre/track/set.h"
+#include "bts/fibre/tractlet/set.h"
+#include "bts/fibre/tractlet/section.h"
+#include "bts/fibre/base/set_reader.h"
+#include "bts/fibre/base/set_writer.h"
 
 using namespace BTS;
 
