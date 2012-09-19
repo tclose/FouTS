@@ -30,6 +30,7 @@
 #include "bts/fibre/track.h"
 
 #include "bts/fibre/base/set.h"
+#include "bts/fibre/properties.h"
 
 
 
@@ -73,7 +74,7 @@ namespace BTS {
         *
         * @param extended_props The extended properties of the set
         */
-        Set (const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (const std::map<std::string,std::string>& extended_props = Properties())
          : Fibre::Base::Set<Track>(std::vector<const char*>(), std::vector<const char*>(), extended_props) {}
 
 
@@ -84,7 +85,7 @@ namespace BTS {
         * @param elem_props The element properties
         * @param extended_props The extended properties of the set
         */
-        Set (const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = Properties())
          : Fibre::Base::Set<Track>(props, elem_props, extended_props) {}
 
 
@@ -95,7 +96,7 @@ namespace BTS {
         * @param num_points The (fixed) number of points per track in the set (can be freed using the 'free_elem_degree()' function)
         * @param extended_props The extended properties of the set
         */
-        Set (size_t size, size_t num_points, const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (size_t size, size_t num_points, const std::map<std::string,std::string>& extended_props = Properties())
          : Fibre::Base::Set<Track>(size, num_points, num_points * 3, std::vector<const char*>(), std::vector<const char*>(), extended_props) {}
 
 
@@ -107,21 +108,21 @@ namespace BTS {
         * @param num_points The (fixed) number of points in the the tracks in the track set (can be freed using the 'free_elem_degree()' function)
         * @param extended_props The extended properties of the set
         */
-        Set (size_t size, size_t num_points, const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (size_t size, size_t num_points, const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = Properties())
          : Fibre::Base::Set<Track>(size, num_points, num_points * 3 + elem_props.size(), props, elem_props, extended_props) {}
 
 
 //
-//        Set (const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+//        Set (const std::map<std::string,std::string>& properties = Properties())
 //          : Base::Set<Track>(properties) {}
 //
-//        Set (size_t num_tcks, const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+//        Set (size_t num_tcks, const std::map<std::string,std::string>& properties = Properties())
 //          : Base::Set<Track>(num_tcks, properties) {}
 //
-//        Set (size_t num_tcks, size_t degree, const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+//        Set (size_t num_tcks, size_t degree, const std::map<std::string,std::string>& properties = Properties())
 //          : Base::Set<Track>(num_tcks, degree, properties) {}
 //
-//        Set (size_t num_tcks, const Track& default_value, const std::map<std::string,std::string>& properties = std::map<std::string,std::string>())
+//        Set (size_t num_tcks, const Track& default_value, const std::map<std::string,std::string>& properties = Properties())
 //          : Base::Set<Track>(num_tcks, default_value, properties) {}
 
 

@@ -303,13 +303,13 @@ namespace BTS {
 
 
 
-          /*! Returns the value of the underlying GSLVector<double>::owner field to specify if the fibre object is the
+          /*! Returns the value of the underlying MR::Math::Vector<double>::owner field to specify if the fibre object is the
            *  owner of the data or does not own the data (i.e. is a view onto part of a larger structure
            *
            * @return Whether the fibre object owns the data
            */
           bool        	    is_owner() const
-            { return this->GSLVector<double>::owner; }
+            { return this->MR::Math::Vector<double>::owner; }
 
 
           //! Returns the "size" of the object, i.e. the number of @see BTS::Triple<double> objects it contains

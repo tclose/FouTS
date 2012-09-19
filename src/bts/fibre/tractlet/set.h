@@ -32,6 +32,7 @@
 #include "bts/fibre/tractlet.h"
 #include "bts/fibre/base/set_reader.h"
 #include "bts/fibre/base/set_writer.h"
+#include "bts/fibre/properties.h"
 
 #include "bts/common.h"
 #include "bts/file.h"
@@ -90,7 +91,7 @@ namespace BTS {
          *
          * @param extended_props The extended properties of the set
          */
-        Set (const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (const std::map<std::string,std::string>& extended_props = Properties())
           : Base::Set<Tractlet>(std::vector<const char*>(), std::vector<const char*>(), extended_props) {}
 
 
@@ -100,7 +101,7 @@ namespace BTS {
          * @param elem_props The element properties
          * @param extended_props The extended properties of the set
          */
-        Set (const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = Properties())
           : Base::Set<Tractlet>(props, elem_props, extended_props) {}
 
 
@@ -110,7 +111,7 @@ namespace BTS {
          * @param degree The (fixed) degree of the the tractlets in the tractlet set (can be freed using the 'free_elem_degree()' function)
          * @param extended_props The extended properties of the set
          */
-        Set (size_t size, size_t degree, const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (size_t size, size_t degree, const std::map<std::string,std::string>& extended_props = Properties())
           : Base::Set<Tractlet>(size, degree, 9 * degree, std::vector<const char*>(), std::vector<const char*>(), extended_props) {}
 
 
@@ -122,7 +123,7 @@ namespace BTS {
          * @param degree The (fixed) degree of the the tractlets in the tractlet set (can be freed using the 'free_elem_degree()' function)
          * @param extended_props The extended properties of the set
          */
-        Set (size_t size, size_t degree, const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+        Set (size_t size, size_t degree, const std::vector<const char*>& props, const std::vector<const char*>& elem_props, const std::map<std::string,std::string>& extended_props = Properties())
           : Base::Set<Tractlet>(size, degree, 9 * degree + elem_props.size(), props, elem_props, extended_props) {}
 
 
@@ -145,11 +146,9 @@ namespace BTS {
 
         Set (const Track::Set& set, size_t degree, size_t num_tractlets, const std::string& cluster_save_location = "");
 
-
         BASE_GENERAL_FUNCTIONS(Set);
 
         BASE_SET_FUNCTIONS(Set);
-
 
         size_t                                      max_degree() const;
 

@@ -26,20 +26,11 @@
 #include <string>
 #include <map>
 
-
 namespace BTS {
 
 	namespace Fibre {
-
 		
     class Properties : public std::map<std::string, std::string> {
-
-      public:
-
-        class Extended;
-        class Header;
-        template <typename T> class Intrinsic_tpl;
-        class Intrinsic;
 
       public:
 
@@ -48,20 +39,29 @@ namespace BTS {
         Properties(const std::map<std::string, std::string>& properties)
           : std::map<std::string, std::string>(properties) {}
 
-
-        Properties(const MR::DWI::Tractography::Properties& mr_properties)
-          : std::map<std::string, std::string>(mr_properties) {}
-
-
         Properties&   operator=(const std::map<std::string, std::string>& properties)
           { std::map<std::string, std::string>::operator=(properties); return *this; }
 
-
         ~Properties() {}
-
 
     };
 
+
+    class PropertyKeys : public std::vector<std::string> {
+
+      public:
+
+        PropertyKeys() {}
+
+        PropertyKeys(const std::vector<std::string>& property_keys)
+          : std::vector<std::string>(property_keys) {}
+
+        PropertyKeys&   operator=(const std::vector<std::string>& property_keys)
+          { std::vector<std::string>::operator=(property_keys); return *this; }
+
+        ~PropertyKeys() {}
+
+    };
 
 	}
 

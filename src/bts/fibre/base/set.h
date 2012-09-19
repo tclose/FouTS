@@ -32,13 +32,14 @@
 
 #include "bts/fibre/base/object.h"
 #include "bts/coord.h"
+#include "bts/fibre/properties.h"
 
 #define BASE_SET_FUNCTIONS(Derived) \
   Derived&                      resize(size_t size, double fill_value = NAN) \
-    { assert(!var_elem_degrees()); Base::Set<typename Derived::Element>::resize(size, fill_value, 0, 0); return *this; } \
+    { assert(!var_elem_degrees()); Base::Set<Derived::Element>::resize(size, fill_value, 0, 0); return *this; } \
 \
-  Derived&                      resize(size_t size, const typename Derived::Element& elem) \
-    { Base::Set<typename Derived::Element>::resize(size,elem); return *this; } \
+  Derived&                      resize(size_t size, const Derived::Element& elem) \
+    { Base::Set<Derived::Element>::resize(size,elem); return *this; } \
 
 
 namespace BTS {
@@ -147,7 +148,7 @@ namespace BTS {
                 size_t elem_vsize,
                 const std::vector<const char*>& props,
                 const std::vector<const char*>& elem_props,
-                const std::map<std::string,std::string>& extended_props = std::map<std::string,std::string>())
+                const std::map<std::string,std::string>& extended_props = Properties())
               : Object(size, size * elem_vsize + props.size(), props),
                 vrows(false),
                 rsize(elem_vsize),
@@ -242,7 +243,7 @@ namespace BTS {
 
           ~Set () {
 
-            if (this->GSLVector<double>::owner) {
+            if (is_owner()) {
               delete elem_props;
 
               if (ext_props) delete ext_props;

@@ -112,7 +112,7 @@ namespace BTS {
   }
 
 
-  double            Coord::norm2 (Coord& gradient, typename Coord::Tensor& hessian) const {
+  double            Coord::norm2 (Coord& gradient, Coord::Tensor& hessian) const {
 
     gradient = *this * 2.0;
 
@@ -123,7 +123,7 @@ namespace BTS {
   }
 
 
-  double            Coord::norm (Coord& gradient, typename Coord::Tensor& hessian) const {
+  double            Coord::norm (Coord& gradient, Coord::Tensor& hessian) const {
 
     double nrm = norm();
 

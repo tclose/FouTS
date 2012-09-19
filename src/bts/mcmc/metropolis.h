@@ -33,7 +33,7 @@ extern "C" {
 
 #include "progressbar.h"
 
-#include "bts/fibre/properties/extended.h"
+
 #include "bts/mcmc/common.h"
 
 #include "bts/mcmc/annealer.h"
