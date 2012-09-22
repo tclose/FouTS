@@ -86,6 +86,8 @@ OPTIONS = {
   Option ("degree", "Degree of strands when converted from tracks")
    + Argument ("degree", "").type_integer (0, Fibre::Strand::DEFAULT_DEGREE, LARGE_INT),
 
+  Option("empty", "Produce a clean empty image instead of using a strands"),
+
   DIFFUSION_PARAMETERS,
 
   IMAGE_PARAMETERS,
@@ -119,7 +121,7 @@ EXECUTE {
   bool clean = false;
   size_t seed = time(0);
   size_t degree = Fibre::Strand::DEFAULT_DEGREE;
-
+  bool empty = false;
 
   Options opt = get_options("clean");
   if (opt.size())
@@ -134,6 +136,10 @@ EXECUTE {
   opt = get_options("degree");
   if (opt.size())
     degree = opt[0][0];
+
+  opt = get_options("empty");
+  if (opt.size())
+    empty = true;
 
   // Loads parameters to construct Diffusion::Model ('diff_' prefix)
   SET_DIFFUSION_PARAMETERS;
@@ -195,42 +201,50 @@ EXECUTE {
 
 
 //-----------------//
-// Fabricate image //
+// Generate image //
 //-----------------//
 
+  if (empty) {
 
-  MR::ProgressBar progress_bar ("Generating image from provided fibres...");
+    MR::ProgressBar progress_bar ("Generating image from provided fibres...");
+    image->properties()["state_location"]        = "empty";
 
-  if (File::has_or_txt_extension<Fibre::Strand>(input_location) || File::has_or_txt_extension<Fibre::Track>(input_location)) {
+  } else {
+    MR::ProgressBar progress_bar ("Generating image from provided fibres...");
 
-    Fibre::Strand::Set strands (input_location, degree);
+    if (File::has_or_txt_extension<Fibre::Strand>(input_location) || File::has_or_txt_extension<Fibre::Track>(input_location)) {
 
-    //exp_base_intensity is recorded in header so needs to be synchronised with base_intensity of strands
-    if (exp_base_intensity < 0)
-      exp_base_intensity = strands.base_intensity();
-    else
-      strands.set_base_intensity(exp_base_intensity);
+      Fibre::Strand::Set strands (input_location, degree);
 
-    image->expected_image(strands);
+      //exp_base_intensity is recorded in header so needs to be synchronised with base_intensity of strands
+      if (exp_base_intensity < 0)
+        exp_base_intensity = strands.base_intensity();
+      else
+        strands.set_base_intensity(exp_base_intensity);
 
-  } else if (File::has_or_txt_extension<Fibre::Tractlet>(input_location)) {
+      image->expected_image(strands);
 
-    Fibre::Tractlet::Set tractlets (input_location);
+    } else if (File::has_or_txt_extension<Fibre::Tractlet>(input_location)) {
 
-    //exp_base_intensity is recorded in header so needs to be synchronised with base_intensity of tractlets
-    if (exp_base_intensity < 0)
-      exp_base_intensity = tractlets.base_intensity();
-    else
-      tractlets.set_base_intensity(exp_base_intensity);
+      Fibre::Tractlet::Set tractlets (input_location);
 
-    image->expected_image(tractlets);
+      //exp_base_intensity is recorded in header so needs to be synchronised with base_intensity of tractlets
+      if (exp_base_intensity < 0)
+        exp_base_intensity = tractlets.base_intensity();
+      else
+        tractlets.set_base_intensity(exp_base_intensity);
 
-  } else
-    throw Exception ("Unrecognised extension '" + input_location + "'.");
+      image->expected_image(tractlets);
+
+    } else
+      throw Exception ("Unrecognised extension '" + input_location + "'.");
+
+    image->properties()["state_location"]        = input_location;
+  }
 
   image->properties()["type"]                  = "synthetic";
   image->properties()["method"]                = "generate_image";
-  image->properties()["state_location"]        = input_location;
+
 
   image->properties()["software version"]  = version_number_string();
   image->properties()["datetime"]          = current_datetime();

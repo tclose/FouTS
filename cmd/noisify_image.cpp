@@ -69,6 +69,8 @@ OPTIONS = {
   Option ("seed", "Random seed used to initialise the random generator.")
    + Argument ("", "").type_float (1e-9, INFINITY, 0.1),
 
+  Option ("dim", "dimensions of the ")
+    + Argument ("", "").type_float (1e-9, INFINITY, 0.1),
 
 Option()
 
