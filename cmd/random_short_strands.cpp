@@ -46,8 +46,8 @@ SET_AUTHOR ("Thomas G. Close");
 SET_COPYRIGHT (NULL);
 
 DESCRIPTION = {
-  "Trims paths to a sphere of specified radius.",
-  "The sections of paths that lie outside the radius of the sphere are removed and sections that reenter are split into new paths.",
+  "Initialises very short and thin Fourier tracts uniformly distributed within the given volume",
+  "Initialises very short and thin Fourier tracts uniformly distributed within the given volume",
   NULL
 };
 
@@ -81,8 +81,6 @@ EXECUTE {
 
 
   std::string output_location = argument[0];;
-
-
 
   size_t degree = 3;
   double sphere_radius = 1.0;
