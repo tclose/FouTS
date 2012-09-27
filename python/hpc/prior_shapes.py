@@ -11,7 +11,7 @@
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'prior_shapes'
 
-import tombo
+import hpc
 import argparse
 import os.path
 
@@ -28,7 +28,7 @@ args = parser.parse_args()
 
 for i in xrange(args.num_runs):
     # Create work directory and get path for output directory
-    work_dir, output_dir = tombo.create_work_dir(SCRIPT_NAME, args.output_dir)
+    work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir)
     # Set up command to run the script
     cmd_line = """
 generate_image dummy.tct {work_dir}/output/noise.mif --empty --img_dims "{dim} {dim} {dim}" --noise_ref_signal 1 --noise_snr {snr}
@@ -36,4 +36,4 @@ init_fibres {work_dir}/output/init.tct --acs {acs} --base_intensity 1.0 --num_fi
 time metropolis {work_dir}/output/noise.mif {work_dir}/output/init.tct --like_snr {snr}
 """.format(work_dir=work_dir, dim=args.img_dims, acs=args.init_acs, snr=args.snr)
     # Submit job to que
-    tombo.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name)
+    hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name)

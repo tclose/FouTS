@@ -1,5 +1,5 @@
 """
-  Contains functions to set up the environment on the tombo server to run scripts in the 'simulate' 
+  Contains functions to set up the environment on the a HPC server to run scripts in the 'simulate' 
   package
   
   @author Tom Close 
@@ -95,14 +95,14 @@ def create_env(work_dir):
     env['PATH'] = env['PATH'] + os.pathsep + \
                   '/home/t/tclose/git/BaFTrS/bin' + os.pathsep + \
                   '/home/t/tclose/git/MRtrix/bin'
-    env['LD_LIBRARY_PATH'] = '/opt/mpi/gnu/openmpi-1.4.3/lib' + os.pathsep + '/home/t/tclose/git/BaFTrS/lib'
+    env['LD_LIBRARY_PATH'] = '/opt/mpi/gnu/openmpi-1.4.3/lib' + os.pathsep + '/home/t/tclose/git/MRtrix/lib'
     return env
 
 
-def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, copy_to_output=['xml'], 
+def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, copy_to_output=[], 
                dry_run=False):
     """
-    Create a jobscript in the work directory and then submit it to the tombo que
+    Create a jobscript in the work directory and then submit it to the HPC que
     
     @param script_name: The name of the script (used to give a meaningful name to the job)
     @param cmds: The commands to run on the cluster
