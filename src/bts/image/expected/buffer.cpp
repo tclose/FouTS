@@ -70,8 +70,8 @@ namespace BTS {
       const size_t                        Buffer::NUM_WIDTH_SECTIONS_DEFAULT   = 4;
       const bool                        Buffer::ENFORCE_BOUNDS_DEFAULT       = false;
 
-      const std::string                 Buffer::STRAND_BASE_INTENSITY_REFERENCE     = "/home/tclose/Data/Tractography/fibre/strand/single/x.str";
-      const std::string                 Buffer::TRACTLET_BASE_INTENSITY_REFERENCE   = "/home/tclose/Data/Tractography/fibre/tract/single/x-all.tct";
+      const std::string                 Buffer::STRAND_BASE_INTENSITY_REFERENCE     = str(getenv("HOME")) + str("/git/BaFTrS/params/fibre/strand/single/x.str");
+      const std::string                 Buffer::TRACTLET_BASE_INTENSITY_REFERENCE   = str(getenv("HOME")) + str("/git/BaFTrS/params/fibre/tract/single/x-all.tct");
 
 
       Buffer*                     Buffer::factory(const std::string& type,

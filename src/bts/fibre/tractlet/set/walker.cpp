@@ -29,7 +29,7 @@ namespace BTS {
 
     const char*        Tractlet::Set::Walker::TYPE_DEFAULT            = "standard";
     const double       Tractlet::Set::Walker::STEP_SCALE_DEFAULT      = 0.001;
-    const std::string  Tractlet::Set::Walker::STEP_LOCATION_DEFAULT   = "/home/tclose/Data/Tractography/fibre/tract/masks/mcmc/metropolis/default.tct";
+    const std::string  Tractlet::Set::Walker::STEP_LOCATION_DEFAULT   = str(getenv("HOME")) + str("/git/BaFTrS/params/fibre/tract/masks/mcmc/metropolis/default.tct");
 
 
     Tractlet::Set::Walker*    Tractlet::Set::Walker::factory(const Tractlet::Set& state,

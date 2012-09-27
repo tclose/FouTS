@@ -54,7 +54,7 @@ filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
     while not created_work_dir:
         try:
             created_work_dir = not os.makedirs(work_dir) 
-        except IOError as e:
+        except OSError as e:
             count += 1
             if count > 1000:
                 print "Something has gone wrong, can't create directory '%s' after 1000 attempts" % work_dir
@@ -73,7 +73,7 @@ def init_work_dir(work_dir, required_dirs, time_str):
     """
     # Copy snapshot of selected subdirectories to working directory
     for directory in required_dirs:
-        shutil.copytree(os.path.join(get_project_dir(),'params', 'BaFTrS', directory), os.path.join(work_dir, 'params', directory))
+        shutil.copytree(os.path.join(get_project_dir(),'params', directory), os.path.join(work_dir, 'params', directory))
     # Make output directory for the generated files
     os.mkdir(os.path.join(work_dir, 'output'))
     # Save the git revision in the output folder for reference
@@ -95,7 +95,7 @@ def create_env(work_dir):
     env['PATH'] = env['PATH'] + os.pathsep + \
                   os.path.join(env['HOME'], 'git', 'BaFTrS', 'bin') + os.pathsep + \
                   os.path.join(env['HOME'], 'git', 'MRtrix', 'bin')
-    env['LD_LIBRARY_PATH'] = '/opt/mpi/gnu/openmpi-1.4.3/lib' + os.pathsep + \ 
+    env['LD_LIBRARY_PATH'] = '/opt/mpi/gnu/openmpi-1.4.3/lib' + os.pathsep + \
                   os.path.join(env['HOME'], 'git', 'MRtrix', 'lib')
     return env
 

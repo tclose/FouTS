@@ -47,10 +47,6 @@ namespace BTS {
     const bool                          Model::ISOTROPIC_DEFAULT            = 0;
     const double                        Model::ADC_DEFAULT                  = 5e-4;
     const double                        Model::FA_DEFAULT                   = 0.8;
-//    const double                        Model::B_VALUE_DEFAULT              = 3000.0;
-
-//    const char*                         Model::RESPONSE_SH_LOCATION_DEFAULT = "/home/tclose/Code/Tractography/params/diffusion/tensor.SH";
-//    const char*                         Model::RESPONSES_LOCATION_DEFAULT  = "/home/tclose/Code/Tractography/params/diffusion/tensor-no_iso.poly";
 
     // Maximum order ('l') spherical harmonic that can be calculated;
     const size_t                        Model::LMAX        = 8;
