@@ -26,7 +26,7 @@ def create_seed(seed):
         seed = int(seed)
     return seed
 
-def create_work_dir(script_name, output_dir_parent=None, required_dirs=['src', 'xml']):
+def create_work_dir(script_name, output_dir_parent=None, required_dirs=[]):
     """
     Generates unique paths for the work and output directories, creating the work directory in the 
     process.
@@ -73,7 +73,7 @@ def init_work_dir(work_dir, required_dirs, time_str):
     """
     # Copy snapshot of selected subdirectories to working directory
     for directory in required_dirs:
-        shutil.copytree(os.path.join(get_project_dir(),'params', directory), os.path.join(work_dir, 'params', directory))
+        shutil.copytree(os.path.join(get_project_dir(),'params', 'BaFTrS', directory), os.path.join(work_dir, 'params', directory))
     # Make output directory for the generated files
     os.mkdir(os.path.join(work_dir, 'output'))
     # Save the git revision in the output folder for reference
@@ -93,9 +93,10 @@ def create_env(work_dir):
     """
     env = os.environ.copy()
     env['PATH'] = env['PATH'] + os.pathsep + \
-                  '/home/t/tclose/git/BaFTrS/bin' + os.pathsep + \
-                  '/home/t/tclose/git/MRtrix/bin'
-    env['LD_LIBRARY_PATH'] = '/opt/mpi/gnu/openmpi-1.4.3/lib' + os.pathsep + '/home/t/tclose/git/MRtrix/lib'
+                  os.path.join(env['HOME'], 'git', 'BaFTrS', 'bin') + os.pathsep + \
+                  os.path.join(env['HOME'], 'git', 'MRtrix', 'bin')
+    env['LD_LIBRARY_PATH'] = '/opt/mpi/gnu/openmpi-1.4.3/lib' + os.pathsep + \ 
+                  os.path.join(env['HOME'], 'git', 'MRtrix', 'lib')
     return env
 
 
