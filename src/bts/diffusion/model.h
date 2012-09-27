@@ -137,7 +137,7 @@ namespace BTS {
       //Public const static members
       public:
         
-        const static char*                       ENCODINGS_LOCATION_DEFAULT;
+        const static std::string                 ENCODINGS_LOCATION_DEFAULT;
 
         const static bool                        ISOTROPIC_DEFAULT;
 
