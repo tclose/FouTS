@@ -148,7 +148,11 @@ function main_fig = plot_tracts_sets(varargin)
   if ~strcmp(file_extension(tracts_filename), 'tst')
     error (['Extension, ''' file_extension(tracts_filename) ''' is not a valid tract set file (''.tst'').']);
   end
-
+  
+  
+  if (highlight_axes && ~mod(num_width_sections,2))
+    error(['If ''-highlight_axes'' option is selected the number of width sections ''-num_width_sections'' needs to be odd (' num2str(num_width_sections) ' provided)'])
+  end
   
   [tract_sets, properties, set_prop_keys, set_prop_values, elem_prop_keys, elem_prop_values] = load_tract_sets(tracts_filename); 
   
@@ -168,6 +172,7 @@ function main_fig = plot_tracts_sets(varargin)
   if num_width_sections == -1
     num_width_sections = loaded_num_width_sections;
   end
+  
 
   if last
 
@@ -308,7 +313,7 @@ function main_fig = plot_tracts_sets(varargin)
     
     if no_axes
     
-%       set(gca, 'visible', 'off');
+       set(gca, 'visible', 'off');
     
     else
     

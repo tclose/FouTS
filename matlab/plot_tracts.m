@@ -175,6 +175,9 @@ function main_fig = plot_tracts(varargin)
     error (['Extension, ''' file_extension(tracts_filename) ''' is not a valid tract file (''.tct'').']);
   end
 
+  if (highlight_axes && ~mod(num_width_sections,2))
+    error(['If ''-highlight_axes'' option is selected the number of width sections ''-num_width_sections'' needs to be odd (' num2str(num_width_sections) ' provided)'])
+  end
   
   [tracts, props, prop_keys, prop_values] = load_tracts(tracts_filename);
    

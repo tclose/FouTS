@@ -15,7 +15,7 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
   if isempty(tract_indices)
     tract_indices = [0:1:size(tracts,1)-1];
   end
-
+  
   num_tracts = size(tracts,1);
   
   strands = cell(num_tracts,1);
@@ -23,7 +23,6 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
   
   strand_count = 0;
   tcks = cell(num_tracts * (2 * num_strands + 1),4);
-
   
   width_fraction = 1 / num_strands;
   
