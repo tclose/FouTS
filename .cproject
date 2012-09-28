@@ -117,7 +117,7 @@
 					<folderInfo id="cdt.managedbuild.config.gnu.exe.release.1477195243.1967270139.2105434965.1067866718." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.release.946983826" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.release">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.release.1349100692" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.release"/>
-							<builder arguments="" autoBuildTarget="all" buildPath="${project_loc}" cleanBuildTarget="${workspace_loc}/MRtrix/build clean" command="${project_loc}/build_debug" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="cdt.managedbuild.target.gnu.builder.exe.release.421508294" incrementalBuildTarget="" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="false" parallelizationNumber="3" stopOnErr="true" superClass="cdt.managedbuild.target.gnu.builder.exe.release">
+							<builder arguments="" autoBuildTarget="all" buildPath="${project_loc}" cleanBuildTarget="${workspace_loc}/MRtrix/build clean" command="${ProjDirPath}/build_debug" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="cdt.managedbuild.target.gnu.builder.exe.release.421508294" incrementalBuildTarget="" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="false" parallelizationNumber="3" stopOnErr="true" superClass="cdt.managedbuild.target.gnu.builder.exe.release">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name=""/>
 								</outputEntries>

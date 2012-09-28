@@ -395,7 +395,9 @@ namespace BTS {
 
         std::string output;
 
-        if (File::has_or_txt_extension<Fibre::Strand>(location)) {
+        if (!location.size())
+          output = Math::matlab_str(Fibre::Tractlet::Set()); //FIXME: This will be a little confusing
+        else if (File::has_or_txt_extension<Fibre::Strand>(location)) {
           Fibre::Strand::Set strands (location);
           strands *= scale;
           output = strands.matlab_str();
