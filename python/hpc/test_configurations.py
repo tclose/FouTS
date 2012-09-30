@@ -18,16 +18,16 @@ import time
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--img_dim', default=10, type=int, help='The size of the noisy image to fit against')
-parser.add_argument('--step_scale', default=0.001, type=float, help='')
-parser.add_argument('--num_iterations', default=200000, type=int, help='')
-parser.add_argument('--sample_period', default=1000, type=int, help='')
+parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
+parser.add_argument('--num_iterations', default=200000, type=int, help='The number of interations in the metropolis sampling')
+parser.add_argument('--sample_period', default=1000, type=int, help='The sample period of the metropolis sampling')
 parser.add_argument('--degree', default=3, type=int, help='The degree of the strands to fit')
 parser.add_argument('--num_width_sections', default=15, help='The number of samples to use across a Fourier tracts cross-section')
-parser.add_argument('--interp_type', default='sinc', type=str, help='')
-parser.add_argument('--interp_extent', default=3, type=int, help='')
-parser.add_argument('--assumed_interp_extent', default=1, type=int, help='')
-parser.add_argument('--prior_freq', default=10, type=int, help='')
-parser.add_argument('--prior_density', default=10, type=int, help='')
+parser.add_argument('--interp_type', default='sinc', type=str, help='The type of interpolation used in the reference image')
+parser.add_argument('--interp_extent', default=3, type=int, help='The interpolation extent used in the reference image')
+parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The interpolation type used in the likelihood images')
+parser.add_argument('--prior_freq', default=10, type=int, help='The scaling of the frequency prior (currently unused)')
+parser.add_argument('--prior_density', default=10, type=int, help='The scaling of the density prior (currently unused)')
 parser.add_argument('--img_snr', default=5, type=float, help='The snr to used in the noisy image')
 parser.add_argument('--like_snr', default=20, type=float, help='The assumed snr to used in the likelihood function in \
 the metropolis sampling')
@@ -96,22 +96,22 @@ be corrupted.\n(Error: {e})".format(config_path=config_path, e=e))
             img_dim = args.img_dim
         cmd_line = """      
 # Generate image        
-generate_image {config_path} {work_dir}/output/{config}.mif $noise \
+generate_image {config_path} {work_dir}/output/image.mif $noise \
 img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
 -exp_interp_extent {args.interp_extent} -noise_snr {args.img_snr} -noise_type gaussian -noise_ref_signal {noise_ref_signal} \
 -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b
 
 # Initialise fibres
-init_fibres {work_dir}/output/{config}_init.tct -num_fibres {num_tracts} \
+init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
 -img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed}
 
 # Run metropolis
-metropolis {work_dir}/output/{config}.mif {work_dir}/output/{config}_init.tct {work_dir}/output/{config}.tst -like_snr {args.like_snr} \
+metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {args.like_snr} \
 -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b -seed {metropolis_seed}
 
 # Run analysis
-stats_fibres {config_path} {work_dir}/output/{config}.tst
+stats_fibres {config_path} {work_dir}/output/samples.tst
 """.format(work_dir=work_dir, config_path=config_path, config=config, args=args, noise_ref_signal=noise_ref_signal,
            num_tracts=num_tracts, img_dim=img_dim, init_seed=seed, metropolis_seed=seed+1)
         # Submit job to que
