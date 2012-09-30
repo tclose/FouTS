@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 """
- This script prepares the environment for the simulate/fabios_network.py script on the Sun Grid 
- Engine batch script to run in by making a snapshot of the code base at the start of the run, 
- generating a jobscript and sending it to the job que
+ This script submits scripts to generate random prior shapes from noisy images and submit them to the job que on a sun
+ grid engine
 
  Author: Tom Close (tclose@oist.jp)
  Created: 6/8/2012
