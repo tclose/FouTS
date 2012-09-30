@@ -55,7 +55,6 @@ gen_img_cmd="generate_image {param_dir}/fibre/tract/noise_ref.tct /tmp/noise_ref
 -exp_interp_extent {args.interp_extent} -clean -exp_num_width_sections {args.num_width_sections} \
 -diff_encodings_location {param_dir}/diffusion/encoding_60.b".format(param_dir=param_dir, args=args)
 # Get reference signal to compare noise snr against (the maximum b0 reading from a single straight x tract
-print os.environ
 try:
 #    print sp.check_output("generate_image --help", shell=True, env=os.environ.copy())
     sp.check_call(gen_img_cmd, shell=True, env=os.environ.copy())
