@@ -98,7 +98,7 @@ be corrupted.\n(Error: {e})".format(config_path=config_path, e=e))
 # Generate image        
 generate_image {config_path} {work_dir}/output/{config}.mif $noise \
 img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
--exp_interp_extent {args.interp_extent} -noise_snr {args.img_snr} -noise_type gauss -noise_ref_signal {noise_ref_signal} \
+-exp_interp_extent {args.interp_extent} -noise_snr {args.img_snr} -noise_type gaussian -noise_ref_signal {noise_ref_signal} \
 -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b
 
 # Initialise fibres
