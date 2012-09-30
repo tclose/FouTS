@@ -24,7 +24,7 @@
 #define __bts_image_noise_h__
 
 #define NOISE_PARAMETERS \
-  Option ("noise_type", "Type of noise distribution") \
+  Option ("noise_type", "Type of noise distribution. Can be either 'gaussian' or 'rician' (default 'gaussian').") \
    + Argument ("noise_type", "").type_text (Image::Noise::TYPE_DEFAULT), \
 \
   Option ("noise_snr", "The signal-to-noise ratio of the noise.") \
