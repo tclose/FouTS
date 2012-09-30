@@ -14,10 +14,6 @@ import hpc
 import argparse
 import os.path
 
-CONFIGURATIONS=['x', 'x-big', 'x-small', 'x-pos-yz', 'xy', 'xz', 'xyz', 'x-curve-z', 'yz-curve-x', 'x_y', 'x_xy1', 
-                'x_xy', 'x_xy3', 'x_xxy', 'x-curve-z_y-curve-z', 'layer5', 'x-rotate', 'x-curve-y_x-curve--y', 
-                'x-rotate-big']
-
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--img_dims', default=10, type=int, help='The size of the noisy image to fit against')
 parser.add_argument('--step_scale', default=0.001, type=float, help='')
@@ -35,6 +31,12 @@ parser.add_argument('--dry_run', action='store_true', help='Only perform a dry r
 parser.add_argument('--np', type=int, default=1, help='The the number of processes to use for the simulation (default: %(default)s)')
 parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to(default: %(default)s)')
 args = parser.parse_args()
+
+CONFIGURATIONS=['layer.tct', 'x-curve-z_y-curve-z.tct', 'x-small.tct', 'x_y.tct', 'x-big.tct', 'x-pos-yz.tct', 'x.tct', 
+                'yz-curve-x.tct', 'x-curve-y_x-curve--y.tct', 'x-rotate-big.tct', 'x_xxy.tct', 'x-curve-z.tct', 
+                'x-rotate.tct', 'x_xy.tct']
+
+REQUIRED_DIRS=['params/fibre/tract/simple']
 
 for i in xrange(args.num_runs):
     for config in CONFIGURATIONS:
@@ -55,7 +57,7 @@ for i in xrange(args.num_runs):
 #        fi            
         cmd_line = """      
 # Generate image        
-generate_image {work_dir}/ref/$refname.tct {work_dir}/$run_index/$config.mif $noise -exp_type sinc -exp_interp_extent {interp} -noise_snr {img_snr} -noise_type gauss -noise_ref_signal {noise_ref_signal}"
+generate_image {work_dir}/params/$refname.tct {work_dir}/.mif $noise -exp_type sinc -exp_interp_extent {interp} -noise_snr {img_snr} -noise_type gauss -noise_ref_signal {noise_ref_signal}"
 
 # Initialise fibres
 init_cmd="init_fibres {work_dir}/$run_index/${config}_init.tct -num_fibres $tractlet_count $init_radius -degree 3 -length $LENGTH_STDDEV -curve_stddev $CURVE_STDDEV"
