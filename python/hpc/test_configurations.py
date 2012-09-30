@@ -47,7 +47,7 @@ CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-bi
                 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-rotate-big', 'x_xxy', 'x-curve-z',
                 'x-rotate', 'x_xy', 'x-curve-z_y-curve--z']
 
-REQUIRED_DIRS = ['fibre/tract/test_configurations', 'diffusion']
+REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 
 
 param_dir=os.path.join(hpc.get_project_dir(), 'params')
@@ -59,7 +59,7 @@ try:
 #    print sp.check_output("generate_image --help", shell=True, env=os.environ.copy())
     sp.check_call(gen_img_cmd, shell=True, env=os.environ.copy())
 except Exception as e:
-    raise Exception('Command: ''{0}'' caused an error ''{1}'''.format(gen_img_cmd,e))
+    raise Exception('Generate image command: ''{0}'' caused an error ''{1}'''.format(gen_img_cmd,e))
 noise_ref_signal=sp.check_output('maxb0 /tmp/noise_ref.mif', shell=True, env=os.environ.copy())
 # Generate a random seed to seed the random number generators of the cmds
 seed = int(time.time() * 100)
