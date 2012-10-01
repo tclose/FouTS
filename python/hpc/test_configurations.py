@@ -103,7 +103,7 @@ img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
 
 # Initialise fibres
 init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
--img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed}
+-img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed} -acs 0.01 -base_intensity 1.0
 
 # Run metropolis
 metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {args.like_snr} \

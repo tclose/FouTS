@@ -21,6 +21,6 @@ elif [ ${#OBJ_TARGET} -gt 0 ]; then
     
 fi
   
-echo $TARGET  
+echo $TARGET
 
-../MRtrix/build debug $TARGET $@ 
+/home/tclose/git/MRtrix/build debug $TARGET $@ 

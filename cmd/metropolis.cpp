@@ -160,9 +160,7 @@ EXECUTE {
   std::string samples_location = argument[2];
   std::string burn_samples_location = File::strip_extension (samples_location) + ".burn." + File::extension(samples_location);
 
-
-
-  MR::Image::Header header (argument[0]);
+  MR::Image::Header header (obs_image_location);
 
   if (header.ndim() != 4)
     throw Exception ("dwi image should contain 4 dimensions");
