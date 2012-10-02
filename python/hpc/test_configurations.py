@@ -59,7 +59,6 @@ if len(args.like_snr) == 1:
 elif len(args.like_snr) != num_param_sets or len(args.like_snr) != 1:
     raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
                                                                     format(len(args.like_snr), num_param_sets))
-
 SCRIPT_NAME = 'test_configurations'
 
 CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
@@ -68,8 +67,8 @@ CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-bi
 
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 
-param_dir=os.path.join(hpc.get_project_dir(), 'params')
-gen_img_cmd="generate_image {param_dir}/fibre/tract/noise_ref.tct /tmp/noise_ref.mif -exp_type {args.interp_type} \
+param_dir = os.path.join(hpc.get_project_dir(), 'params')
+gen_img_cmd = "generate_image {param_dir}/fibre/tract/noise_ref.tct /tmp/noise_ref.mif -exp_type {args.interp_type} \
 -exp_interp_extent {args.interp_extent} -clean -exp_num_width_sections {args.num_width_sections} \
 -diff_encodings_location {param_dir}/diffusion/encoding_60.b".format(param_dir=param_dir, args=args)
 # Get reference signal to compare noise snr against (the maximum b0 reading from a single straight x tract
@@ -77,20 +76,20 @@ try:
 #    print sp.check_output("generate_image --help", shell=True, env=os.environ.copy())
     sp.check_call(gen_img_cmd, shell=True, env=os.environ.copy())
 except Exception as e:
-    raise Exception('Generate image command: ''{0}'' caused an error ''{1}'''.format(gen_img_cmd,e))
-noise_ref_signal=sp.check_output('maxb0 /tmp/noise_ref.mif', shell=True, env=os.environ.copy())
+    raise Exception('Generate image command: ''{0}'' caused an error ''{1}'''.format(gen_img_cmd, e))
+noise_ref_signal = sp.check_output('maxb0 /tmp/noise_ref.mif', shell=True, env=os.environ.copy())
 # Generate a random seed to seed the random number generators of the cmds
 seed = int(time.time() * 100)
 for i in xrange(args.num_runs):
-    for prior_freq, prior_density, like_snr in zip(args.prior_freq, args.prior_density, args.like_snr): 
+    for prior_freq, prior_density, like_snr in zip(args.prior_freq, args.prior_density, args.like_snr):
         for config in CONFIGURATIONS:
             # Create work directory and get path for output directory
-            work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)        
+            work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
             # Strip configuration of symbols for tract number and img dimension
             config_name = re.sub('\-n[0-9]+', '', config) # Strip tract number
             config_name = re.sub('\-d[0-9]+', '', config_name) # Strip dimension
             # Get the configuration path
-            config_path = '{work_dir}/params/fibre/tract/test_configurations/{config_name}.tct'.format(work_dir=work_dir, 
+            config_path = '{work_dir}/params/fibre/tract/test_configurations/{config_name}.tct'.format(work_dir=work_dir,
                                                                                                  config_name=config_name)
             # Try to extract number of tracts to use for sampling from configuration
             num_tracts = re.findall('\-n[0-9]+', config)
@@ -133,7 +132,7 @@ for i in xrange(args.num_runs):
     # Run analysis
     stats_fibres {config_path} {work_dir}/output/samples.tst
     """.format(work_dir=work_dir, config_path=config_path, config=config, args=args, noise_ref_signal=noise_ref_signal,
-               num_tracts=num_tracts, img_dim=img_dim, init_seed=seed, metropolis_seed=seed+1, prior_freq=prior_freq, 
+               num_tracts=num_tracts, img_dim=img_dim, init_seed=seed, metropolis_seed=seed + 1, prior_freq=prior_freq,
                prior_density=prior_density, like_snr=like_snr)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name, dry_run=args.dry_run,
