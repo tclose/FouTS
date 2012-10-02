@@ -25,7 +25,6 @@
 #include "bts/image2/interpolators/sinc_xy_quartic_z.h"
 #include "bts/math/vector.h"
 #include "bts/math/matrix.h"
-#include ""
 
 namespace BTS {
 
@@ -38,7 +37,7 @@ namespace BTS {
 
 	      // Calculate displacement of positions from voxel centre
 	      work = positions;
-	      for (size_t dim_i = 0; dim_i < 2; ++dim_i) {
+	      for (size_t dim_i = 0; dim_i < 2; ++dim_i)
 	        work.column(dim_i) -= voxel_centre[dim_i];
 
 	      // Loop through each position and calculate the
