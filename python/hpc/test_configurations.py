@@ -26,10 +26,10 @@ parser.add_argument('--num_width_sections', default=15, help='The number of samp
 parser.add_argument('--interp_type', default='sinc', type=str, help='The type of interpolation used in the reference image')
 parser.add_argument('--interp_extent', default=3, type=int, help='The interpolation extent used in the reference image')
 parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The interpolation type used in the likelihood images')
-parser.add_argument('--prior_freq', default=10, type=int, help='The scaling of the frequency prior (currently unused)')
-parser.add_argument('--prior_density', default=10, type=int, help='The scaling of the density prior (currently unused)')
+parser.add_argument('--prior_freq', default=[10], type=int, action='append', help='The scaling of the frequency prior (currently unused)')
+parser.add_argument('--prior_density', default=[10], type=int, action='append', help='The scaling of the density prior (currently unused)')
 parser.add_argument('--img_snr', default=5, type=float, help='The snr to used in the noisy image')
-parser.add_argument('--like_snr', default=20, type=float, help='The assumed snr to used in the likelihood function in \
+parser.add_argument('--like_snr', default=[20], type=float, action='append', help='The assumed snr to used in the likelihood function in \
 the metropolis sampling')
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory \
 will be created (defaults to $HOME/Output)')
@@ -41,6 +41,24 @@ parser.add_argument('--que_name', type=str, default='short', help='The the que t
 (default: %(default)s)')
 args = parser.parse_args()
 
+# Ensure that number of parameter values match, or if they are a singleton that they are multiplied to match the
+# number of other parameters
+num_param_sets = max((len(args.prior_freq), len(args.prior_density), len(args.like_snr)))
+if len(args.prior_freq) == 1:
+    args.prior_freq = [args.prior_freq] * 3
+elif len(args.prior_freq) != num_param_sets or len(args.prior_freq) != 1:
+    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
+                                                                    format(len(args.prior_freq), num_param_sets))
+if len(args.prior_density) == 1:
+    args.prior_density = [args.prior_density] * 3
+elif len(args.prior_density) != num_param_sets or len(args.prior_density) != 1:
+    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
+                                                                    format(len(args.prior_density), num_param_sets))
+if len(args.like_snr) == 1:
+    args.like_snr = [args.like_snr] * 3
+elif len(args.like_snr) != num_param_sets or len(args.like_snr) != 1:
+    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
+                                                                    format(len(args.like_snr), num_param_sets))
 SCRIPT_NAME = 'test_configurations'
 
 CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
@@ -48,7 +66,6 @@ CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-bi
                 'x-rotate', 'x_xy', 'x-curve-z_y-curve--z']
 
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
-
 
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
 gen_img_cmd = "generate_image {param_dir}/fibre/tract/noise_ref.tct /tmp/noise_ref.mif -exp_type {args.interp_type} \
@@ -64,57 +81,61 @@ noise_ref_signal = sp.check_output('maxb0 /tmp/noise_ref.mif', shell=True, env=o
 # Generate a random seed to seed the random number generators of the cmds
 seed = int(time.time() * 100)
 for i in xrange(args.num_runs):
-    for config in CONFIGURATIONS:
-        # Create work directory and get path for output directory
-        work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
-        # Strip configuration of symbols for tract number and img dimension
-        config_name = re.sub('\-n[0-9]+', '', config) # Strip tract number
-        config_name = re.sub('\-d[0-9]+', '', config_name) # Strip dimension
-        # Get the configuration path
-        config_path = '{work_dir}/params/fibre/tract/test_configurations/{config_name}.tct'.format(work_dir=work_dir,
-                                                                                             config_name=config_name)
-        # Try to extract number of tracts to use for sampling from configuration
-        num_tracts = re.findall('\-n[0-9]+', config)
-        # If number of tracts not given in configuration name, match that of the configuration file.
-        if num_tracts:
-            num_tracts = int(num_tracts[0].lstrip('-n'))
-        else:
-            try:
-                num_tracts = int(sp.check_output("fibre_info {config_path} | grep total_count | awk '{{print $2}}'".
-                                                                        format(config_path=config_path), shell=True))
-            except OSError as e:
-                raise Exception("Could not open configurations file ''{0}'' for reading (returned: {1})".format(config_path, e))
-            except ValueError as e:
-                raise Exception("Could not read 'total_count' property from configuration file '{config_path}', could \
-be corrupted.\n(Error: {e})".format(config_path=config_path, e=e))
+    for prior_freq, prior_density, like_snr in zip(args.prior_freq, args.prior_density, args.like_snr):
+        for config in CONFIGURATIONS:
+            # Create work directory and get path for output directory
+            work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
+            # Strip configuration of symbols for tract number and img dimension
+            config_name = re.sub('\-n[0-9]+', '', config) # Strip tract number
+            config_name = re.sub('\-d[0-9]+', '', config_name) # Strip dimension
+            # Get the configuration path
+            config_path = '{work_dir}/params/fibre/tract/test_configurations/{config_name}.tct'.format(work_dir=work_dir,
+                                                                                                 config_name=config_name)
+            # Try to extract number of tracts to use for sampling from configuration
+            num_tracts = re.findall('\-n[0-9]+', config)
+            # If number of tracts not given in configuration name, match that of the configuration file.
+            if num_tracts:
+                num_tracts = int(num_tracts[0].lstrip('-n'))
             else:
-                num_tracts = int(num_tracts)
-        img_dim = re.findall('\-d[0-9]+', config)
-        if img_dim:
-            img_dim = float(img_dim[0].lstrip('-d'))
-        else:
-            img_dim = args.img_dim
-        cmd_line = """      
-# Generate image        
-generate_image {config_path} {work_dir}/output/image.mif $noise \
-img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
--exp_interp_extent {args.interp_extent} -noise_snr {args.img_snr} -noise_type gaussian -noise_ref_signal {noise_ref_signal} \
--diff_encodings_location {work_dir}/params/diffusion/encoding_60.b
 
-# Initialise fibres
-init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
--img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed} -acs 0.01 -base_intensity 1.0
-
-# Run metropolis
-metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {args.like_snr} \
--exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
--sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b -seed {metropolis_seed}
-
-# Run analysis
-stats_fibres {config_path} {work_dir}/output/samples.tst
-""".format(work_dir=work_dir, config_path=config_path, config=config, args=args, noise_ref_signal=noise_ref_signal,
-           num_tracts=num_tracts, img_dim=img_dim, init_seed=seed, metropolis_seed=seed + 1)
-        # Submit job to que
-        hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name, dry_run=args.dry_run,
-                                                                                         copy_to_output=REQUIRED_DIRS)
+                try:
+                    num_tracts = int(sp.check_output("fibre_info {config_path} | grep total_count | awk '{{print $2}}'".
+                                                                            format(config_path=config_path), shell=True))
+                except OSError as e:
+                    raise Exception("Could not open configurations file ''{0}'' for reading (returned: {1})".format(config_path, e))
+                except ValueError as e:
+                    raise Exception("Could not read 'total_count' property from configuration file '{config_path}', could \
+    be corrupted.\n(Error: {e})".format(config_path=config_path, e=e))
+                else:
+                    num_tracts = int(num_tracts)
+            img_dim = re.findall('\-d[0-9]+', config)
+            if img_dim:
+                img_dim = float(img_dim[0].lstrip('-d'))
+            else:
+                img_dim = args.img_dim
+            cmd_line = """      
+    # Generate image        
+    generate_image {config_path} {work_dir}/output/image.mif $noise \
+    img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
+    -exp_interp_extent {args.interp_extent} -noise_snr {args.img_snr} -noise_type gaussian -noise_ref_signal {noise_ref_signal} \
+    -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b
+    
+    # Initialise fibres
+    init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
+    -img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed} -acs 0.01 -base_intensity 1.0
+    
+    # Run metropolis
+    metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
+    -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
+    -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b -seed {metropolis_seed} \
+    -prior_freq {prior_freq} -prior_density {prior_density}
+        
+    # Run analysis
+    stats_fibres {config_path} {work_dir}/output/samples.tst
+    """.format(work_dir=work_dir, config_path=config_path, config=config, args=args, noise_ref_signal=noise_ref_signal,
+               num_tracts=num_tracts, img_dim=img_dim, init_seed=seed, metropolis_seed=seed + 1, prior_freq=prior_freq,
+               prior_density=prior_density, like_snr=like_snr)
+            # Submit job to que
+            hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name, dry_run=args.dry_run,
+                                                                                             copy_to_output=REQUIRED_DIRS)
         seed += 2
