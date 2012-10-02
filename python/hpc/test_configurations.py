@@ -6,16 +6,20 @@
  Author: Tom Close (tclose@oist.jp)
  Created: 6/8/2012
 """
-
 #Name of the script for the output directory and submitted mpi job
-
+SCRIPT_NAME = 'test_configurations'
+CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
+                'yz-curve-x', 'x-curve-y_x-curve--y', 'x-rotate-big', 'x_xxy', 'x-curve-z',
+                'x-rotate', 'x_xy', 'x-curve-z_y-curve--z']
+REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
+# Required imports
 import hpc
 import argparse
 import os.path
 import re
 import subprocess as sp
 import time
-
+# Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--img_dim', default=10, type=int, help='The size of the noisy image to fit against')
 parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
@@ -40,7 +44,6 @@ parser.add_argument('--np', type=int, default=1, help='The the number of process
 parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to \
 (default: %(default)s)')
 args = parser.parse_args()
-
 # Ensure that number of parameter values match, or if they are a singleton that they are multiplied to match the
 # number of other parameters
 num_param_sets = max((len(args.prior_freq), len(args.prior_density), len(args.like_snr)))
@@ -59,19 +62,12 @@ if len(args.like_snr) == 1:
 elif len(args.like_snr) != num_param_sets or len(args.like_snr) != 1:
     raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
                                                                     format(len(args.like_snr), num_param_sets))
-SCRIPT_NAME = 'test_configurations'
-
-CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
-                'yz-curve-x', 'x-curve-y_x-curve--y', 'x-rotate-big', 'x_xxy', 'x-curve-z',
-                'x-rotate', 'x_xy', 'x-curve-z_y-curve--z']
-
-REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
-
+# Get parameters directory
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
+# Get reference signal to compare noise snr against (the maximum b0 reading from a single straight x tract
 gen_img_cmd = "generate_image {param_dir}/fibre/tract/noise_ref.tct /tmp/noise_ref.mif -exp_type {args.interp_type} \
 -exp_interp_extent {args.interp_extent} -clean -exp_num_width_sections {args.num_width_sections} \
 -diff_encodings_location {param_dir}/diffusion/encoding_60.b".format(param_dir=param_dir, args=args)
-# Get reference signal to compare noise snr against (the maximum b0 reading from a single straight x tract
 try:
 #    print sp.check_output("generate_image --help", shell=True, env=os.environ.copy())
     sp.check_call(gen_img_cmd, shell=True, env=os.environ.copy())
