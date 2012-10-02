@@ -53,7 +53,8 @@ namespace BTS {
       ByDefault by_default;
 
     public:
-      Option () {}
+      Option ()
+        : by_default(Inactive) {}
 
       Option (const char* name, const char* description)
         : MR::Option(name, description), by_default(Inactive) {}
