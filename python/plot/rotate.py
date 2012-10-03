@@ -97,6 +97,6 @@ for snr_i, snr in enumerate(SNR_RANGE):
             print "Finished {} runs".format(run_i)
     axes.set_title('SNR {}'.format(snr))
     axes.set_xlabel('Rotation (Radians)')
-    axes.set_ylabel('Probability')
+    axes.set_ylabel('Probability Density')
     print "Finished snr {}".format(snr)
 plt.show()
