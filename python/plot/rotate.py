@@ -16,7 +16,7 @@ FIGURE_DIR = '/home/tclose/Documents/BaFTrS/figures/'
 SNR_RANGE = [2, 5, 10, 20]
 NUM_RUNS = 100
 CONF_INTERVAL = 0.99
-PLOT_COLOURS = {'Rician': 'b', 'Gaussian': 'g', 'Difference': 'r'}
+PLOT_COLOURS = {'Rician': 'indigo', 'Gaussian': 'dodgerblue', 'Difference': 'orange'}
 #Loop through each run for each SNR value
 # Create proxy artists for legend
 plot_index_mins = []
@@ -92,7 +92,7 @@ for snr_i, snr in enumerate(SNR_RANGE):
                                                                                             PLOT_COLOURS['Difference'])):
             for index, style in zip(ci, ('--', ':')):
                 angle = (float(index) - float(num_samples) / 2.0) * bin_width
-                axes.plot((angle, angle), (plot_mins[snr_i], plot_index_mins[snr_i][index]), style + colour)
+                axes.plot((angle, angle), (plot_mins[snr_i], plot_index_mins[snr_i][index]), color=colour, linestyle=style)
         if run_i % 100 == 0:
             print "Finished {} runs".format(run_i)
     axes.set_title('SNR {}'.format(snr))
