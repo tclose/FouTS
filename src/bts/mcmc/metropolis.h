@@ -244,7 +244,7 @@ namespace BTS {
 //        x.properties.insert(component_values.begin(), component_values.end());
 
 #ifndef TEST_BED
-//        exp_image.save("/home/tclose/data/metropolis/signal/iter_" + str(sample_i) + ".mif");
+//        likelihood.get_expected_image().save("/home/tclose/git/BaFTrS/output/signal/iter_" + str(sample_i) + ".mif");
 
 //        delete &exp_image;
 //        delete &blank_image;

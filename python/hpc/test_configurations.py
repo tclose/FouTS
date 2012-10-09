@@ -28,7 +28,7 @@ parser.add_argument('--sample_period', default=1000, type=int, help='The sample 
 parser.add_argument('--degree', default=3, type=int, help='The degree of the strands to fit')
 parser.add_argument('--num_width_sections', default=15, help='The number of samples to use across a Fourier tracts cross-section')
 parser.add_argument('--interp_type', default='sinc', type=str, help='The type of interpolation used in the reference image')
-parser.add_argument('--interp_extent', default=3, type=int, help='The interpolation extent used in the reference image')
+parser.add_argument('--interp_extent', default=1, type=int, help='The interpolation extent used in the reference image')
 parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The interpolation type used in the likelihood images')
 parser.add_argument('--prior_freq', default=[10], type=int, action='append', help='The scaling of the frequency prior (currently unused)')
 parser.add_argument('--prior_density', default=[10], type=int, action='append', help='The scaling of the density prior (currently unused)')

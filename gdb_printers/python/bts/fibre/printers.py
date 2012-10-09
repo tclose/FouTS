@@ -44,11 +44,11 @@ class CoordPrinter:
       x = self.val['data'].dereference()
       y = (self.val['data'] + self.val['stride']).dereference()
       z = (self.val['data'] + 2 * self.val['stride']).dereference()
-      return "[%g, %g, %g]" % (x,y,z)
+      return "[%g, %g, %g]" % (x, y, z)
 
     def display_hint(self):
         return 'array'
-      
+
 
 #
 #class FibreTractletPrinter:
@@ -123,7 +123,7 @@ class FibreStrandTrackPrinter:
         x = self.next_elem()
         y = self.next_elem()
         z = self.next_elem()
-        yield '%d' % i, '[%g, %g, %g]' % (x,y,z)
+        yield '%d' % i, '[%g, %g, %g]' % (x, y, z)
 
     def to_string(self):
         if self.typename == 'Fibre::Strand':
@@ -135,9 +135,9 @@ class FibreStrandTrackPrinter:
     def next_elem(self):
       elem = self.data_ptr.dereference()
       self.data_ptr = self.data_ptr + self.stride
-      return elem    
+      return elem
 
-    
+
 
 class FibreTractletPrinter:
     "Print Fibre::Strand and Fibre::Track objects"
@@ -151,12 +151,12 @@ class FibreTractletPrinter:
 
     def children(self):
       for i in xrange(self.degree):
-        yield '%d' % i, '[%g, %g, %g | %g, %g, %g | %g, %g, %g ]' % (self.get_elem(i, 0, 0), self.get_elem(i, 0, 1), self.get_elem(i, 0, 2), 
-                                                                     self.get_elem(i, 1, 0), self.get_elem(i, 1, 1), self.get_elem(i, 1, 2), 
+        yield '%d' % i, '[%g, %g, %g | %g, %g, %g | %g, %g, %g ]' % (self.get_elem(i, 0, 0), self.get_elem(i, 0, 1), self.get_elem(i, 0, 2),
+                                                                     self.get_elem(i, 1, 0), self.get_elem(i, 1, 1), self.get_elem(i, 1, 2),
                                                                      self.get_elem(i, 2, 0), self.get_elem(i, 2, 1), self.get_elem(i, 2, 2))
 
     def to_string(self):
-        return ("Fibre::Tractlet (degree=%d): " % self.degree)
+        return ("Fibre::Tractlet (degree={}): ".format(self.degree))
 
     def get_elem(self, degree_i, ax_i, dim_i):
       address = self.data_ptr + ((ax_i * self.degree + degree_i) * 3 + dim_i) * self.stride

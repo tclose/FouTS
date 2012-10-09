@@ -49,11 +49,11 @@ filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
     time_str = time.strftime('%Y-%m-%d-%A_%H-%M-%S', time.localtime()) # Unique time for distinguishing runs    
     work_dir = os.path.join(work_dir_parent, script_name + "." + time_str + ".1") # Working directory path
     #Ensure that working directory is unique
-    created_work_dir=False
+    created_work_dir = False
     count = 1
     while not created_work_dir:
         try:
-            created_work_dir = not os.makedirs(work_dir) 
+            created_work_dir = not os.makedirs(work_dir)
         except OSError as e:
             count += 1
             if count > 1000:
@@ -61,7 +61,7 @@ filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
                 raise e
             work_dir = '.'.join(work_dir.split('.')[:-1] + [str(count)]) # Replace old count at the end of work directory with new count
     output_dir = os.path.join(output_dir_parent, os.path.split(work_dir)[1])
-    init_work_dir(work_dir, required_dirs, time_str)   
+    init_work_dir(work_dir, required_dirs, time_str)
     return work_dir, output_dir
 
 def init_work_dir(work_dir, required_dirs, time_str):
@@ -82,7 +82,7 @@ def init_work_dir(work_dir, required_dirs, time_str):
     f = open(os.path.join(work_dir, 'output', 'time_stamp'), 'w')
     f.write(time_str + '\n')
     f.close()
-    
+
 
 
 def create_env(work_dir):
@@ -100,7 +100,7 @@ def create_env(work_dir):
     return env
 
 
-def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, copy_to_output=[], 
+def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, copy_to_output=[],
                dry_run=False):
     """
     Create a jobscript in the work directory and then submit it to the HPC que
@@ -120,7 +120,7 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', en
         env = copy(env)
     copy_cmd = ''
     for directory in copy_to_output:
-        copy_cmd+='mv {work_dir}/{directory} {output_dir}/{directory}\n'.format(work_dir=work_dir, output_dir=output_dir, directory=directory)
+        copy_cmd += 'mv {work_dir}/{directory} {output_dir}/{directory}\n'.format(work_dir=work_dir, output_dir=output_dir, directory=directory)
     #Create jobscript
     jobscript_path = os.path.join(work_dir, script_name + '.job')
     f = open(jobscript_path, 'w')
@@ -172,7 +172,7 @@ cp {work_dir}/output_stream {output_dir}/output
 echo "============== Done ===============" 
 """.format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
       ld_library_path=env['LD_LIBRARY_PATH'], np=np,
-      que_name=que_name,cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd, 
+      que_name=que_name, cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd,
       jobscript_path=jobscript_path))
     f.close()
     # Submit job
