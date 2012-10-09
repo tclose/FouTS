@@ -36,14 +36,14 @@ def create_work_dir(script_name, output_dir_parent=None, required_dirs=[]):
     @param required_dirs: The sub-directories that need to be copied into the work directory    
     """
     if not output_dir_parent:
-        output_dir_parent = os.path.join(os.environ['HOME'], 'output')
+        output_dir_parent = os.path.realpath(os.path.join(os.environ['HOME'], 'output'))
     work_dir_parent = os.path.realpath(os.path.join(os.environ['HOME'], 'work'))
     if not os.path.exists(work_dir_parent):
-        raise Exception("Symbolic link to work directory is missing from your home directory \
+        raise Exception("Symbolic link to your work directory is missing from your home directory \
 (i.e. $HOME/work). A symbolic link should be created that points to an appropriate \
 directory in your units sub-directory of '/work' (i.e. ln -s /work/<unit-name>/<user-name> $HOME/work)")
     if not work_dir_parent.startswith('/work'):
-        raise Exception("$HOME/work be a symbolic link to a sub-directory of the high-performance \
+        raise Exception("$HOME/work must be a symbolic link to a sub-directory of the high-performance \
 filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
     # Automatically generate paths
     time_str = time.strftime('%Y-%m-%d-%A_%H-%M-%S', time.localtime()) # Unique time for distinguishing runs    
@@ -120,7 +120,7 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', en
         env = copy(env)
     copy_cmd = ''
     for directory in copy_to_output:
-        copy_cmd += 'mv {work_dir}/{directory} {output_dir}/{directory}\n'.format(work_dir=work_dir, output_dir=output_dir, directory=directory)
+        copy_cmd += 'cp -r -p {work_dir}/{directory} {output_dir}/{directory}\n'.format(work_dir=work_dir, output_dir=output_dir, directory=directory)
     #Create jobscript
     jobscript_path = os.path.join(work_dir, script_name + '.job')
     f = open(jobscript_path, 'w')
@@ -166,10 +166,9 @@ echo "============== Mpirun has ended =============="
 echo "Copying files to output directory '{output_dir}'"
 mv {work_dir}/output {output_dir}
 cp {jobscript_path} {output_dir}/job
-cp {work_dir}/output_stream {output_dir}/output
 {copy_cmd}
-
 echo "============== Done ===============" 
+cp {work_dir}/output_stream {output_dir}/output
 """.format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
       ld_library_path=env['LD_LIBRARY_PATH'], np=np,
       que_name=que_name, cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd,
