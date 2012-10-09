@@ -21,7 +21,7 @@
 */
 
 #include "bts/prob/prior.h"
-#include "bts/prob/prior_component/magnitude.h"
+#include "bts/prob/prior_component/frequency.h"
 #include "bts/prob/prior_component/hook.h"
 #include "bts/prob/prior_component/density.h"
 
@@ -36,8 +36,8 @@ namespace BTS {
     const double Prior::SCALE_DEFAULT = 1;
 
     Prior::Prior(double scale,
-                double mag_scale,
-                double mag_aux_scale,
+                double freq_scale,
+                double freq_aux_scale,
                 double hook_scale,
                 double hook_num_points,
                 double density_high_scale,
@@ -48,7 +48,7 @@ namespace BTS {
                 double length_scale,
                 double length_mean)
     : scale(scale),
-      magnitude(mag_scale, mag_aux_scale),
+      frequency(freq_scale, freq_aux_scale),
       hook(hook_scale, hook_num_points),
       density(density_high_scale, density_low_scale, density_num_points),
       acs(acs_scale, acs_mean),
@@ -58,7 +58,7 @@ namespace BTS {
       Fibre::Strand gradient;
       gradient = fibres;
       std::map<std::string,std::string> component_map;
-      component_map[PriorComponent::Magnitude::NAME] = str(magnitude.log_prob(fibres, gradient));
+      component_map[PriorComponent::Frequency::NAME] = str(frequency.log_prob(fibres, gradient));
       component_map[PriorComponent::Hook::NAME] = str(hook.log_prob(fibres, gradient));
       component_map[PriorComponent::Length::NAME] = str(length.log_prob(fibres, gradient));
       component_map[PriorComponent::Density::NAME] = 0.0;
@@ -71,7 +71,7 @@ namespace BTS {
        Fibre::Tractlet gradient;
        gradient = fibres;
        std::map<std::string,std::string> component_map;
-       component_map[PriorComponent::Magnitude::NAME] = str(magnitude.log_prob(fibres, gradient));
+       component_map[PriorComponent::Frequency::NAME] = str(frequency.log_prob(fibres, gradient));
        component_map[PriorComponent::Hook::NAME] = str(hook.log_prob(fibres[0], gradient[0]));
        component_map[PriorComponent::Length::NAME] = str(length.log_prob(fibres[0], gradient[0]));
        component_map[PriorComponent::Density::NAME] = str(density.log_prob(fibres, gradient));
@@ -85,7 +85,7 @@ namespace BTS {
 
        double lprob = 0.0;
 
-       lprob += magnitude.log_prob(strand, gradient);
+       lprob += frequency.log_prob(strand, gradient);
        lprob += hook.log_prob(strand, gradient);
        lprob += length.log_prob(strand, gradient);
 
@@ -97,7 +97,7 @@ namespace BTS {
 
       double lprob = 0.0;
 
-      lprob += magnitude.log_prob(tractlet, gradient);
+      lprob += frequency.log_prob(tractlet, gradient);
       lprob += hook.log_prob(tractlet[0], gradient[0]);
       lprob += length.log_prob(tractlet[0], gradient[0]);
       lprob += density.log_prob(tractlet, gradient);

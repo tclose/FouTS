@@ -622,12 +622,12 @@ EXECUTE {
 
     std::vector< std::pair<std::string, std::string> > key_values;
 
-    key_values.push_back(std::pair<std::string, std::string> ("prior_curv_scale", str(Prob::Prior::Magnitude::SCALE_DEFAULT)));
+    key_values.push_back(std::pair<std::string, std::string> ("prior_curv_scale", str(Prob::Prior::Frequency::SCALE_DEFAULT)));
 
-    check_parameters_group(echo_options, "prior_curv", key_values, Prob::Prior::Magnitude::ACTIVE_DEFAULT);
+    check_parameters_group(echo_options, "prior_curv", key_values, Prob::Prior::Frequency::ACTIVE_DEFAULT);
 
 
-  } else if (Prob::Prior::Magnitude::ACTIVE_DEFAULT == Active)
+  } else if (Prob::Prior::Frequency::ACTIVE_DEFAULT == Active)
     echo_options["prior_curv"] = "0";
 
 
@@ -749,16 +749,16 @@ EXECUTE {
     echo_options["prior_tract_sheer"] = "0 1";
 
 
-  if (echo_options.count("prior_prior_tract_mag_scale")) {
+  if (echo_options.count("prior_prior_tract_freq_scale")) {
 
     std::vector< std::pair<std::string, std::string> > key_values;
 
-    key_values.push_back(std::pair<std::string, std::string> ("prior_prior_tract_mag_scale", str(Prob::Prior::Magnitude::SCALE_DEFAULT)));
+    key_values.push_back(std::pair<std::string, std::string> ("prior_prior_tract_freq_scale", str(Prob::Prior::Frequency::SCALE_DEFAULT)));
 
-    check_parameters_group(echo_options, "prior_prior_tract_mag", key_values, Prob::Prior::Magnitude::ACTIVE_DEFAULT);
+    check_parameters_group(echo_options, "prior_prior_tract_mag", key_values, Prob::Prior::Frequency::ACTIVE_DEFAULT);
 
 
-  } else if (Prob::Prior::Magnitude::ACTIVE_DEFAULT == Active)
+  } else if (Prob::Prior::Frequency::ACTIVE_DEFAULT == Active)
     echo_options["prior_prior_tract_mag"] = "0 1";
 
 

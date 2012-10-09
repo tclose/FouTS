@@ -135,7 +135,7 @@ namespace BTS {
 
           ~Landscape();
 
-          Landscape(double magnitude, size_t num_points, double spacing,
+          Landscape(double frequency, size_t num_points, double spacing,
               size_t seed = time(NULL));
 
           double log_prob(const MCMC::State& test_state);

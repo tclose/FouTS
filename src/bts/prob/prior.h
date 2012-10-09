@@ -34,9 +34,9 @@
    + Argument ("prior_hook_scale", "").optional().type_float(0, Prob::PriorComponent::Hook::SCALE_DEFAULT,LARGE_FLOAT) \
    + Argument ("prior_hook_num_points", "").optional().type_integer(1, Prob::PriorComponent::Hook::NUM_POINTS_DEFAULT,LARGE_INT), \
 \
-  Option ("prior_mag", "The prior placed on the tractlet magnitude") \
-   + Argument ("prior_mag_scale", "").optional().type_float(0, Prob::PriorComponent::Magnitude::SCALE_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_mag_aux_scale", "").optional().type_float(0, Prob::PriorComponent::Magnitude::AUX_SCALE_DEFAULT,LARGE_FLOAT), \
+  Option ("prior_freq", "The prior placed on the tractlet frequency") \
+   + Argument ("prior_freq_scale", "").optional().type_float(0, Prob::PriorComponent::Frequency::SCALE_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_freq_aux_scale", "").optional().type_float(0, Prob::PriorComponent::Frequency::AUX_SCALE_DEFAULT,LARGE_FLOAT), \
 \
   Option ("prior_density", "The type of prior placed on the sheer of the secondary axes") \
    + Argument ("prior_density_high_scale", "").optional().type_float(0, Prob::PriorComponent::Density::HIGH_SCALE_DEFAULT,LARGE_FLOAT) \
@@ -71,15 +71,15 @@
       prior_hook_num_points = prior_opt[0][1]; \
   } \
  \
-  double prior_mag_scale  = Prob::PriorComponent::Magnitude::SCALE_DEFAULT; \
-  double prior_mag_aux_scale  = Prob::PriorComponent::Magnitude::AUX_SCALE_DEFAULT; \
+  double prior_freq_scale  = Prob::PriorComponent::Frequency::SCALE_DEFAULT; \
+  double prior_freq_aux_scale  = Prob::PriorComponent::Frequency::AUX_SCALE_DEFAULT; \
  \
-  prior_opt = get_options("prior_mag"); \
+  prior_opt = get_options("prior_freq"); \
   if (prior_opt.size()) { \
     if (prior_opt[0].size() >= 1) \
-      prior_mag_scale = prior_opt[0][0]; \
+      prior_freq_scale = prior_opt[0][0]; \
     if (prior_opt[0].size() >= 2) \
-      prior_mag_aux_scale = prior_opt[0][1]; \
+      prior_freq_aux_scale = prior_opt[0][1]; \
   } \
  \
    double prior_density_high_scale  = Prob::PriorComponent::Density::HIGH_SCALE_DEFAULT; \
@@ -126,9 +126,9 @@
   if (prior_scale) { \
     properties["prior_scale"]                         = str(prior_scale); \
 \
-    if (prior_mag_scale) { \
-      properties["prior_mag_scale"]                   = str(prior_mag_scale); \
-      properties["prior_mag_aux_scale"]               = str(prior_mag_aux_scale); \
+    if (prior_freq_scale) { \
+      properties["prior_freq_scale"]                   = str(prior_freq_scale); \
+      properties["prior_freq_aux_scale"]               = str(prior_freq_aux_scale); \
     } \
 \
     if (prior_hook_scale) { \
@@ -153,7 +153,7 @@
     } \
   } \
 
-#include "bts/prob/prior_component/magnitude.h"
+#include "bts/prob/prior_component/frequency.h"
 #include "bts/prob/prior_component/hook.h"
 #include "bts/prob/prior_component/density.h"
 #include "bts/prob/prior_component/acs.h"
@@ -182,7 +182,7 @@ namespace BTS {
       protected:
 
         double scale;
-        PriorComponent::Magnitude magnitude;
+        PriorComponent::Frequency frequency;
         PriorComponent::Hook hook;
         PriorComponent::Density density;
         PriorComponent::ACS acs;
@@ -191,8 +191,8 @@ namespace BTS {
       public:
 
         Prior(double scale,
-              double mag_scale,
-              double mag_aux_scale,
+              double freq_scale,
+              double freq_aux_scale,
               double hook_scale,
               double hook_num_points,
               double density_high_scale,
@@ -204,16 +204,16 @@ namespace BTS {
               double length_mean);
 
         Prior(const Prior& p)
-         : scale(p.scale), magnitude(p.magnitude), hook(p.hook), density(p.density), acs(p.acs), length(p.length) {}
+         : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(p.acs), length(p.length) {}
 
         Prior& operator=(const Prior& p)
-          { scale =p.scale; magnitude = p.magnitude; hook = p.hook; density = p.density; acs = p.acs; length = p.length; return *this; }
+          { scale =p.scale; frequency = p.frequency; hook = p.hook; density = p.density; acs = p.acs; length = p.length; return *this; }
 
         virtual ~Prior() {}
 
         std::vector<std::string>        list_components() const {
           std::vector<std::string> components;
-          components.push_back(PriorComponent::Magnitude::NAME);
+          components.push_back(PriorComponent::Frequency::NAME);
           components.push_back(PriorComponent::Hook::NAME);
           components.push_back(PriorComponent::Density::NAME);
           components.push_back(PriorComponent::ACS::NAME);

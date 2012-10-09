@@ -37,7 +37,7 @@ namespace BTS {
 
       std::map<std::string, std::string> component_values;
 
-      component_values["magnitude"] = magnitude.log_prob(fibre);
+      component_values["frequency"] = frequency.log_prob(fibre);
       component_values["hook"] = hook.log_prob(fibre);
       component_values["density"] = density.log_prob(fibre);
 

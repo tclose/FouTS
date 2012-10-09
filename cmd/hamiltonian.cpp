@@ -351,8 +351,8 @@ EXECUTE {
   //------------------//
 
   Prob::Prior prior (prior_scale,
-                    prior_mag_scale,
-                    prior_mag_aux_scale,
+                    prior_freq_scale,
+                    prior_freq_aux_scale,
                     prior_hook_scale,
                     prior_hook_num_points,
                     prior_density_high_scale,
