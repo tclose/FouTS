@@ -73,7 +73,7 @@ def init_work_dir(work_dir, required_dirs, time_str):
     """
     # Copy snapshot of selected subdirectories to working directory
     for directory in required_dirs:
-        shutil.copytree(os.path.join(get_project_dir(),'params', directory), os.path.join(work_dir, 'params', directory))
+        shutil.copytree(os.path.join(get_project_dir(), directory), os.path.join(work_dir, directory))
     # Make output directory for the generated files
     os.mkdir(os.path.join(work_dir, 'output'))
     # Save the git revision in the output folder for reference
