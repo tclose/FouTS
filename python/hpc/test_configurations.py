@@ -30,11 +30,13 @@ parser.add_argument('--num_width_sections', default=15, help='The number of samp
 parser.add_argument('--interp_type', default='sinc', type=str, help='The type of interpolation used in the reference image')
 parser.add_argument('--interp_extent', default=1, type=int, help='The interpolation extent used in the reference image')
 parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The interpolation type used in the likelihood images')
-parser.add_argument('--prior_freq', default=[25.0], type=int, action='append', help='The scaling of the frequency prior (currently unused)')
-parser.add_argument('--prior_aux_freq', default=[75.0], type=int, action='append', help='The scaling of the frequency prior (currently unused)')
-parser.add_argument('--prior_density', default=[10], type=int, action='append', help='The scaling of the density prior (currently unused)')
-parser.add_argument('--img_snr', default=5, type=float, help='The snr to used in the noisy image')
-parser.add_argument('--like_snr', default=[20], type=float, action='append', help='The assumed snr to used in the likelihood function in \
+parser.add_argument('--prior_freq', default=[25.0], type=float, action='append', help='The scaling of the frequency prior (currently unused)')
+parser.add_argument('--prior_aux_freq', default=[75.0], type=float, action='append', help='The scaling of the frequency prior (currently unused)')
+parser.add_argument('--prior_density_high', default=[1.0], type=float, action='append', help='The scaling of the density prior (currently unused)')
+parser.add_argument('--prior_density_low', default=[1.0], type=float, action='append', help='The scaling of the density prior (currently unused)')
+parser.add_argument('--prior_hook', default=[50.0], type=float, action='append', help='The scaling of the density prior (currently unused)')
+parser.add_argument('--img_snr', default=5.0, type=float, help='The snr to used in the noisy image')
+parser.add_argument('--like_snr', default=[20.0], type=float, action='append', help='The assumed snr to used in the likelihood function in \
 the metropolis sampling')
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory \
 will be created (defaults to $HOME/Output)')
@@ -48,7 +50,8 @@ args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other 
 # parameters in the set
-num_param_sets = max((len(args.prior_freq), len(args.prior_aux_freq), len(args.prior_density), len(args.like_snr)))
+num_param_sets = max((len(args.prior_freq), len(args.prior_aux_freq), len(args.prior_density_low),
+                                            len(args.prior_density_high), len(args.prior_hook), len(args.like_snr)))
 if len(args.prior_freq) == 1:
     args.prior_freq *= num_param_sets
 elif len(args.prior_freq) != num_param_sets:
@@ -59,11 +62,21 @@ if len(args.prior_aux_freq) == 1:
 elif len(args.prior_aux_freq) != num_param_sets:
     raise Exception('Number of prior auxiliary frequency params ({}) does not match number of params ({})'.
                                                                     format(len(args.prior_aux_freq), num_param_sets))
-if len(args.prior_density) == 1:
-    args.prior_density *= num_param_sets
-elif len(args.prior_density) != num_param_sets:
+if len(args.prior_density_high) == 1:
+    args.prior_density_high *= num_param_sets
+elif len(args.prior_density_high) != num_param_sets:
     raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
-                                                                    format(len(args.prior_density), num_param_sets))
+                                                                    format(len(args.prior_density_high), num_param_sets))
+if len(args.prior_density_low) == 1:
+    args.prior_density_low *= num_param_sets
+elif len(args.prior_density_low) != num_param_sets:
+    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
+                                                                    format(len(args.prior_density_low), num_param_sets))
+if len(args.prior_hook) == 1:
+    args.prior_hook *= num_param_sets
+elif len(args.prior_hook) != num_param_sets:
+    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
+                                                                    format(len(args.prior_hook), num_param_sets))
 if len(args.like_snr) == 1:
     args.like_snr *= num_param_sets
 elif len(args.like_snr) != num_param_sets:
@@ -84,8 +97,8 @@ noise_ref_signal = sp.check_output('maxb0 /tmp/noise_ref.mif', shell=True, env=o
 # Generate a random seed to seed the random number generators of the cmds
 seed = int(time.time() * 100)
 for i in xrange(args.num_runs):
-    for prior_freq, prior_aux_freq, prior_density, like_snr in zip(args.prior_freq, args.prior_aux_freq,
-                                                                                    args.prior_density, args.like_snr):
+    for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, like_snr in zip(args.prior_freq,
+                   args.prior_aux_freq, args.prior_density_low, args.prior_density_low, args.prior_hook, args.like_snr):
         for config in CONFIGURATIONS:
             # Create work directory and get path for output directory
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
@@ -132,13 +145,14 @@ for i in xrange(args.num_runs):
     metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
     -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
     -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b -seed {metropolis_seed} \
-    -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density}
+    -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} {prior_density_low} 100 -prior_hook {prior_hook}
         
     # Run analysis
     stats_fibres {config_path} {work_dir}/output/samples.tst
     """.format(work_dir=work_dir, config_path=config_path, config=config, args=args, noise_ref_signal=noise_ref_signal,
                num_tracts=num_tracts, img_dim=img_dim, init_seed=seed, metropolis_seed=seed + 1, prior_freq=prior_freq,
-               prior_aux_freq=prior_aux_freq, prior_density=prior_density, like_snr=like_snr)
+               prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low, prior_density_high=prior_density_high,
+               prior_hook=prior_hook, like_snr=like_snr)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name, dry_run=args.dry_run,
                                                                                              copy_to_output=REQUIRED_DIRS)
