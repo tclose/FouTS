@@ -34,7 +34,7 @@ parser.add_argument('--prior_freq', default=[25.0], type=float, action='append',
 parser.add_argument('--prior_aux_freq', default=[75.0], type=float, action='append', help='The scaling of the frequency prior (currently unused)')
 parser.add_argument('--prior_density_high', default=[1.0], type=float, action='append', help='The scaling of the density prior (currently unused)')
 parser.add_argument('--prior_density_low', default=[1.0], type=float, action='append', help='The scaling of the density prior (currently unused)')
-parser.add_argument('--prior_hook', default=[50.0], type=float, action='append', help='The scaling of the density prior (currently unused)'))
+parser.add_argument('--prior_hook', default=[50.0], type=float, action='append', help='The scaling of the density prior (currently unused)')
 parser.add_argument('--img_snr', default=5.0, type=float, help='The snr to used in the noisy image')
 parser.add_argument('--like_snr', default=[20.0], type=float, action='append', help='The assumed snr to used in the likelihood function in \
 the metropolis sampling')
@@ -50,7 +50,8 @@ args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other 
 # parameters in the set
-num_param_sets = max((len(args.prior_freq), len(args.prior_aux_freq), len(args.prior_density), len(args.like_snr)))
+num_param_sets = max((len(args.prior_freq), len(args.prior_aux_freq), len(args.prior_density_low),
+                                            len(args.prior_density_high), len(args.prior_hook), len(args.like_snr)))
 if len(args.prior_freq) == 1:
     args.prior_freq *= num_param_sets
 elif len(args.prior_freq) != num_param_sets:
@@ -61,11 +62,21 @@ if len(args.prior_aux_freq) == 1:
 elif len(args.prior_aux_freq) != num_param_sets:
     raise Exception('Number of prior auxiliary frequency params ({}) does not match number of params ({})'.
                                                                     format(len(args.prior_aux_freq), num_param_sets))
-if len(args.prior_density) == 1:
-    args.prior_density *= num_param_sets
-elif len(args.prior_density) != num_param_sets:
+if len(args.prior_density_high) == 1:
+    args.prior_density_high *= num_param_sets
+elif len(args.prior_density_high) != num_param_sets:
     raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
-                                                                    format(len(args.prior_density), num_param_sets))
+                                                                    format(len(args.prior_density_high), num_param_sets))
+if len(args.prior_density_low) == 1:
+    args.prior_density_low *= num_param_sets
+elif len(args.prior_density_low) != num_param_sets:
+    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
+                                                                    format(len(args.prior_density_low), num_param_sets))
+if len(args.prior_hook) == 1:
+    args.prior_hook *= num_param_sets
+elif len(args.prior_hook) != num_param_sets:
+    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
+                                                                    format(len(args.prior_hook), num_param_sets))
 if len(args.like_snr) == 1:
     args.like_snr *= num_param_sets
 elif len(args.like_snr) != num_param_sets:
