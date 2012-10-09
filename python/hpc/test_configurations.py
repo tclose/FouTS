@@ -144,8 +144,9 @@ for i in xrange(args.num_runs):
     # Run metropolis
     metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
     -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
-    -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b -seed {metropolis_seed} \
-    -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} {prior_density_low} 100 -prior_hook {prior_hook}
+    -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
+    -seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
+    {prior_density_low} 100 -prior_hook {prior_hook} 100
         
     # Run analysis
     stats_fibres {config_path} {work_dir}/output/samples.tst
