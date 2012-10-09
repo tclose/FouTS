@@ -21,8 +21,8 @@
  */
 
 
-#ifndef __bts_prob_prior_strand_curvature_h__
-#define __bts_prob_prior_strand_curvature_h__
+#ifndef __bts_prob_priorcomponent_frequency_h__
+#define __bts_prob_priorcomponent_frequency_h__
 
 #include "math/math.h"
 
@@ -36,7 +36,7 @@ namespace BTS {
 
     namespace PriorComponent {
 
-      class Magnitude {
+      class Frequency {
 
         public:
 
@@ -52,19 +52,19 @@ namespace BTS {
 
         public:
 
-          Magnitude (double scale, double aux_scale)
+          Frequency (double scale, double aux_scale)
             : scale(scale), aux_scale(aux_scale) {}
 
-          Magnitude(const Magnitude& m)
+          Frequency(const Frequency& m)
             : scale(m.scale), aux_scale(aux_scale) {}
 
-          Magnitude&  operator=(const Magnitude& m)
+          Frequency&  operator=(const Frequency& m)
             { scale = m.scale; aux_scale = m.aux_scale; return *this; }
 
-          ~Magnitude() {}
+          ~Frequency() {}
 
-          Magnitude*      clone() const
-            { return new Magnitude(*this); }
+          Frequency*      clone() const
+            { return new Frequency(*this); }
 
           double          log_prob(const Fibre::Strand strand, Fibre::Strand gradient);
 

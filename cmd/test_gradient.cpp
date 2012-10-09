@@ -775,7 +775,7 @@ EXECUTE {
 //  double step_size = 1e-4;
 //  Triple<double> encoding_orientation (1.0, 0.0, 0.0);
 //  std::string axis_scales_location = Prob::Test::Gaussian::AXIS_SCALES_LOCATION_DEFAULT;
-//  std::string object_type  = "Prob::Prior::Magnitude";
+//  std::string object_type  = "Prob::Prior::Frequency";
 //  std::string function_name = "log_prob";
 //  bool  calculate_hessian = false;
 //  bool calculate_rank3_hessian = false;
@@ -957,8 +957,8 @@ EXECUTE {
 //  //--------------------//
 //
 //  Prob::Prior prior (prior_scale,
-//                    prior_mag_scale,
-//                    prior_mag_aux_scale,
+//                    prior_freq_scale,
+//                    prior_freq_aux_scale,
 //                    prior_hook_scale,
 //                    prior_hook_num_points,
 //                    prior_density_high_scale,
@@ -1078,23 +1078,23 @@ EXECUTE {
 //        throw Exception ("Unrecognised function '" + object_type + "::" + function_name + "(const " + state_type + "&, " + state_type + "&)'.");
 //
 //
-////--- Prob::Prior::Magnitude ---//
+////--- Prob::Prior::Frequency ---//
 //
-//    } else if (object_type == "Prob::PriorComponent::Magnitude") {
+//    } else if (object_type == "Prob::PriorComponent::Frequency") {
 //
-//      Prob::PriorComponent::Magnitude prior_curvature_magnitude (prior_mag_scale);
+//      Prob::PriorComponent::Frequency prior_curvature_frequency (prior_freq_scale);
 //
 //      if (function_name == "log_prob") {
 //
 //        if (calculate_hessian) {
-//          TEST_HESSIAN(Fibre::Strand, Prob::PriorComponent::Magnitude, log_prob, prior_curvature_magnitude);
+//          TEST_HESSIAN(Fibre::Strand, Prob::PriorComponent::Frequency, log_prob, prior_curvature_frequency);
 //        } else {
-//          TEST_GRADIENT(Fibre::Strand, Prob::PriorComponent::Magnitude, log_prob, prior_curvature_magnitude);
+//          TEST_GRADIENT(Fibre::Strand, Prob::PriorComponent::Frequency, log_prob, prior_curvature_frequency);
 //        }
 //
 //      } else if (function_name == "log_prob_and_fisher") {
 //
-//        TEST_FISHER_GRADIENT(Fibre::Strand, Prob::PriorComponent::Magnitude, log_prob_and_fisher, prior_curvature_magnitude);
+//        TEST_FISHER_GRADIENT(Fibre::Strand, Prob::PriorComponent::Frequency, log_prob_and_fisher, prior_curvature_frequency);
 //
 //      } else
 //        throw Exception ("Unrecognised function '" + object_type + "::" + function_name + "(const " + state_type + "&, " + state_type + "&)'.");

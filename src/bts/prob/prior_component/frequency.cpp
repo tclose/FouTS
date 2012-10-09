@@ -20,7 +20,7 @@
 
  */
 
-#include "bts/prob/prior_component/magnitude.h"
+#include "bts/prob/prior_component/frequency.h"
 
 #include "bts/prob/inline_functions.h"
 
@@ -30,11 +30,11 @@ namespace BTS {
 
     namespace PriorComponent {
 
-      const double            Magnitude::SCALE_DEFAULT   = 25.0;
-      const double            Magnitude::AUX_SCALE_DEFAULT = 75.0;
-      const std::string       Magnitude::NAME            = "magnitude";
+      const double            Frequency::SCALE_DEFAULT   = 25.0;
+      const double            Frequency::AUX_SCALE_DEFAULT = 75.0;
+      const std::string       Frequency::NAME            = "frequency";
 
-      double Magnitude::log_prob(const Fibre::Strand strand, Fibre::Strand gradient) {
+      double Frequency::log_prob(const Fibre::Strand strand, Fibre::Strand gradient) {
 
         double lprob = 0.0;
         gradient.zero();
@@ -68,7 +68,7 @@ namespace BTS {
 
       }
 
-//      double Magnitude::log_prob(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& hessian) {
+//      double Frequency::log_prob(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& hessian) {
 //
 //        double lprob = 0.0;
 //        gradient.zero();
@@ -124,7 +124,7 @@ namespace BTS {
 //      }
 
 
-      double Magnitude::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
+      double Frequency::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
 
         gradient.zero();
 
@@ -163,7 +163,7 @@ namespace BTS {
 
 
 //
-//      double Magnitude::log_prob_and_fisher(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& fisher) {
+//      double Frequency::log_prob_and_fisher(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& fisher) {
 //
 //        double log_prob = 0.0;
 //        gradient.zero();
@@ -201,7 +201,7 @@ namespace BTS {
 //      }
 //
 //
-//      double Magnitude::log_prob_and_fisher(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& fisher, std::vector<Fibre::Strand::Tensor>& fisher_gradient) {
+//      double Frequency::log_prob_and_fisher(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& fisher, std::vector<Fibre::Strand::Tensor>& fisher_gradient) {
 //
 //        double lprob = 0.0;
 //        gradient.zero();
