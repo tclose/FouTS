@@ -30,13 +30,13 @@ parser.add_argument('--num_width_sections', default=15, help='The number of samp
 parser.add_argument('--interp_type', default='sinc', type=str, help='The type of interpolation used in the reference image')
 parser.add_argument('--interp_extent', default=1, type=int, help='The interpolation extent used in the reference image')
 parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The interpolation type used in the likelihood images')
-parser.add_argument('--prior_freq', default=[25.0], type=float, action='append', help='The scaling of the frequency prior (currently unused)')
-parser.add_argument('--prior_aux_freq', default=[75.0], type=float, action='append', help='The scaling of the frequency prior (currently unused)')
-parser.add_argument('--prior_density_high', default=[1.0], type=float, action='append', help='The scaling of the density prior (currently unused)')
-parser.add_argument('--prior_density_low', default=[1.0], type=float, action='append', help='The scaling of the density prior (currently unused)')
-parser.add_argument('--prior_hook', default=[50.0], type=float, action='append', help='The scaling of the density prior (currently unused)')
+parser.add_argument('--prior_freq', default=[25.0], type=float, nargs='+', help='The scaling of the frequency prior (currently unused)')
+parser.add_argument('--prior_aux_freq', default=[75.0], type=float, nargs='+', help='The scaling of the frequency prior (currently unused)')
+parser.add_argument('--prior_density_high', default=[1.0], type=float, nargs='+', help='The scaling of the density prior (currently unused)')
+parser.add_argument('--prior_density_low', default=[1.0], type=float, nargs='+', help='The scaling of the density prior (currently unused)')
+parser.add_argument('--prior_hook', default=[50.0], type=float, nargs='+', help='The scaling of the density prior (currently unused)')
 parser.add_argument('--img_snr', default=5.0, type=float, help='The snr to used in the noisy image')
-parser.add_argument('--like_snr', default=[20.0], type=float, action='append', help='The assumed snr to used in the likelihood function in \
+parser.add_argument('--like_snr', default=[20.0], type=float, nargs='+', help='The assumed snr to used in the likelihood function in \
 the metropolis sampling')
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory \
 will be created (defaults to $HOME/Output)')
