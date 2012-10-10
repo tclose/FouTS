@@ -325,7 +325,6 @@ EXECUTE {
       else if (acs >= 0.0)
         tractlets[tractlet_i].set_acs(tractlets[tractlet_i][1][0].norm() * tractlets[tractlet_i][2][0].norm() * density
                                                                                                       * M_PI / 4.0);
-      std::cout << tractlets[tractlet_i] << std::endl;
     }
 
     tractlets.save(output_location);
