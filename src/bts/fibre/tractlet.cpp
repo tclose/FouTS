@@ -584,12 +584,16 @@ namespace BTS {
     std::ostream&                  	operator<< (std::ostream& stream, const Tractlet& tractlet) {
 
       if (tractlet.has_var_acs()) {
-        stream << "acs: " << tractlet.acs() << std::endl;
+        stream << "ACS: " << tractlet.acs() << std::endl;
         // Output 10 densities from t=0 to t=1
         stream << "densities:" << std::endl;
         std::vector<double> areas = tractlet.cross_sectional_areas(10);
         for (size_t i = 0; i < 10; ++i)
           std::cout << tractlet.acs() / areas[i] << " ";
+        std::cout << std::endl;
+        stream << "sqrt(ACS) for density=1:" << std::endl;
+        for (size_t i = 0; i < 10; ++i)
+          std::cout << "(" << MR::Math::sqrt(areas[i]) << ") ";
         std::cout << std::endl;
       }
 
