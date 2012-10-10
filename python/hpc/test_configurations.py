@@ -102,6 +102,11 @@ for i in xrange(args.num_runs):
         for config in CONFIGURATIONS:
             # Create work directory and get path for output directory
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
+            # Create a file in the output directory with just the configuration printed in it (usefulf for quickly 
+            # determining what the configuration is
+            config_name_file = open(os.path.join(work_dir, 'output'), 'w')
+            config_name_file.write(config)
+            config_name_file.close()
             # Strip configuration of symbols for tract number and img dimension
             config_name = re.sub('\-n[0-9]+', '', config) # Strip tract number
             config_name = re.sub('\-d[0-9]+', '', config_name) # Strip dimension
