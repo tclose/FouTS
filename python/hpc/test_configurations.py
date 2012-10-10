@@ -122,7 +122,7 @@ for i in xrange(args.num_runs):
                     raise Exception("Could not open configurations file ''{0}'' for reading (returned: {1})".format(config_path, e))
                 except ValueError as e:
                     raise Exception("Could not read 'total_count' property from configuration file '{config_path}', could \
-    be corrupted.\n(Error: {e})".format(config_path=config_path, e=e))
+be corrupted.\n(Error: {e})".format(config_path=config_path, e=e))
                 else:
                     num_tracts = int(num_tracts)
             img_dim = re.findall('\-d[0-9]+', config)
@@ -131,25 +131,31 @@ for i in xrange(args.num_runs):
             else:
                 img_dim = args.img_dim
             cmd_line = """      
-    # Generate image        
-    generate_image {config_path} {work_dir}/output/image.mif $noise \
-    img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
-    -exp_interp_extent {args.interp_extent} -noise_snr {args.img_snr} -noise_type gaussian -noise_ref_signal {noise_ref_signal} \
-    -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b
+# Copy configuration to output directory for future reference
+cp {config_path} {work_dir}/output/config.tct
+if [ -f {config_path}x ]; then
+    cp {config_path}x {work_dir}/output/config.tctx
+fi
+
+# Generate image
+generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif $noise \
+img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
+-exp_interp_extent {args.interp_extent} -noise_snr {args.img_snr} -noise_type gaussian -noise_ref_signal {noise_ref_signal} \
+-diff_encodings_location {work_dir}/params/diffusion/encoding_60.b
+
+# Initialise fibres
+init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
+-img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed} -acs 0.01 -base_intensity 1.0
+
+# Run metropolis
+metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
+-exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
+-sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
+-seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
+{prior_density_low} 100 -prior_hook {prior_hook} 100
     
-    # Initialise fibres
-    init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
-    -img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed} -acs 0.01 -base_intensity 1.0
-    
-    # Run metropolis
-    metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
-    -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
-    -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
-    -seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
-    {prior_density_low} 100 -prior_hook {prior_hook} 100
-        
-    # Run analysis
-    stats_fibres {config_path} {work_dir}/output/samples.tst
+# Run analysis
+stats_fibres {config_path} {work_dir}/output/samples.tst
     """.format(work_dir=work_dir, config_path=config_path, config=config, args=args, noise_ref_signal=noise_ref_signal,
                num_tracts=num_tracts, img_dim=img_dim, init_seed=seed, metropolis_seed=seed + 1, prior_freq=prior_freq,
                prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low, prior_density_high=prior_density_high,
