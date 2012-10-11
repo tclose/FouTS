@@ -149,8 +149,7 @@ fi
 generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif $noise \
 img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
 -exp_interp_extent {args.interp_extent} -noise_snr {args.img_snr} -noise_type gaussian -noise_ref_signal {noise_ref_signal} \
--diff_encodings_location {work_dir}/params/diffusion/encoding_60.b -exp_num_width_sections {args.num_width_sections} \
- -exp_type {args.interp_type} 
+-diff_encodings_location {work_dir}/params/diffusion/encoding_60.b -exp_num_width_sections {args.num_width_sections}
 
 # Initialise fibres
 init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
