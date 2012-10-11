@@ -21,7 +21,7 @@ import subprocess as sp
 import time
 # Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--img_dim', default=10, type=int, help='The size of the noisy image to fit against')
+parser.add_argument('--img_dim', default=3, type=int, help='The size of the noisy image to fit against')
 parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
 parser.add_argument('--num_iterations', default=200000, type=int, help='The number of interations in the metropolis sampling')
 parser.add_argument('--sample_period', default=1000, type=int, help='The sample period of the metropolis sampling')
@@ -104,9 +104,8 @@ for i in xrange(args.num_runs):
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
             # Create a file in the output directory with just the configuration printed in it (usefulf for quickly 
             # determining what the configuration is
-            config_name_file = open(os.path.join(work_dir, 'output'), 'w')
-            config_name_file.write(config)
-            config_name_file.close()
+            with open(os.path.join(work_dir, 'output'), 'w') as config_name_file:
+                config_name_file.write(config + '\n')
             # Strip configuration of symbols for tract number and img dimension
             config_name = re.sub('\-n[0-9]+', '', config) # Strip tract number
             config_name = re.sub('\-d[0-9]+', '', config_name) # Strip dimension
