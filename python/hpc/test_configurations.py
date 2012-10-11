@@ -27,7 +27,7 @@ parser.add_argument('--step_scale', default=0.001, type=float, help='The scale o
 parser.add_argument('--num_iterations', default=200000, type=int, help='The number of interations in the metropolis sampling')
 parser.add_argument('--sample_period', default=1000, type=int, help='The sample period of the metropolis sampling')
 parser.add_argument('--degree', default=3, type=int, help='The degree of the strands to fit')
-parser.add_argument('--num_width_sections', default=15, help='The number of samples to use across a Fourier tracts cross-section')
+parser.add_argument('--num_width_sections', default=4, help='The number of samples to use across a Fourier tracts cross-section')
 parser.add_argument('--interp_type', default='sinc', type=str, help='The type of interpolation used in the reference image')
 parser.add_argument('--interp_extent', default=1, type=int, help='The interpolation extent used in the reference image')
 parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The interpolation type used in the likelihood images')
@@ -149,7 +149,8 @@ fi
 generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif $noise \
 img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
 -exp_interp_extent {args.interp_extent} -noise_snr {args.img_snr} -noise_type gaussian -noise_ref_signal {noise_ref_signal} \
--diff_encodings_location {work_dir}/params/diffusion/encoding_60.b
+-diff_encodings_location {work_dir}/params/diffusion/encoding_60.b -exp_num_width_sections {args.num_width_sections} \
+ -exp_type {args.interp_type} 
 
 # Initialise fibres
 init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
@@ -160,7 +161,8 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/out
 -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
-{prior_density_low} 100 -prior_hook {prior_hook} 100
+{prior_density_low} 100 -prior_hook {prior_hook} 100 -exp_num_width_sections {args.num_width_sections} \
+ -exp_type {args.interp_type} 
     
 # Run analysis
 stats_fibres {config_path} {work_dir}/output/samples.tst

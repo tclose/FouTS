@@ -71,6 +71,8 @@ namespace BTS {
          const size_t* cmd_version, const char* cmd_author, const char* cmd_copyright)
          : MR::App(argc, argv, cmd_desc, cmd_args, cmd_opts, cmd_version, cmd_author, cmd_copyright) {}
 
+//      void   print_help () const;
+
       virtual ~App ();
   };
 
