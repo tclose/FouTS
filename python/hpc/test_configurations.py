@@ -85,11 +85,11 @@ elif len(args.like_snr) != num_param_sets:
                                                                     format(len(args.like_snr), num_param_sets))
 # Get parameters directory
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
-output_parent_dir=os.path.realpath(os.path.join(os.environ['HOME'], 'output'))
+output_parent_dir = os.path.realpath(os.path.join(os.environ['HOME'], 'output'))
 # Get reference signal to compare noise snr against (the maximum b0 reading from a single straight x tract
 gen_img_cmd = "generate_image {param_dir}/fibre/tract/noise_ref.tct {output_dir}/noise_ref.mif -exp_type {args.interp_type} \
 -exp_interp_extent {args.interp_extent} -clean -exp_num_width_sections {args.num_width_sections} \
--diff_encodings_location {param_dir}/diffusion/encoding_60.b".format(param_dir=param_dir, 
+-diff_encodings_location {param_dir}/diffusion/encoding_60.b".format(param_dir=param_dir,
                                       output_dir=output_parent_dir, args=args)
 try:
 #    print sp.check_output("generate_image --help", shell=True, env=os.environ.copy())
@@ -146,8 +146,8 @@ if [ -f {config_path}x ]; then
 fi
 
 # Generate image
-generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif $noise \
-img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
+generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif \
+-img_dims "{img_dim} {img_dim} {img_dim}" -exp_type {args.interp_type} \
 -exp_interp_extent {args.interp_extent} -noise_snr {args.img_snr} -noise_type gaussian -noise_ref_signal {noise_ref_signal} \
 -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b -exp_num_width_sections {args.num_width_sections}
 

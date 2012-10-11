@@ -164,7 +164,7 @@ cd {work_dir}
 echo "============== Mpirun has ended =============="
 
 echo "Copying files to output directory '{output_dir}'"
-mv {work_dir}/output {output_dir}
+cp -r {work_dir}/output {output_dir}
 cp {jobscript_path} {output_dir}/job
 {copy_cmd}
 echo "============== Done ===============" 
