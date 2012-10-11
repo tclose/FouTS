@@ -85,18 +85,19 @@ elif len(args.like_snr) != num_param_sets:
                                                                     format(len(args.like_snr), num_param_sets))
 # Get parameters directory
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
+output_parent_dir=os.path.realpath(os.path.join(os.environ['HOME'], 'output'))
 # Get reference signal to compare noise snr against (the maximum b0 reading from a single straight x tract
-gen_img_cmd = "generate_image {param_dir}/fibre/tract/noise_ref.tct {args.output_dir}/noise_ref.mif -exp_type {args.interp_type} \
+gen_img_cmd = "generate_image {param_dir}/fibre/tract/noise_ref.tct {output_dir}/noise_ref.mif -exp_type {args.interp_type} \
 -exp_interp_extent {args.interp_extent} -clean -exp_num_width_sections {args.num_width_sections} \
--diff_encodings_location {param_dir}/diffusion/encoding_60.b".format(param_dir=param_dir, args=args)
+-diff_encodings_location {param_dir}/diffusion/encoding_60.b".format(param_dir=param_dir, 
+                                      output_dir=output_parent_dir, args=args)
 try:
 #    print sp.check_output("generate_image --help", shell=True, env=os.environ.copy())
     sp.check_call(gen_img_cmd, shell=True, env=os.environ.copy())
 except Exception as e:
     raise Exception('Generate image command: ''{0}'' caused an error ''{1}'''.format(gen_img_cmd, e))
-print "Generated noise reference image {args.output_dir}/noise_ref.mif', with command: {cmd}".format(args=args,
-                                                                                                        cmd=gen_img_cmd)
-noise_ref_signal = sp.check_output('maxb0 {args.output_dir}/noise_ref.mif'.format(args=args), shell=True,
+print "Generated noise reference image {}/noise_ref.mif', with command: {}".format(output_parent_dir, gen_img_cmd)
+noise_ref_signal = sp.check_output('maxb0 {}/noise_ref.mif'.format(output_parent_dir), shell=True,
                                                                                                 env=os.environ.copy())
 # Generate a random seed to seed the random number generators of the cmds
 seed = int(time.time() * 100)
