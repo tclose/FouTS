@@ -93,6 +93,8 @@ try:
     sp.check_call(gen_img_cmd, shell=True, env=os.environ.copy())
 except Exception as e:
     raise Exception('Generate image command: ''{0}'' caused an error ''{1}'''.format(gen_img_cmd, e))
+print "Generated noise reference image {args.output_dir}/noise_ref.mif', with command: {cmd}".format(args=args,
+                                                                                                        cmd=gen_img_cmd)
 noise_ref_signal = sp.check_output('maxb0 {args.output_dir}/noise_ref.mif'.format(args=args), shell=True,
                                                                                                 env=os.environ.copy())
 # Generate a random seed to seed the random number generators of the cmds
