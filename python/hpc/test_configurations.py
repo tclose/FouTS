@@ -35,7 +35,7 @@ parser.add_argument('--prior_aux_freq', default=[75.0], type=float, nargs='+', h
 parser.add_argument('--prior_density_high', default=[1.0], type=float, nargs='+', help='The scaling of the density prior (currently unused)')
 parser.add_argument('--prior_density_low', default=[1.0], type=float, nargs='+', help='The scaling of the density prior (currently unused)')
 parser.add_argument('--prior_hook', default=[50.0], type=float, nargs='+', help='The scaling of the density prior (currently unused)')
-parser.add_argument('--img_snr', default=5.0, type=float, help='The snr to used in the noisy image')
+parser.add_argument('--img_snr', default=20.0, type=float, help='The snr to used in the noisy image')
 parser.add_argument('--like_snr', default=[20.0], type=float, nargs='+', help='The assumed snr to used in the likelihood function in \
 the metropolis sampling')
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory \
@@ -85,7 +85,7 @@ elif len(args.like_snr) != num_param_sets:
 # Get parameters directory
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
 # Get reference signal to compare noise snr against (the maximum b0 reading from a single straight x tract
-gen_img_cmd = "generate_image {param_dir}/fibre/tract/noise_ref.tct /tmp/noise_ref.mif -exp_type {args.interp_type} \
+gen_img_cmd = "generate_image {param_dir}/fibre/tract/noise_ref.tct {args.output_dir}/noise_ref.mif -exp_type {args.interp_type} \
 -exp_interp_extent {args.interp_extent} -clean -exp_num_width_sections {args.num_width_sections} \
 -diff_encodings_location {param_dir}/diffusion/encoding_60.b".format(param_dir=param_dir, args=args)
 try:
@@ -93,7 +93,8 @@ try:
     sp.check_call(gen_img_cmd, shell=True, env=os.environ.copy())
 except Exception as e:
     raise Exception('Generate image command: ''{0}'' caused an error ''{1}'''.format(gen_img_cmd, e))
-noise_ref_signal = sp.check_output('maxb0 /tmp/noise_ref.mif', shell=True, env=os.environ.copy())
+noise_ref_signal = sp.check_output('maxb0 {args.output_dir}/noise_ref.mif'.format(args=args), shell=True,
+                                                                                                env=os.environ.copy())
 # Generate a random seed to seed the random number generators of the cmds
 seed = int(time.time() * 100)
 for i in xrange(args.num_runs):
