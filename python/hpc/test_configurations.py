@@ -118,7 +118,6 @@ for i in xrange(args.num_runs):
             if num_tracts:
                 num_tracts = int(num_tracts[0].lstrip('-n'))
             else:
-
                 try:
                     num_tracts = int(sp.check_output("fibre_info {config_path} | grep total_count | awk '{{print $2}}'".
                                                                             format(config_path=config_path), shell=True))
