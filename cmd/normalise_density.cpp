@@ -80,6 +80,8 @@ EXECUTE {
   if (!tcts.has_elem_prop(Fibre::Tractlet::ACS_SQRT_PROP))
       tcts.add_elem_prop(Fibre::Tractlet::ACS_SQRT_PROP);
 
+  MR::ProgressBar progress_bar ("Normalising densities of Fourier tracts...", tcts.size());
+
   for (size_t tct_i = 0; tct_i < tcts.size(); tct_i++) {
     std::vector<double> areas = tcts[tct_i].cross_sectional_areas(num_points);
     double avg_area = 0.0;
@@ -91,7 +93,6 @@ EXECUTE {
  
   tcts.save(output_location);
 
-  //MR::ProgressBar::done();
 }
 
 
