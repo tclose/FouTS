@@ -23,7 +23,7 @@ import time
 # Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--img_dim', default=3, type=int, help='The size of the noisy image to fit against')
-parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
+parser.add_argument('--step_scale', default=0.01, type=float, help='The scale of the steps used for the metropolis sampling')
 parser.add_argument('--num_iterations', default=200000, type=int, help='The number of interations in the metropolis sampling')
 parser.add_argument('--sample_period', default=1000, type=int, help='The sample period of the metropolis sampling')
 parser.add_argument('--degree', default=3, type=int, help='The degree of the strands to fit')
