@@ -1,5 +1,5 @@
-%%% Extended Properties File %%% - keys: base_width	density	
-1	0.992343	
-1	1.001	
-1	1.00447	
-1	0.995717	
+%%% Extended Properties File %%% - keys: acs_sqrt	base_width	density	
+0.0360493	1	0.992343	
+0.0655474	1	1.001	
+0.12979	1	1.00447	
+0.0326722	1	0.995717	
