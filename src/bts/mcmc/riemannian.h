@@ -349,10 +349,10 @@ namespace BTS {
                 prop_x.set_extend_prop("grad_norm2",str(prop_gradient.norm2()));
                 prop_x.set_extend_prop("log_kinetic_energy",str(momentum.log_kinetic_energy(prop_fisher_chol)));
 
-                std::map<std::string, std::string> prop_component_values = prior.get_component_values(prop_x);
+                std::map<std::string, double> prop_component_values = prior.get_component_values(prop_x);
 
-                for (std::map<std::string, std::string>::iterator comp_it = prop_component_values.begin(); comp_it != prop_component_values.end(); ++comp_it)
-                  prop_x.set_extend_prop(comp_it->first, comp_it->second);
+                for (std::map<std::string, double>::iterator comp_it = prop_component_values.begin(); comp_it != prop_component_values.end(); ++comp_it)
+                  prop_x.set_extend_prop(comp_it->first, str(comp_it->second));
 
                 iterations.append(prop_x);
                 gradient_iterations.append(prop_gradient);
@@ -411,10 +411,10 @@ namespace BTS {
           x.set_extend_prop(PROPOSED_H_PROP,  str(prop_H));
 
 
-          std::map<std::string, std::string> component_values = prior.get_component_values(x);
+          std::map<std::string, double> component_values = prior.get_component_values(x);
 
-          for (std::map<std::string,std::string>::iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
-            x.set_extend_prop(comp_it->first, comp_it->second);
+          for (std::map<std::string, double>::iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
+            x.set_extend_prop(comp_it->first, str(comp_it->second));
 
 
         } catch (const NanInfException& e) {

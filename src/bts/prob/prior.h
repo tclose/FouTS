@@ -247,20 +247,19 @@ namespace BTS {
           return components;
         }
 
-        std::map<std::string, std::string> get_component_values(const Fibre::Strand strand);
+        std::map<std::string, double> get_component_values(const Fibre::Strand strand);
 
-        std::map<std::string, std::string> get_component_values(const Fibre::Tractlet tractlet);
+        std::map<std::string, double> get_component_values(const Fibre::Tractlet tractlet);
 
-        template <typename T> std::map<std::string, std::string> get_component_values(const T fibres) {
-          std::map<std::string,std::string> overall_map, elem_map;
+        template <typename T> std::map<std::string, double> get_component_values(const T fibres) {
+          std::map<std::string,double> overall_map, elem_map;
           std::vector<string> components = list_components();
           for (std::vector<std::string>::iterator comp_it = components.begin(); comp_it != components.end(); ++comp_it)
             overall_map[*comp_it] = 0.0;
           for (size_t fibre_i = 0; fibre_i < fibres.size(); ++fibre_i) {
             elem_map = get_component_values(fibres[fibre_i]);
-            for (std::map<std::string,std::string>::iterator comp_it = elem_map.begin(); comp_it != elem_map.end(); ++comp_it)
+            for (std::map<std::string, double>::iterator comp_it = elem_map.begin(); comp_it != elem_map.end(); ++comp_it)
               overall_map[comp_it->first] += comp_it->second;
-
           }
           return overall_map;
         }

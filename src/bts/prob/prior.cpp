@@ -57,13 +57,13 @@ namespace BTS {
       length(length_scale,length_mean),
       thinness(thinness_scale, thinness_power) {}
 
-    std::map<std::string, std::string> Prior::get_component_values(const Fibre::Strand fibres) {
+    std::map<std::string, double> Prior::get_component_values(const Fibre::Strand fibres) {
       Fibre::Strand gradient;
       gradient = fibres;
-      std::map<std::string,std::string> component_map;
-      component_map[PriorComponent::Frequency::NAME] = str(frequency.log_prob(fibres, gradient));
-      component_map[PriorComponent::Hook::NAME] = str(hook.log_prob(fibres, gradient));
-      component_map[PriorComponent::Length::NAME] = str(length.log_prob(fibres, gradient));
+      std::map<std::string,double> component_map;
+      component_map[PriorComponent::Frequency::NAME] = frequency.log_prob(fibres, gradient);
+      component_map[PriorComponent::Hook::NAME] = hook.log_prob(fibres, gradient);
+      component_map[PriorComponent::Length::NAME] = length.log_prob(fibres, gradient);
       component_map[PriorComponent::Thinness::NAME] = 0.0;
       component_map[PriorComponent::Density::NAME] = 0.0;
       component_map[PriorComponent::ACS::NAME] = 0.0;
@@ -71,16 +71,16 @@ namespace BTS {
     }
 
 
-    std::map<std::string, std::string> Prior::get_component_values(const Fibre::Tractlet fibres) {
+    std::map<std::string, double> Prior::get_component_values(const Fibre::Tractlet fibres) {
        Fibre::Tractlet gradient;
        gradient = fibres;
-       std::map<std::string,std::string> component_map;
-       component_map[PriorComponent::Frequency::NAME] = str(frequency.log_prob(fibres, gradient));
-       component_map[PriorComponent::Hook::NAME] = str(hook.log_prob(fibres[0], gradient[0]));
-       component_map[PriorComponent::Length::NAME] = str(length.log_prob(fibres[0], gradient[0]));
-       component_map[PriorComponent::Thinness::NAME] = str(thinness.log_prob(fibres, gradient));
-       component_map[PriorComponent::Density::NAME] = str(density.log_prob(fibres, gradient));
-       component_map[PriorComponent::ACS::NAME] = str(acs.log_prob(fibres));
+       std::map<std::string,double> component_map;
+       component_map[PriorComponent::Frequency::NAME] = frequency.log_prob(fibres, gradient);
+       component_map[PriorComponent::Hook::NAME] = hook.log_prob(fibres[0], gradient[0]);
+       component_map[PriorComponent::Length::NAME] = length.log_prob(fibres[0], gradient[0]);
+       component_map[PriorComponent::Thinness::NAME] = thinness.log_prob(fibres);
+       component_map[PriorComponent::Density::NAME] = density.log_prob(fibres, gradient);
+       component_map[PriorComponent::ACS::NAME] = acs.log_prob(fibres);
        return component_map;
      }
 

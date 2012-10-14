@@ -44,7 +44,6 @@ namespace BTS {
       double          Thinness::log_prob(const Fibre::Tractlet tract, Fibre::Tractlet gradient) {
         if (power != 2)
           throw Exception("Power can only be 2 at this point");
-        assert(!gradient.is_owner());
         // If gradient hasn't been initialised, initialise it to the size of the tractlet, otherwise check its degree.
         if (!gradient.degree()) {
           gradient = tract;
