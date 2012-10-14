@@ -37,7 +37,7 @@ namespace BTS {
       double          Thinness::log_prob(const Fibre::Tractlet tract) {
         if (power != 2)
           throw Exception("Power can only be 2 at this point");
-        return - scale * MR::Math::pow2(tract[1].norm() / tract.acs());
+        return - scale * MR::Math::pow2(tract(0,1).norm() / tract.acs());
       }
 
 
@@ -55,10 +55,10 @@ namespace BTS {
 
         double lprob = -scale * MR::Math::pow2(tract[1].norm() / tract.acs());
 
-        gradient.set_acs(2.0 * scale * MR::Math::pow2(tract[1].norm()) / MR::Math::pow3(tract.acs()));
-        gradient[1][X] = -2.0 * scale * tract[1][X] * tract[1].norm() / MR::Math::pow2(tract.acs());
-        gradient[1][Y] = -2.0 * scale * tract[1][Y] * tract[1].norm() / MR::Math::pow2(tract.acs());
-        gradient[1][Z] = -2.0 * scale * tract[1][Z] * tract[1].norm() / MR::Math::pow2(tract.acs());
+        gradient.set_acs(2.0 * scale * MR::Math::pow2(tract(0,1).norm()) / MR::Math::pow3(tract.acs()));
+        gradient(0,1)[X] = -2.0 * scale * tract(0,1)[X] * tract(0,1).norm() / MR::Math::pow2(tract.acs());
+        gradient(0,1)[Y] = -2.0 * scale * tract(0,1)[Y] * tract(0,1).norm() / MR::Math::pow2(tract.acs());
+        gradient(0,1)[Z] = -2.0 * scale * tract(0,1)[Z] * tract(0,1).norm() / MR::Math::pow2(tract.acs());
 
         return lprob;
       }
