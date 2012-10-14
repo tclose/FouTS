@@ -8,10 +8,10 @@
 """
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'test_configurations'
-#CONFIGURATIONS = ['x']
 CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
                 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-rotate-big', 'x_xxy', 'x-curve-z',
                 'x-rotate', 'x_xy', 'x-curve-z_y-curve--z']
+#CONFIGURATIONS = ['x']
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 # Required imports
 import hpc
@@ -23,8 +23,8 @@ import time
 # Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--img_dim', default=3, type=int, help='The size of the noisy image to fit against')
-parser.add_argument('--step_scale', default=0.01, type=float, help='The scale of the steps used for the metropolis sampling')
-parser.add_argument('--num_iterations', default=200000, type=int, help='The number of interations in the metropolis sampling')
+parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
+parser.add_argument('--num_iterations', default=100000, type=int, help='The number of interations in the metropolis sampling')
 parser.add_argument('--sample_period', default=1000, type=int, help='The sample period of the metropolis sampling')
 parser.add_argument('--degree', default=3, type=int, help='The degree of the strands to fit')
 parser.add_argument('--num_width_sections', default=4, help='The number of samples to use across a Fourier tracts cross-section')
