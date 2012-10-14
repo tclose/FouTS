@@ -46,13 +46,16 @@ namespace BTS {
                 double acs_scale,
                 double acs_mean,
                 double length_scale,
-                double length_mean)
+                double length_mean
+                double skinny_scale,
+                size_t skinny_power)
     : scale(scale),
       frequency(freq_scale, freq_aux_scale),
       hook(hook_scale, hook_num_points),
       density(density_high_scale, density_low_scale, density_num_points),
       acs(acs_scale, acs_mean),
-      length(length_scale,length_mean){}
+      length(length_scale,length_mean),
+      skinny(skinny_scale, skinny_power) {}
 
     std::map<std::string, std::string> Prior::get_component_values(const Fibre::Strand fibres) {
       Fibre::Strand gradient;
@@ -61,6 +64,7 @@ namespace BTS {
       component_map[PriorComponent::Frequency::NAME] = str(frequency.log_prob(fibres, gradient));
       component_map[PriorComponent::Hook::NAME] = str(hook.log_prob(fibres, gradient));
       component_map[PriorComponent::Length::NAME] = str(length.log_prob(fibres, gradient));
+      component_map[PriorComponent::Skinny::NAME] = str(skinny.log_prob(fibres, gradient));
       component_map[PriorComponent::Density::NAME] = 0.0;
       component_map[PriorComponent::ACS::NAME] = 0.0;
       return component_map;
@@ -74,8 +78,9 @@ namespace BTS {
        component_map[PriorComponent::Frequency::NAME] = str(frequency.log_prob(fibres, gradient));
        component_map[PriorComponent::Hook::NAME] = str(hook.log_prob(fibres[0], gradient[0]));
        component_map[PriorComponent::Length::NAME] = str(length.log_prob(fibres[0], gradient[0]));
+       component_map[PriorComponent::Skinny::NAME] = str(skinny.log_prob(fibres[0], gradient[0]));
        component_map[PriorComponent::Density::NAME] = str(density.log_prob(fibres, gradient));
-       component_map[PriorComponent::ACS::NAME] = str(acs.log_prob(fibres));;
+       component_map[PriorComponent::ACS::NAME] = str(acs.log_prob(fibres));
        return component_map;
      }
 
@@ -102,6 +107,7 @@ namespace BTS {
       lprob += length.log_prob(tractlet[0], gradient[0]);
       lprob += density.log_prob(tractlet, gradient);
       lprob += acs.log_prob(tractlet, gradient);
+      lprob += skinny.log_prob(tractlet, gradient);
 
       return lprob;
 

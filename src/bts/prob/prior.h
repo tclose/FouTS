@@ -51,6 +51,10 @@
    + Argument ("prior_length_scale", "").optional().type_float(0, Prob::PriorComponent::Length::SCALE_DEFAULT,LARGE_FLOAT) \
    + Argument ("prior_length_mean", "").optional().type_float(0, Prob::PriorComponent::Length::MEAN_DEFAULT,LARGE_FLOAT) \
 \
+  Option ("prior_skinny", "The prior placed on the tractlet skinny") \
+   + Argument ("prior_skinny_scale", "").optional().type_float(0, Prob::PriorComponent::Length::SCALE_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_skinny_mean", "").optional().type_float(0, Prob::PriorComponent::Length::MEAN_DEFAULT,LARGE_FLOAT) \
+\
 
 //Loads the 'prior' parameters into variables
 #define SET_PRIOR_PARAMETERS \
@@ -118,7 +122,17 @@
       prior_length_mean = prior_opt[0][1]; \
   } \
  \
-
+  double prior_skinny_scale  = Prob::PriorComponent::Skinny::SCALE_DEFAULT; \
+  double prior_skinny_mean  = Prob::PriorComponent::Skinny::MEAN_DEFAULT; \
+ \
+  prior_opt = get_options("prior_skinny"); \
+  if (prior_opt.size()) { \
+    if (prior_opt[0].size() >= 1) \
+      prior_skinny_scale = prior_opt[0][0]; \
+    if (prior_opt[0].size() >= 2) \
+      prior_skinny_mean = prior_opt[0][1]; \
+  } \
+ \
 
 
 //Adds the 'prior' parameters to the properties to be saved with the data.
@@ -148,16 +162,23 @@
     } \
   \
     if (prior_length_scale) { \
-      properties["prior_length_scale"]                   = str(prior_length_scale); \
-      properties["prior_length_mean"]                    = str(prior_length_mean); \
+      properties["prior_length_scale"]                = str(prior_length_scale); \
+      properties["prior_length_mean"]                 = str(prior_length_mean); \
     } \
   } \
+  \
+    if (prior_skinny_scale) { \
+      properties["prior_skinny_scale"]            = str(prior_skinny_scale); \
+      properties["prior_skinny_mean"]             = str(prior_skinny_mean); \
+    } \
+  }
 
 #include "bts/prob/prior_component/frequency.h"
 #include "bts/prob/prior_component/hook.h"
 #include "bts/prob/prior_component/density.h"
 #include "bts/prob/prior_component/acs.h"
 #include "bts/prob/prior_component/length.h"
+#include "bts/prob/prior_component/skinny.h"
 
 #include "bts/common.h"  
 
@@ -187,6 +208,7 @@ namespace BTS {
         PriorComponent::Density density;
         PriorComponent::ACS acs;
         PriorComponent::Length length;
+        PriorComponent::Skinny skinny;
 
       public:
 
@@ -204,10 +226,12 @@ namespace BTS {
               double length_mean);
 
         Prior(const Prior& p)
-         : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(p.acs), length(p.length) {}
+         : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(p.acs), length(p.length),
+                                                                                           skinny(p.skinny) {}
 
         Prior& operator=(const Prior& p)
-          { scale =p.scale; frequency = p.frequency; hook = p.hook; density = p.density; acs = p.acs; length = p.length; return *this; }
+          { scale =p.scale; frequency = p.frequency; hook = p.hook; density = p.density; acs = p.acs; length = p.length;
+                                                                              skinny = p.skinny; return *this; }
 
         virtual ~Prior() {}
 
@@ -218,6 +242,7 @@ namespace BTS {
           components.push_back(PriorComponent::Density::NAME);
           components.push_back(PriorComponent::ACS::NAME);
           components.push_back(PriorComponent::Length::NAME);
+          components.push_back(PriorComponent::Skinny::NAME);
           return components;
         }
 
