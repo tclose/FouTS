@@ -49,11 +49,11 @@
 \
   Option ("prior_length", "The prior placed on the tractlet length") \
    + Argument ("prior_length_scale", "").optional().type_float(0, Prob::PriorComponent::Length::SCALE_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_length_mean", "").optional().type_float(0, Prob::PriorComponent::Length::MEAN_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_length_mean", "").optional().type_float(0, Prob::PriorComponent::Length::MEAN_DEFAULT,LARGE_FLOAT), \
 \
   Option ("prior_skinny", "The prior placed on the tractlet skinny") \
-   + Argument ("prior_skinny_scale", "").optional().type_float(0, Prob::PriorComponent::Length::SCALE_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_skinny_mean", "").optional().type_float(0, Prob::PriorComponent::Length::MEAN_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_skinny_scale", "").optional().type_float(0, Prob::PriorComponent::Skinny::SCALE_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_skinny_power", "").optional().type_float(0, Prob::PriorComponent::Skinny::POWER_DEFAULT,LARGE_FLOAT) \
 \
 
 //Loads the 'prior' parameters into variables
@@ -123,14 +123,14 @@
   } \
  \
   double prior_skinny_scale  = Prob::PriorComponent::Skinny::SCALE_DEFAULT; \
-  double prior_skinny_mean  = Prob::PriorComponent::Skinny::MEAN_DEFAULT; \
+  double prior_skinny_power  = Prob::PriorComponent::Skinny::POWER_DEFAULT; \
  \
   prior_opt = get_options("prior_skinny"); \
   if (prior_opt.size()) { \
     if (prior_opt[0].size() >= 1) \
       prior_skinny_scale = prior_opt[0][0]; \
     if (prior_opt[0].size() >= 2) \
-      prior_skinny_mean = prior_opt[0][1]; \
+      prior_skinny_power = prior_opt[0][1]; \
   } \
  \
 
@@ -165,11 +165,10 @@
       properties["prior_length_scale"]                = str(prior_length_scale); \
       properties["prior_length_mean"]                 = str(prior_length_mean); \
     } \
-  } \
   \
     if (prior_skinny_scale) { \
-      properties["prior_skinny_scale"]            = str(prior_skinny_scale); \
-      properties["prior_skinny_mean"]             = str(prior_skinny_mean); \
+      properties["prior_skinny_scale"]                = str(prior_skinny_scale); \
+      properties["prior_skinny_power"]                = str(prior_skinny_power); \
     } \
   }
 
@@ -223,7 +222,9 @@ namespace BTS {
               double acs_scale,
               double acs_mean,
               double length_scale,
-              double length_mean);
+              double length_mean,
+              double skinny_scale,
+              size_t skinny_power);
 
         Prior(const Prior& p)
          : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(p.acs), length(p.length),

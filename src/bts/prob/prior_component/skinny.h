@@ -26,7 +26,8 @@
 
 #include "math/math.h"
 
-#include "bts/fibre/tract/set.h"
+#include "bts/fibre/tractlet/set.h"
+#include "bts/fibre/tractlet/tensor.h"
 
 namespace BTS {
 

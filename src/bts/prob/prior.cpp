@@ -46,7 +46,7 @@ namespace BTS {
                 double acs_scale,
                 double acs_mean,
                 double length_scale,
-                double length_mean
+                double length_mean,
                 double skinny_scale,
                 size_t skinny_power)
     : scale(scale),
@@ -64,7 +64,7 @@ namespace BTS {
       component_map[PriorComponent::Frequency::NAME] = str(frequency.log_prob(fibres, gradient));
       component_map[PriorComponent::Hook::NAME] = str(hook.log_prob(fibres, gradient));
       component_map[PriorComponent::Length::NAME] = str(length.log_prob(fibres, gradient));
-      component_map[PriorComponent::Skinny::NAME] = str(skinny.log_prob(fibres, gradient));
+      component_map[PriorComponent::Skinny::NAME] = 0.0;
       component_map[PriorComponent::Density::NAME] = 0.0;
       component_map[PriorComponent::ACS::NAME] = 0.0;
       return component_map;
@@ -78,7 +78,7 @@ namespace BTS {
        component_map[PriorComponent::Frequency::NAME] = str(frequency.log_prob(fibres, gradient));
        component_map[PriorComponent::Hook::NAME] = str(hook.log_prob(fibres[0], gradient[0]));
        component_map[PriorComponent::Length::NAME] = str(length.log_prob(fibres[0], gradient[0]));
-       component_map[PriorComponent::Skinny::NAME] = str(skinny.log_prob(fibres[0], gradient[0]));
+       component_map[PriorComponent::Skinny::NAME] = str(skinny.log_prob(fibres, gradient));
        component_map[PriorComponent::Density::NAME] = str(density.log_prob(fibres, gradient));
        component_map[PriorComponent::ACS::NAME] = str(acs.log_prob(fibres));
        return component_map;
