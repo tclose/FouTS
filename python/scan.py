@@ -130,7 +130,7 @@ def buildScanCmds(samples, other_options='', echo_options='', origin='', axes=''
             raise Exception("Unrecognised state extension '%s'" % state_ext)
 
 
-    # If directory exists, clean all files within it first.
+    # If directory exists, clean all files withinness it first.
     if os.path.isdir(output_dir):
         try:
             subprocess.call('svn delete --force %s' % output_dir)

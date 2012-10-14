@@ -51,9 +51,9 @@
    + Argument ("prior_length_scale", "").optional().type_float(0, Prob::PriorComponent::Length::SCALE_DEFAULT,LARGE_FLOAT) \
    + Argument ("prior_length_mean", "").optional().type_float(0, Prob::PriorComponent::Length::MEAN_DEFAULT,LARGE_FLOAT), \
 \
-  Option ("prior_skinny", "The prior placed on the tractlet skinny") \
-   + Argument ("prior_skinny_scale", "").optional().type_float(0, Prob::PriorComponent::Skinny::SCALE_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_skinny_power", "").optional().type_float(0, Prob::PriorComponent::Skinny::POWER_DEFAULT,LARGE_FLOAT) \
+  Option ("prior_thinness", "The prior placed on the tractlet thinness") \
+   + Argument ("prior_thinness_scale", "").optional().type_float(0, Prob::PriorComponent::Thinness::SCALE_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_thinness_power", "").optional().type_float(0, Prob::PriorComponent::Thinness::POWER_DEFAULT,LARGE_FLOAT) \
 \
 
 //Loads the 'prior' parameters into variables
@@ -122,15 +122,15 @@
       prior_length_mean = prior_opt[0][1]; \
   } \
  \
-  double prior_skinny_scale  = Prob::PriorComponent::Skinny::SCALE_DEFAULT; \
-  double prior_skinny_power  = Prob::PriorComponent::Skinny::POWER_DEFAULT; \
+  double prior_thinness_scale  = Prob::PriorComponent::Thinness::SCALE_DEFAULT; \
+  double prior_thinness_power  = Prob::PriorComponent::Thinness::POWER_DEFAULT; \
  \
-  prior_opt = get_options("prior_skinny"); \
+  prior_opt = get_options("prior_thinness"); \
   if (prior_opt.size()) { \
     if (prior_opt[0].size() >= 1) \
-      prior_skinny_scale = prior_opt[0][0]; \
+      prior_thinness_scale = prior_opt[0][0]; \
     if (prior_opt[0].size() >= 2) \
-      prior_skinny_power = prior_opt[0][1]; \
+      prior_thinness_power = prior_opt[0][1]; \
   } \
  \
 
@@ -166,9 +166,9 @@
       properties["prior_length_mean"]                 = str(prior_length_mean); \
     } \
   \
-    if (prior_skinny_scale) { \
-      properties["prior_skinny_scale"]                = str(prior_skinny_scale); \
-      properties["prior_skinny_power"]                = str(prior_skinny_power); \
+    if (prior_thinness_scale) { \
+      properties["prior_thinness_scale"]                = str(prior_thinness_scale); \
+      properties["prior_thinness_power"]                = str(prior_thinness_power); \
     } \
   }
 
@@ -177,7 +177,7 @@
 #include "bts/prob/prior_component/density.h"
 #include "bts/prob/prior_component/acs.h"
 #include "bts/prob/prior_component/length.h"
-#include "bts/prob/prior_component/skinny.h"
+#include "bts/prob/prior_component/thinness.h"
 
 #include "bts/common.h"  
 
@@ -207,7 +207,7 @@ namespace BTS {
         PriorComponent::Density density;
         PriorComponent::ACS acs;
         PriorComponent::Length length;
-        PriorComponent::Skinny skinny;
+        PriorComponent::Thinness thinness;
 
       public:
 
@@ -223,16 +223,16 @@ namespace BTS {
               double acs_mean,
               double length_scale,
               double length_mean,
-              double skinny_scale,
-              size_t skinny_power);
+              double thinness_scale,
+              size_t thinness_power);
 
         Prior(const Prior& p)
          : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(p.acs), length(p.length),
-                                                                                           skinny(p.skinny) {}
+                                                                                           thinness(p.thinness) {}
 
         Prior& operator=(const Prior& p)
           { scale =p.scale; frequency = p.frequency; hook = p.hook; density = p.density; acs = p.acs; length = p.length;
-                                                                              skinny = p.skinny; return *this; }
+                                                                              thinness = p.thinness; return *this; }
 
         virtual ~Prior() {}
 
@@ -243,7 +243,7 @@ namespace BTS {
           components.push_back(PriorComponent::Density::NAME);
           components.push_back(PriorComponent::ACS::NAME);
           components.push_back(PriorComponent::Length::NAME);
-          components.push_back(PriorComponent::Skinny::NAME);
+          components.push_back(PriorComponent::Thinness::NAME);
           return components;
         }
 

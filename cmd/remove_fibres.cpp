@@ -151,7 +151,7 @@ EXECUTE {
     out.add_extend_elem_props(in);
 
 
-    MR::ProgressBar progress_bar("Removing thin tractlets....");
+    MR::ProgressBar progress_bar("Removing thinness tractlets....");
 
     for (size_t tract_i = 0; tract_i < in.size(); ++tract_i) {
 

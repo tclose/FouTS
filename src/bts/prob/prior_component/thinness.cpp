@@ -21,7 +21,7 @@
  */
 
 #include "math/math.h"
-#include "bts/prob/prior_component/skinny.h"
+#include "bts/prob/prior_component/thinness.h"
 
 
 namespace BTS {
@@ -30,18 +30,18 @@ namespace BTS {
 
     namespace PriorComponent {
 
-      const double            Skinny::SCALE_DEFAULT     = 0.0; //10
-      const size_t            Skinny::POWER_DEFAULT     = 2;
-      const std::string       Skinny::NAME              = "Skinny";
+      const double            Thinness::SCALE_DEFAULT     = 0.0; //10
+      const size_t            Thinness::POWER_DEFAULT     = 2;
+      const std::string       Thinness::NAME              = "Thinness";
 
-      double          Skinny::log_prob(const Fibre::Tractlet tract) {
+      double          Thinness::log_prob(const Fibre::Tractlet tract) {
         if (power != 2)
           throw Exception("Power can only be 2 at this point");
         return - scale * MR::Math::pow2(tract[1].norm() / tract.acs());
       }
 
 
-      double          Skinny::log_prob(const Fibre::Tractlet tract, Fibre::Tractlet gradient) {
+      double          Thinness::log_prob(const Fibre::Tractlet tract, Fibre::Tractlet gradient) {
         if (power != 2)
           throw Exception("Power can only be 2 at this point");
         assert(!gradient.is_owner());

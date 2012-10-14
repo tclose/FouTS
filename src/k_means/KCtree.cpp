@@ -569,7 +569,7 @@ void KCtree::getNeighbors(		// compute neighbors for centers
 {
     initDistGlobals(ctrs);			// initialize globals
     int *candIdx = new int[kcKCtrs];		// allocate center indices
-    for (int j = 0; j < kcKCtrs; j++) {		// initialize everything
+    for (int j = 0; j < kcKCtrs; j++) {		// initialize everythinnessg
     	candIdx[j] = j;				// initialize indices
     }
     root->getNeighbors(candIdx, kcKCtrs);	// get neighbors for tree
@@ -655,7 +655,7 @@ void KCtree::getAssignments(		// compute assignments for points
     initDistGlobals(ctrs);			// initialize globals
 
     int *candIdx = new int[kcKCtrs];		// allocate center indices
-    for (int j = 0; j < kcKCtrs; j++) {		// initialize everything
+    for (int j = 0; j < kcKCtrs; j++) {		// initialize everythinnessg
     	candIdx[j] = j;				// initialize indices
     }
     						// search the tree

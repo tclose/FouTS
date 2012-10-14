@@ -40,7 +40,7 @@ public:
 	GeomPerfectMatching(int pointNum, int DIM);
 	~GeomPerfectMatching();
 
-	// Must be called exactly point_num times (before anything else can be called).
+	// Must be called exactly point_num times (before anythinnessg else can be called).
 	// First call returns 0, second returns 1, and so on.
 	// coord must be an array of size DIM. (This array is read into internal memory.)
 	PointId AddPoint(REAL* coord);

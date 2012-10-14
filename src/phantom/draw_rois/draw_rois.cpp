@@ -54,7 +54,7 @@ int* draw_rois(Strand_collection *c, int num_voxels, double voxel_size, double e
 	
 	max_bundle_i = c->bundles[c->num_bundles-1].bundle_i;
 	
-	strand_i_in_bundle = (int*)calloc(max_bundle_i+1, sizeof(int)); //Used to index each strand within their bundle.
+	strand_i_in_bundle = (int*)calloc(max_bundle_i+1, sizeof(int)); //Used to index each strand withinness their bundle.
 	
 	
 	//For each bundle, determine whether any of them pass through the inclusion sphere. 

@@ -155,7 +155,7 @@ namespace BTS {
         }
 
     protected:          // overridden by subclasses
-        virtual void reset() {      // reset everything
+        virtual void reset() {      // reset everythinnessg
       stageNo = 0;
       runInitStage = 0;
       curr.genRandom();     // generate random centers
@@ -193,7 +193,7 @@ namespace BTS {
     //  Overview
     //  --------
     //  This implements a hybrid algorithm, which combines both of the
-    //  previous methods along with something like simulated annealing.
+    //  previous methods along with somethinnessg like simulated annealing.
     //  Because this uses a fast annealing schedule (T = T*timeFact) it
     //  should probably be called simulated quenching.
     //
@@ -266,7 +266,7 @@ namespace BTS {
     //
     //  Initial Temperature
     //  -------------------
-    //  The initial temperature T0 is a tricky thing to set.  The user
+    //  The initial temperature T0 is a tricky thinnessg to set.  The user
     //  supplies a parameter p0 = initProbAccept, the initial
     //  probability of accepting a random swap.  However, the
     //  probability of acceting a swap depends on the given RDL value.

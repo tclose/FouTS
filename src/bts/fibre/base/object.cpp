@@ -163,7 +163,7 @@ namespace BTS {
         //Increment state vector to hold new property
         MR::Math::Vector<double>::resize(vsize()+1);
 
-        //If the property wasn't inserted within the existing properties append it to the end of the list
+        //If the property wasn't inserted withinness the existing properties append it to the end of the list
         if (insert_index == props->size()) {
 
           props->push_back(name);  //Add pointer to property name to properties list

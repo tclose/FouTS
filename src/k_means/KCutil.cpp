@@ -229,7 +229,7 @@ void sl_midpt_split(
     //		then we select n_lo = 1 (so there is one point on left) and
     //  if ideal_cut_val > max (implying br1 <= n-1),
     //		then we select n_lo = n-1 (so there is one point on right).
-    //	Otherwise, we select n_lo as close to n/2 as possible within
+    //	Otherwise, we select n_lo as close to n/2 as possible withinness
     //		[br1..br2].
     //------------------------------------------------------------------
     if (ideal_cut_val < min) n_lo = 1;

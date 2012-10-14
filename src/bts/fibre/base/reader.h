@@ -105,7 +105,7 @@ namespace BTS {
 
           void                            open (const std::string& location);
 
-          //TODO: Refactor to extend_elem_prop_keys() or something
+          //TODO: Refactor to extend_elem_prop_keys() or somethinnessg
           std::vector<std::string>        extend_prop_keys() const
             { return ext_prp_keys; }
 

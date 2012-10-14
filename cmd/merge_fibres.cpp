@@ -244,8 +244,8 @@ EXECUTE {
                     prior_acs_mean,
                     prior_length_scale,
                     prior_length_mean,
-                    prior_skinny_scale,
-                    prior_skinny_power);
+                    prior_thinness_scale,
+                    prior_thinness_power);
 
 
     Fibre::Strand::Set strands(input_location,strands_per_acs);

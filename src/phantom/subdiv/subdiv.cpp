@@ -186,7 +186,7 @@ void subdivide_strand(Strand *parent, Strand_collection *children, double strand
 			
 			child_dist = sqrt(child_disp[X] * child_disp[X] + child_disp[Y] * child_disp[Y] + child_disp[Z] * child_disp[Z]);
 			
-			/* If possible child start point lies within parent strand extent then add it to the collection */
+			/* If possible child start point lies withinness parent strand extent then add it to the collection */
 			if (child_dist <= parent->radius) {
 				
 				children->start_points[ (children->num_strands + num_new_children) * 3 + X] = possible_child_start_point[X];

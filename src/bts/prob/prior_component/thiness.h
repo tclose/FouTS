@@ -21,8 +21,8 @@
  */
 
 
-#ifndef __bts_prob_priorcomponent_skinny_h__
-#define __bts_prob_priorcomponent_skinny_h__
+#ifndef __bts_prob_priorcomponent_thinness_h__
+#define __bts_prob_priorcomponent_thinness_h__
 
 #include "math/math.h"
 
@@ -35,7 +35,7 @@ namespace BTS {
 
     namespace PriorComponent {
 
-      class Skinny {
+      class Thinness {
 
         public:
 
@@ -51,19 +51,19 @@ namespace BTS {
 
         public:
 
-          Skinny (double scale, size_t power)
+          Thinness (double scale, size_t power)
           : scale(scale), power(power) {}
 
-          Skinny(const Skinny& s)
+          Thinness(const Thinness& s)
             : scale(s.scale), power(s.power) {}
 
-          Skinny&  operator=(const Skinny& s)
+          Thinness&  operator=(const Thinness& s)
             { scale = s.scale; power = s.power; return *this; }
 
-          ~Skinny() {}
+          ~Thinness() {}
 
-          Skinny*       clone() const
-            { return new Skinny(*this); }
+          Thinness*       clone() const
+            { return new Thinness(*this); }
 
           double          log_prob(const Fibre::Tractlet tract);
 

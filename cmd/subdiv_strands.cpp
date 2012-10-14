@@ -50,7 +50,7 @@ SET_AUTHOR ("Thomas G. Close");
 SET_COPYRIGHT (NULL);
 
 DESCRIPTION = {
-  "Subdivides thicker strands into more thinner strands",
+  "Subdivides thicker strands into more thinnessner strands",
   "",
   NULL
 };

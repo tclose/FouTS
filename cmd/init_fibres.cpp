@@ -96,10 +96,10 @@ OPTIONS = {
   Option("width_stddev", "Standard deviation of width of the initialised fibres.")
    + Argument("width_stddev","").type_float(SMALL_FLOAT, WIDTH_STDDEV_DEFAULT,LARGE_FLOAT),
 
-  Option("reject_radius", "If a centre of a randomly generated fibre lies within the radius of a previously generated strand it is rejected.")
+  Option("reject_radius", "If a centre of a randomly generated fibre lies withinness the radius of a previously generated strand it is rejected.")
    + Argument("reject_radius","").type_float(SMALL_FLOAT, REJECT_RADIUS_DEFAULT,LARGE_FLOAT),
 
-  Option("edge_buffer", "Restrict the distributed_centres of the generated fibres to be within a certain distance from the edge of the ROI.")
+  Option("edge_buffer", "Restrict the distributed_centres of the generated fibres to be withinness a certain distance from the edge of the ROI.")
    + Argument("edge_buffer","").type_float(SMALL_FLOAT, EDGE_BUFFER_DEFAULT,LARGE_FLOAT),
 
   Option("curve_stddev", "The standard deviation of the curvature parameters.")
@@ -335,7 +335,7 @@ EXECUTE {
 }
 
 
-//Randomly generate centre points within the region of interest
+//Randomly generate centre points withinness the region of interest
 std::vector< Triple<double> >    distributed_centres(const Triple<double>& roi_extent, size_t num_fibres, gsl_rng* rand_gen, double reject_radius) {
 
   std::vector< Triple<double> > points;

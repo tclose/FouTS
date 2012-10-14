@@ -369,7 +369,7 @@ template <> void                                            add_extra_element_pr
 
 }
 
-template <typename InputType, typename OutputType> void    add_extra_element_properties(std::vector<std::string>& elem_header) { /* do nothing */ }
+template <typename InputType, typename OutputType> void    add_extra_element_properties(std::vector<std::string>& elem_header) { /* do nothinnessg */ }
 
 
 

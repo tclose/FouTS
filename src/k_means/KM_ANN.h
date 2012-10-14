@@ -329,7 +329,7 @@ KMpointArray kmAllocCopyPts(		// allocate and copy point array
     const KMpointArray	source);		// source point
 
 template <typename Object>
-void kmCopy(				// copy anything without allocation
+void kmCopy(				// copy anythinnessg without allocation
     int			n,			// number of object
     const Object*	source,			// source array
     Object*		dest)			// destination array
@@ -340,7 +340,7 @@ void kmCopy(				// copy anything without allocation
 }
 
 template <typename Object>
-Object* kmAllocCopy(			// allocate and copy anything
+Object* kmAllocCopy(			// allocate and copy anythinnessg
     int			n,			// number of object
     const Object*	source)			// source array
 {

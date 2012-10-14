@@ -77,7 +77,7 @@ double* sim_voxel_intensities(Voxel *voxel, int num_grad_directions, double *gra
 						
 				} else { 
 							
-					/* Voids within the structure take on the same b=0 signal and diffusivity as the white matter strands*/	
+					/* Voids withinness the structure take on the same b=0 signal and diffusivity as the white matter strands*/	
 					for (grad_i = 0; grad_i < num_grad_directions; grad_i++) {
 						intensities[grad_i] += exp(-1 * b_values[grad_i] * diffusivity);
 					}			

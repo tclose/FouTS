@@ -150,7 +150,7 @@ namespace BTS {
 
         /*! Resizes the dimensions of the image.  Note that is does not change the underlying voxels which are sparsely
          *  implemented in a std::map.  It does set enforce_bounds to false as it does not guarantee that the existing voxels
-         *  are contained within the new bounds. */
+         *  are contained withinness the new bounds. */
         void                                  resize(const Triple<size_t>& dimensions)
           { this->dimensions = dimensions; relax_bounds(); }
 
@@ -162,7 +162,7 @@ namespace BTS {
           { this->dimensions = dimensions; this->enforce_bounds = enforce_bounds; voxels.clear(); }
 
 
-        //!Relaxes the constraint that voxels need to be within the given bounds of the image.
+        //!Relaxes the constraint that voxels need to be withinness the given bounds of the image.
         void                                  relax_bounds()
           { enforce_bounds = false; }
 

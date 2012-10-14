@@ -471,7 +471,7 @@ namespace BTS {
 
         std::set<T*> neighbourhood;
 
-        // Loop through all voxels within the interpolation extent of the given voxel and add their address to the
+        // Loop through all voxels withinness the interpolation extent of the given voxel and add their address to the
         // neighbourhood vector.
         for (int z_neigh = coord[Z] - neigh_extent; z_neigh < coord[Z] + neigh_extent; z_neigh++)
           for (int y_neigh = coord[Y] - neigh_extent; y_neigh < coord[Y] + neigh_extent; y_neigh++)

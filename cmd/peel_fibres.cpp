@@ -43,7 +43,7 @@ SET_COPYRIGHT (NULL);
 
 DESCRIPTION = {
   "Peels fibres.",
-  "Removes all fibres that do not pass within an inner 'inclusion radius'.",
+  "Removes all fibres that do not pass withinness an inner 'inclusion radius'.",
   NULL
 };
 

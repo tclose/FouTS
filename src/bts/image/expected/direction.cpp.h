@@ -33,7 +33,7 @@ namespace BTS {
     template <typename T> double      Expected::Direction::signal_tpl (const T& section) {
 
       //OPTIMISED makes use of the fact that each section is processed sequentially, allowing the weighting and interpolation to be
-      //precalculated and stored within the Diffusion::Response and Fabricated::Voxel objects respectively. Then quickly combined
+      //precalculated and stored withinness the Diffusion::Response and Fabricated::Voxel objects respectively. Then quickly combined
       //for all of the diffusion-weighting/voxel combinations.
 #ifdef OPTIMISED
 
@@ -60,7 +60,7 @@ namespace BTS {
 
 
       //OPTIMISED makes use of the fact that each section is processed sequentially, allowing the weighting and interpolation to be
-      //precalculated and stored within the Diffusion::Response and Fabricated::Voxel objects respectively. Then quickly combined
+      //precalculated and stored withinness the Diffusion::Response and Fabricated::Voxel objects respectively. Then quickly combined
       //for all of the diffusion-weighting/voxel combinations.
 #ifdef OPTIMISED
 
@@ -103,7 +103,7 @@ namespace BTS {
 
 
       //OPTIMISED makes use of the fact that each section is processed sequentially, allowing the weighting and interpolation to be
-      //precalculated and stored within the Diffusion::Response and Fabricated::Voxel objects respectively. Then quickly combined
+      //precalculated and stored withinness the Diffusion::Response and Fabricated::Voxel objects respectively. Then quickly combined
       //for all of the diffusion-weighting/voxel combinations.
 #ifdef OPTIMISED
 

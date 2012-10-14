@@ -1440,7 +1440,7 @@ namespace BTS {
 
         }
 
-        //If the property wasn't inserted within the existing properties append it to the end of the list
+        //If the property wasn't inserted withinness the existing properties append it to the end of the list
         if (insert_index == elem_props->size())
           elem_props->push_back(name);  //Add pointer to property name to properties list
 
@@ -1901,7 +1901,7 @@ namespace BTS {
 
         if (source.num_elem_props()) {
 
-          // Declare the variables used within the loop
+          // Declare the variables used withinness the loop
           size_t prop_i = 0;
           const char* prp_key;
 
