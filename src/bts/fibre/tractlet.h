@@ -76,7 +76,7 @@ namespace BTS {
       public:
 
         const static Coord                          FILE_SEPARATOR;
-        const static std::string                  FILE_EXTENSION;
+        const static std::string                    FILE_EXTENSION;
 
         const static char*                          LENGTH_ACS_PROP;
         const static char*                          WIDTH_ACS_PROP;
@@ -169,7 +169,8 @@ namespace BTS {
           { return has_prop(ALPHA_PROP) ? MR::Math::pow2(prop(ALPHA_PROP)) : 1.0; /* The ACS is stored in the state vector via its squareroot to prevent it from becoming < 0 */}
 
         void                          add_acs(double acs = 1.0)
-          { add_prop(ALPHA_PROP, acs); }
+          { if (acs < 0.0) throw Exception("ACS must be greater than 0.0 (" + str(acs) + ")"); add_prop(ALPHA_PROP,
+                                                                                                MR::Math::sqrt(acs)); }
 
         void                          set_acs(double acs)
           { assert(acs >= 0); prop(ALPHA_PROP) = MR::Math::sqrt(acs); } //sqrt is stored instead of straight value to prevent ACS becoming < 0 during iterative methods
@@ -180,10 +181,10 @@ namespace BTS {
         bool                          has_var_acs() const
           { return has_prop(ALPHA_PROP); }
 
-        double&                       acs_sqrt()
+        double&                       alpha()
           { assert(has_var_acs()); return prop(ALPHA_PROP); }
 
-        double                        acs_sqrt() const
+        double                        alpha() const
           { assert(has_var_acs()); return prop(ALPHA_PROP); }
 
         //Ensure that tractlets do not pass through themselves

@@ -53,7 +53,7 @@ namespace BTS {
         double lprob = -scale * MR::Math::pow2(tractlet.acs() - mean);
 
         if (tractlet.has_var_acs())
-          gradient.acs_sqrt() -= 4.0 * scale * tractlet.acs_sqrt() *  (tractlet.acs() - mean) ;
+          gradient.alpha() -= 4.0 * scale * tractlet.alpha() *  (tractlet.acs() - mean) ;
 
         return lprob;
       }

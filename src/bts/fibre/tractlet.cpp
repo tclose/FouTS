@@ -259,12 +259,12 @@ namespace BTS {
 
           throw Exception ("tied_width gradient needs to be adjusted after accounting for tractlet sheer.");
 
-          acs_sqrt() += gradient.intensity() * (tractlet[1][0].norm() * tractlet[2][0].norm() - tractlet[1][0].dot(tractlet[2][0]));
+          alpha() += gradient.intensity() * (tractlet[1][0].norm() * tractlet[2][0].norm() - tractlet[1][0].dot(tractlet[2][0]));
           operator()(1,0) += gradient.intensity() * tractlet.acs() * (tractlet[1][0] * (tractlet[2][0].norm() / tractlet[1][0].norm()) - tractlet[2][0]);
           operator()(2,0) += gradient.intensity() * tractlet.acs() * (tractlet[2][0] * (tractlet[1][0].norm() / tractlet[2][0].norm()) - tractlet[1][0]);
 
         } else
-          acs_sqrt() += gradient.intensity();
+          alpha() += gradient.intensity();
       }
 
 

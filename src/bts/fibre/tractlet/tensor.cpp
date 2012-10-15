@@ -127,9 +127,9 @@ namespace BTS {
           Fibre::Tractlet ax2 = row(2,degree_i1,dim_i1);
 
           if (has_var_acs()) {
-            ax0.acs_sqrt() += acs_gradient.operator()(0,degree_i1)[dim_i1];
-            ax1.acs_sqrt() += acs_gradient.operator()(1,degree_i1)[dim_i1];
-            ax2.acs_sqrt() += acs_gradient.operator()(2,degree_i1)[dim_i1];
+            ax0.alpha() += acs_gradient.operator()(0,degree_i1)[dim_i1];
+            ax1.alpha() += acs_gradient.operator()(1,degree_i1)[dim_i1];
+            ax2.alpha() += acs_gradient.operator()(2,degree_i1)[dim_i1];
           }
 
 

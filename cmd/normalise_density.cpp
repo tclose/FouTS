@@ -77,8 +77,8 @@ EXECUTE {
 
   Fibre::Tractlet::Set tcts(input_location);
   
-  if (!tcts.has_elem_prop(Fibre::Tractlet::ACS_SQRT_PROP))
-      tcts.add_elem_prop(Fibre::Tractlet::ACS_SQRT_PROP);
+  if (!tcts.has_elem_prop(Fibre::Tractlet::alpha_PROP))
+      tcts.add_elem_prop(Fibre::Tractlet::alpha_PROP);
 
   MR::ProgressBar progress_bar ("Normalising densities of Fourier tracts...", tcts.size());
 
