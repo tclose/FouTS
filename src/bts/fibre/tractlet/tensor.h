@@ -96,7 +96,7 @@ namespace BTS {
         { return tmpl.has_var_acs(); }
 
         Tractlet        acs()
-          { assert(has_var_acs()); return Tractlet(degree(), MR::Math::Matrix<double>::row(vsize() + tmpl.prop_index(Object::ACS_SQRT_PROP)), tmpl.props); }
+          { assert(has_var_acs()); return Tractlet(degree(), MR::Math::Matrix<double>::row(vsize() + tmpl.prop_index(Object::ALPHA_PROP)), tmpl.props); }
 
         double&         operator()(size_t row_ax_i,
                                  size_t row_degree_i,

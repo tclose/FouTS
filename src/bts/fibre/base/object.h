@@ -135,7 +135,7 @@ namespace BTS {
 
         public:
 
-          const static char*          	  ACS_SQRT_PROP;  /**< Human-readable name of the Apparrent Connection Strength (ACS) property used for printing and saving.
+          const static char*          	  ALPHA_PROP;  /**< Human-readable name of the Apparrent Connection Strength (ACS) property used for printing and saving.
                                                           NB: Existence checks for properties use the pointer address not
                                                           the character strings they refer to, so be sure to use exactly this char*
                                                           when using the acs property (same for all properties).  */

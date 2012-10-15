@@ -38,7 +38,7 @@ namespace BTS {
 
 	  namespace Base {
 
-      const char*                Object::ACS_SQRT_PROP = "acs_sqrt";
+      const char*                Object::ALPHA_PROP = "acs_sqrt";
 
       const char*                Object::PROPS_LIST_END = 0;
 

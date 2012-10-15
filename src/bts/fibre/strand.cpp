@@ -34,7 +34,7 @@ namespace BTS {
 
     const  Coord                          Strand::FILE_SEPARATOR = Triple<double> (NAN, NAN, NAN);
 
-    const char*                           Strand::PROPS_LIST[] = { Object::ACS_SQRT_PROP, PROPS_LIST_END };
+    const char*                           Strand::PROPS_LIST[] = { Object::ALPHA_PROP, PROPS_LIST_END };
 
     const std::string                     Strand::FILE_EXTENSION = "str";
     const size_t                          Strand::DEFAULT_DEGREE = 3;

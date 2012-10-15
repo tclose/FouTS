@@ -118,16 +118,16 @@ namespace BTS {
           { return size(); };
 
         double                              acs() const
-          { return has_prop(ACS_SQRT_PROP) ? prop(ACS_SQRT_PROP) : 1.0; }
+          { return has_prop(ALPHA_PROP) ? prop(ALPHA_PROP) : 1.0; }
 
         void                                add_acs(double acs = 1.0)
-          { add_prop(ACS_SQRT_PROP, acs); }
+          { add_prop(ALPHA_PROP, acs); }
 
         void                                set_acs(double acs)
-          { assert(acs >= 0); prop(ACS_SQRT_PROP) = MR::Math::sqrt(acs); }
+          { assert(acs >= 0); prop(ALPHA_PROP) = MR::Math::sqrt(acs); }
 
         void                                remove_acs()
-          { remove_prop(ACS_SQRT_PROP); }
+          { remove_prop(ALPHA_PROP); }
 
         Track                               base()
           { return Track(sze, sub(0,bsize()), &EMPTY_PROPS); }

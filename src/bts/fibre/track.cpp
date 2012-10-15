@@ -40,7 +40,7 @@ namespace BTS {
     const Coord                       Track::FILE_SEPARATOR = Triple<double> (NAN, NAN, NAN);
     const std::string                 Track::FILE_EXTENSION = "tck";
 
-    const char*                       Track::PROPS_LIST[] = { Object::ACS_SQRT_PROP, PROPS_LIST_END };
+    const char*                       Track::PROPS_LIST[] = { Object::ALPHA_PROP, PROPS_LIST_END };
 
 //    const char*                       Track::INTRINSIC_PROPERTIES[Track::NUM_INTRINSIC_PROPERTIES] = {};
 

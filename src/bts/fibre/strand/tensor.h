@@ -90,7 +90,7 @@ namespace BTS {
         { return tmpl.has_var_acs(); }
 
         Strand        acs()
-          { assert(has_var_acs()); return Strand(degree(), MR::Math::Matrix<double>::row(vsize() + tmpl.prop_index(Strand::ACS_SQRT_PROP)), tmpl.props); }
+          { assert(has_var_acs()); return Strand(degree(), MR::Math::Matrix<double>::row(vsize() + tmpl.prop_index(Strand::ALPHA_PROP)), tmpl.props); }
 
 
         double&       operator()(size_t row_degree_i, size_t row_dim_i, size_t col_degree_i, size_t col_dim_i)

@@ -76,11 +76,12 @@ namespace BTS {
       public:
 
         const static Coord                          FILE_SEPARATOR;
-        const static std::string                    FILE_EXTENSION;
+        const static std::string                  FILE_EXTENSION;
 
-        const static char*                          BASE_WIDTH_PROP;
+        const static char*                          LENGTH_ACS_PROP;
+        const static char*                          WIDTH_ACS_PROP;
 
-        const static double                         BASE_WIDTH_PROP_DEFAULT;
+        const static double                         LENGTH_ACS_PROP_DEFAULT;
         const static double                         STRANDS_PER_AREA_DEFAULT;
 
         const static double                         REASONABLE_WIDTH;
@@ -165,25 +166,25 @@ namespace BTS {
         void                          redegree(size_t new_degree, double default_value = NAN);
 
         double                        acs() const
-          { return has_prop(ACS_SQRT_PROP) ? MR::Math::pow2(prop(ACS_SQRT_PROP)) : 1.0; /* The ACS is stored in the state vector via its squareroot to prevent it from becoming < 0 */}
+          { return has_prop(ALPHA_PROP) ? MR::Math::pow2(prop(ALPHA_PROP)) : 1.0; /* The ACS is stored in the state vector via its squareroot to prevent it from becoming < 0 */}
 
         void                          add_acs(double acs = 1.0)
-          { add_prop(ACS_SQRT_PROP, acs); }
+          { add_prop(ALPHA_PROP, acs); }
 
         void                          set_acs(double acs)
-          { assert(acs >= 0); prop(ACS_SQRT_PROP) = MR::Math::sqrt(acs); } //sqrt is stored instead of straight value to prevent ACS becoming < 0 during iterative methods
+          { assert(acs >= 0); prop(ALPHA_PROP) = MR::Math::sqrt(acs); } //sqrt is stored instead of straight value to prevent ACS becoming < 0 during iterative methods
 
         void                          remove_acs()
-          { remove_prop(ACS_SQRT_PROP); }
+          { remove_prop(ALPHA_PROP); }
 
         bool                          has_var_acs() const
-          { return has_prop(ACS_SQRT_PROP); }
+          { return has_prop(ALPHA_PROP); }
 
         double&                       acs_sqrt()
-          { assert(has_var_acs()); return prop(ACS_SQRT_PROP); }
+          { assert(has_var_acs()); return prop(ALPHA_PROP); }
 
         double                        acs_sqrt() const
-          { assert(has_var_acs()); return prop(ACS_SQRT_PROP); }
+          { assert(has_var_acs()); return prop(ALPHA_PROP); }
 
         //Ensure that tractlets do not pass through themselves
         Tractlet&                     sanitize();

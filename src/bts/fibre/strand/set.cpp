@@ -212,7 +212,7 @@ namespace BTS {
         }
 
         // Normalise the ACS property of the generated strands by the number generated
-        if (has_elem_prop(ACS_SQRT_PROP))
+        if (has_elem_prop(ALPHA_PROP))
           for (size_t strand_i = 0; strand_i < size(); ++strand_i)
             operator[](strand_i).set_acs(tractlet.acs() / (double)count);
 

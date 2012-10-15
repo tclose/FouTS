@@ -234,7 +234,7 @@ EXECUTE {
 
   std::vector<const char*> elem_props;
   if (acs >= 0.0)
-    elem_props.push_back(Fibre::Base::Object::ACS_SQRT_PROP);
+    elem_props.push_back(Fibre::Base::Object::ALPHA_PROP);
 
 
 

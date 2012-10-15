@@ -139,7 +139,7 @@ EXECUTE {
 
   std::vector<const char*> elem_props;
   if (acs >= 0.0)
-    elem_props.push_back(Fibre::Strand::ACS_SQRT_PROP);
+    elem_props.push_back(Fibre::Strand::ALPHA_PROP);
 
 
   if (File::has_or_txt_extension<Fibre::Strand>(output_location) || File::has_extension<Fibre::Strand::Set>(output_location) || File::has_txt_extension<Fibre::Strand::Set>(output_location)) {

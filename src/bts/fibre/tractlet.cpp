@@ -47,9 +47,12 @@ namespace BTS {
 
 
     const Coord         Tractlet::FILE_SEPARATOR = Triple<double> (-INFINITY, -INFINITY, -INFINITY);
-    const std::string   Tractlet::FILE_EXTENSION = "tct";
+    const std::string  Tractlet::FILE_EXTENSION = "tct";
     
-    const char*         Tractlet::PROPS_LIST[] = { Object::ACS_SQRT_PROP, PROPS_LIST_END };
+    const char*         Tractlet::PROPS_LIST[] = { Object::ALPHA_PROP, Tractlet::LENGTH_ACS_PROP, Tractlet::WIDTH_ACS_PROP, PROPS_LIST_END };
+
+    const char*         Tractlet::LENGTH_ACS_PROP = "length_acs";
+    const char*         Tractlet::WIDTH_ACS_PROP = "width_acs";
 
     const double        Tractlet::STRANDS_PER_AREA_DEFAULT = 1000;
 
