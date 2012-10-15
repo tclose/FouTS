@@ -460,7 +460,7 @@ namespace BTS {
 
     void                                        Tractlet::Set::calc_characteristic_properties() {
 
-      // Do nothing.
+      // Do nothinnessg.
 
     }
 

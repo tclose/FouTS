@@ -58,16 +58,16 @@ namespace BTS {
 	  namespace Expected {
 
 
-      const Triple<size_t>                Buffer::DIMS_DEFAULT      = Triple<size_t>(3,3,3);
+      const Triple<size_t>              Buffer::DIMS_DEFAULT      = Triple<size_t>(3,3,3);
       const Triple<double>              Buffer::VOX_LENGTHS_DEFAULT       = Triple<double>(0.15,0.15,0.15);
       const Triple<double>              Buffer::OFFSETS_DEFAULT          = Triple<double>::Zeros;
       const std::string                 Buffer::FILE_EXTENSION           = "mif";
 
       const double                      Buffer::INTERP_EXTENT_DEFAULT        = 1.0;
       const double                      Buffer::HALF_WIDTH_DEFAULT           = 0.392470007505158;
-      const char*                       Buffer::TYPE_DEFAULT                 = "quartic";
-      const size_t                        Buffer::NUM_LENGTH_SECTIONS_DEFAULT  = 15;
-      const size_t                        Buffer::NUM_WIDTH_SECTIONS_DEFAULT   = 4;
+      const char*                       Buffer::TYPE_DEFAULT                 = "sinc";
+      const size_t                      Buffer::NUM_LENGTH_SECTIONS_DEFAULT  = 15;
+      const size_t                      Buffer::NUM_WIDTH_SECTIONS_DEFAULT   = 4;
       const bool                        Buffer::ENFORCE_BOUNDS_DEFAULT       = false;
 
       const std::string                 Buffer::STRAND_BASE_INTENSITY_REFERENCE     = str(getenv("HOME")) + str("/git/BaFTrS/params/fibre/strand/single/x.str");

@@ -151,7 +151,7 @@ namespace BTS {
         public:
 
           /*! Loads a BTS data file and converts the loaded fibre object into a string that is readable by the MATLAB
-           *  software package. Is used to store fibre objects used as parameters (such as step sizes) within fibre object
+           *  software package. Is used to store fibre objects used as parameters (such as step sizes) withinness fibre object
            *  file headers.
            *
            * @param location Location of the file containing the fibre object data
@@ -665,7 +665,7 @@ namespace BTS {
 
         std::map<const char*,double> intrinsic;
 
-        // Declare the variables used within the loop
+        // Declare the variables used withinness the loop
         size_t prop_i = 0;
         const char* prp_key;
 
@@ -686,7 +686,7 @@ namespace BTS {
 
         std::vector<const char*> intrinsic;
 
-        // Declare the variables used within the loop
+        // Declare the variables used withinness the loop
         size_t prop_i = 0;
         const char* prp_key;
         std::vector<std::string>::iterator prop_it;
@@ -713,7 +713,7 @@ namespace BTS {
 
         std::vector<const char*> selected;
 
-        // Declare the variables used within the loop
+        // Declare the variables used withinness the loop
         size_t prop_i = 0;
         const char* prp_key;
 
@@ -735,7 +735,7 @@ namespace BTS {
 
         if (source.num_props()) {
 
-          // Declare the variables used within the loop
+          // Declare the variables used withinness the loop
           size_t prop_i = 0;
           const char* prp_key;
 

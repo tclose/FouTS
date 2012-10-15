@@ -38,10 +38,8 @@ extern "C" {
 #include "bts/common.h"
 #include "bts/file.h"
 
-
 #include "bts/fibre/tractlet/set.h"
 #include "bts/fibre/strand/set.h"
-
 
 #include "bts/diffusion/model.h"
 #include "bts/image/expected/trilinear/buffer.h"
@@ -52,10 +50,6 @@ extern "C" {
 
 #include "bts/prob/uniform.h"
 #include "bts/prob/prior.h"
-
-
-
-
 
 #include "bts/prob/likelihood.h"
 #include "bts/prob/likelihood.h"
@@ -165,8 +159,6 @@ EXECUTE {
   if (header.ndim() != 4)
     throw Exception ("dwi image should contain 4 dimensions");
 
-
-
 //----------------------------------//
 //  Get and Set Optional Parameters //
 //----------------------------------//
@@ -181,8 +173,6 @@ EXECUTE {
   bool prior_only =                     false;
   bool verbose =                        true;
   bool save_images =                    false;
-
-
 
   Options opt = get_options("num_iterations");
   if (opt.size())
@@ -247,7 +237,6 @@ EXECUTE {
 
   // Loads parameters that are common to all commands.
   SET_COMMON_PARAMETERS;
-
 
   //--------------------------------//
   //  Set up reference image buffer //
@@ -366,7 +355,9 @@ EXECUTE {
                     prior_acs_scale,
                     prior_acs_mean,
                     prior_length_scale,
-                    prior_length_mean);
+                    prior_length_mean,
+                    prior_thinness_scale,
+                    prior_thinness_power);
 
 
   //-------------------------//
@@ -411,9 +402,8 @@ EXECUTE {
 
       burnt_strands = MCMC::metropolis <Fibre::Strand::Set,
                                         Prob::Likelihood,
-                                        Prob::Prior>
-
-                                      ( strands,
+                                        Prob::Prior> (
+                                        strands,
                                         *likelihood,
                                         prior,
                                         *walker,

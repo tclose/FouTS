@@ -28,7 +28,7 @@
 
 KMfilterCenters KMlocal::execute()		// execute the algorithm
 {
-   reset();					// resets everything
+   reset();					// resets everythinnessg
    while (!isDone()) {				// while not done
 	beginRun();				// start a new run
 	do {					// do while run is not done

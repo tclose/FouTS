@@ -57,7 +57,7 @@ SET_AUTHOR ("Thomas G. Close");
 SET_COPYRIGHT (NULL);
 
 DESCRIPTION = {
-  "Average a set of fibres sets, inluding the option to remove thin tractlets.",
+  "Average a set of fibres sets, inluding the option to remove thinness tractlets.",
   "",
   NULL
 };
@@ -207,7 +207,7 @@ template <typename T> void average_fibres(const std::string& input_location, con
 
   typename T::Set output_set(std::vector<const char*>(), reader.elem_prop_keys());
 
-  MR::ProgressBar min_vol_progress_bar ("Excluding fibres that are thinner than average acs...", avg_fibres.size());
+  MR::ProgressBar min_vol_progress_bar ("Excluding fibres that are thinnessner than average acs...", avg_fibres.size());
 
   for (size_t elem_i = 0; elem_i < avg_fibres.size(); ++elem_i) {
 

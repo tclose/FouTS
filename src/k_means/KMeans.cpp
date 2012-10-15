@@ -28,7 +28,7 @@
 //  Global data (shared by all files)
 //	The following variables are used by all the procedures and are
 //	initialized in kmInitGlobals().  kmInitTime is the CPU time
-//	needed to initialize things before the first stage.
+//	needed to initialize thinnessgs before the first stage.
 //------------------------------------------------------------------------
 
 StatLev		kmStatLev	= SILENT;	// global stats output level

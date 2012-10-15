@@ -315,7 +315,7 @@ namespace BTS {
           for (double ax2_frac = (-1.0 + width_fraction); ax2_frac < 1.0; ax2_frac += 2.0 * width_fraction) {
 
             // Include section if the "coordinate" consisting of the combined fractions along each perturbation axes lies
-            // within the unit circle minus a half a width_fraction. This will give the resulting cross-sections an
+            // withinness the unit circle minus a half a width_fraction. This will give the resulting cross-sections an
             // elliptical shape (or circular if axes are equal).
             if (MR::Math::pow2(ax1_frac) + MR::Math::pow2(ax2_frac) <= (1.0 - width_fraction / 2.0)) {
 
@@ -350,7 +350,7 @@ namespace BTS {
 
         for (double ax2_frac = (-1.0 + width_fraction); ax2_frac < 1.0; ax2_frac += 2.0 * width_fraction) {
 
-          //Include section if coord consisting of the combined fractions along each perturbation axes lies within the
+          //Include section if coord consisting of the combined fractions along each perturbation axes lies withinness the
           // unit circle minus a half a width_fraction. This will give the resulting cross-sections an elliptical
           // shape (or circular if axes are equal).
           if (MR::Math::pow2(ax1_frac) + MR::Math::pow2(ax2_frac) <= (1.0 - width_fraction /2.0)) {
@@ -586,9 +586,19 @@ namespace BTS {
 
     std::ostream&                  	operator<< (std::ostream& stream, const Tractlet& tractlet) {
 
-
-      if (tractlet.has_var_acs())
-        stream << "acs: " << tractlet.acs() << std::endl;
+      if (tractlet.has_var_acs()) {
+        stream << "ACS: " << tractlet.acs() << std::endl;
+        // Output 10 densities from t=0 to t=1
+        stream << "densities:" << std::endl;
+        std::vector<double> areas = tractlet.cross_sectional_areas(10);
+        for (size_t i = 0; i < 10; ++i)
+          std::cout << tractlet.acs() / areas[i] << " ";
+        std::cout << std::endl;
+        stream << "sqrt(ACS) for density=1:" << std::endl;
+        for (size_t i = 0; i < 10; ++i)
+          std::cout << "(" << MR::Math::sqrt(areas[i]) << ") ";
+        std::cout << std::endl;
+      }
 
       stream << std::endl;
 

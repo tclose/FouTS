@@ -57,7 +57,7 @@ filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
         except OSError as e:
             count += 1
             if count > 1000:
-                print "Something has gone wrong, can't create directory '%s' after 1000 attempts" % work_dir
+                print "Somethinnessg has gone wrong, can't create directory '%s' after 1000 attempts" % work_dir
                 raise e
             work_dir = '.'.join(work_dir.split('.')[:-1] + [str(count)]) # Replace old count at the end of work directory with new count
     output_dir = os.path.join(output_dir_parent, os.path.split(work_dir)[1])
@@ -164,7 +164,7 @@ cd {work_dir}
 echo "============== Mpirun has ended =============="
 
 echo "Copying files to output directory '{output_dir}'"
-mv {work_dir}/output {output_dir}
+cp -r {work_dir}/output {output_dir}
 cp {jobscript_path} {output_dir}/job
 {copy_cmd}
 echo "============== Done ===============" 

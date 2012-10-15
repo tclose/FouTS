@@ -78,6 +78,11 @@ function fig = plot_extend_elem_properties(figure_name, all_prop_keys, all_prop_
         sum(all_props) ./ size(all_props,1)
       end
       
+      if strcmp(key,'acs_sqrt')
+        all_props = all_props.^2;
+        key = 'acs'
+      end
+      
       num_strands = size(all_props,2);
 
       subplot(num_keys,1,key_i);

@@ -106,7 +106,7 @@ namespace BTS {
   Option ("exp_interp_extent", "Extent of the kernel that will be used to interpolate the signal from the tractlets") \
    + Argument ("exp_interp_extent", "").type_float (SMALL_FLOAT, Image::Expected::Buffer::INTERP_EXTENT_DEFAULT, LARGE_FLOAT), \
 \
-  Option ("exp_enforce_bounds", "Only record the signal (and include in likelihood calculations) that falls within the bounds of the image."), \
+  Option ("exp_enforce_bounds", "Only record the signal (and include in likelihood calculations) that falls withinness the bounds of the image."), \
 \
   Option ("exp_half_width", "'Variance' of the kernel that will be used to interpolate the signal from the tractlets when using the Gaussian type kernel.") \
    + Argument ("exp_half_width", "").type_float (SMALL_FLOAT, Image::Expected::Buffer::HALF_WIDTH_DEFAULT, LARGE_FLOAT), \

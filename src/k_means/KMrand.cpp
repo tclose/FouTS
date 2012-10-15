@@ -289,7 +289,7 @@ void kmCoLaplacePts(		// correlated-Laplacian distribution
 //----------------------------------------------------------------------
 //  kmClusGaussPts - Generate clusters of Gaussian distributed points
 //	Cluster centers are uniformly distributed over [-1,1], and the
-//	standard deviation within each cluster is fixed.
+//	standard deviation withinness each cluster is fixed.
 //
 //	Note: Once cluster centers have been set, they are not changed,
 //	unless new_clust = true.  This is so that subsequent calls generate
@@ -317,7 +317,7 @@ void kmClusGaussPts(		// clustered-Gaussian distribution
 	int		dim,		// dimension
 	int		n_col,		// number of colors
 	bool		new_clust,	// generate new clusters.
-	double		std_dev,	// standard deviation within clusters
+	double		std_dev,	// standard deviation withinness clusters
 	double*		clus_sep)	// cluster separation (returned)
 {
     if (cgClusters == NULL || new_clust) {// need new cluster centers
@@ -365,7 +365,7 @@ KMpointArray kmGetCGclusters()	// get clustered gauss cluster centers
 //	generated, each whose dimension is a random number between 1
 //	and max_dim.  The points are evenly distributed among the clusters.
 //	For each cluster, we generate points uniformly distributed along
-//	the flat within the hypercube.
+//	the flat withinness the hypercube.
 //
 //	This is done as follows.  Each cluster is defined by a d-element
 //	control vector whose components are either:
@@ -404,7 +404,7 @@ void kmClusOrthFlats(		// clustered along orthogonal flats
 	int		dim,		// dimension
 	int		n_col,		// number of colors
 	bool		new_clust,	// generate new clusters.
-	double		std_dev,	// standard deviation within clusters
+	double		std_dev,	// standard deviation withinness clusters
 	int		max_dim)	// maximum dimension of the flats
 {
     const double CO_FLAG = 999;			// special flag value
@@ -455,7 +455,7 @@ void kmClusOrthFlats(		// clustered along orthogonal flats
 //	among a collection of low dimensional ellipsoids in the
 //	hypercube [-1,1]^d.  The objective is to model distributions
 //	in which the points are distributed in lower dimensional
-//	subspaces, and within this lower dimensional space the points
+//	subspaces, and withinness this lower dimensional space the points
 //	are distributed with a Gaussian distribution (with no
 //	correlation between the dimensions).
 //
@@ -544,7 +544,7 @@ void kmClusEllipsoids(		// clustered around ellipsoids
 //  kmMultiClus - multi-sized clusters
 //	This distribution is designed to be a challenge for clustering
 //	algorithm.  It consists of a clusters of varying sizes, located
-//	within the cube [-1,1]^d.  The cluster centers are uniformly
+//	withinness the cube [-1,1]^d.  The cluster centers are uniformly
 //	distributed.  We generate clusters one by one.  For each
 //	cluster, the size of the cluster m is chosen so that the
 //	probability of generating a cluster of size 2^i is 1/2^i.

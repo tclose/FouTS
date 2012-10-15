@@ -249,10 +249,10 @@ namespace BTS {
 //            end_log_prob = new_end_log_prob;
 //            all_log_prob = new_all_log_prob;
 
-            std::map<std::string, std::string> prop_component_values = prior.get_component_values(prop_x);
+            std::map<std::string, double> prop_component_values = prior.get_component_values(prop_x);
 
-            for (std::map<std::string, std::string>::iterator comp_it = prop_component_values.begin(); comp_it != prop_component_values.end(); ++comp_it)
-              prop_x.set_extend_prop(comp_it->first, comp_it->second);
+            for (std::map<std::string, double>::iterator comp_it = prop_component_values.begin(); comp_it != prop_component_values.end(); ++comp_it)
+              prop_x.set_extend_prop(comp_it->first, str(comp_it->second));
 
             iterations.append(prop_x);
 
@@ -316,10 +316,10 @@ namespace BTS {
 //        x.set_extend_prop("prior"]               = str(prior_px);
 //        x.set_extend_prop("total_signal"]        = str(total_signal);
 
-        std::map<std::string, std::string> component_values = prior.get_component_values(x);
+        std::map<std::string, double> component_values = prior.get_component_values(x);
 
-        for (std::map<std::string, std::string>::iterator comp_it =component_values.begin(); comp_it != component_values.end(); ++comp_it)
-          prop_x.set_extend_prop(comp_it->first, comp_it->second);
+        for (std::map<std::string, double>::iterator comp_it =component_values.begin(); comp_it != component_values.end(); ++comp_it)
+          prop_x.set_extend_prop(comp_it->first, str(comp_it->second));
 
         // Save sample.
         samples.append(x);

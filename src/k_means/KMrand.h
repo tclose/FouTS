@@ -78,7 +78,7 @@ void kmClusGaussPts(		// clustered-Gaussian distribution
 	int		dim,		// dimension
 	int		n_col,		// number of colors (clusters)
 	bool		new_clust = true,   // generate new cluster centers
-	double		std_dev = 0.1,	    // std deviation within clusters
+	double		std_dev = 0.1,	    // std deviation withinness clusters
 	double*		clus_sep = NULL);   // cluster separation (returned)
 
 KMpointArray kmGetCGclusters(); // get clustered-gauss cluster centers
@@ -89,7 +89,7 @@ void kmClusOrthFlats(           // clustered along orthogonal flats
 	int		dim,		// dimension
 	int		n_col,		// number of colors
 	bool		new_clust,	// generate new clusters.
-	double		std_dev,	// standard deviation within clusters
+	double		std_dev,	// standard deviation withinness clusters
 	int		max_dim);	// maximum dimension of the flats
 
 void kmClusEllipsoids(		// clustered around ellipsoids

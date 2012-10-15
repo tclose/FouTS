@@ -429,7 +429,9 @@ EXECUTE {
                     prior_acs_scale,
                     prior_acs_mean,
                     prior_length_scale,
-                    prior_length_mean);
+                    prior_length_mean,
+                    prior_thinness_scale,
+                    prior_thinness_power);
 
 //----------------//
 // Set Properties //
@@ -516,9 +518,9 @@ EXECUTE {
         std::cout << "Total Prior: " << total_prior << std::endl;
         std::cout << "Total Prior Gradient:" << prior_gradient << std::endl << std::endl;
 
-        std::map<std::string, std::string> component_values = prior.get_component_values(origin);
+        std::map<std::string, double> component_values = prior.get_component_values(origin);
 
-        for (std::map<std::string, std::string>::const_iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
+        for (std::map<std::string, double>::const_iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
           std::cout << "Prior " << comp_it->first << ": " << comp_it->second << std::endl;
 
         std::cout << std::endl;
@@ -595,9 +597,9 @@ EXECUTE {
         std::cout << "Total Prior: " << total_prior << std::endl;
         std::cout << "Total Prior Gradient:" << prior_gradient << std::endl << std::endl;
 
-        std::map<std::string, std::string> component_values = prior.get_component_values(origin);
+        std::map<std::string, double> component_values = prior.get_component_values(origin);
 
-        for (std::map<std::string, std::string>::const_iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
+        for (std::map<std::string, double>::const_iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
           std::cout << "Prior " << comp_it->first << ": " << comp_it->second << std::endl;
 
         std::cout << std::endl;
@@ -702,9 +704,9 @@ EXECUTE {
         std::cout << "Total Prior: " << total_prior << std::endl;
         std::cout << "Likelihood: " << likelihood_px << std::endl;
 
-        std::map<std::string, std::string> component_values = prior.get_component_values(origin);
+        std::map<std::string, double> component_values = prior.get_component_values(origin);
 
-        for (std::map<std::string, std::string>::const_iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
+        for (std::map<std::string, double>::const_iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
           std::cout << "Prior " << comp_it->first << ": " << comp_it->second << std::endl;
 
         std::cout << std::endl;
@@ -792,9 +794,9 @@ EXECUTE {
         std::cout << "Total Prior: " << total_prior << std::endl;
         std::cout << "Likelihood: " << likelihood_px << std::endl;
 
-        std::map<std::string, std::string> component_values = prior.get_component_values(origin);
+        std::map<std::string, double> component_values = prior.get_component_values(origin);
 
-        for (std::map<std::string, std::string>::const_iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
+        for (std::map<std::string, double>::const_iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
           std::cout << "Prior " << comp_it->first << ": " << comp_it->second << std::endl;
 
         std::cout << std::endl;

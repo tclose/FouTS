@@ -49,7 +49,11 @@
 \
   Option ("prior_length", "The prior placed on the tractlet length") \
    + Argument ("prior_length_scale", "").optional().type_float(0, Prob::PriorComponent::Length::SCALE_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_length_mean", "").optional().type_float(0, Prob::PriorComponent::Length::MEAN_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_length_mean", "").optional().type_float(0, Prob::PriorComponent::Length::MEAN_DEFAULT,LARGE_FLOAT), \
+\
+  Option ("prior_thinness", "The prior placed on the tractlet thinness") \
+   + Argument ("prior_thinness_scale", "").optional().type_float(0, Prob::PriorComponent::Thinness::SCALE_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_thinness_power", "").optional().type_float(0, Prob::PriorComponent::Thinness::POWER_DEFAULT,LARGE_FLOAT) \
 \
 
 //Loads the 'prior' parameters into variables
@@ -118,7 +122,17 @@
       prior_length_mean = prior_opt[0][1]; \
   } \
  \
-
+  double prior_thinness_scale  = Prob::PriorComponent::Thinness::SCALE_DEFAULT; \
+  double prior_thinness_power  = Prob::PriorComponent::Thinness::POWER_DEFAULT; \
+ \
+  prior_opt = get_options("prior_thinness"); \
+  if (prior_opt.size()) { \
+    if (prior_opt[0].size() >= 1) \
+      prior_thinness_scale = prior_opt[0][0]; \
+    if (prior_opt[0].size() >= 2) \
+      prior_thinness_power = prior_opt[0][1]; \
+  } \
+ \
 
 
 //Adds the 'prior' parameters to the properties to be saved with the data.
@@ -148,16 +162,22 @@
     } \
   \
     if (prior_length_scale) { \
-      properties["prior_length_scale"]                   = str(prior_length_scale); \
-      properties["prior_length_mean"]                    = str(prior_length_mean); \
+      properties["prior_length_scale"]                = str(prior_length_scale); \
+      properties["prior_length_mean"]                 = str(prior_length_mean); \
     } \
-  } \
+  \
+    if (prior_thinness_scale) { \
+      properties["prior_thinness_scale"]                = str(prior_thinness_scale); \
+      properties["prior_thinness_power"]                = str(prior_thinness_power); \
+    } \
+  }
 
 #include "bts/prob/prior_component/frequency.h"
 #include "bts/prob/prior_component/hook.h"
 #include "bts/prob/prior_component/density.h"
 #include "bts/prob/prior_component/acs.h"
 #include "bts/prob/prior_component/length.h"
+#include "bts/prob/prior_component/thinness.h"
 
 #include "bts/common.h"  
 
@@ -187,6 +207,7 @@ namespace BTS {
         PriorComponent::Density density;
         PriorComponent::ACS acs;
         PriorComponent::Length length;
+        PriorComponent::Thinness thinness;
 
       public:
 
@@ -201,13 +222,17 @@ namespace BTS {
               double acs_scale,
               double acs_mean,
               double length_scale,
-              double length_mean);
+              double length_mean,
+              double thinness_scale,
+              size_t thinness_power);
 
         Prior(const Prior& p)
-         : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(p.acs), length(p.length) {}
+         : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(p.acs), length(p.length),
+                                                                                           thinness(p.thinness) {}
 
         Prior& operator=(const Prior& p)
-          { scale =p.scale; frequency = p.frequency; hook = p.hook; density = p.density; acs = p.acs; length = p.length; return *this; }
+          { scale =p.scale; frequency = p.frequency; hook = p.hook; density = p.density; acs = p.acs; length = p.length;
+                                                                              thinness = p.thinness; return *this; }
 
         virtual ~Prior() {}
 
@@ -218,23 +243,23 @@ namespace BTS {
           components.push_back(PriorComponent::Density::NAME);
           components.push_back(PriorComponent::ACS::NAME);
           components.push_back(PriorComponent::Length::NAME);
+          components.push_back(PriorComponent::Thinness::NAME);
           return components;
         }
 
-        std::map<std::string, std::string> get_component_values(const Fibre::Strand strand);
+        std::map<std::string, double> get_component_values(const Fibre::Strand strand);
 
-        std::map<std::string, std::string> get_component_values(const Fibre::Tractlet tractlet);
+        std::map<std::string, double> get_component_values(const Fibre::Tractlet tractlet);
 
-        template <typename T> std::map<std::string, std::string> get_component_values(const T fibres) {
-          std::map<std::string,std::string> overall_map, elem_map;
+        template <typename T> std::map<std::string, double> get_component_values(const T fibres) {
+          std::map<std::string,double> overall_map, elem_map;
           std::vector<string> components = list_components();
           for (std::vector<std::string>::iterator comp_it = components.begin(); comp_it != components.end(); ++comp_it)
             overall_map[*comp_it] = 0.0;
           for (size_t fibre_i = 0; fibre_i < fibres.size(); ++fibre_i) {
             elem_map = get_component_values(fibres[fibre_i]);
-            for (std::map<std::string,std::string>::iterator comp_it = elem_map.begin(); comp_it != elem_map.end(); ++comp_it)
+            for (std::map<std::string, double>::iterator comp_it = elem_map.begin(); comp_it != elem_map.end(); ++comp_it)
               overall_map[comp_it->first] += comp_it->second;
-
           }
           return overall_map;
         }

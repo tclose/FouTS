@@ -162,7 +162,7 @@ namespace BTS {
 //          prop_x.set_extend_prop("likelihood"]     = str(likelihood_px);
 //          prop_x.set_extend_prop("prior"]          = str(prior_px);
 //
-//          std::map<std::string, std::string> component_values = prior.get_component_values(prop_x);
+//          std::map<std::string, double> component_values = prior.get_component_values(prop_x);
 //
 //          prop_x.properties.insert(component_values.begin(), component_values.end());
 //
@@ -236,10 +236,10 @@ namespace BTS {
 //        x.set_extend_prop("total_signal"]     = str(total_signal);
 #endif
 
-        std::map<std::string, std::string> component_values = prior.get_component_values(x);
+        std::map<std::string, double> component_values = prior.get_component_values(x);
 
-        for (std::map<std::string,std::string>::iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
-          x.set_extend_prop(comp_it->first, comp_it->second);
+        for (std::map<std::string, double>::iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
+          x.set_extend_prop(comp_it->first, str(comp_it->second));
 
 //        x.properties.insert(component_values.begin(), component_values.end());
 

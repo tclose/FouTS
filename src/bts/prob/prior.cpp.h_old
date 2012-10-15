@@ -33,13 +33,16 @@ namespace BTS {
     const double Prior::SCALE_DEFAULT = 1;
 
 
-    template <typename T> std::map<std::string, std::string>     get_component_values(const T& fibre) {
+    template <typename T> std::map<std::string, std::string>     Prior::get_component_values(const T& fibre) {
 
       std::map<std::string, std::string> component_values;
 
       component_values["frequency"] = frequency.log_prob(fibre);
       component_values["hook"] = hook.log_prob(fibre);
       component_values["density"] = density.log_prob(fibre);
+      component_values["thinness"] = thinness.log_prob(fibre);
+      component_values["acs"] = acs.log_prob(fibre);
+      component_values["length"] = length.log_prob(fibre);
 
       return component_values;
 

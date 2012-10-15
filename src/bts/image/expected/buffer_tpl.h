@@ -226,7 +226,7 @@ namespace BTS {
 
           // Returns the 'neighbourhood' coordinate that the point lies in.  The 'neighbourhood' coordinate is the coordinate
           // that the point + [0.5,0.5,0.5] lies in. This is used to map the neighbourhood of voxels that lie
-          // within the interpolation extent about the given point (see set and get neighbourhoods).
+          // withinness the interpolation extent about the given point (see set and get neighbourhoods).
           Index voxel_centre_coord(const Coord& point) {
             Coord offset_point = point + Coord::Halves;
             Index coord((int) floor(offset_point[X]), (int) floor(

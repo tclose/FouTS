@@ -75,7 +75,7 @@ namespace BTS {
 
           std::vector<std::string> list_components() { return std::vector<std::string>(); }
 
-          template <typename T> std::map<std::string, std::string> get_component_values(T& t) { return std::map<std::string, std::string>(); }
+          template <typename T> std::map<std::string, double> get_component_values(T& t) { return std::map<std::string, double>(); }
 
 
         friend std::ostream&             operator<< (std::ostream& stream, const Gaussian& test);

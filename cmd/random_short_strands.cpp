@@ -46,8 +46,8 @@ SET_AUTHOR ("Thomas G. Close");
 SET_COPYRIGHT (NULL);
 
 DESCRIPTION = {
-  "Initialises very short and thin Fourier tracts uniformly distributed within the given volume",
-  "Initialises very short and thin Fourier tracts uniformly distributed within the given volume",
+  "Initialises very short and thinness Fourier tracts uniformly distributed withinness the given volume",
+  "Initialises very short and thinness Fourier tracts uniformly distributed withinness the given volume",
   NULL
 };
 

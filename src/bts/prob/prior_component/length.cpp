@@ -50,7 +50,8 @@ namespace BTS {
           gradient = strand;
           gradient.zero();
         } else if (gradient.degree() != strand.degree())
-          throw Exception ("Tractlet degree (" + str(strand.degree()) + ") does not match that of the supplied gradient (" + str(gradient.degree()) + ").");
+          throw Exception ("Tractlet degree (" + str(strand.degree()) + ") does not match that of the supplied gradient (" +
+                                                                                        str(gradient.degree()) + ").");
 
         double lprob = -scale * MR::Math::pow2(strand[1].norm() - mean);
 

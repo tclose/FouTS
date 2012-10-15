@@ -42,7 +42,6 @@ extern "C" {
 
 using namespace BTS;
 
-const double  ACS_DEFAULT =-1.0;
 const double  BASE_INTENSITY_DEFAULT = -1.0;
 const size_t  DEGREE_DEFAULT = 3;
 const size_t  NUM_FIBRES_DEFAULT = 5;
@@ -73,8 +72,11 @@ ARGUMENTS = {
 
 OPTIONS = {
 
+  Option("density", "Instead of setting the acs directly, the desired density can be specified instead.")
+  + Argument("density","").type_float(SMALL_FLOAT,1.0,LARGE_FLOAT),
+
   Option("acs", "Intensity of the generated fibres.")
-   + Argument("acs","").type_float(SMALL_FLOAT,ACS_DEFAULT,LARGE_FLOAT),
+   + Argument("acs","").type_float(SMALL_FLOAT,NAN,LARGE_FLOAT),
 
   Option("base_intensity", "Base intensity of the generated fibres.")
    + Argument("base_intensity","").type_float(SMALL_FLOAT,BASE_INTENSITY_DEFAULT,LARGE_FLOAT),
@@ -94,10 +96,10 @@ OPTIONS = {
   Option("width_stddev", "Standard deviation of width of the initialised fibres.")
    + Argument("width_stddev","").type_float(SMALL_FLOAT, WIDTH_STDDEV_DEFAULT,LARGE_FLOAT),
 
-  Option("reject_radius", "If a centre of a randomly generated fibre lies within the radius of a previously generated strand it is rejected.")
+  Option("reject_radius", "If a centre of a randomly generated fibre lies withinness the radius of a previously generated strand it is rejected.")
    + Argument("reject_radius","").type_float(SMALL_FLOAT, REJECT_RADIUS_DEFAULT,LARGE_FLOAT),
 
-  Option("edge_buffer", "Restrict the distributed_centres of the generated fibres to be within a certain distance from the edge of the ROI.")
+  Option("edge_buffer", "Restrict the distributed_centres of the generated fibres to be withinness a certain distance from the edge of the ROI.")
    + Argument("edge_buffer","").type_float(SMALL_FLOAT, EDGE_BUFFER_DEFAULT,LARGE_FLOAT),
 
   Option("curve_stddev", "The standard deviation of the curvature parameters.")
@@ -127,8 +129,8 @@ EXECUTE {
 
   std::string output_location = argument[0];
 
-
-  double acs      = ACS_DEFAULT;
+  double density  = 1.0;
+  double acs      = 0.0;
   double base_intensity = BASE_INTENSITY_DEFAULT;
   size_t degree         = DEGREE_DEFAULT;
   size_t num_fibres       = NUM_FIBRES_DEFAULT;
@@ -144,9 +146,19 @@ EXECUTE {
 
   Options opt;
 
+  bool explicit_acs = false;
   opt = get_options("acs");
-  if (opt.size())
+  if (opt.size()) {
     acs = opt[0][0];
+    explicit_acs = true;
+  }
+
+  opt = get_options("density");
+  if (opt.size()) {
+    if (explicit_acs)
+      throw Exception ("'-density' option cannot be used in conjunction with acs option, please use one or the other.");
+    density = opt[0][0];
+  }
 
   opt = get_options("base_intensity");
   if (opt.size())
@@ -307,9 +319,12 @@ EXECUTE {
       tractlets[tractlet_i][1][0] = ax1 * (width_mean + gsl_ran_gaussian(rand_gen, width_stddev));
       tractlets[tractlet_i][2][0] = ax2 * (width_mean + gsl_ran_gaussian(rand_gen, width_stddev));
 
-      if (acs >= 0.0)
+      // If ACS explicitly specified then use it otherwise use the density value to calculate what the ACS should be
+      if (explicit_acs)
         tractlets[tractlet_i].set_acs(acs);
-
+      else if (acs >= 0.0)
+        tractlets[tractlet_i].set_acs(tractlets[tractlet_i][1][0].norm() * tractlets[tractlet_i][2][0].norm() * density
+                                                                                                      * M_PI / 4.0);
     }
 
     tractlets.save(output_location);
@@ -320,7 +335,7 @@ EXECUTE {
 }
 
 
-//Randomly generate centre points within the region of interest
+//Randomly generate centre points withinness the region of interest
 std::vector< Triple<double> >    distributed_centres(const Triple<double>& roi_extent, size_t num_fibres, gsl_rng* rand_gen, double reject_radius) {
 
   std::vector< Triple<double> > points;

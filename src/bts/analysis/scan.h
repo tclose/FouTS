@@ -158,10 +158,10 @@ namespace BTS {
         properties["likelihood_px"] = str(likelihood_px);
         properties["prior_px"] = str(prior_px);
 
-        std::map<std::string, std::string> component_values = prior.get_component_values(state);
+        std::map<std::string, double> component_values = prior.get_component_values(state);
 
-        for (std::map<std::string,std::string>::iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
-          properties[comp_it->first] = comp_it->second;
+        for (std::map<std::string,double>::iterator comp_it = component_values.begin(); comp_it != component_values.end(); ++comp_it)
+          properties[comp_it->first] = str(comp_it->second);
 
         writer.append(state, properties);
 

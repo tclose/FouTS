@@ -80,7 +80,7 @@ namespace BTS {
 
         for (size_t peak_i = 0; peak_i < num_peaks; peak_i++) {
 
-          // Rejection sampling to get peaks randomly distributed within the roi_radius.
+          // Rejection sampling to get peaks randomly distributed withinness the roi_radius.
           MCMC::State centre(ndims);
   
           for (size_t dim_i = 0; dim_i < ndims; ++dim_i)
