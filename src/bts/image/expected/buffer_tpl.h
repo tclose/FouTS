@@ -186,8 +186,9 @@ namespace BTS {
 
           Buffer_tpl(bool enforce_bounds = true) :
             Observed::Buffer_tpl<T>(enforce_bounds), num_len_sections(0),
-                num_wth_sections(0), interp_extent(0.0), neigh_extent(0) {
-          }
+                num_wth_sections(0), interp_extent(0.0), neigh_extent(0),
+                width_epsilon(Fibre::Tractlet::WIDTH_EPSILON_DEFAULT),
+                length_epsilon(Fibre::Tractlet::LENGTH_EPSILON_DEFAULT) {}
 
           Buffer_tpl(const Triple<size_t>& dimensions,
               const Triple<double>& voxel_sizes,
@@ -198,7 +199,8 @@ namespace BTS {
             Observed::Buffer_tpl<T>(dimensions, voxel_sizes, corner_offsets,
                 enforce_bounds), diffusion_model(diffusion_model),
                 num_len_sections(number_length_sections), num_wth_sections(
-                    number_width_sections), width_epsilon(width_epsilon), length_epsilon(length_epsilon)
+                    number_width_sections), width_epsilon(width_epsilon),
+                    length_epsilon(length_epsilon)
 
           {
 
@@ -217,7 +219,7 @@ namespace BTS {
           Buffer_tpl(const Buffer_tpl& bt) :
             Observed::Buffer_tpl<T>(bt), diffusion_model(bt.diffusion_model),
                 num_len_sections(bt.num_len_sections), num_wth_sections(
-                    bt.num_wth_sections)
+                    bt.num_wth_sections), width_epsilon(bt.width_epsilon), length_epsilon(bt.length_epsilon)
 
           {
             set_extent(bt.interp_extent);

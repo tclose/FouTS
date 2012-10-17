@@ -63,7 +63,9 @@ namespace BTS {
                     double interp_extent = Expected::Buffer::INTERP_EXTENT_DEFAULT,
                     double half_width = Expected::Buffer::HALF_WIDTH_DEFAULT,
                     const Triple<double>& corner_offset = Triple<double>(),
-                    bool enforce_bounds = true
+                    bool enforce_bounds = true,
+                    double exp_width_epsilon = Fibre::Tractlet::WIDTH_EPSILON_DEFAULT,
+                    double exp_length_epsilon = Fibre::Tractlet::LENGTH_EPSILON_DEFAULT
                   );
 
 

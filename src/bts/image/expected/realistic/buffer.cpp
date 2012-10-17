@@ -57,8 +57,10 @@ namespace BTS {
                           size_t num_strands,
                           double extent,
                           const Triple<double>& corner_offset,
-                          bool enforce_bounds)
-          : Buffer_tpl<Voxel>(dimensions, voxel_sizes, diffusion_model, num_sections, num_strands, extent, corner_offset, enforce_bounds)
+                          bool enforce_bounds,
+                          double width_epsilon,
+                          double length_epsilon)
+          : Buffer_tpl<Voxel>(dimensions, voxel_sizes, diffusion_model, num_sections, num_strands, extent, corner_offset, enforce_bounds, width_epsilon, length_epsilon)
           { name_init(); }
 
 

@@ -83,7 +83,9 @@ namespace BTS {
                                                       double interp_extent,
                                                       const Triple<double>& offsets,
                                                       bool enforce_bounds,
-                                                      double gaussian_half_width) {
+                                                      double gaussian_half_width,
+                                                      double exp_width_epsilon,
+                                                      double exp_length_epsilon) {
 
         Buffer* image;
 
