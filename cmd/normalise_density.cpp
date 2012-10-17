@@ -51,9 +51,14 @@ ARGUMENTS = {
 
 OPTIONS = {
 
+    Option ("width_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 0th degree auxiliary vectors")
+     + Argument ("width_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 0th degree auxiliary vectors").type_float (SMALL_FLOAT, Fibre::Tractlet::WIDTH_EPSILON_DEFAULT, LARGE_FLOAT),
+
+    Option ("length_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 1st degree primary vector")
+    + Argument ("length_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 1st degree primar vector").type_float (SMALL_FLOAT, Fibre::Tractlet::LENGTH_EPSILON_DEFAULT, LARGE_FLOAT),
+
     Option ("num_points", "The number of points that will be generated along the strand location")
      + Argument ("num_points", "The number of points that will be generated along the strand location").type_integer (1, 100, 2000),
-
 
 Option() };
 
@@ -69,28 +74,33 @@ EXECUTE {
   else
     output_location = input_location;
 
+  double width_epsilon = Fibre::Tractlet::WIDTH_EPSILON_DEFAULT;
+  double length_epsilon = Fibre::Tractlet::LENGTH_EPSILON_DEFAULT;
   size_t num_points = 100;
 
-  Options opt = get_options("num_points");
+  Options opt = get_options("width_epsilon");
+  if (opt.size())
+    width_epsilon = opt[0][0];
+
+  opt = get_options("length_epsilon");
+  if (opt.size())
+    length_epsilon = opt[0][0];
+
+  opt = get_options("num_points");
   if (opt.size())
     num_points = opt[0][0];
 
   Fibre::Tractlet::Set tcts(input_location);
   
-  if (!tcts.has_elem_prop(Fibre::Tractlet::alpha_PROP))
-      tcts.add_elem_prop(Fibre::Tractlet::alpha_PROP);
+  if (!tcts.has_elem_prop(Fibre::Tractlet::ALPHA_PROP))
+      tcts.add_elem_prop(Fibre::Tractlet::ALPHA_PROP);
 
-  MR::ProgressBar progress_bar ("Normalising densities of Fourier tracts...", tcts.size());
+  MR::ProgressBar progress_bar ("Normalising densities of Fourier tracts...");
 
-  for (size_t tct_i = 0; tct_i < tcts.size(); tct_i++) {
-    std::vector<double> areas = tcts[tct_i].cross_sectional_areas(num_points);
-    double avg_area = 0.0;
-    for (size_t area_i = 0; area_i < num_points; ++area_i)
-      avg_area += areas[area_i];
-    avg_area /= (double)num_points;
-    tcts[tct_i].set_acs(avg_area);
-  }
- 
+  tcts.normalise_densities(width_epsilon, length_epsilon, num_points);
+
+  tcts.set_extend_prop("width_epsilon", str(width_epsilon));
+  tcts.set_extend_prop("length_epsilon", str(length_epsilon));
   tcts.save(output_location);
 
 }

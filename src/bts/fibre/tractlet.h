@@ -170,15 +170,20 @@ namespace BTS {
         double                        acs(double width_epsilon = WIDTH_EPSILON_DEFAULT,
                                                               double length_epsilon = LENGTH_EPSILON_DEFAULT) const;
 
-        void                          add_acs(double acs = 1.0);
+        void                          add_acs(double acs = 1.0, double width_epsilon = WIDTH_EPSILON_DEFAULT,
+                                                                        double length_epsilon = LENGTH_EPSILON_DEFAULT);
 
-        void                          set_acs(double acs);
+        void                          set_acs(double acs, double width_epsilon = WIDTH_EPSILON_DEFAULT,
+                                                                        double length_epsilon = LENGTH_EPSILON_DEFAULT);
 
         void                          remove_acs()
           { remove_prop(ALPHA_PROP); }
 
         bool                          has_var_acs() const
           { return has_prop(ALPHA_PROP); }
+
+        void                          normalise_density(double width_epsilon = WIDTH_EPSILON_DEFAULT,
+                                              double length_epsilon = LENGTH_EPSILON_DEFAULT, size_t num_points = 100);
 
         double&                       alpha()
           { assert(has_var_acs()); return prop(ALPHA_PROP); }
@@ -312,24 +317,28 @@ namespace BTS {
     Tractlet                         operator* (double c, Tractlet t);
 
     inline double                    Tractlet::acs(double width_epsilon, double length_epsilon) const {
+      double acs;
       if (has_prop(ALPHA_PROP))
         acs = MR::Math::pow2(prop(ALPHA_PROP)) + width_epsilon * (operator()(1,0).norm() + operator()(2,0).norm())
+                                               + length_epsilon * MR::Math::sqrt(operator()(0,1).norm());
       else
         acs = 1.0;
       return acs;
     }
 
-    inline void                      Tractlet::add_acs(double acs = 1.0) {
+    inline void                      Tractlet::add_acs(double acs, double width_epsilon, double length_epsilon) {
       if (acs < 0.0)
         throw Exception("ACS must be greater than 0.0 (" + str(acs) + ")");
       add_prop(ALPHA_PROP, NAN);
-      set_acs(acs);
+      set_acs(acs, width_epsilon, length_epsilon);
     }
 
-    inline void                      Tractlet::set_acs(double acs) {
+    inline void                      Tractlet::set_acs(double acs, double width_epsilon, double length_epsilon) {
       assert(acs >= 0);
-      prop(ALPHA_PROP) = MR::Math::sqrt(acs);
-    } //sqrt is stored instead of straight value to prevent ACS becoming < 0 during iterative methods
+      double alpha2 = acs - width_epsilon * (operator()(1,0).norm() + operator()(2,0).norm()) -
+                                                                length_epsilon * MR::Math::sqrt(operator()(0,1).norm());
+      prop(ALPHA_PROP) = MR::Math::sqrt(alpha2);
+    }
 
 
 

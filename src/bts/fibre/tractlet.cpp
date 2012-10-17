@@ -58,8 +58,8 @@ namespace BTS {
 
     const double        Tractlet::REASONABLE_WIDTH = 0.1;
 
-    const double        Tractlet::LENGTH_EPSILON_DEFAULT = 0.01;
-    const double        Tractlet::WIDTH_EPSILON_DEFAULT = 0.01;
+    const double        Tractlet::LENGTH_EPSILON_DEFAULT = 0.0;
+    const double        Tractlet::WIDTH_EPSILON_DEFAULT = 0.0;
 
 //    Tractlet::Tractlet (std::vector<Strand> axes, double base_width, double acs)
 //
@@ -645,6 +645,18 @@ namespace BTS {
 
     }
 
+
+    void                            Tractlet::normalise_density(double width_epsilon, double length_epsilon,
+                                                                                              size_t num_points) {
+      if (!has_var_acs())
+        add_acs(NAN);
+      std::vector<double> areas = cross_sectional_areas(num_points);
+      double avg_area = 0.0;
+      for (size_t area_i = 0; area_i < num_points; ++area_i)
+        avg_area += areas[area_i];
+      avg_area /= (double)num_points;
+      set_acs(avg_area, width_epsilon, length_epsilon);
+    }
 
   }
 

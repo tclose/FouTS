@@ -185,6 +185,10 @@ namespace BTS {
         Set                                         smallest_distance_set(const Set& reference)
           { Set smallest; Base::Set<Tractlet>::smallest_distance_set(reference, smallest); return smallest; }
 
+        Set&                                        normalise_densities(double width_epsilon = Tractlet::WIDTH_EPSILON_DEFAULT,
+                                                                        double length_epsilon = Tractlet::LENGTH_EPSILON_DEFAULT,
+                                                                        double num_points = 100);
+
         Set&                                        operator+=  (const Set& set)
           { Base::Set<Tractlet>::operator+=(set); return *this; }
 
@@ -253,7 +257,18 @@ namespace BTS {
     };
 
 
-    inline Tractlet::Set                           operator* (double c, Tractlet::Set set)                        { Tractlet::Set answer (set); answer *= c;    return answer; }
+    inline Tractlet::Set                            operator* (double c, Tractlet::Set set)
+      { Tractlet::Set answer (set); answer *= c;    return answer; }
+
+
+    inline Tractlet::Set&                          Tractlet::Set::normalise_densities(double width_epsilon,
+                                                                                      double length_epsilon,
+                                                                                      double num_points) {
+      if (!has_elem_prop(Tractlet::ALPHA_PROP))
+        add_elem_prop(Tractlet::ALPHA_PROP);
+      LOOP(operator[](tractlet_i).normalise_density(width_epsilon, length_epsilon, num_points);)
+      return *this;
+    }
 
 
   }
