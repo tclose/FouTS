@@ -60,7 +60,7 @@ namespace BTS {
 
         std::vector<typename U::Section> path;
 
-        fibre.sections(path, num_len_sections, num_wth_sections, this->voxel_lengths, this->corner_offsets);
+        fibre.sections(path, num_len_sections, num_wth_sections, this->voxel_lengths, this->corner_offsets, 0, width_epsilon, length_epsilon);
 
         for (typename std::vector<typename U::Section>::iterator section_it = path.begin(); section_it != path.end(); ++section_it) {
 
@@ -111,6 +111,8 @@ namespace BTS {
       template <typename T> template <typename U> void         Buffer_tpl<T>::part_image(const U& fibre,
                                                                     std::vector<typename U::Section>& path,
                                                                     Reference::Buffer<typename U::Section>& section_reference) {
+
+        throw Exception("Doesn't include acs()");
 
 
         fibre.sections(path, num_len_sections, num_wth_sections, this->voxel_lengths, this->corner_offsets, this->num_encodings());

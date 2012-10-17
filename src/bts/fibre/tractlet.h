@@ -211,7 +211,9 @@ namespace BTS {
                                                 size_t num_width_sections,
                                                 const Triple<double>& vox_lengths = Triple<double>::Ones,
                                                 const Triple<double>& offsets = Triple<double>::Zeros,
-                                                size_t num_encodings = 0) const;
+                                                size_t num_encodings = 0,
+                                                double width_epsilon = WIDTH_EPSILON_DEFAULT,
+                                                double length_epsilon = LENGTH_EPSILON_DEFAULT) const;
 
 
         /*!Section positions are normalized to the image so that the bottom-left-back (the minimal coordinate point)

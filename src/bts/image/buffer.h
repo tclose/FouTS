@@ -172,6 +172,7 @@ namespace BTS {
         bool                                  bounds_are_enforced() const
           { return enforce_bounds; }
 
+
         Buffer_tpl<T>&                        operator+= (const Buffer_tpl<T>& buff);
 
 
@@ -219,19 +220,19 @@ namespace BTS {
           { Buffer_tpl<T> mult = *this; mult /= M; return mult; }    
 
         
-        const Triple<size_t>&                   dims () const
+        const Triple<size_t>&                 dims () const
           { return dimensions; }
         
 
-        size_t                                  dim (size_t dim_index) const
+        size_t                                dim (size_t dim_index) const
           { return dimensions[dim_index]; }
 
 
-        size_t                                  num_voxels_in_bounds() const
+        size_t                                num_voxels_in_bounds() const
           { return dim(X) * dim(Y) * dim(Z); }
 
 
-        size_t                                  num_not_empty_voxels() const
+        size_t                                num_not_empty_voxels() const
           { return voxels.size(); }
 
 
@@ -277,11 +278,11 @@ namespace BTS {
 
 
         Buffer (const Triple<size_t>& dimensions, size_t num_encodings, bool enforce_bounds = true)
-          : Buffer_tpl< Voxel<double> >(dimensions, enforce_bounds) {}
+          : Buffer_tpl< Voxel<double> >(dimensions, enforce_bounds), num_encodings(num_encodings) {}
 
 
         Buffer (const Buffer& B)
-          : Buffer_tpl< Voxel<double> >(B) {}
+          : Buffer_tpl< Voxel<double> >(B), num_encodings(B.num_encodings) {}
 
         template <typename T> Buffer (const Buffer_tpl<T>& B)
           : Buffer_tpl< Voxel<double> >(B.dims(), B.bounds_are_enforced()), num_encodings(0) {
@@ -304,7 +305,7 @@ namespace BTS {
         }
 
 
-        ~Buffer() {}
+        virtual ~Buffer() {}
 
 
         Buffer&                            operator= (const Buffer& B)

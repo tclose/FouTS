@@ -59,10 +59,10 @@ namespace BTS {
       public:
 
         Section (const MR::Math::Vector<double>::View& view, std::vector<const char*>* props)
-          : Strand::Section((size_t)4, view, props) {}
+          : Strand::Section((size_t)4, view, props), ax1_fraction(NAN), ax2_fraction(NAN), width_fraction(NAN), parent(0) {}
 
         Section(size_t init_precalc_size = 0)
-          : Strand::Section((size_t)4, PROPS, init_precalc_size), ax1_fraction(NAN), ax2_fraction(NAN), width_fraction(NAN) {}
+          : Strand::Section((size_t)4, PROPS, init_precalc_size), ax1_fraction(NAN), ax2_fraction(NAN), width_fraction(NAN), parent(0) {}
 
         Section(const Tractlet& tractlet,
                 const MR::Math::Vector<double>::View& position_coeffs,
@@ -71,6 +71,8 @@ namespace BTS {
                 double ax2_fraction,
                 double length_fraction,
                 double width_fraction,
+                double width_epsilon = Fibre::Tractlet::WIDTH_EPSILON_DEFAULT,
+                double length_epsilon = Fibre::Tractlet::LENGTH_EPSILON_DEFAULT,
                 size_t init_precalc_size = 0)
 
           : Strand::Section(init_precalc_size)
@@ -83,7 +85,9 @@ namespace BTS {
               ax1_fraction,
               ax2_fraction,
               length_fraction,
-              width_fraction);
+              width_fraction,
+              width_epsilon,
+              length_epsilon);
 
         }
 
@@ -94,10 +98,12 @@ namespace BTS {
                 double ax1_fraction,
                 double ax2_fraction,
                 double length_fraction,
-                double width_fraction)
+                double width_fraction,
+                double width_epsilon,
+                double length_epsilon)
         {
 
-          Strand::Section::set(tractlet.acs(), position_coeffs, tangent_coeffs, length_fraction);
+          Strand::Section::set(tractlet.acs(width_epsilon, length_epsilon), position_coeffs, tangent_coeffs, length_fraction);
 
           this->ax1_fraction = ax1_fraction;
           this->ax2_fraction = ax2_fraction;
@@ -124,11 +130,12 @@ namespace BTS {
           : Strand::Section(s),
             ax1_fraction(s.ax1_fraction),
             ax2_fraction(s.ax2_fraction),
+            width_fraction(s.width_fraction),
             parent(s.parent) {}
 
 
         Section&                  operator= (const Section& s)
-          { this->Strand::Section::operator=(s); ax1_fraction= s.ax1_fraction; ax2_fraction = s.ax2_fraction; parent = s.parent; return *this; }
+          { this->Strand::Section::operator=(s); ax1_fraction= s.ax1_fraction; ax2_fraction = s.ax2_fraction; width_fraction = s.width_fraction; parent = s.parent; return *this; }
 
 
         ~Section() {}

@@ -237,6 +237,7 @@ namespace BTS {
 
     void                          	Tractlet::add_section_gradient(const Tractlet& tractlet, const Section& section, const Strand::BasicSection& gradient) {
 
+      throw Exception("Not working with acs()");
 
       Strand pos_gradient = Strand::outer_product(section.position_coeffs, gradient.position());
 
@@ -293,7 +294,9 @@ namespace BTS {
                                                           size_t num_width_sections,
                                                           const Triple<double>& vox_lengths,
                                                           const Triple<double>& offsets,
-                                                          size_t num_encodings) const {
+                                                          size_t num_encodings,
+                                                          double width_epsilon,
+                                                          double length_epsilon) const {
 
 
       sections.resize(total_num_sections(num_length_sections, num_width_sections), Tractlet::Section(num_encodings));
@@ -320,7 +323,7 @@ namespace BTS {
             // elliptical shape (or circular if axes are equal).
             if (MR::Math::pow2(ax1_frac) + MR::Math::pow2(ax2_frac) <= (1.0 - width_fraction / 2.0)) {
 
-              sections[section_count].set(*this, position_matrix.row(section_i), tangent_matrix.row(section_i), ax1_frac, ax2_frac, length_fraction, width_fraction);
+              sections[section_count].set(*this, position_matrix.row(section_i), tangent_matrix.row(section_i), ax1_frac, ax2_frac, length_fraction, width_fraction, width_epsilon, length_epsilon);
               sections[section_count].normalize(vox_lengths, offsets);
 
               ++section_count;
