@@ -84,8 +84,8 @@ namespace BTS {
                                                       const Triple<double>& offsets,
                                                       bool enforce_bounds,
                                                       double gaussian_half_width,
-                                                      double exp_width_epsilon,
-                                                      double exp_length_epsilon) {
+                                                      double width_epsilon,
+                                                      double length_epsilon) {
 
         Buffer* image;
 
@@ -98,7 +98,9 @@ namespace BTS {
                                   num_width_sections,
                                   interp_extent,
                                   offsets,
-                                  enforce_bounds);
+                                  enforce_bounds,
+                                  width_epsilon,
+                                  length_epsilon);
 
         else if (type == Gaussian::Buffer::SHORT_NAME)
           image = new Gaussian::Buffer (
@@ -110,7 +112,9 @@ namespace BTS {
                                   interp_extent,
                                   gaussian_half_width,
                                   offsets,
-                                  enforce_bounds);
+                                  enforce_bounds,
+                                  width_epsilon,
+                                  length_epsilon);
 
         else if (type == Quartic::Buffer::SHORT_NAME)
 
@@ -122,7 +126,9 @@ namespace BTS {
                                     num_width_sections,
                                     interp_extent,
                                     offsets,
-                                    enforce_bounds);
+                                    enforce_bounds,
+                                    width_epsilon,
+                                    length_epsilon);
 
         else if (type == Sinc::Buffer::SHORT_NAME)
 
@@ -134,7 +140,9 @@ namespace BTS {
                                     num_width_sections,
                                     interp_extent,
                                     offsets,
-                                    enforce_bounds);
+                                    enforce_bounds,
+                                    width_epsilon,
+                                    length_epsilon);
 
         else if (type == TopHat::Buffer::SHORT_NAME)
 
@@ -146,7 +154,9 @@ namespace BTS {
                                   num_width_sections,
                                   interp_extent,
                                   offsets,
-                                  enforce_bounds);
+                                  enforce_bounds,
+                                  width_epsilon,
+                                  length_epsilon);
 
         else if (type == ReverseSqrt::Buffer::SHORT_NAME)
 
@@ -158,7 +168,9 @@ namespace BTS {
                                     num_width_sections,
                                     interp_extent,
                                     offsets,
-                                    enforce_bounds);
+                                    enforce_bounds,
+                                    width_epsilon,
+                                    length_epsilon);
 
         else if (type == Realistic::Buffer::SHORT_NAME)
 
@@ -170,7 +182,9 @@ namespace BTS {
                                     num_width_sections,
                                     interp_extent,
                                     offsets,
-                                    enforce_bounds);
+                                    enforce_bounds,
+                                    width_epsilon,
+                                    length_epsilon);
 
         else
           throw Exception ("Unrecognised interpolation type '" + type + "' passed to option '-exp_type'.");
