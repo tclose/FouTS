@@ -58,7 +58,8 @@ namespace BTS {
 
     const double        Tractlet::REASONABLE_WIDTH = 0.1;
 
-
+    const double        Tractlet::LENGTH_EPSILON_DEFAULT = 0.01;
+    const double        Tractlet::WIDTH_EPSILON_DEFAULT = 0.01;
 
 //    Tractlet::Tractlet (std::vector<Strand> axes, double base_width, double acs)
 //

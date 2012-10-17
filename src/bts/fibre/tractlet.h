@@ -85,6 +85,8 @@ namespace BTS {
         const static double                         STRANDS_PER_AREA_DEFAULT;
 
         const static double                         REASONABLE_WIDTH;
+        const static double                         LENGTH_EPSILON_DEFAULT;
+        const static double                         WIDTH_EPSILON_DEFAULT;
 
         const static char*                          PROPS_LIST[];
 
@@ -165,15 +167,12 @@ namespace BTS {
         //!Resizes each of the 3 axes to the new degree value.
         void                          redegree(size_t new_degree, double default_value = NAN);
 
-        double                        acs() const
-          { return has_prop(ALPHA_PROP) ? MR::Math::pow2(prop(ALPHA_PROP)) : 1.0; /* The ACS is stored in the state vector via its squareroot to prevent it from becoming < 0 */}
+        double                        acs(double width_epsilon = WIDTH_EPSILON_DEFAULT,
+                                                              double length_epsilon = LENGTH_EPSILON_DEFAULT) const;
 
-        void                          add_acs(double acs = 1.0)
-          { if (acs < 0.0) throw Exception("ACS must be greater than 0.0 (" + str(acs) + ")"); add_prop(ALPHA_PROP,
-                                                                                                MR::Math::sqrt(acs)); }
+        void                          add_acs(double acs = 1.0);
 
-        void                          set_acs(double acs)
-          { assert(acs >= 0); prop(ALPHA_PROP) = MR::Math::sqrt(acs); } //sqrt is stored instead of straight value to prevent ACS becoming < 0 during iterative methods
+        void                          set_acs(double acs);
 
         void                          remove_acs()
           { remove_prop(ALPHA_PROP); }
@@ -311,6 +310,27 @@ namespace BTS {
 
     Tractlet                         operator+ (double c, Tractlet t);
     Tractlet                         operator* (double c, Tractlet t);
+
+    inline double                    Tractlet::acs(double width_epsilon, double length_epsilon) const {
+      if (has_prop(ALPHA_PROP))
+        acs = MR::Math::pow2(prop(ALPHA_PROP)) + width_epsilon * (operator()(1,0).norm() + operator()(2,0).norm())
+      else
+        acs = 1.0;
+      return acs;
+    }
+
+    inline void                      Tractlet::add_acs(double acs = 1.0) {
+      if (acs < 0.0)
+        throw Exception("ACS must be greater than 0.0 (" + str(acs) + ")");
+      add_prop(ALPHA_PROP, NAN);
+      set_acs(acs);
+    }
+
+    inline void                      Tractlet::set_acs(double acs) {
+      assert(acs >= 0);
+      prop(ALPHA_PROP) = MR::Math::sqrt(acs);
+    } //sqrt is stored instead of straight value to prevent ACS becoming < 0 during iterative methods
+
 
 
   }
