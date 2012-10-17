@@ -55,7 +55,9 @@ namespace BTS {
                     size_t num_strands = NUM_WIDTH_SECTIONS_DEFAULT,
                     double extent = INTERP_EXTENT_DEFAULT,
                     const Triple<double>& corner_offset = Triple<double> (),
-                    bool enforce_bounds = true
+                    bool enforce_bounds = true,
+                    double width_epsilon = Fibre::Tractlet::WIDTH_EPSILON_DEFAULT,
+                    double length_epsilon = Fibre::Tractlet::LENGTH_EPSILON_DEFAULT
                   );
 
 

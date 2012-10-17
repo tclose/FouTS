@@ -52,10 +52,10 @@ ARGUMENTS = {
 OPTIONS = {
 
     Option ("width_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 0th degree auxiliary vectors")
-     + Argument ("width_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 0th degree auxiliary vectors").type_float (SMALL_FLOAT, Fibre::Tractlet::WIDTH_EPSILON_DEFAULT, LARGE_FLOAT),
+     + Argument ("width_epsilon").type_float (0.0, Fibre::Tractlet::WIDTH_EPSILON_DEFAULT, LARGE_FLOAT),
 
     Option ("length_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 1st degree primary vector")
-    + Argument ("length_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 1st degree primar vector").type_float (SMALL_FLOAT, Fibre::Tractlet::LENGTH_EPSILON_DEFAULT, LARGE_FLOAT),
+    + Argument ("length_epsilon").type_float (0.0, Fibre::Tractlet::LENGTH_EPSILON_DEFAULT, LARGE_FLOAT),
 
     Option ("num_points", "The number of points that will be generated along the strand location")
      + Argument ("num_points", "The number of points that will be generated along the strand location").type_integer (1, 100, 2000),

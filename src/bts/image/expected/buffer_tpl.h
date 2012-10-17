@@ -91,6 +91,8 @@ namespace BTS {
 
           double interp_extent;
           int neigh_extent;
+          double width_epsilon;
+          double length_epsilon;
 
           std::map<Index, std::set<T*> > neighbourhoods;
 
@@ -192,11 +194,11 @@ namespace BTS {
               const Diffusion::Model& diffusion_model,
               size_t number_length_sections, size_t number_width_sections,
               double interp_extent, const Triple<double>& corner_offsets,
-              bool enforce_bounds) :
+              bool enforce_bounds, double width_epsilon, double length_epsilon) :
             Observed::Buffer_tpl<T>(dimensions, voxel_sizes, corner_offsets,
                 enforce_bounds), diffusion_model(diffusion_model),
                 num_len_sections(number_length_sections), num_wth_sections(
-                    number_width_sections)
+                    number_width_sections), width_epsilon(width_epsilon), length_epsilon(length_epsilon)
 
           {
 

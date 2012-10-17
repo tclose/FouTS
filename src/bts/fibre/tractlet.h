@@ -335,8 +335,14 @@ namespace BTS {
 
     inline void                      Tractlet::set_acs(double acs, double width_epsilon, double length_epsilon) {
       assert(acs >= 0);
-      double alpha2 = acs - width_epsilon * (operator()(1,0).norm() + operator()(2,0).norm()) -
+      double min_acs = width_epsilon * (operator()(1,0).norm() + operator()(2,0).norm()) +
                                                                 length_epsilon * MR::Math::sqrt(operator()(0,1).norm());
+      double alpha2 = acs - min_acs;
+      if (alpha2 < 0.0) {
+        std::cout << std::endl << "WARNING! Could not set acs of tract to " << acs << " as it is below the minimum acs for the "
+                      << "given tract geometry (" << min_acs << "). Setting to " << min_acs << " instead" << std::endl;
+        alpha2 = 0.0;
+      }
       prop(ALPHA_PROP) = MR::Math::sqrt(alpha2);
     }
 
