@@ -72,7 +72,7 @@ namespace BTS {
 
       public:
 
-        std::vector<std::string>&   append_characteristic_property_keys(std::vector<std::string>& header);
+        static std::vector<std::string>&   append_characteristic_property_keys(std::vector<std::string>& header);
 
 
       //Public static constants
@@ -227,7 +227,8 @@ namespace BTS {
 
         std::string                                 matlab_str() const;
 
-        void                                        calc_characteristic_properties();
+        void                                        calc_characteristic_properties(double width_epsilon = Tractlet::WIDTH_EPSILON_DEFAULT,
+                                                                                   double length_epsilon = Tractlet::LENGTH_EPSILON_DEFAULT);
 
       private:
 

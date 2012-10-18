@@ -72,7 +72,9 @@ namespace BTS {
                                                                                       double anneal_frac_start = 1.0,
                                                                                       bool prior_only = false,
                                                                                       bool verbose = true,
-                                                                                      bool save_images = false) {
+                                                                                      bool save_images = false,
+                                                                                      double width_epsilon = Fibre::Tractlet::WIDTH_EPSILON_DEFAULT,
+                                                                                      double length_epsilon = Fibre::Tractlet::LENGTH_EPSILON_DEFAULT) {
 
 
       if (save_images)
@@ -95,7 +97,7 @@ namespace BTS {
 
       std::vector<std::string> elem_header;
 
-//      State::append_characteristic_property_keys(elem_header);
+      State::append_characteristic_property_keys(elem_header);
 
       std::vector<std::string> components_list = prior.list_components();
 
@@ -253,7 +255,7 @@ namespace BTS {
 
         //-------- End Debugging ------//
 
-        x.calc_characteristic_properties();
+        x.calc_characteristic_properties(width_epsilon,length_epsilon);
 
         // Save sample.
         samples.append(x);

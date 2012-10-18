@@ -516,7 +516,9 @@ EXECUTE {
                                   anneal_frac_start,
                                   prior_only,
                                   verbose,
-                                  save_images
+                                  save_images,
+                                  exp_width_epsilon,
+                                  exp_length_epsilon
                                 );
 
       if (burn_enforce_bounds != exp_enforce_bounds)
@@ -542,7 +544,9 @@ EXECUTE {
                 1.0,
                 prior_only,
                 verbose,
-                save_images
+                save_images,
+                exp_width_epsilon,
+                exp_length_epsilon
               );
 
   } 

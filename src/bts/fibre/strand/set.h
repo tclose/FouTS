@@ -97,7 +97,7 @@ namespace BTS {
       //Public static functions
       public:
 
-        //Do nothinnessg, no characteristic properties in Strand::Set class.
+        //Do nothing, no characteristic properties in Strand::Set class.
         static std::vector<std::string>&  append_characteristic_property_keys(std::vector<std::string>& header) { return header; }
 
       //Public member functions
@@ -269,7 +269,7 @@ namespace BTS {
         
         std::string                                 matlab_str() const;
 
-        void                                        calc_characteristic_properties() {}
+        void                                        calc_characteristic_properties(double dummy = 0.0, double dummy2 = 0.0) {}
 
       private:
 

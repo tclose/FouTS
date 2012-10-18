@@ -91,10 +91,13 @@ namespace BTS {
 
           double interp_extent;
           int neigh_extent;
-          double width_epsilon;
-          double length_epsilon;
 
           std::map<Index, std::set<T*> > neighbourhoods;
+
+        public:
+
+          double width_epsilon;
+          double length_epsilon;
 
         public:
           //Holds all strand or tractlet sections used to generate the image. Storage here allows data structures to be

@@ -441,7 +441,7 @@ namespace BTS {
 
     std::vector<std::string>&                   Tractlet::Set::append_characteristic_property_keys(std::vector<std::string>& header) {
 
-      header.push_back("tract_volume");
+      header.push_back("acs");
 
       return header;
 
@@ -458,9 +458,12 @@ namespace BTS {
     }
 
 
-    void                                        Tractlet::Set::calc_characteristic_properties() {
+    void                                        Tractlet::Set::calc_characteristic_properties(double width_epsilon, double length_epsilon) {
 
-      // Do nothinnessg.
+      if (!has_extend_elem_prop("acs"))
+        add_extend_elem_prop("acs", "0.0");
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        this->set_extend_elem_prop("acs", str(this->operator[](tractlet_i).acs(width_epsilon, length_epsilon)), tractlet_i);
 
     }
 
