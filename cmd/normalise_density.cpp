@@ -74,8 +74,8 @@ EXECUTE {
   else
     output_location = input_location;
 
-  double width_epsilon = Fibre::Tractlet::Set::WIDTH_EPSILON_DEFAULT;
-  double length_epsilon = Fibre::Tractlet::Set::LENGTH_EPSILON_DEFAULT;
+  double width_epsilon = NAN;
+  double length_epsilon = NAN;
   size_t num_points = 100;
 
   Options opt = get_options("width_epsilon");
@@ -97,8 +97,10 @@ EXECUTE {
 
   MR::ProgressBar progress_bar ("Normalising densities of Fourier tracts...");
 
-  tcts.set_width_epsilon(width_epsilon);
-  tcts.set_length_epsilon(length_epsilon);
+  if (!isnan(width_epsilon))
+    tcts.set_width_epsilon(width_epsilon);
+  if (!isnan(length_epsilon))
+    tcts.set_length_epsilon(length_epsilon);
 
   tcts.normalise_densities(num_points);
 
