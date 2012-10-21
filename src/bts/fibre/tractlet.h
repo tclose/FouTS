@@ -122,7 +122,7 @@ namespace BTS {
         ~Tractlet() {}
 
         Tractlet&                     operator= (const Tractlet& t)
-          { Base::Object::operator=(t); dgree = t.dgree; set_acs(t.acs()); return *this; }
+          { Base::Object::operator=(t); dgree = t.dgree; if (has_var_acs() || t.has_var_acs()) set_acs(t.acs()); return *this; }
 
         Tractlet (const Strand& s, double width);
 
@@ -271,6 +271,9 @@ namespace BTS {
           { return push_back(strand); }
 
       protected:
+
+        void                          set_parent(const Base::Set<Tractlet>* prent)
+          { parent = prent; }
 
         void                          clear()
           { Object::clear(); dgree = 0; }

@@ -718,6 +718,7 @@ namespace BTS {
             free_elem_degree();
           }
 
+          elem.set_parent(this);
 
           //If estimated size is smaller than actual size append a new element to the end
           if (count >= size())

@@ -286,6 +286,10 @@ namespace BTS {
         std::vector<double>               cross_sectional_areas(size_t num_points)
           { throw Exception ("Should not be used, just added to debug template function with tractlets."); }
 
+      protected:
+
+        void                          set_parent(const Base::Set<Strand>* prent)
+          { parent = prent; }
     };
 
 

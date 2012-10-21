@@ -162,6 +162,10 @@ namespace BTS {
 
         Coord                               left_product(const MR::Math::Vector<double>::View& row_vector) const;
 
+      protected:
+
+        void                          set_parent(const Base::Set<Track>* prent)
+          { parent = prent; }
 
     };
 
