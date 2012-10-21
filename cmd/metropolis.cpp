@@ -274,9 +274,7 @@ EXECUTE {
                                                         exp_num_width_sections,
                                                         exp_interp_extent,
                                                         exp_enforce_bounds,
-                                                        exp_half_width,
-                                                        exp_width_epsilon,
-                                                        exp_length_epsilon);
+                                                        exp_half_width);
 
   //----------------------------------------------------------------//
   // Auto-generate base acs initial value/b_intens_gauss_mean //
@@ -516,9 +514,7 @@ EXECUTE {
                                   anneal_frac_start,
                                   prior_only,
                                   verbose,
-                                  save_images,
-                                  exp_width_epsilon,
-                                  exp_length_epsilon
+                                  save_images
                                 );
 
       if (burn_enforce_bounds != exp_enforce_bounds)
@@ -544,9 +540,7 @@ EXECUTE {
                 1.0,
                 prior_only,
                 verbose,
-                save_images,
-                exp_width_epsilon,
-                exp_length_epsilon
+                save_images
               );
 
   } 

@@ -234,13 +234,7 @@ namespace BTS {
 
         /*!Split strand in to many 'Strand::Sections'. Note num_width_sections is ignored and is only included to get a template
          * function to work.*/
-        std::vector<Section>&             sections(std::vector<Section>& sections, size_t num_length_sections,
-                                                    size_t num_width_sections = 0,
-                                                    const Triple<double>& vox_lengths = Triple<double>::Ones,
-                                                    const Triple<double>& offsets = Triple<double>::Zeros,
-                                                    size_t num_encodings = 0,
-                                                    double width_epsilon = 0.0,
-                                                    double length_epsilon = 0.0) const;
+        std::vector<Section>&             sections(std::vector<Section>& sections, size_t num_length_sections, size_t num_width_sections = 0, const Triple<double>& vox_lengths = Triple<double>::Ones, const Triple<double>& offsets = Triple<double>::Zeros, size_t num_encodings = 0) const;
 
         //Calculates the contribution of the section gradient back to the original strand's gradient.
         void                              add_section_gradient( const Strand& strand,

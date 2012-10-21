@@ -50,11 +50,9 @@ namespace BTS {
                                             double extent,
                                             double half_width,
                                             const Triple<double>& corner_offset,
-                                            bool enforce_bounds,
-                                            double width_epsilon,
-                                            double length_epsilon)
+                                            bool enforce_bounds)
 
-          : Buffer_tpl<Voxel>(dimensions, voxel_sizes, diffusion_model, num_sections, num_strands, extent, corner_offset, enforce_bounds, width_epsilon, length_epsilon), variance(half_width / (SQRT_LOG_2 * SQRT_2))
+          : Buffer_tpl<Voxel>(dimensions, voxel_sizes, diffusion_model, num_sections, num_strands, extent, corner_offset, enforce_bounds), variance(half_width / (SQRT_LOG_2 * SQRT_2))
           { name_init(); }
 
 

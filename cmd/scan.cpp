@@ -389,9 +389,7 @@ EXECUTE {
                                                          exp_interp_extent,
                                                          img_offsets,
                                                          exp_enforce_bounds,
-                                                         exp_half_width,
-                                                         exp_width_epsilon,
-                                                         exp_length_epsilon);
+                                                         exp_half_width);
 
 
 //----------------------------------------------------------------//

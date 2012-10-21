@@ -215,9 +215,7 @@ EXECUTE {
                                                         exp_num_width_sections,
                                                         exp_interp_extent,
                                                         exp_enforce_bounds,
-                                                        exp_half_width,
-                                                        exp_width_epsilon,
-                                                        exp_length_epsilon);
+                                                        exp_half_width);
 
   Image::Expected::Buffer& diff_image = *exp_image.clone();
 

@@ -114,12 +114,6 @@ namespace BTS {
   Option ("exp_base_intensity", "The base intensity the strands/tractlets will be set to initially (possibly permanently). If < 0, the base intensity will be estimated from the observed image (if applicable).") \
    + Argument ("exp_base_intensity", "").type_float (-1.01, 1.0, LARGE_FLOAT), \
 \
-  Option ("exp_width_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 0th degree auxiliary vectors") \
-   + Argument ().type_float (0.0, Fibre::Tractlet::WIDTH_EPSILON_DEFAULT, LARGE_FLOAT), \
-\
-  Option ("exp_length_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 1st degree primary vector") \
-  + Argument ().type_float (0.0, Fibre::Tractlet::LENGTH_EPSILON_DEFAULT, LARGE_FLOAT), \
-\
   Option ("exp_untie_width_intensity", "When not set, intensity will be coupled to the average cross-sectional area of the tract.")
 
 //Loads the parameters into variables
@@ -127,13 +121,11 @@ namespace BTS {
 \
   size_t          exp_num_length_sections = Image::Expected::Buffer::NUM_LENGTH_SECTIONS_DEFAULT; \
   size_t          exp_num_width_sections  = Image::Expected::Buffer::NUM_WIDTH_SECTIONS_DEFAULT; \
-  std::string     exp_type                = Image::Expected::Buffer::TYPE_DEFAULT; \
-  double          exp_interp_extent       = Image::Expected::Buffer::INTERP_EXTENT_DEFAULT; \
-  bool            exp_enforce_bounds      = Image::Expected::Buffer::ENFORCE_BOUNDS_DEFAULT; \
-  double          exp_half_width          = Image::Expected::Buffer::HALF_WIDTH_DEFAULT; \
-  double          exp_width_epsilon       = Fibre::Tractlet::WIDTH_EPSILON_DEFAULT; \
-  double          exp_length_epsilon      = Fibre::Tractlet::LENGTH_EPSILON_DEFAULT; \
-  double          exp_base_intensity      = 1.0; \
+  std::string   exp_type                = Image::Expected::Buffer::TYPE_DEFAULT; \
+  double        exp_interp_extent       = Image::Expected::Buffer::INTERP_EXTENT_DEFAULT; \
+  bool          exp_enforce_bounds      = Image::Expected::Buffer::ENFORCE_BOUNDS_DEFAULT; \
+  double        exp_half_width          = Image::Expected::Buffer::HALF_WIDTH_DEFAULT; \
+  double        exp_base_intensity      = 1.0; \
 \
   Options exp_opt = get_options("exp_num_length_sections"); \
   if (exp_opt.size()) \
@@ -161,15 +153,7 @@ exp_opt = get_options("exp_num_width_sections"); \
 \
   exp_opt = get_options("exp_base_intensity"); \
   if (exp_opt.size()) \
-    exp_base_intensity = exp_opt[0][0]; \
-\
-  exp_opt = get_options("exp_width_epsilon"); \
-  if (exp_opt.size()) \
-  exp_width_epsilon = exp_opt[0][0]; \
-\
-  exp_opt = get_options("exp_length_epsilon"); \
-  if (exp_opt.size()) \
-    exp_length_epsilon = exp_opt[0][0];
+    exp_base_intensity = exp_opt[0][0];
 
 //Adds the parameters to the properties to be saved with the data.
 #define ADD_EXPECTED_IMAGE_PROPERTIES(properties) \
@@ -179,8 +163,6 @@ exp_opt = get_options("exp_num_width_sections"); \
   properties["exp_enforce_bounds"]         = str(exp_enforce_bounds); \
   properties["exp_type"]                   = exp_type; \
   properties["exp_base_intensity"]         = str(exp_base_intensity); \
-  properties["exp_width_epsilon"]         = str(exp_width_epsilon); \
-  properties["exp_length_epsilon"]         = str(exp_length_epsilon); \
   if (exp_type == "gaussian") { \
     properties["exp_half_width"]       = exp_half_width; \
   } \
@@ -271,20 +253,20 @@ namespace BTS {
               const Diffusion::Model& diffusion_model,
               size_t num_length_sections, size_t num_width_sections,
               double interp_extent, const Triple<double>& offsets,
-              bool enforce_bounds, double gaussian_half_width, double width_epsilon, double length_epsilon);
+              bool enforce_bounds, double gaussian_half_width);
 
           static Buffer* factory(const std::string& type,
               const Observed::Buffer& obs_image,
               const Diffusion::Model& diffusion_model,
               size_t num_length_sections, size_t num_width_sections,
               double interp_extent, bool enforce_bounds,
-              double gaussian_half_width, double width_epsilon, double length_epsilon)
+              double gaussian_half_width)
 
           {
             return factory(type, obs_image.dims(), obs_image.vox_lengths(),
                 diffusion_model, num_length_sections, num_width_sections,
                 interp_extent, obs_image.offsets(), enforce_bounds,
-                gaussian_half_width, width_epsilon, length_epsilon);
+                gaussian_half_width);
           }
 
           //Used for pretty printing in gdb. Is set in the constructor of derived classes.

@@ -238,6 +238,7 @@ namespace BTS {
         void                                        set_characteristics();
 
 
+
       private:
 
         /*! Initiates the tractlet set from a set of strands by first clustering the strands into clusters and then converting

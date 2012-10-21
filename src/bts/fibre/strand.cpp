@@ -111,6 +111,8 @@ namespace BTS {
 
     }
 
+
+
     Track                                 Strand::to_track(size_t num_points, bool include_endpoints) const {
       return Track(*this, num_points, include_endpoints);
     }
@@ -347,14 +349,7 @@ namespace BTS {
     }
 
 
-    std::vector<Strand::Section>&         Strand::sections(std::vector<Strand::Section>& sections,
-                                                            size_t num_length_sections,
-                                                            size_t num_width_sections,
-                                                            const Triple<double>& vox_lengths,
-                                                            const Triple<double>& offsets,
-                                                            size_t num_encodings,
-                                                            double width_epsilon,
-                                                            double length_epsilon) const {
+    std::vector<Strand::Section>&         Strand::sections(std::vector<Strand::Section>& sections, size_t num_length_sections, size_t num_width_sections, const Triple<double>& vox_lengths, const Triple<double>& offsets, size_t num_encodings) const {
 
       sections.resize(num_length_sections, Strand::Section(num_encodings));
 

@@ -95,11 +95,6 @@ namespace BTS {
           std::map<Index, std::set<T*> > neighbourhoods;
 
         public:
-
-          double width_epsilon;
-          double length_epsilon;
-
-        public:
           //Holds all strand or tractlet sections used to generate the image. Storage here allows data structures to be
           //reused between image generations. The size_t index indicates the strand index
           std::map<size_t, std::vector<Fibre::Strand::Section> > strand_sections;
@@ -189,21 +184,19 @@ namespace BTS {
 
           Buffer_tpl(bool enforce_bounds = true) :
             Observed::Buffer_tpl<T>(enforce_bounds), num_len_sections(0),
-                num_wth_sections(0), interp_extent(0.0), neigh_extent(0),
-                width_epsilon(Fibre::Tractlet::WIDTH_EPSILON_DEFAULT),
-                length_epsilon(Fibre::Tractlet::LENGTH_EPSILON_DEFAULT) {}
+                num_wth_sections(0), interp_extent(0.0), neigh_extent(0) {
+          }
 
           Buffer_tpl(const Triple<size_t>& dimensions,
               const Triple<double>& voxel_sizes,
               const Diffusion::Model& diffusion_model,
               size_t number_length_sections, size_t number_width_sections,
               double interp_extent, const Triple<double>& corner_offsets,
-              bool enforce_bounds, double width_epsilon, double length_epsilon) :
+              bool enforce_bounds) :
             Observed::Buffer_tpl<T>(dimensions, voxel_sizes, corner_offsets,
                 enforce_bounds), diffusion_model(diffusion_model),
                 num_len_sections(number_length_sections), num_wth_sections(
-                    number_width_sections), width_epsilon(width_epsilon),
-                    length_epsilon(length_epsilon)
+                    number_width_sections)
 
           {
 
@@ -222,7 +215,7 @@ namespace BTS {
           Buffer_tpl(const Buffer_tpl& bt) :
             Observed::Buffer_tpl<T>(bt), diffusion_model(bt.diffusion_model),
                 num_len_sections(bt.num_len_sections), num_wth_sections(
-                    bt.num_wth_sections), width_epsilon(bt.width_epsilon), length_epsilon(bt.length_epsilon)
+                    bt.num_wth_sections)
 
           {
             set_extent(bt.interp_extent);
