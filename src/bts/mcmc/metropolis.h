@@ -97,7 +97,7 @@ namespace BTS {
 
       std::vector<std::string> elem_header;
 
-      State::append_characteristic_property_keys(elem_header);
+      State::append_characteristic_keys(elem_header);
 
       std::vector<std::string> components_list = prior.list_components();
 
@@ -255,7 +255,7 @@ namespace BTS {
 
         //-------- End Debugging ------//
 
-        x.calc_characteristic_properties(width_epsilon,length_epsilon);
+        x.set_characteristics();
 
         // Save sample.
         samples.append(x);

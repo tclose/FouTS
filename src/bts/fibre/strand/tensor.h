@@ -75,22 +75,22 @@ namespace BTS {
           { return tmpl.vsize(); }
 
         Strand        row(size_t idx)
-          { return Strand(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props); }
+          { return Strand(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props, 0); }
 
         const Strand  row(size_t idx) const
-          { return Strand(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props); }
+          { return Strand(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props, 0); }
 
         Strand        column(size_t idx)
-          { return Strand(degree(), MR::Math::Matrix<double>::column(idx), tmpl.props); }
+          { return Strand(degree(), MR::Math::Matrix<double>::column(idx), tmpl.props, 0); }
 
         const Strand  column(size_t idx) const
-          { return Strand(degree(), MR::Math::Matrix<double>::column(idx), tmpl.props); }
+          { return Strand(degree(), MR::Math::Matrix<double>::column(idx), tmpl.props, 0); }
 
         bool          has_var_acs() const
         { return tmpl.has_var_acs(); }
 
         Strand        acs()
-          { assert(has_var_acs()); return Strand(degree(), MR::Math::Matrix<double>::row(vsize() + tmpl.prop_index(Strand::ALPHA_PROP)), tmpl.props); }
+          { assert(has_var_acs()); return Strand(degree(), MR::Math::Matrix<double>::row(vsize() + tmpl.prop_index(Strand::ALPHA_PROP)), tmpl.props, 0); }
 
 
         double&       operator()(size_t row_degree_i, size_t row_dim_i, size_t col_degree_i, size_t col_dim_i)
@@ -102,10 +102,10 @@ namespace BTS {
 
 
         Strand        operator[](size_t idx)
-          { return Strand(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props); }
+          { return Strand(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props, 0); }
 
         const Strand  operator[](size_t idx) const
-          { return Strand(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props); }
+          { return Strand(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props, 0); }
 
         void          add_section_hessian(const Strand& strand, const Section& section, const BasicSection& gradient, const BasicSection::Tensor& hessian);
 

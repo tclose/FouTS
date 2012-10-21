@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#TARGET='src/bts/fibre/base.o'
+#TARGET='src/bts/fibre/tractlet.o'
 #TARGET='bin/stress_tester'
 
 if [ ${#TARGET} -gt 0 ]; then

@@ -35,6 +35,7 @@
 #include "bts/fibre/strand.h"
 #include "bts/fibre/base/reader.h"
 #include "bts/fibre/base/writer.h"
+#include "bts/fibre/base/set.h"
 
 
 
@@ -78,15 +79,14 @@ namespace BTS {
         const static Coord                          FILE_SEPARATOR;
         const static std::string                    FILE_EXTENSION;
 
-        const static char*                          LENGTH_ACS_PROP;
-        const static char*                          WIDTH_ACS_PROP;
+        const static char*                          ACS_EXT_PROP;
+        const static char*                          WIDTH_EPSILON_COMPONENT_EXT_PROP;
+        const static char*                          LENGTH_EPSILON_COMPONENT_EXT_PROP;
+        const static char*                          AVG_DENSITY_EXT_PROP;
 
-        const static double                         LENGTH_ACS_PROP_DEFAULT;
         const static double                         STRANDS_PER_AREA_DEFAULT;
 
         const static double                         REASONABLE_WIDTH;
-        const static double                         LENGTH_EPSILON_DEFAULT;
-        const static double                         WIDTH_EPSILON_DEFAULT;
 
         const static char*                          PROPS_LIST[];
 
@@ -104,28 +104,29 @@ namespace BTS {
       protected:
 
         size_t dgree;
+        const Base::Set<Tractlet>* parent;
 
       //Public member functions.
       public:
       
         Tractlet(size_t degree, const std::vector<const char*>& props = std::vector<const char*>())
-          : Base::Object (3, degree * 9 + props.size(), props), dgree(degree) {}
+          : Base::Object (3, degree * 9 + props.size(), props), dgree(degree), parent(0) {}
 
       //TODO: Try to make protected by making Base::Reader<Tractlet> a friend
       public:
 
         Tractlet(const std::vector<const char*>& props = std::vector<const char*>())
-          : Base::Object(3, 0, props), dgree(0) {}
+          : Base::Object(3, 0, props), dgree(0), parent(0) {}
 
       public:
 
         Tractlet(const Tractlet& t)
-          : Base::Object(t), dgree(t.dgree) {}
+          : Base::Object(t), dgree(t.dgree) { set_acs(t.acs()); }
         
         ~Tractlet() {}
 
         Tractlet&                     operator= (const Tractlet& t)
-          { Base::Object::operator=(t); dgree = t.dgree; return *this; }
+          { Base::Object::operator=(t); dgree = t.dgree; if (has_var_acs() || t.has_var_acs()) set_acs(t.acs()); return *this; }
 
         Tractlet (const Strand& s, double width);
 
@@ -140,8 +141,9 @@ namespace BTS {
          * @param view The view onto the larger vector or matrix
          * @param props The properties stored in the set or tensor
          */
-        Tractlet(size_t degree, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props)
-          : Base::Object((size_t)3, view, props), dgree(degree) {}
+        Tractlet(size_t degree, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props,
+                                                                                      const Base::Set<Tractlet>* parent)
+          : Base::Object((size_t)3, view, props), dgree(degree), parent(parent) {}
 
         void from_track(Track primary_axis, size_t degree, double width);
 
@@ -149,10 +151,10 @@ namespace BTS {
 
 
         Strand                        operator[](size_t index)
-          { assert(index < 3); return Strand(dgree, sub(index * degree() * 3, (index+1) * degree() * 3), &EMPTY_PROPS); }
+          { assert(index < 3); return Strand(dgree, sub(index * degree() * 3, (index+1) * degree() * 3), &EMPTY_PROPS, 0); }
 
         Strand                        operator[](size_t index) const
-          { assert(index < 3); return Strand(dgree, sub(index * degree() * 3, (index+1) * degree() * 3), &EMPTY_PROPS); }
+          { assert(index < 3); return Strand(dgree, sub(index * degree() * 3, (index+1) * degree() * 3), &EMPTY_PROPS, 0); }
 
         Coord                         operator()(size_t axis_i, size_t degree_i) {
           assert(axis_i < 3); assert(bsize() % dgree == 0); assert(bsize() / 9 == dgree);
@@ -167,14 +169,9 @@ namespace BTS {
         //!Resizes each of the 3 axes to the new degree value.
         void                          redegree(size_t new_degree, double default_value = NAN);
 
-        double                        acs(double width_epsilon = WIDTH_EPSILON_DEFAULT,
-                                                              double length_epsilon = LENGTH_EPSILON_DEFAULT) const;
+        double                        acs() const;
 
-        void                          add_acs(double acs = 1.0, double width_epsilon = WIDTH_EPSILON_DEFAULT,
-                                                                        double length_epsilon = LENGTH_EPSILON_DEFAULT);
-
-        void                          set_acs(double acs, double width_epsilon = WIDTH_EPSILON_DEFAULT,
-                                                                        double length_epsilon = LENGTH_EPSILON_DEFAULT);
+        void                          set_acs(double acs);
 
         void                          remove_acs()
           { remove_prop(ALPHA_PROP); }
@@ -182,8 +179,13 @@ namespace BTS {
         bool                          has_var_acs() const
           { return has_prop(ALPHA_PROP); }
 
-        void                          normalise_density(double width_epsilon = WIDTH_EPSILON_DEFAULT,
-                                              double length_epsilon = LENGTH_EPSILON_DEFAULT, size_t num_points = 100);
+        double                        average_area(size_t num_points = 100);
+
+        double                        average_density(size_t num_points = 100)
+          { return acs() / average_area(num_points); }
+
+        void                          normalise_density(size_t num_points = 100)
+          { set_acs(average_area(num_points)); }
 
         double&                       alpha()
           { assert(has_var_acs()); return prop(ALPHA_PROP); }
@@ -197,13 +199,13 @@ namespace BTS {
         std::vector<double>           cross_sectional_areas(size_t num_points) const;
 
         Tractlet                      base()
-          { return Tractlet(dgree, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Tractlet(dgree, sub(0,bsize()), &EMPTY_PROPS, 0); }
 
         const Tractlet                base() const
-          { return Tractlet(dgree, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Tractlet(dgree, sub(0,bsize()), &EMPTY_PROPS, 0); }
 
         Strand                        backbone() const
-          { return Strand(dgree, sub(0, dgree*3), &EMPTY_PROPS); }
+          { return Strand(dgree, sub(0, dgree*3), &EMPTY_PROPS, 0); }
 
 
         std::vector<Section>&         sections( std::vector<Section>& sections,
@@ -282,6 +284,9 @@ namespace BTS {
 
       protected:
 
+        void                          set_parent(const Base::Set<Tractlet>* prent)
+          { parent = prent; }
+
         void                          clear()
           { Object::clear(); dgree = 0; }
 
@@ -317,38 +322,6 @@ namespace BTS {
 
     Tractlet                         operator+ (double c, Tractlet t);
     Tractlet                         operator* (double c, Tractlet t);
-
-    inline double                    Tractlet::acs(double width_epsilon, double length_epsilon) const {
-      double acs;
-      if (has_prop(ALPHA_PROP))
-        acs = MR::Math::pow2(prop(ALPHA_PROP)) + width_epsilon * (operator()(1,0).norm() + operator()(2,0).norm())
-                                               + length_epsilon * MR::Math::sqrt(operator()(0,1).norm());
-      else
-        acs = 1.0;
-      return acs;
-    }
-
-    inline void                      Tractlet::add_acs(double acs, double width_epsilon, double length_epsilon) {
-      if (acs < 0.0)
-        throw Exception("ACS must be greater than 0.0 (" + str(acs) + ")");
-      add_prop(ALPHA_PROP, NAN);
-      set_acs(acs, width_epsilon, length_epsilon);
-    }
-
-    inline void                      Tractlet::set_acs(double acs, double width_epsilon, double length_epsilon) {
-      assert(acs >= 0);
-      double min_acs = width_epsilon * (operator()(1,0).norm() + operator()(2,0).norm()) +
-                                                                length_epsilon * MR::Math::sqrt(operator()(0,1).norm());
-      double alpha2 = acs - min_acs;
-      if (alpha2 < 0.0) {
-        std::cout << std::endl << "WARNING! Could not set acs of tract to " << acs << " as it is below the minimum acs for the "
-                      << "given tract geometry (" << min_acs << "). Setting to " << min_acs << " instead" << std::endl;
-        alpha2 = 0.0;
-      }
-      prop(ALPHA_PROP) = MR::Math::sqrt(alpha2);
-    }
-
-
 
   }
 }

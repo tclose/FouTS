@@ -75,7 +75,7 @@ namespace BTS {
 
 
         //Do nothing, no characteristic properties in MCMC::State class.
-        static std::vector<std::string>&  append_characteristic_property_keys(std::vector<std::string>& header) { return header; }
+        static std::vector<std::string>&  append_characteristic_keys(std::vector<std::string>& header) { return header; }
 
 			//Public member functions
 			public:
@@ -160,7 +160,7 @@ namespace BTS {
           { return size(); }
 
 
-        void                          calc_characteristic_properties() {}
+        void                          set_characteristics() {}
 
 		};
 

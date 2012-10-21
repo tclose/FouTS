@@ -32,6 +32,7 @@
 #include "bts/fibre/tractlet.h"
 #include "bts/fibre/strand/set.h"
 #include "bts/fibre/track/set.h"
+#include "bts/fibre/tractlet/set.h"
 #include "bts/fibre/tractlet/section.h"
 
 #include "phantom/subdiv/subdiv.h"
@@ -49,17 +50,16 @@ namespace BTS {
     const Coord         Tractlet::FILE_SEPARATOR = Triple<double> (-INFINITY, -INFINITY, -INFINITY);
     const std::string  Tractlet::FILE_EXTENSION = "tct";
     
-    const char*         Tractlet::PROPS_LIST[] = { Object::ALPHA_PROP, Tractlet::LENGTH_ACS_PROP, Tractlet::WIDTH_ACS_PROP, PROPS_LIST_END };
+    const char*         Tractlet::PROPS_LIST[] = { Object::ALPHA_PROP, PROPS_LIST_END };
 
-    const char*         Tractlet::LENGTH_ACS_PROP = "length_acs";
-    const char*         Tractlet::WIDTH_ACS_PROP = "width_acs";
+    const char*         Tractlet::ACS_EXT_PROP = "acs";
+    const char*         Tractlet::WIDTH_EPSILON_COMPONENT_EXT_PROP = "width_epislon_comp";
+    const char*         Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP = "length_epislon_comp";
+    const char*         Tractlet::AVG_DENSITY_EXT_PROP = "avg_density";
+
 
     const double        Tractlet::STRANDS_PER_AREA_DEFAULT = 1000;
-
     const double        Tractlet::REASONABLE_WIDTH = 0.1;
-
-    const double        Tractlet::LENGTH_EPSILON_DEFAULT = 0.0;
-    const double        Tractlet::WIDTH_EPSILON_DEFAULT = 0.0;
 
 //    Tractlet::Tractlet (std::vector<Strand> axes, double base_width, double acs)
 //
@@ -648,17 +648,51 @@ namespace BTS {
 
     }
 
-
-    void                            Tractlet::normalise_density(double width_epsilon, double length_epsilon,
-                                                                                              size_t num_points) {
-      if (!has_var_acs())
-        add_acs(NAN);
+    double                          Tractlet::average_area(size_t num_points) {
       std::vector<double> areas = cross_sectional_areas(num_points);
       double avg_area = 0.0;
       for (size_t area_i = 0; area_i < num_points; ++area_i)
         avg_area += areas[area_i];
       avg_area /= (double)num_points;
-      set_acs(avg_area, width_epsilon, length_epsilon);
+      return avg_area;
+    }
+
+    double                    	    Tractlet::acs() const {
+      double acs;
+      if (has_prop(ALPHA_PROP)) {
+        acs = MR::Math::pow2(prop(ALPHA_PROP));
+        if (parent) {
+          if (parent->has_prop(Set::WIDTH_EPSILON_PROP))
+            acs += parent->prop(Set::WIDTH_EPSILON_PROP) * (operator()(1,0).norm() + operator()(2,0).norm());
+          if (parent->has_prop(Set::LENGTH_EPSILON_PROP))
+            acs += parent->prop(Set::LENGTH_EPSILON_PROP) * MR::Math::sqrt(operator()(0,1).norm());
+        }
+      } else
+        acs = 1.0;
+      return acs;
+    }
+
+    void                      	    Tractlet::set_acs(double acs) {
+      if (acs < 0.0)
+        throw Exception("ACS must be greater than 0.0 (" + str(acs) + ")");
+      if (!has_var_acs())
+        add_prop(ALPHA_PROP, NAN);
+      double min_acs = 0.0;
+      if (parent) {
+        if (parent->has_prop(Set::WIDTH_EPSILON_PROP))
+          min_acs += parent->prop(Set::WIDTH_EPSILON_PROP) * (operator()(1,0).norm() + operator()(2,0).norm());
+        if (parent->has_prop(Set::LENGTH_EPSILON_PROP))
+          min_acs += parent->prop(Set::LENGTH_EPSILON_PROP) * MR::Math::sqrt(operator()(0,1).norm());
+      }
+      double alpha;
+      if (acs > min_acs)
+        alpha = MR::Math::sqrt(acs - min_acs);
+      else {
+        std::cout << "WARNING! Could not set acs to " << acs << " as it is below the minimum for the given "
+                  << "configuration and epsilon values. Setting to minium value, " << min_acs << ", instead." << std::endl;
+        alpha = 0.0;
+      }
+      prop(ALPHA_PROP) = alpha;
     }
 
   }

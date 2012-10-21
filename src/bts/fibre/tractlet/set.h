@@ -72,7 +72,7 @@ namespace BTS {
 
       public:
 
-        static std::vector<std::string>&   append_characteristic_property_keys(std::vector<std::string>& header);
+        std::vector<std::string>&   append_characteristic_keys(std::vector<std::string>& header);
 
 
       //Public static constants
@@ -80,9 +80,15 @@ namespace BTS {
 
         const static std::string FILE_EXTENSION;
 
+        const static char*          LENGTH_EPSILON_PROP;
+        const static char*          WIDTH_EPSILON_PROP;
+        const static double         LENGTH_EPSILON_DEFAULT;
+        const static double         WIDTH_EPSILON_DEFAULT;
+
       protected:
 
         const static char*          PROPS_LIST[];
+
 
       //Public methods;
       public:
@@ -155,6 +161,10 @@ namespace BTS {
         size_t                                      degree() const
           { if (var_elem_degrees()) throw Exception ("Tractlet set has variable rows, so its 'degree' is undefined"); return elem_dgree; }
 
+        void                                        set_width_epsilon(double width_epsilon);
+
+        void                                        set_length_epsilon(double length_epsilon);
+
         void                                        project_to_sphere(double sphere_radius);        
 
         void                                        load(const std::string& location, size_t degree = 0, size_t num_tractlets = 0);
@@ -185,9 +195,7 @@ namespace BTS {
         Set                                         smallest_distance_set(const Set& reference)
           { Set smallest; Base::Set<Tractlet>::smallest_distance_set(reference, smallest); return smallest; }
 
-        Set&                                        normalise_densities(double width_epsilon = Tractlet::WIDTH_EPSILON_DEFAULT,
-                                                                        double length_epsilon = Tractlet::LENGTH_EPSILON_DEFAULT,
-                                                                        double num_points = 100);
+        Set&                                        normalise_densities(double num_points = 100);
 
         Set&                                        operator+=  (const Set& set)
           { Base::Set<Tractlet>::operator+=(set); return *this; }
@@ -227,8 +235,8 @@ namespace BTS {
 
         std::string                                 matlab_str() const;
 
-        void                                        calc_characteristic_properties(double width_epsilon = Tractlet::WIDTH_EPSILON_DEFAULT,
-                                                                                   double length_epsilon = Tractlet::LENGTH_EPSILON_DEFAULT);
+        void                                        set_characteristics();
+
 
       private:
 
@@ -262,12 +270,10 @@ namespace BTS {
       { Tractlet::Set answer (set); answer *= c;    return answer; }
 
 
-    inline Tractlet::Set&                          Tractlet::Set::normalise_densities(double width_epsilon,
-                                                                                      double length_epsilon,
-                                                                                      double num_points) {
+    inline Tractlet::Set&                          Tractlet::Set::normalise_densities(double num_points) {
       if (!has_elem_prop(Tractlet::ALPHA_PROP))
         add_elem_prop(Tractlet::ALPHA_PROP);
-      LOOP(operator[](tractlet_i).normalise_density(width_epsilon, length_epsilon, num_points);)
+      LOOP(operator[](tractlet_i).normalise_density(num_points);)
       return *this;
     }
 

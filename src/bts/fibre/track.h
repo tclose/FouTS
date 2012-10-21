@@ -30,6 +30,7 @@
 
 #include "bts/fibre/base/writer.h"
 #include "bts/fibre/base/reader.h"
+#include "bts/fibre/base/set.h"
 
 namespace BTS {
 
@@ -73,13 +74,17 @@ namespace BTS {
 
         const static size_t NUM_LENGTH_SECTIONS_DEFAULT = 100;
 
+      protected:
+
+        const Base::Set<Track>* parent;
+
       public:
 
         Track (size_t num_points = 0, const std::vector<const char*> props = std::vector<const char*>())
-          : Base::Object (num_points, num_points * 3 + props.size(), props) { set(NAN); }
+          : Base::Object (num_points, num_points * 3 + props.size(), props), parent(0) { set(NAN); }
 
         Track (const Track& t) 
-          : Base::Object(t) {}
+          : Base::Object(t), parent(0) {}
 
         ~Track() {}
 
@@ -98,8 +103,9 @@ namespace BTS {
          * @param view The view onto the larger vector or matrix
          * @param props The properties stored in the set or tensor
          */
-        Track(size_t num_points, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props)
-          : Base::Object(num_points, view, props) {}
+        Track(size_t num_points, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props,
+                                                                                        const Base::Set<Track>* parent)
+          : Base::Object(num_points, view, props), parent(parent) {}
 
       public:
 
@@ -130,10 +136,10 @@ namespace BTS {
           { remove_prop(ALPHA_PROP); }
 
         Track                               base()
-          { return Track(sze, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Track(sze, sub(0,bsize()), &EMPTY_PROPS, parent); }
 
         const Track                         base() const
-          { return Track(sze, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Track(sze, sub(0,bsize()), &EMPTY_PROPS, parent); }
 
         Track&                              operator+=  (const Coord& p)
           { for (size_t point_i = 0; point_i < size(); point_i++) operator[](point_i) += p; return *this; }
@@ -156,6 +162,10 @@ namespace BTS {
 
         Coord                               left_product(const MR::Math::Vector<double>::View& row_vector) const;
 
+      protected:
+
+        void                          set_parent(const Base::Set<Track>* prent)
+          { parent = prent; }
 
     };
 

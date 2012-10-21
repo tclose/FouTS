@@ -30,6 +30,7 @@
 
 #include "bts/fibre/base/writer.h"
 #include "bts/fibre/base/reader.h"
+#include "bts/fibre/base/set.h"
 
 namespace BTS {
 
@@ -108,29 +109,33 @@ namespace BTS {
 
         static Strand                     outer_product(const MR::Math::Vector<double>& column_vector, const Coord& coord);
 
+      protected:
+
+        const Base::Set<Strand>* parent;
+
       //Public methods
       public:
 
         Strand (size_t degree = 0, const std::vector<const char*>& props = std::vector<const char*>())
-          : Base::Object(degree, degree * 3 + props.size(), props) {}
+          : Base::Object(degree, degree * 3 + props.size(), props), parent(0) {}
 
 
         Strand (int degree, double default_value, const std::vector<const char*>& props = std::vector<const char*>())
-          : Base::Object(degree, degree * 3 + props.size(), props) { set(default_value); }
+          : Base::Object(degree, degree * 3 + props.size(), props), parent(0) { set(default_value); }
 
 
         Strand (const Strand& s)
-          : Base::Object(s) {}
+          : Base::Object(s), parent(0) {}
 
 
         ~Strand () {}
 
 
         Strand                            base()
-          { return Strand(sze, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Strand(sze, sub(0,bsize()), &EMPTY_PROPS, parent); }
 
         const Strand                      base() const
-          { return Strand(sze, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Strand(sze, sub(0,bsize()), &EMPTY_PROPS, parent); }
 
         Strand&                           operator=(const Strand& strand)
           { Base::Object::operator=(strand); return *this; }
@@ -154,8 +159,9 @@ namespace BTS {
          * @param view The view onto the larger vector or matrix
          * @param props The properties stored in the set or tensor
          */
-        Strand(size_t degree, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props)
-          : Base::Object(degree, view, props) {}
+        Strand(size_t degree, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props,
+                                                                                      const Base::Set<Strand>* parent)
+          : Base::Object(degree, view, props), parent(parent) {}
 
 
       public:
@@ -286,6 +292,10 @@ namespace BTS {
         std::vector<double>               cross_sectional_areas(size_t num_points)
           { throw Exception ("Should not be used, just added to debug template function with tractlets."); }
 
+      protected:
+
+        void                          set_parent(const Base::Set<Strand>* prent)
+          { parent = prent; }
     };
 
 

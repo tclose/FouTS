@@ -135,7 +135,8 @@ generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif \
 
 # Initialise fibres
 init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
--img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed} -base_intensity 1.0
+-img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed} -base_intensity 1.0 \
+-width_epsilon {width_epsilon} -length_epsilon {length_epsilon}
 
 # Run metropolis
 metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
@@ -143,7 +144,7 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/out
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
 {prior_density_low} 100 -prior_hook {prior_hook} 100 -prior_thin {prior_thin} 2 -exp_num_width_sections {args.num_width_sections} \
- -exp_type {args.interp_type} -exp_width_epsilon {width_epsilon} -exp_length_epsilon {length_epsilon}
+ -exp_type {args.interp_type}
     
 # Run analysis
 stats_fibres {config_path} {work_dir}/output/samples.tst

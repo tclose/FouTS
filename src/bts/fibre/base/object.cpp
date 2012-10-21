@@ -138,7 +138,7 @@ namespace BTS {
       void                       Object::add_prop(const char* const name, double value) {
 
         if (!is_owner())
-          throw Exception ("Cannot add property to a fibre object that does not own the underlying data (i.e. is a view onto part of a larger structure).");
+          throw Exception ("Cannot add property ('" + str(name) + "') to a fibre object that does not own the underlying data (i.e. is a view onto part of a larger structure).");
 
         //Loop through properties and insert the new property in the appropriate position for alphabetical order
         size_t insert_index = 0;

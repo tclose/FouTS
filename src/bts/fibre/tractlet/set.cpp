@@ -39,9 +39,16 @@ namespace BTS {
 
   namespace Fibre {
 
-    const std::string                           Tractlet::Set::FILE_EXTENSION = "tst";
-    
-    const char*                                 Tractlet::Set::PROPS_LIST[] = { Base::Set<Tractlet>::BASE_INTENSITY_PROP, PROPS_LIST_END };
+    const std::string                         Tractlet::Set::FILE_EXTENSION = "tst";
+    const char*                               Tractlet::Set::LENGTH_EPSILON_PROP = "length_epsilon";
+    const char*                               Tractlet::Set::WIDTH_EPSILON_PROP = "width_epsilon";
+
+    const double                              Tractlet::Set::LENGTH_EPSILON_DEFAULT = 0.01;
+    const double                              Tractlet::Set::WIDTH_EPSILON_DEFAULT = 0.01;
+    const char*                               Tractlet::Set::PROPS_LIST[] = { Base::Set<Tractlet>::BASE_INTENSITY_PROP,
+                                                                                Tractlet::Set::LENGTH_EPSILON_PROP,
+                                                                                Tractlet::Set::WIDTH_EPSILON_PROP,
+                                                                                PROPS_LIST_END };
 
 
 
@@ -439,11 +446,25 @@ namespace BTS {
     }
 
 
-    std::vector<std::string>&                   Tractlet::Set::append_characteristic_property_keys(std::vector<std::string>& header) {
+    std::vector<std::string>&                   Tractlet::Set::append_characteristic_keys(std::vector<std::string>& header) {
 
-      header.push_back("acs");
-
+      header.push_back(Tractlet::ACS_EXT_PROP);
+      header.push_back(Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP);
+      header.push_back(Tractlet::WIDTH_EPSILON_COMPONENT_EXT_PROP);
+      header.push_back(Tractlet::AVG_DENSITY_EXT_PROP);
       return header;
+
+    }
+
+
+    void                                        Tractlet::Set::set_characteristics() {
+
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i) {
+        set_extend_elem_prop(Tractlet::ACS_EXT_PROP,str(operator[](tractlet_i).acs()), tractlet_i);
+        set_extend_elem_prop(Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP,str(prop(LENGTH_EPSILON_PROP) * MR::Math::sqrt(operator[](tractlet_i)(0,1).norm())), tractlet_i);
+        set_extend_elem_prop(Tractlet::WIDTH_EPSILON_COMPONENT_EXT_PROP,str(prop(WIDTH_EPSILON_PROP) * (operator[](tractlet_i)(1,0).norm() + operator[](tractlet_i)(2,0).norm())), tractlet_i);
+        set_extend_elem_prop(Tractlet::AVG_DENSITY_EXT_PROP, str(operator[](tractlet_i).average_density()), tractlet_i);
+      }
 
     }
 
@@ -454,16 +475,6 @@ namespace BTS {
         operator[](tract_i).sanitize();
 
       return *this;
-
-    }
-
-
-    void                                        Tractlet::Set::calc_characteristic_properties(double width_epsilon, double length_epsilon) {
-
-      if (!has_extend_elem_prop("acs"))
-        add_extend_elem_prop("acs", "0.0");
-      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
-        this->set_extend_elem_prop("acs", str(this->operator[](tractlet_i).acs(width_epsilon, length_epsilon)), tractlet_i);
 
     }
 
@@ -670,6 +681,29 @@ namespace BTS {
       include.copy_relevant_elem_props(*this);
 
       return include;
+    }
+
+
+    void                                        Tractlet::Set::set_width_epsilon(double width_epsilon) {
+      if (!has_prop(WIDTH_EPSILON_PROP))
+        add_prop(WIDTH_EPSILON_PROP, 0.0);
+      std::vector<double> old_acss;
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        old_acss.push_back(operator[](tractlet_i).acs());
+      prop(WIDTH_EPSILON_PROP) = width_epsilon;
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        operator[](tractlet_i).set_acs(old_acss[tractlet_i]);
+    }
+
+    void                                        Tractlet::Set::set_length_epsilon(double length_epsilon) {
+      if (!has_prop(LENGTH_EPSILON_PROP))
+        add_prop(LENGTH_EPSILON_PROP, 0.0);
+      std::vector<double> old_acss;
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        old_acss.push_back(operator[](tractlet_i).acs());
+      prop(LENGTH_EPSILON_PROP) = length_epsilon;
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        operator[](tractlet_i).set_acs(old_acss[tractlet_i]);
     }
 
 
