@@ -646,16 +646,49 @@ namespace BTS {
     }
 
 
-    void                            Tractlet::normalise_density(double width_epsilon, double length_epsilon,
-                                                                                              size_t num_points) {
-      if (!has_var_acs())
-        add_acs(NAN);
+    void                            Tractlet::normalise_density(size_t num_points) {
       std::vector<double> areas = cross_sectional_areas(num_points);
       double avg_area = 0.0;
       for (size_t area_i = 0; area_i < num_points; ++area_i)
         avg_area += areas[area_i];
       avg_area /= (double)num_points;
-      set_acs(avg_area, width_epsilon, length_epsilon);
+      set_acs(avg_area);
+    }
+
+
+    double                    Tractlet::acs() const {
+      double acs;
+      if (has_prop(ALPHA_PROP)) {
+        acs = MR::Math::pow2(prop(ALPHA_PROP));
+        if (parent) {
+          if (parent->has_prop(Set::WIDTH_EPSILON))
+            acs += parent->width_epsilon() * (operator()(1,0).norm() + operator()(2,0).norm());
+          if (parent->has_prop(Set::LENGTH_EPSILON))
+            acs += parent->length_epsilon() * MR::Math::sqrt(operator()(0,1).norm());
+        }
+      } else
+        acs = 1.0;
+      return acs;
+    }
+
+    void                      Tractlet::set_acs(double acs) {
+      if (acs < 0.0)
+        throw Exception("ACS must be greater than 0.0 (" + str(acs) + ")");
+      if (!has_var_acs())
+        add_prop(ALPHA_PROP, NAN);
+      double min_acs = 0.0;
+      if (parent) {
+        if (parent->has_prop(Set::WIDTH_EPSILON))
+          min_acs += parent->width_epsilon() * (operator()(1,0).norm() + operator()(2,0).norm());
+        if (parent->has_prop(Set::LENGTH_EPSILON))
+          min_acs += parent->length_epsilon() * MR::Math::sqrt(operator()(0,1).norm());
+      }
+      double alpha;
+      if (acs > min_acs)
+        alpha = MR::Math::sqrt(acs - min_acs);
+      else
+        alpha = 0.0;
+      prop(ALPHA_PROP) = alpha;
     }
 
   }
