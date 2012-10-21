@@ -162,10 +162,10 @@ namespace BTS {
           { if (var_elem_degrees()) throw Exception ("Tractlet set has variable rows, so its 'degree' is undefined"); return elem_dgree; }
 
         void                                        set_width_epsilon(double width_epsilon)
-          { if (!has_prop(WIDTH_EPSILON_PROP)) add_prop(WIDTH_EPSILON_PROP); prop(WIDTH_EPSILON_PROP) = width_epsilon; }
+          { throw Exception("Not width_epsilon no fixed yet"); if (!has_prop(WIDTH_EPSILON_PROP)) add_prop(WIDTH_EPSILON_PROP); prop(WIDTH_EPSILON_PROP) = width_epsilon; }
 
         void                                        set_length_epsilon(double length_epsilon)
-          { if (!has_prop(LENGTH_EPSILON_PROP)) add_prop(LENGTH_EPSILON_PROP); prop(LENGTH_EPSILON_PROP) = length_epsilon; }
+          { throw Exception("Not length_epsilon no fixed yet"); if (!has_prop(LENGTH_EPSILON_PROP)) add_prop(LENGTH_EPSILON_PROP); prop(LENGTH_EPSILON_PROP) = length_epsilon; }
 
         void                                        project_to_sphere(double sphere_radius);        
 
