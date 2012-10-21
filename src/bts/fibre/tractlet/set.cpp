@@ -678,6 +678,29 @@ namespace BTS {
     }
 
 
+    void                                        Tractlet::Set::set_width_epsilon(double width_epsilon) {
+      if (!has_prop(WIDTH_EPSILON_PROP))
+        add_prop(WIDTH_EPSILON_PROP, 0.0);
+      std::vector<double> old_acss;
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        old_acss.push_back(operator[](tractlet_i).acs());
+      prop(WIDTH_EPSILON_PROP) = width_epsilon;
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        operator[](tractlet_i).set_acs(old_acss[tractlet_i]);
+    }
+
+    void                                        Tractlet::Set::set_length_epsilon(double length_epsilon) {
+      if (!has_prop(LENGTH_EPSILON_PROP))
+        add_prop(LENGTH_EPSILON_PROP, 0.0);
+      std::vector<double> old_acss;
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        old_acss.push_back(operator[](tractlet_i).acs());
+      prop(LENGTH_EPSILON_PROP) = length_epsilon;
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        operator[](tractlet_i).set_acs(old_acss[tractlet_i]);
+    }
+
+
   }
 
 }
