@@ -73,13 +73,17 @@ namespace BTS {
 
         const static size_t NUM_LENGTH_SECTIONS_DEFAULT = 100;
 
+      protected:
+
+        const Set* parent;
+
       public:
 
         Track (size_t num_points = 0, const std::vector<const char*> props = std::vector<const char*>())
-          : Base::Object (num_points, num_points * 3 + props.size(), props) { set(NAN); }
+          : Base::Object (num_points, num_points * 3 + props.size(), props), parent(0) { set(NAN); }
 
         Track (const Track& t) 
-          : Base::Object(t) {}
+          : Base::Object(t), parent(0) {}
 
         ~Track() {}
 
@@ -98,8 +102,9 @@ namespace BTS {
          * @param view The view onto the larger vector or matrix
          * @param props The properties stored in the set or tensor
          */
-        Track(size_t num_points, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props)
-          : Base::Object(num_points, view, props) {}
+        Track(size_t num_points, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props,
+                                                                                                      const Set* parent)
+          : Base::Object(num_points, view, props), parent(parent) {}
 
       public:
 

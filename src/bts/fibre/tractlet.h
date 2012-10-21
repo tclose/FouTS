@@ -104,28 +104,29 @@ namespace BTS {
       protected:
 
         size_t dgree;
+        const Set* parent;
 
       //Public member functions.
       public:
       
         Tractlet(size_t degree, const std::vector<const char*>& props = std::vector<const char*>())
-          : Base::Object (3, degree * 9 + props.size(), props), dgree(degree) {}
+          : Base::Object (3, degree * 9 + props.size(), props), dgree(degree), parent(0) {}
 
       //TODO: Try to make protected by making Base::Reader<Tractlet> a friend
       public:
 
         Tractlet(const std::vector<const char*>& props = std::vector<const char*>())
-          : Base::Object(3, 0, props), dgree(0) {}
+          : Base::Object(3, 0, props), dgree(0), parent(0) {}
 
       public:
 
         Tractlet(const Tractlet& t)
-          : Base::Object(t), dgree(t.dgree) {}
+          : Base::Object(t), dgree(t.dgree) { set_acs(t.acs()); }
         
         ~Tractlet() {}
 
         Tractlet&                     operator= (const Tractlet& t)
-          { Base::Object::operator=(t); dgree = t.dgree; return *this; }
+          { Base::Object::operator=(t); dgree = t.dgree; set_acs(t.acs()); return *this; }
 
         Tractlet (const Strand& s, double width);
 
@@ -140,8 +141,9 @@ namespace BTS {
          * @param view The view onto the larger vector or matrix
          * @param props The properties stored in the set or tensor
          */
-        Tractlet(size_t degree, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props)
-          : Base::Object((size_t)3, view, props), dgree(degree) {}
+        Tractlet(size_t degree, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props,
+                                                                                            const Tractlet::Set* parent)
+          : Base::Object((size_t)3, view, props), dgree(degree), parent(parent) {}
 
         void from_track(Track primary_axis, size_t degree, double width);
 
@@ -167,14 +169,9 @@ namespace BTS {
         //!Resizes each of the 3 axes to the new degree value.
         void                          redegree(size_t new_degree, double default_value = NAN);
 
-        double                        acs(double width_epsilon = WIDTH_EPSILON_DEFAULT,
-                                                              double length_epsilon = LENGTH_EPSILON_DEFAULT) const;
+        double                        acs() const;
 
-        void                          add_acs(double acs = 1.0, double width_epsilon = WIDTH_EPSILON_DEFAULT,
-                                                                        double length_epsilon = LENGTH_EPSILON_DEFAULT);
-
-        void                          set_acs(double acs, double width_epsilon = WIDTH_EPSILON_DEFAULT,
-                                                                        double length_epsilon = LENGTH_EPSILON_DEFAULT);
+        void                          set_acs(double acs);
 
         void                          remove_acs()
           { remove_prop(ALPHA_PROP); }
@@ -182,8 +179,7 @@ namespace BTS {
         bool                          has_var_acs() const
           { return has_prop(ALPHA_PROP); }
 
-        void                          normalise_density(double width_epsilon = WIDTH_EPSILON_DEFAULT,
-                                              double length_epsilon = LENGTH_EPSILON_DEFAULT, size_t num_points = 100);
+        void                          normalise_density(size_t num_points = 100);
 
         double&                       alpha()
           { assert(has_var_acs()); return prop(ALPHA_PROP); }
@@ -315,31 +311,6 @@ namespace BTS {
 
     Tractlet                         operator+ (double c, Tractlet t);
     Tractlet                         operator* (double c, Tractlet t);
-
-    inline double                    Tractlet::acs(double width_epsilon, double length_epsilon) const {
-      double acs;
-      if (has_prop(ALPHA_PROP))
-        acs = MR::Math::pow2(prop(ALPHA_PROP)) + width_epsilon * (operator()(1,0).norm() + operator()(2,0).norm())
-                                               + length_epsilon * MR::Math::sqrt(operator()(0,1).norm());
-      else
-        acs = 1.0;
-      return acs;
-    }
-
-    inline void                      Tractlet::add_acs(double acs, double width_epsilon, double length_epsilon) {
-      if (acs < 0.0)
-        throw Exception("ACS must be greater than 0.0 (" + str(acs) + ")");
-      add_prop(ALPHA_PROP, NAN);
-      set_acs(acs, width_epsilon, length_epsilon);
-    }
-
-    inline void                      Tractlet::set_acs(double acs, double width_epsilon, double length_epsilon) {
-      assert(acs >= 0);
-      double alpha2 = acs - width_epsilon * (operator()(1,0).norm() + operator()(2,0).norm()) -
-                                                                length_epsilon * MR::Math::sqrt(operator()(0,1).norm());
-      prop(ALPHA_PROP) = MR::Math::sqrt(alpha2);
-    }
-
 
 
   }

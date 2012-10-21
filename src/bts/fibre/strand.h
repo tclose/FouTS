@@ -108,19 +108,23 @@ namespace BTS {
 
         static Strand                     outer_product(const MR::Math::Vector<double>& column_vector, const Coord& coord);
 
+      protected:
+
+        const Set* parent;
+
       //Public methods
       public:
 
         Strand (size_t degree = 0, const std::vector<const char*>& props = std::vector<const char*>())
-          : Base::Object(degree, degree * 3 + props.size(), props) {}
+          : Base::Object(degree, degree * 3 + props.size(), props), parent(0) {}
 
 
         Strand (int degree, double default_value, const std::vector<const char*>& props = std::vector<const char*>())
-          : Base::Object(degree, degree * 3 + props.size(), props) { set(default_value); }
+          : Base::Object(degree, degree * 3 + props.size(), props), parent(0) { set(default_value); }
 
 
         Strand (const Strand& s)
-          : Base::Object(s) {}
+          : Base::Object(s), parent(0) {}
 
 
         ~Strand () {}
@@ -154,8 +158,9 @@ namespace BTS {
          * @param view The view onto the larger vector or matrix
          * @param props The properties stored in the set or tensor
          */
-        Strand(size_t degree, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props)
-          : Base::Object(degree, view, props) {}
+        Strand(size_t degree, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props,
+                                                                                                      const Set* parent)
+          : Base::Object(degree, view, props), parent(parent) {}
 
 
       public:
