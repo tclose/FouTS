@@ -52,9 +52,11 @@ namespace BTS {
     
     const char*         Tractlet::PROPS_LIST[] = { Object::ALPHA_PROP, PROPS_LIST_END };
 
-    const char*         Tractlet::ACS_PROP = "acs";
-    const char*         Tractlet::WIDTH_EPSILON_COMPONENT_PROP = "width_epislon_comp";
-    const char*         Tractlet::LENGTH_EPSILON_COMPONENT_PROP = "length_epislon_comp";
+    const char*         Tractlet::ACS_EXT_PROP = "acs";
+    const char*         Tractlet::WIDTH_EPSILON_COMPONENT_EXT_PROP = "width_epislon_comp";
+    const char*         Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP = "length_epislon_comp";
+    const char*         Tractlet::AVG_DENSITY_EXT_PROP = "avg_density";
+
 
     const double        Tractlet::STRANDS_PER_AREA_DEFAULT = 1000;
     const double        Tractlet::REASONABLE_WIDTH = 0.1;
@@ -643,16 +645,14 @@ namespace BTS {
 
     }
 
-
-    void                            Tractlet::normalise_density(size_t num_points) {
+    double                          Tractlet::average_area(size_t num_points) {
       std::vector<double> areas = cross_sectional_areas(num_points);
       double avg_area = 0.0;
       for (size_t area_i = 0; area_i < num_points; ++area_i)
         avg_area += areas[area_i];
       avg_area /= (double)num_points;
-      set_acs(avg_area);
+      return avg_area;
     }
-
 
     double                    	    Tractlet::acs() const {
       double acs;

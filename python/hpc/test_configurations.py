@@ -12,6 +12,7 @@ CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-bi
                 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-rotate-big', 'x_xxy', 'x-curve-z',
                 'x-rotate', 'x_xy', 'x-curve-z_y-curve--z']
 CONFIGURATIONS = ['x-curve-y_x-curve--y']
+CONFIGURATIONS = ['x', 'x-n2', 'x_xy', 'x_xy-n3']
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 # Required imports
 import hpc
@@ -37,6 +38,8 @@ parser.add_argument('--prior_density_high', default=[1.0], type=float, nargs='+'
 parser.add_argument('--prior_density_low', default=[1.0], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_hook', default=[50.0], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_thin', default=[0.0], type=float, nargs='+', help='The scaling of the density prior')
+parser.add_argument('--width_epsilon', default=[0.0], type=float, nargs='+', help='The amount of width epsilon to use')
+parser.add_argument('--length_epsilon', default=[0.0], type=float, nargs='+', help='The amount of length epsilon to use')
 parser.add_argument('--img_snr', default=20.0, type=float, help='The snr to used in the noisy image')
 parser.add_argument('--like_snr', default=[20.0], type=float, nargs='+', help='The assumed snr to used in the likelihood function in \
 the metropolis sampling')
@@ -52,43 +55,16 @@ args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other 
 # parameters in the set
-num_param_sets = max((len(args.prior_freq), len(args.prior_aux_freq), len(args.prior_density_low),
-                                            len(args.prior_density_high), len(args.prior_hook), len(args.prior_thin), len(args.like_snr)))
-if len(args.prior_freq) == 1:
-    args.prior_freq *= num_param_sets
-elif len(args.prior_freq) != num_param_sets:
-    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
-                                                                    format(len(args.prior_freq), num_param_sets))
-if len(args.prior_aux_freq) == 1:
-    args.prior_aux_freq *= num_param_sets
-elif len(args.prior_aux_freq) != num_param_sets:
-    raise Exception('Number of prior auxiliary frequency params ({}) does not match number of params ({})'.
-                                                                    format(len(args.prior_aux_freq), num_param_sets))
-if len(args.prior_density_high) == 1:
-    args.prior_density_high *= num_param_sets
-elif len(args.prior_density_high) != num_param_sets:
-    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
-                                                                    format(len(args.prior_density_high), num_param_sets))
-if len(args.prior_density_low) == 1:
-    args.prior_density_low *= num_param_sets
-elif len(args.prior_density_low) != num_param_sets:
-    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
-                                                                    format(len(args.prior_density_low), num_param_sets))
-if len(args.prior_hook) == 1:
-    args.prior_hook *= num_param_sets
-elif len(args.prior_hook) != num_param_sets:
-    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
-                                                                    format(len(args.prior_hook), num_param_sets))
-if len(args.prior_thin) == 1:
-    args.prior_thin *= num_param_sets
-elif len(args.prior_thin) != num_param_sets:
-    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
-                                                                    format(len(args.prior_thin), num_param_sets))
-if len(args.like_snr) == 1:
-    args.like_snr *= num_param_sets
-elif len(args.like_snr) != num_param_sets:
-    raise Exception('Number of prior frequency params ({}) does not match number of params ({})'.
-                                                                    format(len(args.like_snr), num_param_sets))
+ranging_params = [args.prior_freq, args.prior_aux_freq, args.prior_density_low,
+                  args.prior_density_high, args.prior_hook, args.prior_thin, args.like_snr, args.width_epsilon,
+                  args.length_epsilon]
+num_param_sets = max([len(p) for p in ranging_params])
+for par in ranging_params:
+    if len(par) == 1:
+        par *= num_param_sets
+    elif len(par) != num_param_sets:
+        raise Exception('Number of params ({}) does not match number of params ({})'.
+                                                                    format(len(par), num_param_sets))
 # Get parameters directory
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
 output_parent_dir = os.path.realpath(os.path.join(os.environ['HOME'], 'output'))
@@ -108,8 +84,8 @@ noise_ref_signal = sp.check_output('maxb0 {}/noise_ref.mif'.format(output_parent
 # Generate a random seed to seed the random number generators of the cmds
 seed = int(time.time() * 100)
 for i in xrange(args.num_runs):
-    for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin, like_snr in zip(args.prior_freq,
-                   args.prior_aux_freq, args.prior_density_low, args.prior_density_low, args.prior_hook, args.prior_thin, args.like_snr):
+    for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin, like_snr, \
+                                                                width_epsilon, length_epsilon in zip(*ranging_params):
         for config in CONFIGURATIONS:
             # Create work directory and get path for output directory
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
@@ -159,7 +135,8 @@ generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif \
 
 # Initialise fibres
 init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
--img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed} -base_intensity 1.0
+-img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed} -base_intensity 1.0 \
+-width_epsilon {width_epsilon} -length_epsilon {length_epsilon}
 
 # Run metropolis
 metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
@@ -167,15 +144,16 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/out
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
 {prior_density_low} 100 -prior_hook {prior_hook} 100 -prior_thin {prior_thin} 2 -exp_num_width_sections {args.num_width_sections} \
- -exp_type {args.interp_type} 
+ -exp_type {args.interp_type}
     
 # Run analysis
 stats_fibres {config_path} {work_dir}/output/samples.tst
     """.format(work_dir=work_dir, config_path=config_path, config=config, args=args, noise_ref_signal=noise_ref_signal,
                num_tracts=num_tracts, img_dim=img_dim, init_seed=seed, metropolis_seed=seed + 1, prior_freq=prior_freq,
                prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low, prior_density_high=prior_density_high,
-               prior_hook=prior_hook, prior_thin=prior_thin, like_snr=like_snr)
+               prior_hook=prior_hook, prior_thin=prior_thin, like_snr=like_snr, width_epsilon=width_epsilon,
+               length_epsilon=length_epsilon)
             # Submit job to que
-            hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name, dry_run=args.dry_run,
-                                                                                             copy_to_output=REQUIRED_DIRS)
+            hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
+                                                                    dry_run=args.dry_run, copy_to_output=REQUIRED_DIRS)
         seed += 2

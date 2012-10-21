@@ -79,9 +79,10 @@ namespace BTS {
         const static Coord                          FILE_SEPARATOR;
         const static std::string                    FILE_EXTENSION;
 
-        const static char*                          ACS_PROP;
-        const static char*                          WIDTH_EPSILON_COMPONENT_PROP;
-        const static char*                          LENGTH_EPSILON_COMPONENT_PROP;
+        const static char*                          ACS_EXT_PROP;
+        const static char*                          WIDTH_EPSILON_COMPONENT_EXT_PROP;
+        const static char*                          LENGTH_EPSILON_COMPONENT_EXT_PROP;
+        const static char*                          AVG_DENSITY_EXT_PROP;
 
         const static double                         STRANDS_PER_AREA_DEFAULT;
 
@@ -178,7 +179,13 @@ namespace BTS {
         bool                          has_var_acs() const
           { return has_prop(ALPHA_PROP); }
 
-        void                          normalise_density(size_t num_points = 100);
+        double                        average_area(size_t num_points = 100);
+
+        double                        average_density(size_t num_points = 100)
+          { return acs() / average_area(num_points); }
+
+        void                          normalise_density(size_t num_points = 100)
+          { set_acs(average_area(num_points)); }
 
         double&                       alpha()
           { assert(has_var_acs()); return prop(ALPHA_PROP); }

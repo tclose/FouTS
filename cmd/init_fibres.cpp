@@ -72,9 +72,6 @@ ARGUMENTS = {
 
 OPTIONS = {
 
-  Option("density", "Instead of setting the acs directly, the desired density can be specified instead.")
-  + Argument("density","").type_float(SMALL_FLOAT,1.0,LARGE_FLOAT),
-
   Option("acs", "Intensity of the generated fibres.")
    + Argument("acs","").type_float(SMALL_FLOAT,NAN,LARGE_FLOAT),
 
@@ -105,6 +102,12 @@ OPTIONS = {
   Option("curve_stddev", "The standard deviation of the curvature parameters.")
    + Argument("curve_stddev", "").type_float(0, 0, LARGE_FLOAT),
 
+  Option("width_epsilon", "The width epsilon of the generated fibres.")
+  + Argument("width_epsilon", "").type_float(0.0, Fibre::Tractlet::Set::WIDTH_EPSILON_DEFAULT, LARGE_FLOAT),
+
+  Option("length_epsilon", "The length epsilon of the generated fibres.")
+   + Argument("length_epsilon", "").type_float(0.0, Fibre::Tractlet::Set::LENGTH_EPSILON_DEFAULT, LARGE_FLOAT),
+
   Option ("seed", "Seed for the random generation")
    + Argument ("seed", ""),
 
@@ -129,8 +132,7 @@ EXECUTE {
 
   std::string output_location = argument[0];
 
-  double density  = 1.0;
-  double acs      = 0.0;
+  double acs      = NAN;
   double base_intensity = BASE_INTENSITY_DEFAULT;
   size_t degree         = DEGREE_DEFAULT;
   size_t num_fibres       = NUM_FIBRES_DEFAULT;
@@ -141,24 +143,17 @@ EXECUTE {
   double edge_buffer = EDGE_BUFFER_DEFAULT;
   double centre_radius = -1.0;
   double curve_stddev = 0;
+  double width_epsilon = Fibre::Tractlet::Set::WIDTH_EPSILON_DEFAULT;
+  double length_epsilon = Fibre::Tractlet::Set::LENGTH_EPSILON_DEFAULT;
   size_t seed = time(NULL);
 
 
   Options opt;
 
-  bool explicit_acs = false;
   opt = get_options("acs");
-  if (opt.size()) {
+  if (opt.size())
     acs = opt[0][0];
-    explicit_acs = true;
-  }
 
-  opt = get_options("density");
-  if (opt.size()) {
-    if (explicit_acs)
-      throw Exception ("'-density' option cannot be used in conjunction with acs option, please use one or the other.");
-    density = opt[0][0];
-  }
 
   opt = get_options("base_intensity");
   if (opt.size())
@@ -199,6 +194,14 @@ EXECUTE {
   opt = get_options("curve_stddev");
   if (opt.size())
     curve_stddev = opt[0][0];
+
+  opt = get_options("width_epsilon");
+  if (opt.size())
+    width_epsilon = opt[0][0];
+
+  opt = get_options("length_epsilon");
+  if (opt.size())
+    length_epsilon = opt[0][0];
 
   opt = get_options("seed");
   if (opt.size()) {
@@ -277,8 +280,10 @@ EXECUTE {
       if (curve_stddev)
         strands[strand_i][2] = rand_triple(curve_stddev,rand_gen);
 
-      if (acs >= 0.0)
+      if (!isnan(acs))
         strands[strand_i].set_acs(acs);
+      else
+        strands[strand_i].set_acs(1.0);
 
     }
 
@@ -291,6 +296,8 @@ EXECUTE {
 
     Fibre::Tractlet::Set tractlets(num_fibres, degree, props, elem_props);
     tractlets.zero();
+    tractlets.set_width_epsilon(width_epsilon);
+    tractlets.set_length_epsilon(length_epsilon);
     tractlets.set_extend_props(properties);
     if (base_intensity >= 0.0)
       tractlets.set_base_intensity(base_intensity);
@@ -319,12 +326,10 @@ EXECUTE {
       tractlets[tractlet_i][1][0] = ax1 * (width_mean + gsl_ran_gaussian(rand_gen, width_stddev));
       tractlets[tractlet_i][2][0] = ax2 * (width_mean + gsl_ran_gaussian(rand_gen, width_stddev));
 
-      // If ACS explicitly specified then use it otherwise use the density value to calculate what the ACS should be
-      if (explicit_acs)
+      if (!isnan(acs))
         tractlets[tractlet_i].set_acs(acs);
-      else if (acs >= 0.0)
-        tractlets[tractlet_i].set_acs(tractlets[tractlet_i][1][0].norm() * tractlets[tractlet_i][2][0].norm() * density
-                                                                                                      * M_PI / 4.0);
+      else
+        tractlets[tractlet_i].normalise_density();
     }
 
     tractlets.save(output_location);
