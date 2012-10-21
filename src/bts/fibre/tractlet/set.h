@@ -72,7 +72,7 @@ namespace BTS {
 
       public:
 
-        std::vector<std::string>&   append_characteristic_property_keys(std::vector<std::string>& header);
+        std::vector<std::string>&   append_characteristic_keys(std::vector<std::string>& header);
 
 
       //Public static constants
@@ -235,7 +235,7 @@ namespace BTS {
 
         std::string                                 matlab_str() const;
 
-        void                                        calc_characteristic_properties();
+        void                                        set_characteristics();
 
 
 

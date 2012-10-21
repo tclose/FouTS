@@ -53,6 +53,8 @@ namespace BTS {
     const char*         Tractlet::PROPS_LIST[] = { Object::ALPHA_PROP, PROPS_LIST_END };
 
     const char*         Tractlet::ACS_PROP = "acs";
+    const char*         Tractlet::WIDTH_EPSILON_COMPONENT_PROP = "width_epislon_comp";
+    const char*         Tractlet::LENGTH_EPSILON_COMPONENT_PROP = "length_epislon_comp";
 
     const double        Tractlet::STRANDS_PER_AREA_DEFAULT = 1000;
     const double        Tractlet::REASONABLE_WIDTH = 0.1;

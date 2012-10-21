@@ -446,11 +446,24 @@ namespace BTS {
     }
 
 
-    std::vector<std::string>&                   Tractlet::Set::append_characteristic_property_keys(std::vector<std::string>& header) {
+    std::vector<std::string>&                   Tractlet::Set::append_characteristic_keys(std::vector<std::string>& header) {
 
       header.push_back(Tractlet::ACS_PROP);
+      header.push_back(Tractlet::LENGTH_EPSILON_COMPONENT_PROP);
+      header.push_back(Tractlet::WIDTH_EPSILON_COMPONENT_PROP);
 
       return header;
+
+    }
+
+
+    void                                        Tractlet::Set::set_characteristics() {
+
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i) {
+        set_extend_elem_prop(Tractlet::ACS_PROP,str(operator[](tractlet_i).acs()), tractlet_i);
+        set_extend_elem_prop(Tractlet::LENGTH_EPSILON_COMPONENT_PROP,str(prop(LENGTH_EPSILON_PROP) * MR::Math::sqrt(operator[](tractlet_i)(0,1).norm())), tractlet_i);
+        set_extend_elem_prop(Tractlet::WIDTH_EPSILON_COMPONENT_PROP,str(prop(WIDTH_EPSILON_PROP) * (operator[](tractlet_i)(1,0).norm() + operator[](tractlet_i)(2,0).norm())), tractlet_i);
+      }
 
     }
 
@@ -461,14 +474,6 @@ namespace BTS {
         operator[](tract_i).sanitize();
 
       return *this;
-
-    }
-
-
-    void                                        Tractlet::Set::calc_characteristic_properties() {
-
-      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
-        set_extend_elem_prop(Tractlet::ACS_PROP,str(operator[](tractlet_i).acs()), tractlet_i);
 
     }
 

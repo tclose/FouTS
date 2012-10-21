@@ -98,7 +98,7 @@ namespace BTS {
       public:
 
         //Do nothing, no characteristic properties in Strand::Set class.
-        static std::vector<std::string>&  append_characteristic_property_keys(std::vector<std::string>& header) { return header; }
+        static std::vector<std::string>&  append_characteristic_keys(std::vector<std::string>& header) { return header; }
 
       //Public member functions
       public:
@@ -269,7 +269,7 @@ namespace BTS {
         
         std::string                                 matlab_str() const;
 
-        void                                        calc_characteristic_properties() {}
+        void                                        set_characteristics() {}
 
       private:
 

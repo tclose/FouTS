@@ -80,6 +80,9 @@ namespace BTS {
         const static std::string                    FILE_EXTENSION;
 
         const static char*                          ACS_PROP;
+        const static char*                          WIDTH_EPSILON_COMPONENT_PROP;
+        const static char*                          LENGTH_EPSILON_COMPONENT_PROP;
+
         const static double                         STRANDS_PER_AREA_DEFAULT;
 
         const static double                         REASONABLE_WIDTH;

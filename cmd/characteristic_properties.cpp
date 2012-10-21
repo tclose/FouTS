@@ -84,10 +84,10 @@ template <typename T> void characteristic_properties(const std::string& input_lo
 
   T fibres(input_location);
   std::vector<std::string> keys;
-  fibres.append_characteristic_property_keys(keys);
+  fibres.append_characteristic_keys(keys);
   for (std::vector<std::string>::iterator key_it = keys.begin(); key_it != keys.end(); ++key_it)
     fibres.add_extend_elem_prop(*key_it, "NAN");
-  fibres.calc_characteristic_properties();
+  fibres.set_characteristics();
   fibres.save(output_location);
 
 }
