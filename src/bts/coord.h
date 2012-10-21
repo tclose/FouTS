@@ -222,7 +222,7 @@ namespace BTS {
         { return 3; }
 
       void                   clear()
-      { // do nothinnessg, overrides MR::Math::Vector<double> clear to make sure it doesn't resize the vector.
+      { // do nothing, overrides MR::Math::Vector<double> clear to make sure it doesn't resize the vector.
         // TODO: Reimplement Coord class so that it doesn't need to use MR::Math::Vector<double> and remove redundencies like this one.
       }
 

@@ -279,11 +279,11 @@ namespace BTS {
 
 
           T                                           operator[] (size_t idx)
-            { return T(elem_degree(idx), sub(row_start(idx), row_end(idx)), elem_props); }
+            { return T(elem_degree(idx), sub(row_start(idx), row_end(idx)), elem_props, this); }
 
 
           const T                                     operator[] (size_t idx) const
-            { return T(elem_degree(idx), sub(row_start(idx),row_end(idx)), elem_props); }
+            { return T(elem_degree(idx), sub(row_start(idx),row_end(idx)), elem_props, this); }
 
 
           T                                           elem(size_t idx)

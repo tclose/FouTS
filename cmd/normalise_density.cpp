@@ -52,10 +52,10 @@ ARGUMENTS = {
 OPTIONS = {
 
     Option ("width_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 0th degree auxiliary vectors")
-     + Argument ("width_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 0th degree auxiliary vectors").type_float (SMALL_FLOAT, Fibre::Tractlet::WIDTH_EPSILON_DEFAULT, LARGE_FLOAT),
+     + Argument ("width_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 0th degree auxiliary vectors").type_float (SMALL_FLOAT, Fibre::Tractlet::Set::WIDTH_EPSILON_DEFAULT, LARGE_FLOAT),
 
     Option ("length_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 1st degree primary vector")
-    + Argument ("length_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 1st degree primar vector").type_float (SMALL_FLOAT, Fibre::Tractlet::LENGTH_EPSILON_DEFAULT, LARGE_FLOAT),
+    + Argument ("length_epsilon", "The scaling of the width epsilon parameter used to provide a lower bound on the ACS that is tied to the size of the 1st degree primar vector").type_float (SMALL_FLOAT, Fibre::Tractlet::Set::LENGTH_EPSILON_DEFAULT, LARGE_FLOAT),
 
     Option ("num_points", "The number of points that will be generated along the strand location")
      + Argument ("num_points", "The number of points that will be generated along the strand location").type_integer (1, 100, 2000),
@@ -74,8 +74,8 @@ EXECUTE {
   else
     output_location = input_location;
 
-  double width_epsilon = Fibre::Tractlet::WIDTH_EPSILON_DEFAULT;
-  double length_epsilon = Fibre::Tractlet::LENGTH_EPSILON_DEFAULT;
+  double width_epsilon = Fibre::Tractlet::Set::WIDTH_EPSILON_DEFAULT;
+  double length_epsilon = Fibre::Tractlet::Set::LENGTH_EPSILON_DEFAULT;
   size_t num_points = 100;
 
   Options opt = get_options("width_epsilon");
@@ -97,10 +97,11 @@ EXECUTE {
 
   MR::ProgressBar progress_bar ("Normalising densities of Fourier tracts...");
 
-  tcts.normalise_densities(width_epsilon, length_epsilon, num_points);
+  tcts.set_width_epsilon(width_epsilon);
+  tcts.set_length_epsilon(length_epsilon);
 
-  tcts.set_extend_prop("width_epsilon", str(width_epsilon));
-  tcts.set_extend_prop("length_epsilon", str(length_epsilon));
+  tcts.normalise_densities(num_points);
+
   tcts.save(output_location);
 
 }

@@ -349,7 +349,7 @@ protected:					// overridden methods
 //	selectMethod()
 //		Swap
 //	endStage()
-//		(Does nothinnessg, since stage doesn't end until run ends).
+//		(Does nothing, since stage doesn't end until run ends).
 //	isRunDone()
 //		If the number of swaps (incremented) exceeds maxSwaps.
 //	endRun()
@@ -381,7 +381,7 @@ protected:					// overridden methods
     virtual KMalg selectMethod() {		// method = Swap
 	return SWAP;
     }
-    virtual void endStage() { }			// do nothinnessg
+    virtual void endStage() { }			// do nothing
     virtual bool isRunDone() { 			// run is done
 	return  KMlocal::isRunDone() ||		// base class say's done
 		++swapNo >= maxSwaps;		// or enough swaps done

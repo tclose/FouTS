@@ -35,6 +35,7 @@
 #include "bts/fibre/strand.h"
 #include "bts/fibre/base/reader.h"
 #include "bts/fibre/base/writer.h"
+#include "bts/fibre/base/set.h"
 
 
 
@@ -78,15 +79,10 @@ namespace BTS {
         const static Coord                          FILE_SEPARATOR;
         const static std::string                    FILE_EXTENSION;
 
-        const static char*                          LENGTH_ACS_PROP;
-        const static char*                          WIDTH_ACS_PROP;
-
-        const static double                         LENGTH_ACS_PROP_DEFAULT;
+        const static char*                          ACS_PROP;
         const static double                         STRANDS_PER_AREA_DEFAULT;
 
         const static double                         REASONABLE_WIDTH;
-        const static double                         LENGTH_EPSILON_DEFAULT;
-        const static double                         WIDTH_EPSILON_DEFAULT;
 
         const static char*                          PROPS_LIST[];
 
@@ -104,7 +100,7 @@ namespace BTS {
       protected:
 
         size_t dgree;
-        const Set* parent;
+        const Base::Set<Tractlet>* parent;
 
       //Public member functions.
       public:
@@ -142,7 +138,7 @@ namespace BTS {
          * @param props The properties stored in the set or tensor
          */
         Tractlet(size_t degree, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props,
-                                                                                            const Tractlet::Set* parent)
+                                                                                      const Base::Set<Tractlet>* parent)
           : Base::Object((size_t)3, view, props), dgree(degree), parent(parent) {}
 
         void from_track(Track primary_axis, size_t degree, double width);
@@ -151,10 +147,10 @@ namespace BTS {
 
 
         Strand                        operator[](size_t index)
-          { assert(index < 3); return Strand(dgree, sub(index * degree() * 3, (index+1) * degree() * 3), &EMPTY_PROPS); }
+          { assert(index < 3); return Strand(dgree, sub(index * degree() * 3, (index+1) * degree() * 3), &EMPTY_PROPS, 0); }
 
         Strand                        operator[](size_t index) const
-          { assert(index < 3); return Strand(dgree, sub(index * degree() * 3, (index+1) * degree() * 3), &EMPTY_PROPS); }
+          { assert(index < 3); return Strand(dgree, sub(index * degree() * 3, (index+1) * degree() * 3), &EMPTY_PROPS, 0); }
 
         Coord                         operator()(size_t axis_i, size_t degree_i) {
           assert(axis_i < 3); assert(bsize() % dgree == 0); assert(bsize() / 9 == dgree);
@@ -193,13 +189,13 @@ namespace BTS {
         std::vector<double>           cross_sectional_areas(size_t num_points) const;
 
         Tractlet                      base()
-          { return Tractlet(dgree, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Tractlet(dgree, sub(0,bsize()), &EMPTY_PROPS, 0); }
 
         const Tractlet                base() const
-          { return Tractlet(dgree, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Tractlet(dgree, sub(0,bsize()), &EMPTY_PROPS, 0); }
 
         Strand                        backbone() const
-          { return Strand(dgree, sub(0, dgree*3), &EMPTY_PROPS); }
+          { return Strand(dgree, sub(0, dgree*3), &EMPTY_PROPS, 0); }
 
 
         std::vector<Section>&         sections( std::vector<Section>& sections,

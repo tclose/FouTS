@@ -30,6 +30,7 @@
 
 #include "bts/fibre/base/writer.h"
 #include "bts/fibre/base/reader.h"
+#include "bts/fibre/base/set.h"
 
 namespace BTS {
 
@@ -75,7 +76,7 @@ namespace BTS {
 
       protected:
 
-        const Set* parent;
+        const Base::Set<Track>* parent;
 
       public:
 
@@ -103,7 +104,7 @@ namespace BTS {
          * @param props The properties stored in the set or tensor
          */
         Track(size_t num_points, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props,
-                                                                                                      const Set* parent)
+                                                                                        const Base::Set<Track>* parent)
           : Base::Object(num_points, view, props), parent(parent) {}
 
       public:
@@ -135,10 +136,10 @@ namespace BTS {
           { remove_prop(ALPHA_PROP); }
 
         Track                               base()
-          { return Track(sze, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Track(sze, sub(0,bsize()), &EMPTY_PROPS, parent); }
 
         const Track                         base() const
-          { return Track(sze, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Track(sze, sub(0,bsize()), &EMPTY_PROPS, parent); }
 
         Track&                              operator+=  (const Coord& p)
           { for (size_t point_i = 0; point_i < size(); point_i++) operator[](point_i) += p; return *this; }

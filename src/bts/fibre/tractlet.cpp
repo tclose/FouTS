@@ -32,6 +32,7 @@
 #include "bts/fibre/tractlet.h"
 #include "bts/fibre/strand/set.h"
 #include "bts/fibre/track/set.h"
+#include "bts/fibre/tractlet/set.h"
 #include "bts/fibre/tractlet/section.h"
 
 #include "phantom/subdiv/subdiv.h"
@@ -49,17 +50,12 @@ namespace BTS {
     const Coord         Tractlet::FILE_SEPARATOR = Triple<double> (-INFINITY, -INFINITY, -INFINITY);
     const std::string  Tractlet::FILE_EXTENSION = "tct";
     
-    const char*         Tractlet::PROPS_LIST[] = { Object::ALPHA_PROP, Tractlet::LENGTH_ACS_PROP, Tractlet::WIDTH_ACS_PROP, PROPS_LIST_END };
+    const char*         Tractlet::PROPS_LIST[] = { Object::ALPHA_PROP, PROPS_LIST_END };
 
-    const char*         Tractlet::LENGTH_ACS_PROP = "length_acs";
-    const char*         Tractlet::WIDTH_ACS_PROP = "width_acs";
+    const char*         Tractlet::ACS_PROP = "acs";
 
     const double        Tractlet::STRANDS_PER_AREA_DEFAULT = 1000;
-
     const double        Tractlet::REASONABLE_WIDTH = 0.1;
-
-    const double        Tractlet::LENGTH_EPSILON_DEFAULT = 0.0;
-    const double        Tractlet::WIDTH_EPSILON_DEFAULT = 0.0;
 
 //    Tractlet::Tractlet (std::vector<Strand> axes, double base_width, double acs)
 //
@@ -656,38 +652,41 @@ namespace BTS {
     }
 
 
-    double                    Tractlet::acs() const {
+    double                    	    Tractlet::acs() const {
       double acs;
       if (has_prop(ALPHA_PROP)) {
         acs = MR::Math::pow2(prop(ALPHA_PROP));
         if (parent) {
-          if (parent->has_prop(Set::WIDTH_EPSILON))
-            acs += parent->width_epsilon() * (operator()(1,0).norm() + operator()(2,0).norm());
-          if (parent->has_prop(Set::LENGTH_EPSILON))
-            acs += parent->length_epsilon() * MR::Math::sqrt(operator()(0,1).norm());
+          if (parent->has_prop(Set::WIDTH_EPSILON_PROP))
+            acs += parent->prop(Set::WIDTH_EPSILON_PROP) * (operator()(1,0).norm() + operator()(2,0).norm());
+          if (parent->has_prop(Set::LENGTH_EPSILON_PROP))
+            acs += parent->prop(Set::LENGTH_EPSILON_PROP) * MR::Math::sqrt(operator()(0,1).norm());
         }
       } else
         acs = 1.0;
       return acs;
     }
 
-    void                      Tractlet::set_acs(double acs) {
+    void                      	    Tractlet::set_acs(double acs) {
       if (acs < 0.0)
         throw Exception("ACS must be greater than 0.0 (" + str(acs) + ")");
       if (!has_var_acs())
         add_prop(ALPHA_PROP, NAN);
       double min_acs = 0.0;
       if (parent) {
-        if (parent->has_prop(Set::WIDTH_EPSILON))
-          min_acs += parent->width_epsilon() * (operator()(1,0).norm() + operator()(2,0).norm());
-        if (parent->has_prop(Set::LENGTH_EPSILON))
-          min_acs += parent->length_epsilon() * MR::Math::sqrt(operator()(0,1).norm());
+        if (parent->has_prop(Set::WIDTH_EPSILON_PROP))
+          min_acs += parent->prop(Set::WIDTH_EPSILON_PROP) * (operator()(1,0).norm() + operator()(2,0).norm());
+        if (parent->has_prop(Set::LENGTH_EPSILON_PROP))
+          min_acs += parent->prop(Set::LENGTH_EPSILON_PROP) * MR::Math::sqrt(operator()(0,1).norm());
       }
       double alpha;
       if (acs > min_acs)
         alpha = MR::Math::sqrt(acs - min_acs);
-      else
+      else {
+        std::cout << "WARNING! Could not set acs to " << acs << " as it is below the minimum for the given "
+                  << "configuration and epsilon values. Setting to minium value, " << min_acs << ", instead." << std::endl;
         alpha = 0.0;
+      }
       prop(ALPHA_PROP) = alpha;
     }
 

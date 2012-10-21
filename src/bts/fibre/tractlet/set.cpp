@@ -39,9 +39,16 @@ namespace BTS {
 
   namespace Fibre {
 
-    const std::string                           Tractlet::Set::FILE_EXTENSION = "tst";
-    
-    const char*                                 Tractlet::Set::PROPS_LIST[] = { Base::Set<Tractlet>::BASE_INTENSITY_PROP, PROPS_LIST_END };
+    const std::string                         Tractlet::Set::FILE_EXTENSION = "tst";
+    const char*                               Tractlet::Set::LENGTH_EPSILON_PROP = "length_epsilon";
+    const char*                               Tractlet::Set::WIDTH_EPSILON_PROP = "width_epsilon";
+
+    const double                              Tractlet::Set::LENGTH_EPSILON_DEFAULT = 0.01;
+    const double                              Tractlet::Set::WIDTH_EPSILON_DEFAULT = 0.01;
+    const char*                               Tractlet::Set::PROPS_LIST[] = { Base::Set<Tractlet>::BASE_INTENSITY_PROP,
+                                                                                Tractlet::Set::LENGTH_EPSILON_PROP,
+                                                                                Tractlet::Set::WIDTH_EPSILON_PROP,
+                                                                                PROPS_LIST_END };
 
 
 
@@ -441,7 +448,7 @@ namespace BTS {
 
     std::vector<std::string>&                   Tractlet::Set::append_characteristic_property_keys(std::vector<std::string>& header) {
 
-      header.push_back("tract_volume");
+      header.push_back(Tractlet::ACS_PROP);
 
       return header;
 
@@ -460,7 +467,8 @@ namespace BTS {
 
     void                                        Tractlet::Set::calc_characteristic_properties() {
 
-      // Do nothinnessg.
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        set_extend_elem_prop(Tractlet::ACS_PROP,str(operator[](tractlet_i).acs()), tractlet_i);
 
     }
 

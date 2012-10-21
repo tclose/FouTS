@@ -74,7 +74,7 @@ namespace BTS {
 			public:
 
 
-        //Do nothinnessg, no characteristic properties in MCMC::State class.
+        //Do nothing, no characteristic properties in MCMC::State class.
         static std::vector<std::string>&  append_characteristic_property_keys(std::vector<std::string>& header) { return header; }
 
 			//Public member functions

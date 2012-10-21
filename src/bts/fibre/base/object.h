@@ -238,17 +238,18 @@ namespace BTS {
            * @param size The number of elements in the fibre object (not including properties)
            * @param view MR::Math::Vector<double>::View onto the underlying data
            * @param props A list of props to be appended to the state vector.
+           * @param dummy Only needed when creating a Fibre::Base::Set<Object> template functions
+           * (which is only used for testing)
            *
            * @see MR::Math::Vector<T>::View
            */
-          Object (size_t size, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props)
+          Object (size_t size, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props, const void* dummy=0)
                     : MR::Math::Vector<double>(view),
                       sze(size),
                       props(props) {
 
             assert(props);
           }
-
 
         public:
 

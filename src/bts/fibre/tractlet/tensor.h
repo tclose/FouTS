@@ -75,28 +75,28 @@ namespace BTS {
           { return tmpl.vsize(); }
 
         Tractlet        row(size_t idx)
-          { return Tractlet(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props); }
+          { return Tractlet(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props, 0); }
 
         const Tractlet  row(size_t idx) const
-          { return Tractlet(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props); }
+          { return Tractlet(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props, 0); }
 
         Tractlet        row(size_t ax_i, size_t degree_i, size_t dim_i)
-        { return Tractlet(degree(), MR::Math::Matrix<double>::row((ax_i * degree() + degree_i)*3 + dim_i), tmpl.props); }
+        { return Tractlet(degree(), MR::Math::Matrix<double>::row((ax_i * degree() + degree_i)*3 + dim_i), tmpl.props, 0); }
 
         const Tractlet        row(size_t ax_i, size_t degree_i, size_t dim_i) const
-          { return Tractlet(degree(), MR::Math::Matrix<double>::row((ax_i * degree() + degree_i)*3 + dim_i), tmpl.props); }
+          { return Tractlet(degree(), MR::Math::Matrix<double>::row((ax_i * degree() + degree_i)*3 + dim_i), tmpl.props, 0); }
 
         Tractlet        column(size_t idx)
-          { return Tractlet(degree(), MR::Math::Matrix<double>::column(idx), tmpl.props); }
+          { return Tractlet(degree(), MR::Math::Matrix<double>::column(idx), tmpl.props, 0); }
 
         const Tractlet  column(size_t idx) const
-          { return Tractlet(degree(), MR::Math::Matrix<double>::column(idx), tmpl.props); }
+          { return Tractlet(degree(), MR::Math::Matrix<double>::column(idx), tmpl.props, 0); }
 
         bool          	has_var_acs() const
         { return tmpl.has_var_acs(); }
 
         Tractlet        acs()
-          { assert(has_var_acs()); return Tractlet(degree(), MR::Math::Matrix<double>::row(vsize() + tmpl.prop_index(Object::ALPHA_PROP)), tmpl.props); }
+          { assert(has_var_acs()); return Tractlet(degree(), MR::Math::Matrix<double>::row(vsize() + tmpl.prop_index(Object::ALPHA_PROP)), tmpl.props, 0); }
 
         double&         operator()(size_t row_ax_i,
                                  size_t row_degree_i,
@@ -116,10 +116,10 @@ namespace BTS {
          { return MR::Math::Matrix<double>::operator()(row_ax_i * tmpl.degree() * 3 + row_degree_i * 3 + row_dim_i, col_ax_i * tmpl.degree() * 3 + col_degree_i * 3 + col_dim_i); }
 
         Tractlet        operator[](size_t idx)
-          { return Tractlet(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props); }
+          { return Tractlet(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props, 0); }
 
         const Tractlet  operator[](size_t idx) const
-          { return Tractlet(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props); }
+          { return Tractlet(degree(), MR::Math::Matrix<double>::row(idx), tmpl.props, 0); }
 
         void          add_section_hessian(const Tractlet& tractlet,
                                           const Tractlet::Section& section,

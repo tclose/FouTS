@@ -30,6 +30,7 @@
 
 #include "bts/fibre/base/writer.h"
 #include "bts/fibre/base/reader.h"
+#include "bts/fibre/base/set.h"
 
 namespace BTS {
 
@@ -110,7 +111,7 @@ namespace BTS {
 
       protected:
 
-        const Set* parent;
+        const Base::Set<Strand>* parent;
 
       //Public methods
       public:
@@ -131,10 +132,10 @@ namespace BTS {
 
 
         Strand                            base()
-          { return Strand(sze, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Strand(sze, sub(0,bsize()), &EMPTY_PROPS, parent); }
 
         const Strand                      base() const
-          { return Strand(sze, sub(0,bsize()), &EMPTY_PROPS); }
+          { return Strand(sze, sub(0,bsize()), &EMPTY_PROPS, parent); }
 
         Strand&                           operator=(const Strand& strand)
           { Base::Object::operator=(strand); return *this; }
@@ -159,7 +160,7 @@ namespace BTS {
          * @param props The properties stored in the set or tensor
          */
         Strand(size_t degree, const MR::Math::Vector<double>::View& view, std::vector<const char*>* props,
-                                                                                                      const Set* parent)
+                                                                                      const Base::Set<Strand>* parent)
           : Base::Object(degree, view, props), parent(parent) {}
 
 
