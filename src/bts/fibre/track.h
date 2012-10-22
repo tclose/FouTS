@@ -120,7 +120,7 @@ namespace BTS {
          *
          * @return The size of the Track
          */
-        size_t                            degree() const
+        size_t                              degree() const
           { return size(); };
 
         double                              acs() const

@@ -121,7 +121,7 @@ namespace BTS {
       public:
 
         Tractlet(const Tractlet& t)
-          : Base::Object(t), dgree(t.dgree) { set_acs(t.acs()); }
+          : Base::Object(t), dgree(t.dgree), parent(0) { set_acs(t.acs()); }
         
         ~Tractlet() {}
 

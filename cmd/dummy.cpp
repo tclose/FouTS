@@ -60,25 +60,18 @@ OPTIONS = {
 
 Option() };
 
-
+using MR::Math::Vector;
 
 EXECUTE {
 
-  Fibre::Tractlet t(3);
+  Vector<double> v(10);
+  for (size_t i =0; i < 10; ++i)
+    v[i] = (double)i;
 
-  t(0,0) = Coord(0,0,0);
-  t(0,1) = Coord(.25,0,0);
-  t(0,2) = Coord(0,0,0);
-  t(1,0) = Coord(0,0.1,0);
-  t(1,1) = Coord(0,0,0);
-  t(1,2) = Coord(0,0,0);
-  t(2,0) = Coord(0,0,0.1);
-  t(2,1) = Coord(0,0,0);
-  t(2,2) = Coord(0,0,0);
+  bool sw = false;
 
-  std::vector<double> areas = t.cross_sectional_areas(100);
+  Vector<double> v2(sw ? v.view() : v);
 
-  for (size_t i = 0; i < areas.size(); ++i)
-    std::cout << areas[i] << std::endl;
+  std::cout << v2 << std::endl;
 
 }

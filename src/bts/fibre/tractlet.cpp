@@ -685,8 +685,9 @@ namespace BTS {
       if (acs > min_acs)
         alpha = MR::Math::sqrt(acs - min_acs);
       else {
-        std::cout << "WARNING! Could not set acs to " << acs << " as it is below the minimum for the given "
-                  << "configuration and epsilon values. Setting to minium value, " << min_acs << ", instead." << std::endl;
+        if (acs != min_acs)
+          std::cout << "WARNING! Could not set acs to " << acs << " as it is below the minimum for the given "
+                    << "configuration and epsilon values. Setting to minium value, " << min_acs << ", instead." << std::endl;
         alpha = 0.0;
       }
       prop(ALPHA_PROP) = alpha;
