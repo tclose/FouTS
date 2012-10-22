@@ -685,6 +685,8 @@ namespace BTS {
 
 
     void                                        Tractlet::Set::set_width_epsilon(double width_epsilon) {
+      if (!has_elem_prop(Tractlet::ALPHA_PROP))
+        add_elem_prop(Tractlet::ALPHA_PROP, 1.0);
       if (!has_prop(WIDTH_EPSILON_PROP))
         add_prop(WIDTH_EPSILON_PROP, 0.0);
       std::vector<double> old_acss;
@@ -696,6 +698,8 @@ namespace BTS {
     }
 
     void                                        Tractlet::Set::set_length_epsilon(double length_epsilon) {
+      if (!has_elem_prop(Tractlet::ALPHA_PROP))
+        add_elem_prop(Tractlet::ALPHA_PROP, 1.0);
       if (!has_prop(LENGTH_EPSILON_PROP))
         add_prop(LENGTH_EPSILON_PROP, 0.0);
       std::vector<double> old_acss;
