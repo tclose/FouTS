@@ -101,7 +101,6 @@ namespace BTS {
 
       sample_header.insert(sample_header.end(), components_list.begin(), components_list.end());
 
-
       typename State::Writer samples (samples_location, initial_x, sample_header, elem_header, run_properties);
 //      typename State::Writer iterations (File::strip_extension(samples_location) + ".iter."  + File::extension(samples_location), run_properties, sample_header);
 

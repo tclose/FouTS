@@ -127,7 +127,6 @@ namespace BTS {
       double Frequency::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
 
         gradient.zero();
-
         double lprob = log_prob(tractlet[0], gradient[0]);
 
         const Coord v1 = tractlet(0,1);

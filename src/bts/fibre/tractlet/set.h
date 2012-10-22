@@ -72,7 +72,7 @@ namespace BTS {
 
       public:
 
-        std::vector<std::string>&   append_characteristic_keys(std::vector<std::string>& header);
+        std::vector<std::string>&   append_characteristic_keys(std::vector<std::string>& header) const;
 
 
       //Public static constants
@@ -88,7 +88,7 @@ namespace BTS {
       protected:
 
         const static char*          PROPS_LIST[];
-
+        const static char*          CHARACTERISTIC_PROPS_LIST[];
 
       //Public methods;
       public:

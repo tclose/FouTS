@@ -47,6 +47,9 @@ namespace BTS {
         if (step_location.size()) {
           step.load(step_location);
 
+          if (!step.props_match(state))
+            throw Exception("Properties do not match between loaded properties and state properties.");
+
           if (step.size() == 1) {
 
             Fibre::Strand step_template = step[0];

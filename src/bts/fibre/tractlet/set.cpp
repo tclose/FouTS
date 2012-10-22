@@ -39,16 +39,22 @@ namespace BTS {
 
   namespace Fibre {
 
-    const std::string                         Tractlet::Set::FILE_EXTENSION = "tst";
-    const char*                               Tractlet::Set::LENGTH_EPSILON_PROP = "length_epsilon";
-    const char*                               Tractlet::Set::WIDTH_EPSILON_PROP = "width_epsilon";
+    const std::string       Tractlet::Set::FILE_EXTENSION = "tst";
+    const char*             Tractlet::Set::LENGTH_EPSILON_PROP = "length_epsilon";
+    const char*             Tractlet::Set::WIDTH_EPSILON_PROP = "width_epsilon";
 
-    const double                              Tractlet::Set::LENGTH_EPSILON_DEFAULT = 0.01;
-    const double                              Tractlet::Set::WIDTH_EPSILON_DEFAULT = 0.01;
-    const char*                               Tractlet::Set::PROPS_LIST[] = { Base::Set<Tractlet>::BASE_INTENSITY_PROP,
+    const double            Tractlet::Set::LENGTH_EPSILON_DEFAULT = 0.01;
+    const double            Tractlet::Set::WIDTH_EPSILON_DEFAULT = 0.01;
+    const char*             Tractlet::Set::PROPS_LIST[] = { Base::Set<Tractlet>::BASE_INTENSITY_PROP,
                                                                                 Tractlet::Set::LENGTH_EPSILON_PROP,
                                                                                 Tractlet::Set::WIDTH_EPSILON_PROP,
                                                                                 PROPS_LIST_END };
+
+    const char*             Tractlet::Set::CHARACTERISTIC_PROPS_LIST[] = { Tractlet::ACS_EXT_PROP,
+                                                                           Tractlet::AVG_DENSITY_EXT_PROP,
+                                                                           Tractlet::WIDTH_EPSILON_COMPONENT_EXT_PROP,
+                                                                           Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP,
+                                                                           PROPS_LIST_END };
 
 
 
@@ -446,12 +452,10 @@ namespace BTS {
     }
 
 
-    std::vector<std::string>&                   Tractlet::Set::append_characteristic_keys(std::vector<std::string>& header) {
+    std::vector<std::string>&                   Tractlet::Set::append_characteristic_keys(std::vector<std::string>& header) const {
 
-      header.push_back(Tractlet::ACS_EXT_PROP);
-      header.push_back(Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP);
-      header.push_back(Tractlet::WIDTH_EPSILON_COMPONENT_EXT_PROP);
-      header.push_back(Tractlet::AVG_DENSITY_EXT_PROP);
+      for (size_t i = 0; CHARACTERISTIC_PROPS_LIST[i] != PROPS_LIST_END; ++i)
+        header.push_back(CHARACTERISTIC_PROPS_LIST[i]);
       return header;
 
     }
@@ -459,13 +463,19 @@ namespace BTS {
 
     void                                        Tractlet::Set::set_characteristics() {
 
+      for (size_t i = 0; CHARACTERISTIC_PROPS_LIST[i] != PROPS_LIST_END; ++i) {
+        const char* prop = CHARACTERISTIC_PROPS_LIST[i];
+        if (!this->has_extend_elem_prop(prop))
+          this->add_extend_elem_prop(prop, "NAN");
+      }
       for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i) {
         set_extend_elem_prop(Tractlet::ACS_EXT_PROP,str(operator[](tractlet_i).acs()), tractlet_i);
-        set_extend_elem_prop(Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP,str(prop(LENGTH_EPSILON_PROP) * MR::Math::sqrt(operator[](tractlet_i)(0,1).norm())), tractlet_i);
-        set_extend_elem_prop(Tractlet::WIDTH_EPSILON_COMPONENT_EXT_PROP,str(prop(WIDTH_EPSILON_PROP) * (operator[](tractlet_i)(1,0).norm() + operator[](tractlet_i)(2,0).norm())), tractlet_i);
+        set_extend_elem_prop(Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP,str(prop(LENGTH_EPSILON_PROP) *
+                                                      MR::Math::sqrt(operator[](tractlet_i)(0,1).norm())), tractlet_i);
+        set_extend_elem_prop(Tractlet::WIDTH_EPSILON_COMPONENT_EXT_PROP,str(prop(WIDTH_EPSILON_PROP) *
+                                (operator[](tractlet_i)(1,0).norm() + operator[](tractlet_i)(2,0).norm())), tractlet_i);
         set_extend_elem_prop(Tractlet::AVG_DENSITY_EXT_PROP, str(operator[](tractlet_i).average_density()), tractlet_i);
       }
-
     }
 
 

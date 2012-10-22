@@ -355,11 +355,11 @@ namespace BTS {
           void                                        elem_resize(size_t new_elem_degree, size_t new_elem_vsize, double default_value);
 
 
-          T                                           push_back(const T& elem);
+          void                                        push_back(const T& elem);
 
 
-          T                                           push_back(const T& elem, const std::map<std::string,std::string>& elem_properties_row)
-            { T new_elem = push_back(elem); set_extend_elem_prop_row(elem_properties_row, size()-1, true); return new_elem; }
+          void                                        push_back(const T& elem, const std::map<std::string,std::string>& elem_properties_row)
+            { push_back(elem); set_extend_elem_prop_row(elem_properties_row, size()-1, true); }
 
 
           /*! Erase the element at the given index
@@ -656,7 +656,7 @@ namespace BTS {
            * @param without_props Flag to to not push back the properties of the element, which are loaded separately in the reader.
            * @return
            */
-          T                                            push_back(const T& elem, bool without_props);
+          void                                        push_back(const T& elem, bool without_props);
 
         protected:
 

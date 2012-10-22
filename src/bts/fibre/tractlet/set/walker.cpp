@@ -48,6 +48,8 @@ namespace BTS {
 
         if (step_location.size()) {
           step.load(step_location);
+          if (!step.props_match(state))
+            throw Exception("Properties do not match between loaded properties ( " + str(step.prop_keys()) + "," + str(step.elem_prop_keys()) + ") and state properties (" + str(state.prop_keys()) + ", " + str(state.elem_prop_keys()) + ").");
 
           if (step.size() == 1) {
 

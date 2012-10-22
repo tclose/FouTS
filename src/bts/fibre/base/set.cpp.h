@@ -394,7 +394,7 @@ namespace BTS {
 
 
 
-      template <typename T> T                          Set<T>::push_back(const T& elem) {
+      template <typename T> void                       Set<T>::push_back(const T& elem) {
 
         rand_double();
 
@@ -406,16 +406,12 @@ namespace BTS {
 
         resize(size() + 1, NAN, elem.degree(), elem.vsize());
 
-        T new_elem = operator[](size()-1);
-
-        new_elem = elem;
-
-        return new_elem;
+        operator[](size()-1) = elem;
 
       }
 
 
-      template <typename T> T                          Set<T>::push_back(const T& elem, bool with_props) {
+      template <typename T> void                   Set<T>::push_back(const T& elem, bool with_props) {
 
         if (with_props)
           return push_back(elem);
@@ -432,7 +428,6 @@ namespace BTS {
           //Only set base vector part of element (the part without properties).
           set_elem.sub(0, elem.bsize()) = elem.bvector();
 
-          return set_elem;
         }
 
       }
