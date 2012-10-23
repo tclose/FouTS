@@ -452,7 +452,7 @@ namespace BTS {
     }
 
 
-    std::vector<std::string>&                   Tractlet::Set::append_characteristic_keys(std::vector<std::string>& header) const {
+    std::vector<std::string>&                   Tractlet::Set::append_characteristic_keys(std::vector<std::string>& header) {
 
       for (size_t i = 0; CHARACTERISTIC_PROPS_LIST[i] != PROPS_LIST_END; ++i)
         header.push_back(CHARACTERISTIC_PROPS_LIST[i]);

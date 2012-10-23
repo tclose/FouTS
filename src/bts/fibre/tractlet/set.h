@@ -72,7 +72,7 @@ namespace BTS {
 
       public:
 
-        std::vector<std::string>&   append_characteristic_keys(std::vector<std::string>& header) const;
+        static std::vector<std::string>&   append_characteristic_keys(std::vector<std::string>& header);
 
 
       //Public static constants

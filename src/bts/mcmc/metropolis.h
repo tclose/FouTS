@@ -30,6 +30,7 @@ extern "C" {
 }
 
 #include <map>
+#include <sys/stat.h>
 
 #include "progressbar.h"
 
@@ -41,6 +42,7 @@ extern "C" {
 #include "bts/image/expected/buffer.h"
 
 #include "bts/common.h"
+#include "bts/file.h"
 
 
 
@@ -95,7 +97,7 @@ namespace BTS {
 
       std::vector<std::string> elem_header;
 
-//      State::append_characteristic_keys(elem_header);
+      State::append_characteristic_keys(elem_header);
 
       std::vector<std::string> components_list = prior.list_components();
 
@@ -103,6 +105,12 @@ namespace BTS {
 
       typename State::Writer samples (samples_location, initial_x, sample_header, elem_header, run_properties);
 //      typename State::Writer iterations (File::strip_extension(samples_location) + ".iter."  + File::extension(samples_location), run_properties, sample_header);
+
+#ifndef TEST_BED
+      std::string image_dir = File::dirname(samples_location) + str("/images");
+      if (mkdir(image_dir.c_str(),  S_IRWXU | S_IRWXG | S_IRWXO))
+        throw Exception("Could not create directory '" + str(image_dir) + "'.");
+#endif
 
       State x = initial_x;
       State prop_x = x;
@@ -243,7 +251,7 @@ namespace BTS {
 //        x.properties.insert(component_values.begin(), component_values.end());
 
 #ifndef TEST_BED
-//        likelihood.get_expected_image().save("/home/tclose/git/BaFTrS/output/signal/iter_" + str(sample_i) + ".mif");
+        likelihood.get_expected_image().save(image_dir + str("/iter_") + str(sample_i) + ".mif");
 
 //        delete &exp_image;
 //        delete &blank_image;
