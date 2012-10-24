@@ -121,11 +121,9 @@ be corrupted.\n(Error: {e})".format(config_path=config_path, e=e))
             else:
                 img_dim = args.img_dim
             cmd_line = """      
-# Copy configuration to output directory for future reference
-cp {config_path} {work_dir}/output/config.tct
-if [ -f {config_path}x ]; then
-    cp {config_path}x {work_dir}/output/config.tctx
-fi
+# Normalise configuration density and save it to output directory for future reference
+normalise_density {config_path} {work_dir}/output/config.tct -width_epsilon {width_epsilon} \
+-length_epsilon {length_epsilon}
 
 # Generate image
 generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif \
