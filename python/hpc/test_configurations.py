@@ -13,6 +13,7 @@ CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-bi
                 'x-rotate', 'x_xy', 'x-curve-z_y-curve--z']
 CONFIGURATIONS = ['x-curve-y_x-curve--y']
 CONFIGURATIONS = ['x', 'x-n2', 'x_xy', 'x_xy-n3']
+CONFIGURATIONS = ['x', 'x-n2']
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 # Required imports
 import hpc
@@ -63,8 +64,8 @@ for par in ranging_params:
     if len(par) == 1:
         par *= num_param_sets
     elif len(par) != num_param_sets:
-        raise Exception('Number of params ({}) does not match number of params ({})'.
-                                                                    format(len(par), num_param_sets))
+        raise Exception('Number of ''{}'' params ({}) does not match number of params ({})'.
+                                                                    format(par, len(par), num_param_sets))
 # Get parameters directory
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
 output_parent_dir = os.path.realpath(os.path.join(os.environ['HOME'], 'output'))
