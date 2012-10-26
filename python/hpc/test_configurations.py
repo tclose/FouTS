@@ -11,9 +11,9 @@ SCRIPT_NAME = 'test_configurations'
 CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
                 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-rotate-big', 'x_xxy', 'x-curve-z',
                 'x-rotate', 'x_xy', 'x-curve-z_y-curve--z']
-CONFIGURATIONS = ['x-curve-y_x-curve--y']
-CONFIGURATIONS = ['x', 'x-n2', 'x_xy', 'x_xy-n3']
-CONFIGURATIONS = ['x', 'x-n2']
+#CONFIGURATIONS = ['x-curve-y_x-curve--y']
+#CONFIGURATIONS = ['x', 'x-n2', 'x_xy', 'x_xy-n3']
+#CONFIGURATIONS = ['x', 'x-n2']
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 # Required imports
 import hpc
@@ -52,7 +52,7 @@ parser.add_argument('--np', type=int, default=1, help='The the number of process
 (default: %(default)s)')
 parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to \
 (default: %(default)s)')
-parser.add_argument('--permute', type=bool, action='store_true', help='Whether to permute the ')
+parser.add_argument('--permute', action='store_true', help='Whether to permute the ')
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other 

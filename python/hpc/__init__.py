@@ -36,18 +36,19 @@ def permute_params(args, ranging_params, permute=False):
     @param ranging_params [list(str)]: A list of strings that match selected fields in the 'args' namespace
     @param permute [bool]: A flag to decide whether the parameters with multiple values are permuted or whether they are checked to be either the same length or singletons
     """
-    args = deepcopy(args)
+    args = deepcopy(args) # Deep copy so as not to affect the inputted args
+    ranged_params=[]
     if permute:
-        permuted = defaultdict(list)
-        permuted[ranging_params[0]] = getattr(args, ranging_params[0])
-        for par_name in ranging_params[2:]:
+        ranged_params.append(getattr(args, ranging_params[0]))
+        for par_name in ranging_params[1:]:
             param = getattr(args, par_name)
-            curr_len = len(permuted.values()[0])
-            for val in permuted.values():
+            curr_len = len(ranged_params[0]) # All parameters should have the same length
+            for val in ranged_params:
                 val *= len(param)
-            param_list = permuted[par_name]
+            new_param = []
             for p in param:
-                param_list += [p] * curr_len
+                new_param += [p] * curr_len
+            ranged_params.append(new_param)
     else:
         num_param_sets = max([len(args.getattr(p)) for p in ranging_params])
         for par_name in ranging_params:
@@ -57,7 +58,8 @@ def permute_params(args, ranging_params, permute=False):
             elif len(param) != num_param_sets:
                 raise Exception('Number of permuations for ''{param}'' ({num}) does not match number of params \
 ({total_num})'.format(param=par_name, num=len(param), total_num=num_param_sets))
-    return args
+            ranged_params.append(param)
+    return ranged_params
 
 def create_work_dir(script_name, output_dir_parent=None, required_dirs=[]):
     """
