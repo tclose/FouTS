@@ -56,8 +56,9 @@ args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other 
 # parameters in the set
-ranging_params = hpc.permute_params(args, ['prior_freq', 'prior_aux_freq', 'prior_density_low', 'prior_density_high',
-                            'prior_hook', 'prior_thin', 'like_snr', 'width_epsilon', 'length_epsilon'], args.permute)
+ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low', 'prior_density_high',
+                            'prior_hook', 'prior_thin', 'like_snr', 'width_epsilon', 'length_epsilon']
+ranging_params = hpc.permute_params(args, ranging_param_names, args.permute)
 # Get parameters directory
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
 output_parent_dir = os.path.realpath(os.path.join(os.environ['HOME'], 'output'))
@@ -78,10 +79,14 @@ noise_ref_signal = sp.check_output('maxb0 {}/noise_ref.mif'.format(output_parent
 seed = int(time.time() * 100)
 for i in xrange(args.num_runs):
     for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin, like_snr, \
-                                                                width_epsilon, length_epsilon in zip(*ranging_params):
+                                                                width_epsilon, length_epsilon in ranging_params:
         for config in CONFIGURATIONS:
             # Create work directory and get path for output directory
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
+            with open(os.path.join(output_dir, 'params.txt'), 'w') as f:
+                for par_name in ranging_param_names:
+                    if len(getattr(args, par_name)) > 1:
+                        f.write('{par}: {val}\n'.format(par=par_name, val=eval(par_name)))
             # Create a file in the output directory with just the configuration printed in it (usefulf for quickly 
             # determining what the configuration is
             with open(os.path.join(work_dir, 'output', 'config_name'), 'w') as config_name_file:
