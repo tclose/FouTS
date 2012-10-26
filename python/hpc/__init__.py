@@ -50,7 +50,7 @@ def permute_params(args, ranging_params, permute=False):
                 new_param += [p] * curr_len
             ranged_params.append(new_param)
     else:
-        num_param_sets = max([len(args.getattr(p)) for p in ranging_params])
+        num_param_sets = max([len(getattr(args,p)) for p in ranging_params])
         for par_name in ranging_params:
             param = getattr(args, par_name)
             if len(param) == 1:
