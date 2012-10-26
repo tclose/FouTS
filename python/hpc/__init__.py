@@ -11,7 +11,8 @@ import os
 import time
 import shutil
 import subprocess
-from copy import copy
+from copy import copy, deepcopy
+from collections import defaultdict
 
 def get_project_dir():
     """
@@ -26,13 +27,46 @@ def create_seed(seed):
         seed = int(seed)
     return seed
 
+def permute_params(args, ranging_params, permute=False):
+    """ 
+    Permutes the params (stored in the args variable) by the other variables provided or if permute is false replicate
+    singleton dimensions to match the multiple parameters.
+    
+    @param args [namespace]: a namespace containing the members referenced in the 'ranging_params' list, usually the args passed by the ArgumentParser
+    @param ranging_params [list(str)]: A list of strings that match selected fields in the 'args' namespace
+    @param permute [bool]: A flag to decide whether the parameters with multiple values are permuted or whether they are checked to be either the same length or singletons
+    """
+    args = deepcopy(args)
+    if permute:
+        permuted = defaultdict(list)
+        permuted[ranging_params[0]] = getattr(args, ranging_params[0])
+        for par_name in ranging_params[2:]:
+            param = getattr(args, par_name)
+            curr_len = len(permuted.values()[0])
+            for val in permuted.values():
+                val *= len(param)
+            param_list = permuted[par_name]
+            for p in param:
+                param_list += [p] * curr_len
+    else:
+        num_param_sets = max([len(args.getattr(p)) for p in ranging_params])
+        for par_name in ranging_params:
+            param = getattr(args, par_name)
+            if len(param) == 1:
+                param *= num_param_sets
+            elif len(param) != num_param_sets:
+                raise Exception('Number of permuations for ''{param}'' ({num}) does not match number of params \
+({total_num})'.format(param=par_name, num=len(param), total_num=num_param_sets))
+    return args
+
 def create_work_dir(script_name, output_dir_parent=None, required_dirs=[]):
     """
     Generates unique paths for the work and output directories, creating the work directory in the 
     process.
     
     @param script_name: The name of the script, used to name the directories appropriately
-    @param output_dir_parent: The name of the parent directory in which the output directory will be created (defaults to $HOME/Output).
+    @param output_dir_parent: The name of the parent directory in which the output directory will be created (defaults \
+to $HOME/Output).
     @param required_dirs: The sub-directories that need to be copied into the work directory    
     """
     if not output_dir_parent:

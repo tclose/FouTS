@@ -52,20 +52,13 @@ parser.add_argument('--np', type=int, default=1, help='The the number of process
 (default: %(default)s)')
 parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to \
 (default: %(default)s)')
+parser.add_argument('--permute', type=bool, action='store_true', help='Whether to permute the ')
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other 
 # parameters in the set
-ranging_params = [args.prior_freq, args.prior_aux_freq, args.prior_density_low,
-                  args.prior_density_high, args.prior_hook, args.prior_thin, args.like_snr, args.width_epsilon,
-                  args.length_epsilon]
-num_param_sets = max([len(p) for p in ranging_params])
-for par in ranging_params:
-    if len(par) == 1:
-        par *= num_param_sets
-    elif len(par) != num_param_sets:
-        raise Exception('Number of ''{}'' params ({}) does not match number of params ({})'.
-                                                                    format(par, len(par), num_param_sets))
+ranging_params = hpc.permute_params(args, ['prior_freq', 'prior_aux_freq', 'prior_density_low', 'prior_density_high',
+                            'prior_hook', 'prior_thin', 'like_snr', 'width_epsilon', 'length_epsilon'], args.permute)
 # Get parameters directory
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
 output_parent_dir = os.path.realpath(os.path.join(os.environ['HOME'], 'output'))
