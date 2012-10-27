@@ -8,12 +8,9 @@
 """
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'test_configurations'
-CONFIGURATIONS = ['layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
-                'yz-curve-x', 'x-curve-y_x-curve--y', 'x-rotate-big', 'x_xxy', 'x-curve-z',
-                'x-rotate', 'x_xy', 'x-curve-z_y-curve--z']
-#CONFIGURATIONS = ['x-curve-y_x-curve--y']
-#CONFIGURATIONS = ['x', 'x-n2', 'x_xy', 'x_xy-n3']
-#CONFIGURATIONS = ['x', 'x-n2']
+CONFIGURATIONS = ['layer-n3-d5', 'layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
+                  'x-n2', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-y_x-curve--y-n3', 'x-rotate-big', 'x_xxy',
+                  'x-curve-z', 'x-rotate', 'x_xy', 'x_xy-n3', 'x-curve-z_y-curve--z']
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 # Required imports
 import hpc
@@ -36,7 +33,7 @@ parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The in
 parser.add_argument('--prior_freq', default=[5.0], type=float, nargs='+', help='The scaling of the frequency prior')
 parser.add_argument('--prior_aux_freq', default=[10.0], type=float, nargs='+', help='The scaling of the frequency prior')
 parser.add_argument('--prior_density_high', default=[0.01], type=float, nargs='+', help='The scaling of the density prior')
-parser.add_argument('--prior_density_low', default=[0.1], type=float, nargs='+', help='The scaling of the density prior')
+parser.add_argument('--prior_density_low', default=[0.01], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_hook', default=[50.0], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_thin', default=[0.0], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--width_epsilon', default=[0.01], type=float, nargs='+', help='The amount of width epsilon to use')
