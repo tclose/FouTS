@@ -34,7 +34,7 @@ parser.add_argument('--interp_type', default='sinc', type=str, help='The type of
 parser.add_argument('--interp_extent', default=1, type=int, help='The interpolation extent used in the reference image')
 parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The interpolation type used in the likelihood images')
 parser.add_argument('--prior_freq', default=[25.0], type=float, nargs='+', help='The scaling of the frequency prior')
-parser.add_argument('--prior_aux_freq', default=[75.0], type=float, nargs='+', help='The scaling of the frequency prior')
+parser.add_argument('--prior_aux_freq', default=[45.0], type=float, nargs='+', help='The scaling of the frequency prior')
 parser.add_argument('--prior_density_high', default=[1.0], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_density_low', default=[1.0], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_hook', default=[50.0], type=float, nargs='+', help='The scaling of the density prior')
@@ -85,10 +85,9 @@ for i in xrange(args.num_runs):
             # Create work directory and get path for output directory
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
             with open(os.path.join(work_dir, 'summary.txt'), 'w') as f:
-                f.write(config + '\n-----\n')
+                f.write(config + '\n')
                 for par_name in ranging_param_names:
-                    if len(getattr(args, par_name)) > 1:
-                        f.write('{par}: {val}\n'.format(par=par_name, val=eval(par_name)))
+                    f.write('{par}: {val}\n'.format(par=par_name, val=eval(par_name)))
             # Create a file in the output directory with just the configuration printed in it (usefulf for quickly 
             # determining what the configuration is
             with open(os.path.join(work_dir, 'output', 'config_name'), 'w') as config_name_file:
@@ -153,5 +152,5 @@ stats_fibres {config_path} {work_dir}/output/samples.tst
                length_epsilon=length_epsilon)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
-                                                    dry_run=args.dry_run, copy_to_output=REQUIRED_DIRS + ['summary.txt'])
+                                                                dry_run=args.dry_run, copy_to_output=['summary.txt'])
         seed += 2

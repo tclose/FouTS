@@ -37,7 +37,7 @@ def permute_params(args, ranging_params, permute=False):
     @param permute [bool]: A flag to decide whether the parameters with multiple values are permuted or whether they are checked to be either the same length or singletons
     """
     args = deepcopy(args) # Deep copy so as not to affect the inputted args
-    ranged_params=[]
+    ranged_params = []
     if permute:
         ranged_params.append(getattr(args, ranging_params[0]))
         for par_name in ranging_params[1:]:
@@ -50,7 +50,7 @@ def permute_params(args, ranging_params, permute=False):
                 new_param += [p] * curr_len
             ranged_params.append(new_param)
     else:
-        num_param_sets = max([len(getattr(args,p)) for p in ranging_params])
+        num_param_sets = max([len(getattr(args, p)) for p in ranging_params])
         for par_name in ranging_params:
             param = getattr(args, par_name)
             if len(param) == 1:
@@ -155,8 +155,14 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', en
     else:
         env = copy(env)
     copy_cmd = ''
-    for directory in copy_to_output:
-        copy_cmd += 'cp -r -p {work_dir}/{directory} {output_dir}/{directory}\n'.format(work_dir=work_dir, output_dir=output_dir, directory=directory)
+    for to_copy in copy_to_output:
+        origin = work_dir + os.path.sep + to_copy
+        destination = output_dir + os.path.sep + to_copy
+        base_dir = os.path.dirname(destination[:-1] if destination.endswith('/') else destination)
+        copy_cmd += """
+mkdir -p {base_dir}
+cp -r {origin} {destination}
+""".format(base_dir=base_dir, origin=origin, destination=destination)
     #Create jobscript
     jobscript_path = os.path.join(work_dir, script_name + '.job')
     f = open(jobscript_path, 'w')
