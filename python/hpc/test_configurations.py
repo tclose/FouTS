@@ -84,7 +84,8 @@ for i in xrange(args.num_runs):
         for config in CONFIGURATIONS:
             # Create work directory and get path for output directory
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
-            with open(os.path.join(work_dir, 'params.txt'), 'w') as f:
+            with open(os.path.join(work_dir, 'summary.txt'), 'w') as f:
+                f.write(config + '\n-----\n')
                 for par_name in ranging_param_names:
                     if len(getattr(args, par_name)) > 1:
                         f.write('{par}: {val}\n'.format(par=par_name, val=eval(par_name)))
@@ -152,5 +153,5 @@ stats_fibres {config_path} {work_dir}/output/samples.tst
                length_epsilon=length_epsilon)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
-                                                    dry_run=args.dry_run, copy_to_output=REQUIRED_DIRS + ['params.txt'])
+                                                    dry_run=args.dry_run, copy_to_output=REQUIRED_DIRS + ['summary.txt'])
         seed += 2
