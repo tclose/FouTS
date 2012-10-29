@@ -87,7 +87,7 @@ namespace BTS {
           lprob += log_prob(strands[strand_i], strand_gradient);
         }
 
-        lprob *= scale;
+        lprob *= scale / (double)strands.size();
         return lprob;
       }
 
