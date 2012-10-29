@@ -323,12 +323,8 @@ namespace BTS {
             { return props_match(set.props, set.elem_props); }
 
 
-          void                                        add_base_intensity(double base_intens = 1.0)
-            { add_prop(BASE_INTENSITY_PROP, base_intens); }
-
-
           void                                        set_base_intensity(double base_intens)
-            { prop(BASE_INTENSITY_PROP) = base_intens; }
+            { if (!has_prop(BASE_INTENSITY_PROP)) add_prop(BASE_INTENSITY_PROP, base_intens); else prop(BASE_INTENSITY_PROP) = base_intens; }
 
 
           void                                        remove_base_intensity()

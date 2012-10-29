@@ -31,6 +31,7 @@ extern "C" {
 
 #include <map>
 #include <sys/stat.h>
+#include <sys/types.h>  // For stat().
 
 #include "progressbar.h"
 
@@ -108,8 +109,11 @@ namespace BTS {
 
 #ifndef TEST_BED
       std::string image_dir = File::dirname(samples_location) + str("/images");
-      if (mkdir(image_dir.c_str(),  S_IRWXU | S_IRWXG | S_IRWXO))
-        throw Exception("Could not create directory '" + str(image_dir) + "'.");
+      struct stat status;
+      stat(image_dir.c_str(), &status);
+      if ( !(status.st_mode & S_IFDIR) )
+        if (mkdir(image_dir.c_str(),  S_IRWXU | S_IRWXG | S_IRWXO))
+          throw Exception("Could not create directory '" + str(image_dir) + "'.");
 #endif
 
       State x = initial_x;

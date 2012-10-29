@@ -76,7 +76,7 @@
     if (prior_opt[0].size() >= 2) \
       prior_hook_num_points = prior_opt[0][1]; \
     if (prior_opt[0].size() >= 3) \
-      prior_hook_num_points = prior_opt[0][2]; \
+      prior_hook_num_width_sections = prior_opt[0][2]; \
   } \
  \
   double prior_freq_scale  = Prob::PriorComponent::Frequency::SCALE_DEFAULT; \

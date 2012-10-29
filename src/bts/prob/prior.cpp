@@ -102,7 +102,7 @@ namespace BTS {
     double   Prior::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
 
       double lprob = 0.0;
-            lprob += frequency.log_prob(tractlet, gradient);
+      lprob += frequency.log_prob(tractlet, gradient);
       lprob += hook.log_prob(tractlet, gradient);
       lprob += length.log_prob(tractlet[0], gradient[0]);
       lprob += density.log_prob(tractlet, gradient);
