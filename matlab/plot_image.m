@@ -59,6 +59,7 @@ function fig = plot_image(varargin)
 
     auto_offset = 'auto_scale';
     auto_scale = 'auto_offset';
+    auto_dim = 'auto_dim';
     
     help_display = 1;
     
@@ -70,26 +71,29 @@ function fig = plot_image(varargin)
 
     if (~isfield(img_struct, 'data'))
       error(['Could not read image from file ' image_filename]);
-    end
+    end 
 
-    img = img_struct.data;  
-    max_intensity = max(max(max(max(abs(img(:,:,:,2:end))))));
-    max_b0 = max(max(max(max(abs(img(:,:,:,1))))));
-    
+    b0_mask = img_struct.DW_scheme(:,4) == 0.0;
+    img = img_struct.data(:,:,:,~b0_mask);
+    max_intensity = max(max(max(max(abs(img)))));
+    max_b0 = max(max(max(max(abs(img_struct.data(:,:,:,b0_mask))))));
+              
     if max_intensity == 0
       error('Neighbourhood contains no signal');
     end  
 
     auto_offset = [(-img_struct.vox(1) * img_struct.dim(1) * 0.5), (-img_struct.vox(2) * img_struct.dim(2) * 0.5), (-img_struct.vox(3) * img_struct.dim(3) * 0.5)];
     auto_scale = min(img_struct.vox) / ( 2.25 * max_intensity);
-
+    auto_dim = img_struct.dim;
 
   end  
   
   options = {...
             'no_neg_values  ', 0,       'bool', 'No negative values will be plotted';...
             'corner_offset  ', auto_offset,...
-                                      'matrix_1x3', 'Offset of the bottom-left-back corner of the neighbourhood';...
+                                      'matrix_1x3', 'Offset of the bottom-left-back corner of the neighbourhood (for matching with fibres that are defined in a particular region in space3';...
+            'dim'           , auto_dim, 'matrix_1x3', 'The dimensions of a subset of the original image to plot';...
+            'index_offset'   , [0 0 0], 'matrix_1x3', 'The index offset that the subset of image voxels are taken from';...
             'scale_signal   ', auto_scale,...
                                       'float', 'Scaling factor will be scaled by';...
             'colour         ',       [1 1 0],  'matrix_1x3', 'Colour of the non-negative lobes of the signal';...
@@ -107,12 +111,14 @@ function fig = plot_image(varargin)
   if (help_display) 
     return;
   end
-
   
-  grad_directions_mat = load(grad_directions);
+  if any((dim + index_offset) > img_struct.dim(1:3))
+    error(['Dims (' num2str(dim) ') plus offset (' num2str(index_offset) ') exceeds image dimensions (' num2str(img_struct.dim) ').'])
+  end
+    
   plot_directions_mat = load(plot_directions);
   
-  gradient_scheme = gen_scheme(grad_directions_mat(:,1:3), lmax);
+  gradient_scheme = gen_scheme(img_struct.DW_scheme(:,1:3), lmax);
   plot_scheme = gen_scheme(plot_directions_mat(:,1:3), lmax);
      
   disp('');
@@ -173,18 +179,13 @@ function fig = plot_image(varargin)
   count = 0;
   
   
-  for (z = 1:img_struct.dim(3))
+  for (z = index_offset(3):(dim(3) + index_offset(3)))
 
-    for (y = 1:img_struct.dim(2))
+    for (y = index_offset(2):(dim(2) + index_offset(2)))
 
-      for (x = 1:img_struct.dim(1))
+      for (x = index_offset(1):(dim(1) + index_offset(1)))
         
-
-        voxel_signal = squeeze(img(x,y,z,2:end));
-        
-%         plot_amp(voxel_signal,gradient_scheme)
-        
-%         voxel_signal = squeeze(img(x,y,z,:));        
+        voxel_signal = squeeze(img(x,y,z,:));
         
         voxel_signal_SH = amp2SH(voxel_signal, gradient_scheme);
 
@@ -239,7 +240,7 @@ function fig = plot_image(varargin)
   
   hold off;  
   
-  add_vox_lines_to_plot(img_struct.vox(1), img_struct.dim(1));
+  add_vox_lines_to_plot(img_struct.vox(1), max(dim));
   
 
   lighting gouraud;

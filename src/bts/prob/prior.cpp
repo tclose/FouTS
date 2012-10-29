@@ -40,6 +40,7 @@ namespace BTS {
                 double freq_aux_scale,
                 double hook_scale,
                 double hook_num_points,
+                double hook_num_width_sections,
                 double density_high_scale,
                 double density_low_scale,
                 double density_num_points,
@@ -51,7 +52,7 @@ namespace BTS {
                 size_t thinness_power)
     : scale(scale),
       frequency(freq_scale, freq_aux_scale),
-      hook(hook_scale, hook_num_points),
+      hook(hook_scale, hook_num_points, hook_num_width_sections),
       density(density_high_scale, density_low_scale, density_num_points),
       acs(acs_scale, acs_mean),
       length(length_scale,length_mean),
@@ -76,7 +77,7 @@ namespace BTS {
        gradient = fibres;
        std::map<std::string,double> component_map;
        component_map[PriorComponent::Frequency::NAME] = frequency.log_prob(fibres, gradient);
-       component_map[PriorComponent::Hook::NAME] = hook.log_prob(fibres[0], gradient[0]);
+       component_map[PriorComponent::Hook::NAME] = hook.log_prob(fibres, gradient);
        component_map[PriorComponent::Length::NAME] = length.log_prob(fibres[0], gradient[0]);
        component_map[PriorComponent::Thinness::NAME] = thinness.log_prob(fibres);
        component_map[PriorComponent::Density::NAME] = density.log_prob(fibres, gradient);
@@ -102,7 +103,7 @@ namespace BTS {
 
       double lprob = 0.0;
             lprob += frequency.log_prob(tractlet, gradient);
-      lprob += hook.log_prob(tractlet[0], gradient[0]);
+      lprob += hook.log_prob(tractlet, gradient);
       lprob += length.log_prob(tractlet[0], gradient[0]);
       lprob += density.log_prob(tractlet, gradient);
       lprob += acs.log_prob(tractlet, gradient);

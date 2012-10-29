@@ -42,6 +42,7 @@ namespace BTS {
           const static std::string        NAME;
           const static bool    ACTIVE_DEFAULT;
           const static size_t NUM_POINTS_DEFAULT;
+          const static size_t NUM_WIDTH_SECTIONS_DEFAULT;
 
 
         //Protected member variables.
@@ -49,17 +50,18 @@ namespace BTS {
 
           double scale;
           size_t num_points;
+          size_t num_width_sections;
 
         public:
 
-          Hook (double scale, size_t num_points)
-          : scale(scale), num_points(num_points) {}
+          Hook (double scale, size_t num_points, size_t num_width_sections)
+          : scale(scale), num_points(num_points), num_width_sections(num_width_sections) {}
 
-          Hook(const Hook& m)
-            : scale(m.scale), num_points(m.num_points) {}
+          Hook(const Hook& h)
+            : scale(h.scale), num_points(h.num_points), num_width_sections(h.num_width_sections) {}
 
-          Hook&  operator=(const Hook& m)
-            { scale = m.scale; num_points = m.num_points; return *this; }
+          Hook&  operator=(const Hook& h)
+            { scale = h.scale; num_points = h.num_points; num_width_sections = h.num_width_sections; return *this; }
 
           ~Hook() {}
 
@@ -69,6 +71,10 @@ namespace BTS {
           double          log_prob(const Fibre::Strand strand, Fibre::Strand gradient);
 
           double          log_prob(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& hessian);
+
+          double          log_prob(const Fibre::Tractlet strand, Fibre::Tractlet gradient);
+
+          double          log_prob(const Fibre::Tractlet& strand, Fibre::Tractlet& gradient, Fibre::Tractlet::Tensor& hessian);
 
           const std::string&  get_name()
             { return NAME; }

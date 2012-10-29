@@ -32,7 +32,8 @@
 \
   Option ("prior_hook", "The type of prior placed on the sheer of the secondary axes") \
    + Argument ("prior_hook_scale", "").optional().type_float(0, Prob::PriorComponent::Hook::SCALE_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_hook_num_points", "").optional().type_integer(1, Prob::PriorComponent::Hook::NUM_POINTS_DEFAULT,LARGE_INT), \
+   + Argument ("prior_hook_num_points", "").optional().type_integer(1, Prob::PriorComponent::Hook::NUM_POINTS_DEFAULT,LARGE_INT) \
+   + Argument ("prior_hook_num_width_sections", "").optional().type_integer(1, Prob::PriorComponent::Hook::NUM_WIDTH_SECTIONS_DEFAULT,LARGE_INT), \
 \
   Option ("prior_freq", "The prior placed on the tractlet frequency") \
    + Argument ("prior_freq_scale", "").optional().type_float(0, Prob::PriorComponent::Frequency::SCALE_DEFAULT,LARGE_FLOAT) \
@@ -66,6 +67,7 @@
 \
   double prior_hook_scale  = Prob::PriorComponent::Hook::SCALE_DEFAULT; \
   size_t prior_hook_num_points = Prob::PriorComponent::Hook::NUM_POINTS_DEFAULT; \
+  size_t prior_hook_num_width_sections = Prob::PriorComponent::Hook::NUM_WIDTH_SECTIONS_DEFAULT; \
  \
   prior_opt = get_options("prior_hook"); \
   if (prior_opt.size()) { \
@@ -73,6 +75,8 @@
       prior_hook_scale = prior_opt[0][0]; \
     if (prior_opt[0].size() >= 2) \
       prior_hook_num_points = prior_opt[0][1]; \
+    if (prior_opt[0].size() >= 3) \
+      prior_hook_num_points = prior_opt[0][2]; \
   } \
  \
   double prior_freq_scale  = Prob::PriorComponent::Frequency::SCALE_DEFAULT; \
@@ -148,6 +152,7 @@
     if (prior_hook_scale) { \
       properties["prior_hook_scale"]                  = str(prior_hook_scale); \
       properties["prior_hook_num_points"]             = str(prior_hook_num_points); \
+      properties["prior_hook_num_width_sections"]     = str(prior_hook_num_width_sections); \
     } \
 \
     if (prior_density_high_scale) { \
@@ -216,6 +221,7 @@ namespace BTS {
               double freq_aux_scale,
               double hook_scale,
               double hook_num_points,
+              double hook_num_width_sections,
               double density_high_scale,
               double density_low_scale,
               double density_num_points,

@@ -349,6 +349,7 @@ EXECUTE {
                     prior_freq_aux_scale,
                     prior_hook_scale,
                     prior_hook_num_points,
+                    prior_hook_num_width_sections,
                     prior_density_high_scale,
                     prior_density_low_scale,
                     prior_density_num_points,

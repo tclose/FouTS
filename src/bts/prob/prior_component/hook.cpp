@@ -33,6 +33,7 @@ namespace BTS {
       const double            Hook::SCALE_DEFAULT     = 50.0;
       const std::string       Hook::NAME              = "hook";
       const size_t            Hook::NUM_POINTS_DEFAULT = 100;
+      const size_t            Hook::NUM_WIDTH_SECTIONS_DEFAULT = 15;
 
       double 	        Hook::log_prob(const Fibre::Strand strand, Fibre::Strand gradient) {
 
@@ -73,6 +74,23 @@ namespace BTS {
         lprob *= scale;
         return lprob;
       }
+
+      double          Hook::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
+
+        double lprob = 0.0;
+        gradient.invalidate();
+
+        Fibre::Strand::Set strands = tractlet.to_strands(num_width_sections);
+
+        for (size_t strand_i = 0; strand_i < strands.size(); ++strand_i) {
+          Fibre::Strand strand_gradient(strands[strand_i]);
+          lprob += log_prob(strands[strand_i], strand_gradient);
+        }
+
+        lprob *= scale;
+        return lprob;
+      }
+
 
 
       double       	  Hook::log_prob(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& hessian) {
