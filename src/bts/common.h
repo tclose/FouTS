@@ -49,7 +49,8 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-
+#include <unistd.h>
+#include <linux/limits.h>
 
 #include "types.h"
 #include "mrtrix.h"
@@ -344,6 +345,13 @@ namespace BTS {
 
   }
 
+
+  inline std::string                          cwd() {
+     char buff[PATH_MAX];
+     getcwd(buff, PATH_MAX);
+     std::string work_dir(buff);
+     return work_dir;
+  }
 
   // A gdb pretty printing hack
   class CoordView {};

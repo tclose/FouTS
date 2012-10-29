@@ -108,12 +108,21 @@ namespace BTS {
 //      typename State::Writer iterations (File::strip_extension(samples_location) + ".iter."  + File::extension(samples_location), run_properties, sample_header);
 
 #ifndef TEST_BED
-      std::string image_dir = File::dirname(samples_location) + str("/images");
+      std::string parent_dir = File::dirname(samples_location);
+      // If parent dir is not a relative path
+      bool prepend_cwd = true;
+      if (parent_dir.size())
+        if (parent_dir[0] == '/')
+          prepend_cwd = false;
+      if (prepend_cwd)
+        parent_dir = cwd() + parent_dir;
+      std::string image_dir = parent_dir + str("/images");
       struct stat status;
       stat(image_dir.c_str(), &status);
-      if ( !(status.st_mode & S_IFDIR) )
+      if ( !(status.st_mode & S_IFDIR) ) {
         if (mkdir(image_dir.c_str(),  S_IRWXU | S_IRWXG | S_IRWXO))
           throw Exception("Could not create directory '" + str(image_dir) + "'.");
+      }
 #endif
 
       State x = initial_x;
