@@ -30,7 +30,7 @@ namespace BTS {
 
     namespace PriorComponent {
 
-      const double            Hook::SCALE_DEFAULT     = 50.0;
+      const double            Hook::SCALE_DEFAULT     = 10000.0;
       const std::string       Hook::NAME              = "hook";
       const size_t            Hook::NUM_POINTS_DEFAULT = 100;
       const size_t            Hook::NUM_WIDTH_SECTIONS_DEFAULT = 15;
@@ -71,7 +71,7 @@ namespace BTS {
 
         }
 
-        lprob *= scale;
+        lprob *= scale / (double)num_points;
         return lprob;
       }
 
