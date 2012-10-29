@@ -13,7 +13,6 @@ SCRIPT_NAME = 'prior_shapes'
 import hpc
 import argparse
 import os.path
-import time
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--img_dims', default=10, type=int, help='The size of the noisy image to fit against')
@@ -26,19 +25,36 @@ parser.add_argument('--num_runs', default=1, type=int, help='The number of runs 
 parser.add_argument('--dry_run', action='store_true', help='Only perform a dry run (create jobscript then quit)')
 parser.add_argument('--np', type=int, default=1, help='The the number of processes to use for the simulation (default: %(default)s)')
 parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to(default: %(default)s)')
+parser.add_argument('--prior_freq', default=[5.0], type=float, nargs='+', help='The scaling of the frequency prior')
+parser.add_argument('--prior_aux_freq', default=[10.0], type=float, nargs='+', help='The scaling of the frequency prior')
 args = parser.parse_args()
-
+ranging_param_names = ['prior_freq', 'prior_aux_freq']
+ranging_params = hpc.permute_params(args, ranging_param_names, args.permute)
 for i in xrange(args.num_runs):
-    required_dirs = [os.path.join('fibre', 'tract', 'masks','mcmc', 'metropolis'), 'diffusion']
-    # Create work directory and get path for output directory
-    work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=required_dirs)
-    # Set up command to run the script
-    cmd_line = """
-head -n $(( $RANDOM * 60 / 32767 )) {work_dir}/params/diffusion/encoding_60.b | tail -n 1 > {work_dir}/output/encoding.b # Select one of the 60 orientations and write it to a new file
-generate_image dummy.tct {work_dir}/output/noise.mif --empty --img_dims "{dim} {dim} {dim}" --noise_ref_signal 1 --noise_snr {img_snr} --diff_encodings {work_dir}/output/encoding.b
-init_fibres {work_dir}/output/init.tct --degree {degree} --acs {acs_mean} --base_intensity 1.0 --num_fibres 1 --img_dims "{dim} {dim} {dim}"    
-time metropolis {work_dir}/output/noise.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst --like_snr {like_snr} --diff_encodings {work_dir}/output/encoding.b --prior_acs {acs_stddev} {acs_mean} --walk_step_location {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{degree}.tct
-""".format(work_dir=work_dir, dim=args.img_dims, degree=args.degree, acs_mean=args.prior_acs[1], img_snr=args.img_snr, like_snr=args.like_snr, acs_stddev=args.prior_acs[0])
-    # Submit job to que
-    hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name, copy_to_output=required_dirs)
-    time.sleep(1)
+    for prior_freq, prior_aux_freq in zip(*ranging_params):
+        required_dirs = [os.path.join('fibre', 'tract', 'masks', 'mcmc', 'metropolis'), 'diffusion']
+        # Create work directory and get path for output directory
+        work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=required_dirs)
+        with open(os.path.join(work_dir, 'summary.txt'), 'w') as f:
+            for par_name in ranging_param_names:
+                f.write('{par}: {val}\n'.format(par=par_name, val=eval(par_name)))
+        # Set up command to run the script
+        cmd_line = """
+# Select one of the 60 orientations and write it to a new file        
+head -n $(( $RANDOM * 60 / 32767 )) {work_dir}/params/diffusion/encoding_60.b | tail -n 1 > {work_dir}/output/encoding.b \
+
+generate_image dummy.tct {work_dir}/output/noise.mif --empty --img_dims "{dim} {dim} {dim}" --noise_ref_signal 1 \
+--noise_snr {img_snr} --diff_encodings {work_dir}/output/encoding.b --width_epsilon 0.01 --length_epsilon 0.01
+
+init_fibres {work_dir}/output/init.tct --degree {degree} --acs {acs_mean} --base_intensity 1.0 --num_fibres 1 \
+--img_dims "{dim} {dim} {dim}"    
+
+time metropolis {work_dir}/output/noise.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst \
+--like_snr {like_snr} --diff_encodings {work_dir}/output/encoding.b --prior_acs {acs_stddev} {acs_mean} \
+--walk_step_location {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{degree}.tct \
+--prior_freq {prior_freq} {prior_aux_freq}
+    """.format(work_dir=work_dir, dim=args.img_dims, degree=args.degree, acs_mean=args.prior_acs[1], img_snr=args.img_snr,
+            like_snr=args.like_snr, acs_stddev=args.prior_acs[0], prior_freq=prior_freq, prior_aux_freq=prior_aux_freq)
+        # Submit job to que
+        hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
+                                                                                        copy_to_output=required_dirs)
