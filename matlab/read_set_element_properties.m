@@ -7,7 +7,6 @@ function [keys, values] = read_set_element_properties(location)
     keys = cell(0);
     values = cell(0);
     return;
-%		error([ 'Could not open file ' location '!' ]);
   end
 
      
