@@ -27,6 +27,7 @@ parser.add_argument('--np', type=int, default=1, help='The the number of process
 parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to(default: %(default)s)')
 parser.add_argument('--prior_freq', default=[5.0], type=float, nargs='+', help='The scaling of the frequency prior')
 parser.add_argument('--prior_aux_freq', default=[10.0], type=float, nargs='+', help='The scaling of the frequency prior')
+parser.add_argument('--permute', action='store_true', help='Whether to permute the ')
 args = parser.parse_args()
 ranging_param_names = ['prior_freq', 'prior_aux_freq']
 ranging_params = hpc.permute_params(args, ranging_param_names, args.permute)
