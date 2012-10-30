@@ -26,7 +26,7 @@ extern "C" {
 #include <gsl/gsl_randist.h>
 }
 
-
+#include "bts/common.h"
 #include "bts/cmd.h"
 #include "progressbar.h"
 
@@ -54,7 +54,7 @@ DESCRIPTION = {
 };
 
 ARGUMENTS = {
-  Argument ("initial", "The initial image the second image will be subtracted from.").type_file(),
+  Argument ("initial", "The initial image the second image will be subtracted from.").type_image_in(),
 
   Argument ("output_image", "The resulting image").type_file (),
 
@@ -92,16 +92,16 @@ EXECUTE {
     offsets = parse_triple<size_t>(std::string(opt[0][0]));
 
 
-  std::string input_location    = argument[0];
+  MR::Image::Header in (argument[0]);
   std::string output_location   = argument[1];
 
-  Image::Observed::Buffer in(input_location);
+  MR::Math::Matrix<float> dw_scheme = in.get_DW_scheme();
 
+  Triple<double> spatial_offset(in.vox(X) * offsets[X], in.vox(Y) * offsets[Y], in.vox(Z) * offsets[Z]);
 
-  Triple<double> spatial_offset = in.vox_lengths() * offsets + in.offsets();
+  Image::Observed::Buffer out(dims, Triple<double>(in.vox(X), in.vox(Y), in.vox(Z)), spatial_offset, dw_scheme);
 
-  Image::Observed::Buffer out(dims, in.vox_lengths(), spatial_offset, in.get_encodings());
-
+  Image::Voxel<float> dwi (in);
 
   for (size_t x = 0; x < dims[X]; ++x)
     for (size_t y = 0; y < dims[Y]; ++y)
@@ -109,7 +109,7 @@ EXECUTE {
         out(x,y,z) = in(x + offsets[X], y + offsets[Y], z + offsets[Z]);
 
 
-  out.properties()["original_image"] = input_location;
+  out.properties()["original_image"] = argument[0].c_str();
   out.properties()["offsets"] = str(offsets);
 
 
