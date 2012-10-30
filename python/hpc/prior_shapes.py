@@ -36,7 +36,7 @@ for i in xrange(args.num_runs):
         required_dirs = [os.path.join('params', 'fibre', 'tract', 'masks', 'mcmc', 'metropolis'), os.path.join('params', 'diffusion')]
         # Create work directory and get path for output directory
         work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=required_dirs)
-        with open(os.path.join(work_dir, 'summary.txt'), 'w') as f:
+        with open(os.path.join(work_dir, 'output', 'summary.txt'), 'w') as f:
             for par_name in ranging_param_names:
                 f.write('{par}: {val}\n'.format(par=par_name, val=eval(par_name)))
         # Set up command to run the script

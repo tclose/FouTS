@@ -113,8 +113,6 @@ EXECUTE {
         len_out << strands[strand_i][1].norm() - reference[strand_i][1].norm() << " ";
         curv_out << (strands[strand_i][2] - reference[strand_i][2]).norm() * SQRT_2 << " ";
 
-
-
       }
 
       strand_out << std::endl;
@@ -194,7 +192,7 @@ EXECUTE {
     std::ofstream width1_out((File::strip_extension(output_location) + ".width1.txt").c_str());
     std::ofstream width2_out((File::strip_extension(output_location) + ".width2.txt").c_str());
 
-    std::ofstream acs_out((File::strip_extension(output_location) + ".area.txt").c_str());
+    std::ofstream acs_out((File::strip_extension(output_location) + ".acs.txt").c_str());
 
     std::ofstream rot_out((File::strip_extension(output_location) + ".rot.txt").c_str());
 
