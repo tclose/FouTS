@@ -59,7 +59,8 @@ time metropolis {work_dir}/output/noise.mif {work_dir}/output/init.tct {work_dir
 --prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} {prior_density_low} 100 \
 -prior_hook {prior_hook} 100 15 
     """.format(work_dir=work_dir, dim=args.img_dims, degree=args.degree, acs_mean=args.prior_acs[1], img_snr=args.img_snr,
-            like_snr=args.like_snr, acs_stddev=args.prior_acs[0], prior_freq=prior_freq, prior_aux_freq=prior_aux_freq)
+            like_snr=args.like_snr, acs_stddev=args.prior_acs[0], prior_freq=prior_freq, prior_aux_freq=prior_aux_freq,
+             prior_density_low=prior_density_low, prior_density_high=prior_density_high, prior_hook=prior_hook)
         # Submit job to que
         hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
                                                                                         copy_to_output=required_dirs)
