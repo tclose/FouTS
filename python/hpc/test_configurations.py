@@ -11,7 +11,7 @@ SCRIPT_NAME = 'test_configurations'
 CONFIGURATIONS = ['layer-n3-d5', 'layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
                   'x-n2', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-y_x-curve--y-n3', 'x-rotate-big', 'x_xxy',
                   'x-curve-z', 'x-rotate', 'x_xy', 'x_xy-n3', 'x-curve-z_y-curve--z']
-CONFIGURATIONS = ['x', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-z']
+#CONFIGURATIONS = ['x', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-z']
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 # Required imports
 import hpc
@@ -138,7 +138,7 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/out
 -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
-{prior_density_low} 100 -prior_hook {prior_hook} 100 -prior_thin {prior_thin} 2 -exp_num_width_sections {args.num_width_sections} \
+{prior_density_low} 100 -prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 -exp_num_width_sections {args.num_width_sections} \
  -exp_type {args.interp_type}
     
 # Run analysis
