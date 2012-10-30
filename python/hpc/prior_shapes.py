@@ -56,7 +56,8 @@ init_fibres {work_dir}/output/init.tct --degree {degree} --acs {acs_mean} --base
 time metropolis {work_dir}/output/noise.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst \
 --like_snr {like_snr} --diff_encodings {work_dir}/output/encoding.b --prior_acs {acs_stddev} {acs_mean} \
 --walk_step_location {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{degree}.tct \
---prior_freq {prior_freq} {prior_aux_freq}
+--prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} {prior_density_low} 100 \
+-prior_hook {prior_hook} 100 15 
     """.format(work_dir=work_dir, dim=args.img_dims, degree=args.degree, acs_mean=args.prior_acs[1], img_snr=args.img_snr,
             like_snr=args.like_snr, acs_stddev=args.prior_acs[0], prior_freq=prior_freq, prior_aux_freq=prior_aux_freq)
         # Submit job to que
