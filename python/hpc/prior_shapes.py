@@ -36,7 +36,7 @@ ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low', 'pri
 ranging_params = hpc.permute_params(args, ranging_param_names, args.permute)
 for i in xrange(args.num_runs):
     for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook in zip(*ranging_params):
-        required_dirs = [os.path.join('fibre', 'tract', 'masks', 'mcmc', 'metropolis'), 'diffusion']
+        required_dirs = [os.path.join('params', 'fibre', 'tract', 'masks', 'mcmc', 'metropolis'), os.path.join('params', 'diffusion')]
         # Create work directory and get path for output directory
         work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=required_dirs)
         with open(os.path.join(work_dir, 'output', 'summary.txt'), 'w') as f:
@@ -48,10 +48,10 @@ for i in xrange(args.num_runs):
 head -n $(( $RANDOM * 60 / 32767 )) {work_dir}/params/diffusion/encoding_60.b | tail -n 1 > {work_dir}/output/encoding.b \
 
 generate_image dummy.tct {work_dir}/output/noise.mif --empty --img_dims "{dim} {dim} {dim}" --noise_ref_signal 1 \
---noise_snr {img_snr} --diff_encodings {work_dir}/output/encoding.b --width_epsilon 0.01 --length_epsilon 0.01
+--noise_snr {img_snr} --diff_encodings {work_dir}/output/encoding.b
 
 init_fibres {work_dir}/output/init.tct --degree {degree} --acs {acs_mean} --base_intensity 1.0 --num_fibres 1 \
---img_dims "{dim} {dim} {dim}"    
+--img_dims "{dim} {dim} {dim}" --width_epsilon 0.01 --length_epsilon 0.01  
 
 time metropolis {work_dir}/output/noise.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst \
 --like_snr {like_snr} --diff_encodings {work_dir}/output/encoding.b --prior_acs {acs_stddev} {acs_mean} \
