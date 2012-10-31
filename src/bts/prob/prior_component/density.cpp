@@ -31,8 +31,8 @@ namespace BTS {
 
     namespace PriorComponent {
 
-      const double            Density::HIGH_SCALE_DEFAULT  = 1;
-      const double            Density::LOW_SCALE_DEFAULT   = 1;
+      const double            Density::HIGH_SCALE_DEFAULT  = 1.0;
+      const double            Density::LOW_SCALE_DEFAULT   = 1.0;
       const std::string       Density::NAME                = "density";
       const size_t            Density::NUM_POINTS_DEFAULT  = 100;
 
@@ -54,7 +54,7 @@ namespace BTS {
 
         }
 
-        return log_prob;
+        return log_prob / (double)num_points;
 
 
       }

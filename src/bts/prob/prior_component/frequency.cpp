@@ -30,8 +30,8 @@ namespace BTS {
 
     namespace PriorComponent {
 
-      const double            Frequency::SCALE_DEFAULT   = 25.0;
-      const double            Frequency::AUX_SCALE_DEFAULT = 75.0;
+      const double            Frequency::SCALE_DEFAULT   = 5.0;
+      const double            Frequency::AUX_SCALE_DEFAULT = 10.0;
       const std::string       Frequency::NAME            = "frequency";
 
       double Frequency::log_prob(const Fibre::Strand strand, Fibre::Strand gradient) {

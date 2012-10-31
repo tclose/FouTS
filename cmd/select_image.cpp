@@ -37,7 +37,10 @@ extern "C" {
 #include "bts/image/noise.h"
 #include "bts/image/noise/gaussian.h"
 
-
+#include "image/header.h"
+#include "image/voxel.h"
+#include "dataset/subset.h"
+#include "dataset/loop.h"
 
 #include "bts/inline_functions.h"
 
@@ -79,7 +82,6 @@ Option()
 
 EXECUTE {
 
-
   Triple<size_t>    dims (3,3,3);
   Triple<size_t>    offsets (0,0,0);
 
@@ -95,23 +97,41 @@ EXECUTE {
   MR::Image::Header in (argument[0]);
   std::string output_location   = argument[1];
 
-  MR::Math::Matrix<float> dw_scheme = in.get_DW_scheme();
+  Diffusion::Encoding::Set dw_scheme(in.get_DW_scheme());
 
   Triple<double> spatial_offset(in.vox(X) * offsets[X], in.vox(Y) * offsets[Y], in.vox(Z) * offsets[Z]);
 
   Image::Observed::Buffer out(dims, Triple<double>(in.vox(X), in.vox(Y), in.vox(Z)), spatial_offset, dw_scheme);
 
-  Image::Voxel<float> dwi (in);
+  size_t dim_array[] = {dims[X], dims[Y], dims[Z]};
+  size_t offset_array[] = {offsets[X], offsets[Y], offsets[Z]};
 
-  for (size_t x = 0; x < dims[X]; ++x)
-    for (size_t y = 0; y < dims[Y]; ++y)
-      for (size_t z = 0; z < dims[Z]; ++z)
-        out(x,y,z) = in(x + offsets[X], y + offsets[Y], z + offsets[Z]);
+  MR::Image::Voxel<float> vox (in);
+  MR::DataSet::Subset<MR::Image::Voxel<float> > vox_subset(vox, offset_array, dim_array);
 
+  MR::DataSet::Loop loop (0,3);
+  size_t x = 0;
+  size_t y = 0;
+  size_t z = 0;
+  size_t encoding_i = 0;
+  for (loop.start (vox_subset); loop.ok(); loop.next (vox_subset)) {
+    out(x,y,z)[encoding_i] = vox_subset.value();
+    if (x < dims[X])
+      ++x;
+    else {
+      x = 0;
+      if (y < dims[Y])
+        ++y;
+      else {
+        y = 0;
+        if (z < dims[Z])
+          ++z;
+      }
+    }
+  }
 
   out.properties()["original_image"] = argument[0].c_str();
   out.properties()["offsets"] = str(offsets);
-
 
 //-------------//
 //  Save Image //
