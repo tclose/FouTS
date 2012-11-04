@@ -73,6 +73,8 @@ OPTIONS = {
   Option ("offsets", "The offset of the centre of the image from the origin (0,0,0).")
    + Argument ("offsets", "").type_text ("auto"),
 
+  Option("remove_isotropic", "Removes the isotropic component of the signal (assumes that the signal is acquired at a \
+      constant b value"),
 
 Option()
 
@@ -84,6 +86,7 @@ EXECUTE {
 
   Triple<size_t>    dims (3,3,3);
   Triple<size_t>    offsets (0,0,0);
+  bool remove_isotropic = false;
 
   Options opt = get_options("dims");
   if (opt.size())
@@ -93,6 +96,9 @@ EXECUTE {
   if (opt.size())
     offsets = parse_triple<size_t>(std::string(opt[0][0]));
 
+  opt = get_options("remove_isotropic");
+  if (opt.size())
+    remove_isotropic = true;
 
   MR::Image::Header in (argument[0]);
   std::string output_location   = argument[1];
@@ -136,11 +142,14 @@ EXECUTE {
   out.properties()["original_image"] = argument[0].c_str();
   out.properties()["offsets"] = str(offsets);
 
+  if (remove_isotropic)
+    out.remove_isotropic();
+
 //-------------//
 //  Save Image //
 //-------------//
-  std::cout << "(1,1,1,10): "<< out(1,1,1)[10] << std::endl;
   out.save(output_location);
+
 
 
 }
