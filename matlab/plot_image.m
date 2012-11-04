@@ -103,8 +103,8 @@ function fig = plot_image(varargin)
                                       'string', 'Gradient encoding used.';...            
             'plot_directions',        '/home/tclose/Data/Tractography/diffusion/encoding/encoding_1000.b',...
                                       'string', 'The direction encoding used for the plotting.';...
-            'lmax           ',         8,        'natural', 'The lmax of the gradient encodings used.'};...
-         
+            'lmax           ',         8,        'natural', 'The lmax of the gradient encodings used.';...
+            'no_vox_lines   ',         0,        'bool', 'Whether to use vox lines to plot.'};
                                      
   
   parse_arguments      
@@ -240,8 +240,9 @@ function fig = plot_image(varargin)
   
   hold off;  
   
-  add_vox_lines_to_plot(img_struct.vox(1), max(dim));
-  
+  if ~no_vox_lines
+    add_vox_lines_to_plot(img_struct.vox(1), max(dim));
+  end
 
   lighting gouraud;
 
