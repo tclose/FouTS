@@ -103,31 +103,34 @@ EXECUTE {
 
   Image::Observed::Buffer out(dims, Triple<double>(in.vox(X), in.vox(Y), in.vox(Z)), spatial_offset, dw_scheme);
 
-  size_t dim_array[] = {dims[X], dims[Y], dims[Z]};
-  size_t offset_array[] = {offsets[X], offsets[Y], offsets[Z]};
+  size_t dim_array[] = {dims[X], dims[Y], dims[Z], dw_scheme.num_encodings()};
+  size_t offset_array[] = {offsets[X], offsets[Y], offsets[Z], 0};
 
   MR::Image::Voxel<float> vox (in);
   MR::DataSet::Subset<MR::Image::Voxel<float> > vox_subset(vox, offset_array, dim_array);
 
-  MR::DataSet::Loop loop (0,3);
-  size_t x = 0;
-  size_t y = 0;
-  size_t z = 0;
-  size_t encoding_i = 0;
+  MR::ProgressBar progress_bar ("Selecting subset of image...", dw_scheme.num_encodings());
+  MR::DataSet::Loop loop (0,4);
+  size_t x, y, z, encoding_i;
+  x = y = z = encoding_i = 0;
   for (loop.start (vox_subset); loop.ok(); loop.next (vox_subset)) {
-    out(x,y,z)[encoding_i] = vox_subset.value();
-    if (x < dims[X])
-      ++x;
-    else {
+    if (x >= dims[X]) {
       x = 0;
-      if (y < dims[Y])
-        ++y;
-      else {
+      ++y;
+      if (y >= dims[Y]) {
         y = 0;
-        if (z < dims[Z])
-          ++z;
+        ++z;
+        if (z >= dims[Z]) {
+          z = 0;
+          ++encoding_i;
+          ++progress_bar;
+          if (encoding_i >= dw_scheme.num_encodings())
+            throw Exception("Incremented past the end of the number of encodings dimension, something has gone wrong.");
+        }
       }
     }
+    out(x,y,z)[encoding_i] = (float)vox_subset.value();
+    ++x;
   }
 
   out.properties()["original_image"] = argument[0].c_str();
@@ -136,7 +139,7 @@ EXECUTE {
 //-------------//
 //  Save Image //
 //-------------//
-
+  std::cout << "(1,1,1,10): "<< out(1,1,1)[10] << std::endl;
   out.save(output_location);
 
 
