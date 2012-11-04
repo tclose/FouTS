@@ -230,7 +230,7 @@ namespace BTS {
       if (!encodings_matrix.rows())
         throw Exception ("No rows found in encodings matrix.");
 
-      if (!encodings_matrix.columns() != 4)
+      if (encodings_matrix.columns() != 4)
         throw Exception ("Four columns required in encodings matrix, found " + str(encodings_matrix.columns()) + ".");
 
 
