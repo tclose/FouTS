@@ -36,7 +36,7 @@ gen_WM_mask $dwi_file ${pfx}mask.mif - | threshold - ${pfx}wm_mask.mif -abs $WM_
 dwi2tensor $dwi_file - | tensor2FA - - | mrmult - ${pfx}wm_mask.mif - | threshold - ${pfx}sf_mask.mif -abs $SF_FA_THRESHOLD
 
 # Mask single_fibre mask with whole brain mask 
-estimate_response $dwi_file ${pfx}sf_mask.mif $output -lmax 8
+estimate_response $dwi_file ${pfx}sf_mask.mif $output -lmax 8 -normalise
 
 # Cleaning up temporary files
 rm "${pfx}"*
