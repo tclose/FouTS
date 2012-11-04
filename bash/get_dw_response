@@ -2,18 +2,21 @@
 # This function links an MRtrix tool chain commands required to 
 # estimate the diffusion response function from a dMRI data set
 
-WM_PROB_THRESHOLD = 0.95
-SF_FA_THRESHOLD = 0.65
+WM_PROB_THRESHOLD=0.95
+SF_FA_THRESHOLD=0.65
 
 pfx='ER_TMP_PREFIX_'
 
-if [ $# != 2 ] 
+if [ $# != 2 ]; then
   echo "2 arguments exactly are required (the dMRI dataset and the output estimated response), $# were provided"
-  exit 1
+  exit
 fi
 
 dwi_file=$1
 output=$2
+
+# Removing old temporary files
+rm -f "${pfx}"*
 
 # Cd to directory where the dwi file is located
 #work_dir=`dirname $1`
@@ -26,8 +29,11 @@ gen_brain_mask $dwi_file ${pfx}mask.mif
 gen_WM_mask $dwi_file ${pfx}mask.mif - | threshold - ${pfx}wm_mask.mif -abs $WM_PROB_THRESHOLD
 
 # Create FA map from DWI data set
-dwi2tensor $dwi_file - | tensor2FA - - | threshold - ${pfx}sf_mask.mif -abs $SF_FA_THRESHOLD
+dwi2tensor $dwi_file - | tensor2FA - - | mrmult - ${pfx}wm_mask.mif - | threshold - ${pfx}sf_mask.mif -abs $SF_FA_THRESHOLD
 
 # Mask single_fibre mask with whole brain mask 
-mrmult $dwi_file ${pfx}sf_mask.mif ${pfx}wm_mask ${pfx} ${pfx}sf_dwi.mif
+estimate_response $dwi_file ${pfx}sf_mask.mif $output
+
+# Cleaning up temporary files
+rm "${pfx}"*
 
