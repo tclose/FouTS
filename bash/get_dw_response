@@ -8,7 +8,7 @@ WM_PROB_THRESHOLD=0.95
 SF_FA_THRESHOLD=0.65
 
 # Some random prefix to avoid conflict with other files in the directory
-TMP_PREFIX="ER_TMP_PREFIX_"
+TMP_PREFIX="GET_DW_RESPONSE_TMP_PREFIX_"
 
 if [ $# != 2 ]; then
   echo "2 arguments exactly are required (the dMRI dataset and the output estimated response), $# were provided"
@@ -18,8 +18,10 @@ fi
 dwi_file=$1
 output=$2
 
-# Cd to the directory where the output file will be written to write temporary files there
+# Get the directory where the output file will be written to write temporary files there
 work_dir=`dirname $output`
+output_base=`echo "$output" | sed 's/\..*$//'`
+output_ext=`echo "$output" | sed 's/^.*\.//'`
 
 pfx=$work_dir/$TMP_PREFIX
 
@@ -37,6 +39,12 @@ dwi2tensor $dwi_file - | tensor2FA - - | mrmult - ${pfx}wm_mask.mif - | threshol
 
 # Mask single_fibre mask with whole brain mask 
 estimate_response $dwi_file ${pfx}sf_mask.mif $output -lmax 8 -normalise
+
+# For debugging
+#echo "average_b0 $dwi_file ${pfx}sf_mask.mif"
+
+# Save the average b0 to file for use in scaling the base intensity of the expected image
+average_b0 $dwi_file ${pfx}sf_mask.mif > ${output_base}.b0.$output_ext
 
 # Cleaning up temporary files
 rm "${pfx}"*
