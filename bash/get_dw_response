@@ -41,10 +41,10 @@ dwi2tensor $dwi_file - | tensor2FA - - | mrmult - ${pfx}wm_mask.mif - | threshol
 estimate_response $dwi_file ${pfx}sf_mask.mif $output -lmax 8 -normalise
 
 # For debugging
-#echo "average_b0 $dwi_file ${pfx}sf_mask.mif"
+#echo "get_b0 $dwi_file ${pfx}sf_mask.mif"
 
 # Save the average b0 to file for use in scaling the base intensity of the expected image
-average_b0 $dwi_file ${pfx}sf_mask.mif > ${output_base}.b0.$output_ext
+get_b0 $dwi_file ${pfx}sf_mask.mif > ${output_base}.b0.$output_ext
 
 # Cleaning up temporary files
 rm "${pfx}"*
