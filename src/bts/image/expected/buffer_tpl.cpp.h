@@ -540,8 +540,9 @@ namespace BTS {
           tcts[0](2,0) = Coord(0.0, 0.0, interp_length[2] * M_SQRT2);
           // Normalize the density of the tract and set the base_intensity of the set to 1.0, to calculate the required
           // base intensity value to match that of the reference.
-          tcts[0].normalise_density();
+          tcts.normalise_densities();
           tcts.set_base_intensity(1.0);
+
           expected_image<Fibre::Tractlet>(tcts);
           // Divide the reference b0 by the value in the test voxel in the bottom left corner.
           base_intensity = ref_b0 / this->operator()(0,0,0).b0();

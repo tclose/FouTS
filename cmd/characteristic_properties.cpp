@@ -41,14 +41,14 @@ SET_AUTHOR ("Thomas G. Close");
 SET_COPYRIGHT (NULL);
 
 DESCRIPTION = {
-  "Normalises the density of the given Fourier tracts.",
-  "Normalises the density of the given Fourier tracts.",
+  "Calculates characteristic properties such as density, length_min_acs, width_min_acs for a given set of fibre sets.",
+  ".",
   NULL
 };
 
 ARGUMENTS = {
-  Argument ("input", "The Fourier tracts to be normalised.").type_file (),
-  Argument ("output", "Output location of the normalised tracts (if omitted the origin location will be used)").optional().type_file(),
+  Argument ("input", "The Fourier tracts for the characteristic properties to be calculated.").type_file (),
+  Argument ("output", "Output location where the same tracts with their characteristic properties appended will be written.").optional().type_file(),
   Argument()
 };
 
