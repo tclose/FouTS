@@ -42,7 +42,6 @@ extern "C" {
 
 using namespace BTS;
 
-const double  BASE_INTENSITY_DEFAULT = -1.0;
 const size_t  DEGREE_DEFAULT = 3;
 const size_t  NUM_FIBRES_DEFAULT = 5;
 const float   LENGTH_STDDEV_DEFAULT = 0.02;
@@ -133,7 +132,7 @@ EXECUTE {
   std::string output_location = argument[0];
 
   double acs      = NAN;
-  double base_intensity = BASE_INTENSITY_DEFAULT;
+  double base_intensity = 0.0;
   size_t degree         = DEGREE_DEFAULT;
   size_t num_fibres       = NUM_FIBRES_DEFAULT;
   double length_stddev = LENGTH_STDDEV_DEFAULT;
@@ -243,7 +242,7 @@ EXECUTE {
 
 
   std::vector<const char*> props;
-  if (base_intensity >= 0.0)
+  if (base_intensity)
     props.push_back(Fibre::Strand::Set::BASE_INTENSITY_PROP);
 
 
@@ -261,7 +260,7 @@ EXECUTE {
     Fibre::Strand::Set strands(num_fibres, degree, props, elem_props);
     strands.zero();
     strands.set_extend_props(properties);
-    if (base_intensity >= 0.0)
+    if (base_intensity)
       strands.set_base_intensity(base_intensity);
 
     std::vector< Triple<double> > centres;
@@ -299,7 +298,7 @@ EXECUTE {
     tractlets.set_width_epsilon(width_epsilon);
     tractlets.set_length_epsilon(length_epsilon);
     tractlets.set_extend_props(properties);
-    if (base_intensity >= 0.0)
+    if (base_intensity)
       tractlets.set_base_intensity(base_intensity);
 
     std::vector< Triple<double> > centres;

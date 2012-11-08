@@ -111,8 +111,8 @@ namespace BTS {
   Option ("exp_half_width", "'Variance' of the kernel that will be used to interpolate the signal from the tractlets when using the Gaussian type kernel.") \
    + Argument ("exp_half_width", "").type_float (SMALL_FLOAT, Image::Expected::Buffer::HALF_WIDTH_DEFAULT, LARGE_FLOAT), \
 \
-  Option ("exp_b0", "The reference b0 for a \"full\" voxel with unity density. This is used to set the base intensity of the strands.") \
-   + Argument ("exp_b0", "").type_float (-1.01, 1.0, LARGE_FLOAT), \
+  Option ("exp_b0", "The reference b0 for a \"full\" voxel with unity density. This is used to set the base intensity of the strands. If set to zero (the default) the existing base_intensity of the strands will be used instead.") \
+   + Argument ("exp_b0", "").type_float (0.0, 1.0, LARGE_FLOAT), \
 \
   Option ("exp_untie_width_intensity", "When not set, intensity will be coupled to the average cross-sectional area of the tract.")
 
@@ -125,7 +125,7 @@ namespace BTS {
   double        exp_interp_extent       = Image::Expected::Buffer::INTERP_EXTENT_DEFAULT; \
   bool          exp_enforce_bounds      = Image::Expected::Buffer::ENFORCE_BOUNDS_DEFAULT; \
   double        exp_half_width          = Image::Expected::Buffer::HALF_WIDTH_DEFAULT; \
-  double        exp_b0      = 1.0; \
+  double        exp_b0                  = 0.0; \
 \
   Options exp_opt = get_options("exp_num_length_sections"); \
   if (exp_opt.size()) \
@@ -356,11 +356,7 @@ namespace BTS {
 
           Image::Buffer clean_buffer();
 
-          double get_base_intensity(const Observed::Buffer& obs_image, const std::string& state_location);
-
-          double get_base_intensity(const Observed::Buffer& obs_image, Fibre::Strand::Set strands);
-
-          double get_base_intensity(const Observed::Buffer& obs_image, Fibre::Tractlet::Set tractlets);
+          double get_base_intensity(double ref_b0);
 
           bool dims_match(const Observed::Buffer& reference);
 

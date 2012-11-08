@@ -939,8 +939,8 @@ EXECUTE {
 //  // Auto-generate base intensity initial value/b_intens_gauss_mean //
 //  //----------------------------------------------------------------//
 //
-//  if ((exp_base_intensity < 0) && obs_image_provided)
-//    exp_base_intensity = exp_image->get_base_intensity(obs_image, state_location);
+//  if ((base_intensity < 0) && obs_image_provided)
+//    base_intensity = exp_image->get_base_intensity(obs_image, state_location);
 //
 //  //-----------------------//
 //  // Initialize Likelihood //

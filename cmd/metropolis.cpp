@@ -280,9 +280,7 @@ EXECUTE {
   // Auto-generate base acs initial value/b_intens_gauss_mean //
   //----------------------------------------------------------------//
 
-  if (exp_base_intensity < 0)
-    exp_base_intensity = exp_image->get_base_intensity(obs_image, initial_location);
-
+  double base_intensity = exp_image->get_base_intensity(exp_b0);
 
   //-----------------------//
   // Initialize Likelihood //
@@ -375,7 +373,8 @@ EXECUTE {
 
     Fibre::Strand::Set strands (initial_location);
 
-    strands.set_base_intensity(exp_base_intensity);
+    if (base_intensity)
+      strands.set_base_intensity(base_intensity);
 
     //---------------------//
     // Initialize Proposer //
@@ -460,7 +459,8 @@ EXECUTE {
 
     Fibre::Tractlet::Set tractlets (initial_location);
 
-    tractlets.set_base_intensity(exp_base_intensity);
+    if (base_intensity)
+      tractlets.set_base_intensity(base_intensity);
 
 
     //---------------------//

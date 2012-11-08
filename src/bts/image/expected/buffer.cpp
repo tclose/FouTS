@@ -70,10 +70,6 @@ namespace BTS {
       const size_t                      Buffer::NUM_WIDTH_SECTIONS_DEFAULT   = 4;
       const bool                        Buffer::ENFORCE_BOUNDS_DEFAULT       = false;
 
-      const std::string                 Buffer::STRAND_BASE_INTENSITY_REFERENCE     = str(getenv("HOME")) + str("/git/BaFTrS/params/fibre/strand/single/x.str");
-      const std::string                 Buffer::TRACTLET_BASE_INTENSITY_REFERENCE   = str(getenv("HOME")) + str("/git/BaFTrS/params/fibre/tract/single/x-all.tct");
-
-
       Buffer*                     Buffer::factory(const std::string& type,
                                                       const Triple<size_t>& dims,
                                                       const Triple<double>& vox_lengths,
@@ -191,52 +187,27 @@ namespace BTS {
       }
 
 
-      double                        Buffer::get_base_intensity(const Image::Observed::Buffer& obs_image, const std::string& state_location) {
+      double                        Buffer::get_base_intensity(double ref_b0) {
 
-        if (File::has_extension<Fibre::Strand>(state_location)) {
-
-//          Fibre::Strand::Set state (state_location);
-          Fibre::Strand::Set state (STRAND_BASE_INTENSITY_REFERENCE);
-          state.set_base_intensity(1.0);
-          this->expected_image(state);
-
-        } else if (File::has_extension<Fibre::Tractlet>(state_location)) {
-
-//          Fibre::Tractlet::Set state (state_location);
-          Fibre::Tractlet::Set state (TRACTLET_BASE_INTENSITY_REFERENCE);
-          state.set_base_intensity(1.0);
-          this->expected_image(state);
-
-        } else
-          return NAN;
-
-        this->save("/home/tclose/data/calibration_expected.mif");
-
-        return obs_image.max_b0() / this->max_b0();
-
-
-      }
-
-      double                        Buffer::get_base_intensity(const Image::Observed::Buffer& obs_image, Fibre::Strand::Set strands) {
-
-        strands.set_base_intensity(1.0);
-        this->expected_image(strands);
-
-        this->save("/home/tclose/data/calibration_expected.mif");
-
-        return obs_image.max_b0() / this->max_b0();
-
-      }
-
-
-      double                        Buffer::get_base_intensity(const Image::Observed::Buffer& obs_image, Fibre::Tractlet::Set tractlets) {
-
-        tractlets.set_base_intensity(1.0);
-        this->expected_image(tractlets);
-
-        this->save("/home/tclose/data/calibration_expected.mif");
-
-        return obs_image.max_b0() / this->max_b0();
+        double base_intensity = 0.0;
+        if (ref_b0) {
+          Coord interp_length = this->interp_extent * this->vox_lengths();
+          // Create tract spans the interpolation length of the interpolation kernel which is centred on the
+          // bottom left voxel.
+          Fibre::Tractlet::Set tcts (1,2);
+          tcts[0](0,0) = this->corner_offsets + this->vox_lengths() / 2.0;
+          tcts[0](0,1) = Coord(interp_length[0] / M_SQRT2, 0.0, 0.0);
+          tcts[0](1,0) = Coord(0.0, interp_length[1] * M_SQRT2, 0.0);
+          tcts[0](2,0) = Coord(0.0, 0.0, interp_length[2] * M_SQRT2);
+          // Normalize the density of the tract and set the base_intensity of the set to 1.0, to calculate the required
+          // base intensity value to match that of the reference.
+          tcts[0].normalise_density();
+          tcts.set_base_intensity(1.0);
+          this->expected_image(tcts);
+          // Divide the reference b0 by the value in the test voxel in the bottom left corner.
+          base_intensity = ref_b0 / this->operator()(0,0,0).b0();
+        }
+        return base_intensity;
 
       }
 

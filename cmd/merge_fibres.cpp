@@ -251,12 +251,10 @@ EXECUTE {
 
     Fibre::Strand::Set strands(input_location,strands_per_acs);
 
-    if (exp_base_intensity <= 0)
-      exp_base_intensity = exp_image.get_base_intensity(obs_image, strands);
+    if (exp_b0)
+      strands.set_base_intensity(exp_image.get_base_intensity(exp_b0));
 
     strands.save("/home/tclose/data/input_strands.str");
-
-    strands.set_base_intensity(exp_base_intensity);
 
     if ((num_tractlets == 0) && strands.has_extend_prop(Fibre::Strand::Set::ORIGINAL_NUM_TRACTLETS_PROP))
       num_tractlets = to<size_t>(strands.get_extend_prop(Fibre::Strand::Set::ORIGINAL_NUM_TRACTLETS_PROP));

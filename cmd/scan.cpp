@@ -396,8 +396,7 @@ EXECUTE {
 // Auto-generate base intensity initial value/b_intens_gauss_mean //
 //----------------------------------------------------------------//
 
-  if ((exp_base_intensity < 0) && !no_prob && (!only_prob.size() || only_prob.substr(0,16) == "Prob::Likelihood"))
-     exp_base_intensity = exp_image->get_base_intensity(obs_image, origin_location);
+  double base_intensity = exp_image->get_base_intensity(exp_b0);
 
 
 //-----------------------//
