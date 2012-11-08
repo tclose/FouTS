@@ -524,7 +524,7 @@ EXECUTE {
                                             to<size_t>(echo_options["exp_enforce_bounds"]),
                                             to<double>(echo_options["exp_half_width"]));
 
-      double calc_exp_base_intensity = exp_image->base_intensity_default(obs_image, state_location);
+      double calc_exp_base_intensity = exp_image->get_base_intensity(obs_image, state_location);
 
       check_parameter(echo_options, "exp_base_intensity", str(calc_exp_base_intensity));
 

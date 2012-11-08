@@ -191,7 +191,7 @@ namespace BTS {
       }
 
 
-      double                        Buffer::base_intensity_default(const Image::Observed::Buffer& obs_image, const std::string& state_location) {
+      double                        Buffer::get_base_intensity(const Image::Observed::Buffer& obs_image, const std::string& state_location) {
 
         if (File::has_extension<Fibre::Strand>(state_location)) {
 
@@ -217,7 +217,7 @@ namespace BTS {
 
       }
 
-      double                        Buffer::base_intensity_default(const Image::Observed::Buffer& obs_image, Fibre::Strand::Set strands) {
+      double                        Buffer::get_base_intensity(const Image::Observed::Buffer& obs_image, Fibre::Strand::Set strands) {
 
         strands.set_base_intensity(1.0);
         this->expected_image(strands);
@@ -229,7 +229,7 @@ namespace BTS {
       }
 
 
-      double                        Buffer::base_intensity_default(const Image::Observed::Buffer& obs_image, Fibre::Tractlet::Set tractlets) {
+      double                        Buffer::get_base_intensity(const Image::Observed::Buffer& obs_image, Fibre::Tractlet::Set tractlets) {
 
         tractlets.set_base_intensity(1.0);
         this->expected_image(tractlets);

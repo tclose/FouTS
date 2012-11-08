@@ -252,7 +252,7 @@ EXECUTE {
     Fibre::Strand::Set strands(input_location,strands_per_acs);
 
     if (exp_base_intensity <= 0)
-      exp_base_intensity = exp_image.base_intensity_default(obs_image, strands);
+      exp_base_intensity = exp_image.get_base_intensity(obs_image, strands);
 
     strands.save("/home/tclose/data/input_strands.str");
 

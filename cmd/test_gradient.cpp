@@ -940,7 +940,7 @@ EXECUTE {
 //  //----------------------------------------------------------------//
 //
 //  if ((exp_base_intensity < 0) && obs_image_provided)
-//    exp_base_intensity = exp_image->base_intensity_default(obs_image, state_location);
+//    exp_base_intensity = exp_image->get_base_intensity(obs_image, state_location);
 //
 //  //-----------------------//
 //  // Initialize Likelihood //

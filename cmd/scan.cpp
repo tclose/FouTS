@@ -397,7 +397,7 @@ EXECUTE {
 //----------------------------------------------------------------//
 
   if ((exp_base_intensity < 0) && !no_prob && (!only_prob.size() || only_prob.substr(0,16) == "Prob::Likelihood"))
-     exp_base_intensity = exp_image->base_intensity_default(obs_image, origin_location);
+     exp_base_intensity = exp_image->get_base_intensity(obs_image, origin_location);
 
 
 //-----------------------//

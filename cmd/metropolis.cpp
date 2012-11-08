@@ -281,7 +281,7 @@ EXECUTE {
   //----------------------------------------------------------------//
 
   if (exp_base_intensity < 0)
-    exp_base_intensity = exp_image->base_intensity_default(obs_image, initial_location);
+    exp_base_intensity = exp_image->get_base_intensity(obs_image, initial_location);
 
 
   //-----------------------//
