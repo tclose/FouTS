@@ -391,14 +391,6 @@ EXECUTE {
                                                          exp_enforce_bounds,
                                                          exp_half_width);
 
-
-//----------------------------------------------------------------//
-// Auto-generate base intensity initial value/b_intens_gauss_mean //
-//----------------------------------------------------------------//
-
-  double base_intensity = exp_image->get_base_intensity(exp_b0);
-
-
 //-----------------------//
 // Initialize Likelihood //
 //-----------------------//

@@ -42,6 +42,7 @@ extern "C" {
 
 using namespace BTS;
 
+const double  BASE_INTENSITY_DEFAULT = 0.0;
 const size_t  DEGREE_DEFAULT = 3;
 const size_t  NUM_FIBRES_DEFAULT = 5;
 const float   LENGTH_STDDEV_DEFAULT = 0.02;
@@ -132,7 +133,7 @@ EXECUTE {
   std::string output_location = argument[0];
 
   double acs      = NAN;
-  double base_intensity = 0.0;
+  double base_intensity = BASE_INTENSITY_DEFAULT;
   size_t degree         = DEGREE_DEFAULT;
   size_t num_fibres       = NUM_FIBRES_DEFAULT;
   double length_stddev = LENGTH_STDDEV_DEFAULT;

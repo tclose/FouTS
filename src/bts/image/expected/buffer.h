@@ -356,7 +356,7 @@ namespace BTS {
 
           Image::Buffer clean_buffer();
 
-          double get_base_intensity(double ref_b0);
+          virtual double get_base_intensity(double ref_b0) = 0;
 
           bool dims_match(const Observed::Buffer& reference);
 
@@ -461,6 +461,8 @@ namespace BTS {
             const Diffusion::Model&       get_diffusion_model() const \
               { return this->Buffer_tpl<Voxel>::get_diffusion_model(); } \
  \
+            double                      get_base_intensity(double ref_b0) \
+             { return this->Buffer_tpl<Voxel>::get_base_intensity(ref_b0); } \
             size_t                          num_length_sections() const \
               { return this->Buffer_tpl<Voxel>::num_length_sections(); } \
  \

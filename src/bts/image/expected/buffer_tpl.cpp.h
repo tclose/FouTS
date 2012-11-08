@@ -286,6 +286,8 @@ namespace BTS {
 
       }
 
+
+
 //***********************************//
 //********* Hessian Versions ********//
 //***********************************//
@@ -523,6 +525,31 @@ namespace BTS {
 
       }
 
+
+      template <typename T>  double             Buffer_tpl<T>::get_base_intensity(double ref_b0) {
+
+        double base_intensity = 0.0;
+        if (ref_b0) {
+          Coord interp_length = this->interp_extent * this->vox_lengths();
+          // Create tract spans the interpolation length of the interpolation kernel which is centred on the
+          // bottom left voxel.
+          Fibre::Tractlet::Set tcts (1,2);
+          tcts[0](0,0) = this->corner_offsets + this->vox_lengths() / 2.0;
+          tcts[0](0,1) = Coord(interp_length[0] / M_SQRT2, 0.0, 0.0);
+          tcts[0](1,0) = Coord(0.0, interp_length[1] * M_SQRT2, 0.0);
+          tcts[0](2,0) = Coord(0.0, 0.0, interp_length[2] * M_SQRT2);
+          // Normalize the density of the tract and set the base_intensity of the set to 1.0, to calculate the required
+          // base intensity value to match that of the reference.
+          tcts[0].normalise_density();
+          tcts.set_base_intensity(1.0);
+          expected_image<Fibre::Tractlet>(tcts);
+          // Divide the reference b0 by the value in the test voxel in the bottom left corner.
+          base_intensity = ref_b0 / this->operator()(0,0,0).b0();
+          clear();
+        }
+        return base_intensity;
+
+      }
     }
 
   }
