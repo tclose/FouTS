@@ -19,6 +19,7 @@
  along with BTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+#include <numeric>
 
 #include "bts/common.h"
 #include "bts/cmd.h"
@@ -34,6 +35,8 @@ using namespace BTS;
 SET_VERSION_DEFAULT;
 SET_AUTHOR ("Thomas G. Close");
 SET_COPYRIGHT (NULL);
+
+const char* METHOD_DEFAULT = "median";
 
 DESCRIPTION = {
   "Finds the maximum b0 intensity of an image",
@@ -58,6 +61,9 @@ OPTIONS = {
     "applied gradient, and b gives the b-value in units (1000 s/mm^2).")
     + Argument ("encoding").type_file(),
 
+    Option("method", "Used to select the method used to get the b0, one of 'average', 'max', or 'median' (default).")
+    + Argument().type_str(METHOD_DEFAULT),
+
     Option()
 
 };
@@ -72,6 +78,7 @@ EXECUTE {
     throw Exception ("dwi image should contain 4 dimensions");
 
   MR::Math::Matrix<float> grad;
+  std::string method = METHOD_DEFAULT;
 
   Options opt = get_options ("grad");
   if (opt.size())
@@ -81,6 +88,10 @@ EXECUTE {
       throw Exception ("no diffusion encoding found in image \"" + dwi_header.name() + "\"");
     grad = dwi_header.DW_scheme();
   }
+
+  opt = get_options("method");
+  if (opt.size())
+    method = opt[0][0];
 
   if (grad.rows() < 7 || grad.columns() != 4)
     throw Exception ("unexpected diffusion encoding matrix dimensions");
@@ -102,22 +113,33 @@ EXECUTE {
   MR::Image::Voxel<float> dwi (dwi_header);
   MR::Image::Voxel<float> mask (mask_header);
 
-  float sum_b0 = 0.0;
-  size_t count = 0;
+  std::vector<double> all_bzeros;
+  // Just to make it a little quicker reserve some places for the vector.
+  all_bzeros.reserve(bzeros.size() * 1e4);
   MR::DataSet::Loop loop(0,3);
   for (loop.start(mask, dwi); loop.ok(); loop.next(mask, dwi)) {
     if (mask.value() > 0.5) {
       for (size_t i = 0; i < bzeros.size(); i++) {
         dwi[3] = bzeros[i];
-        sum_b0 += dwi.value();
-        ++count;
+        all_bzeros.append(dwi.value());
       }
     }
   }
+  double b0;
 
-  float avg_b0 = sum_b0 / (double)count;
+  if (method == "median")) {
+    std::vector<double>::iterator first = bzeros.begin();
+    std::vector<double>::iterator last = bzeros.end();
+    b0 = std::nth_element(first, (last - first)/ 2, last);
+  } else if (method == "max") {
+    b0 = std::max(bzeros.begin(), bzeros.end())
+  } else if (method == "average") {
+    b0 = std::accumulate(bzeros.begin(), bzeros.end(), 0);
+    b0 /= (double)bzeros.size();
+  } else
+    throw Exception ("Unrecognised value '" + method + "' for method option, can be either 'median', 'max' or 'average'.");
 
-  std::cout << avg_b0 << std::endl;
+  std::cout << b0 << std::endl;
 
 }
 
