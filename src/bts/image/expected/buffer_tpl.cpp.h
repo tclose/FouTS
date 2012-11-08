@@ -534,6 +534,7 @@ namespace BTS {
           // Create tract spans the interpolation length of the interpolation kernel which is centred on the
           // bottom left voxel.
           Fibre::Tractlet::Set tcts (1,2);
+          tcts.zero();
           tcts[0](0,0) = this->corner_offsets + this->vox_lengths() / 2.0;
           tcts[0](0,1) = Coord(interp_length[0] / M_SQRT2, 0.0, 0.0);
           tcts[0](1,0) = Coord(0.0, interp_length[1] * M_SQRT2, 0.0);
@@ -542,7 +543,6 @@ namespace BTS {
           // base intensity value to match that of the reference.
           tcts.normalise_densities();
           tcts.set_base_intensity(1.0);
-
           expected_image<Fibre::Tractlet>(tcts);
           // Divide the reference b0 by the value in the test voxel in the bottom left corner.
           base_intensity = ref_b0 / this->operator()(0,0,0).b0();

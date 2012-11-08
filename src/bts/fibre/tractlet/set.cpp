@@ -463,6 +463,14 @@ namespace BTS {
 
     void                                        Tractlet::Set::set_characteristics() {
 
+      double length_epsilon = 0.0;
+      if (has_prop(LENGTH_EPSILON_PROP))
+        length_epsilon = prop(LENGTH_EPSILON_PROP);
+
+      double width_epsilon = 0.0;
+      if (has_prop(WIDTH_EPSILON_PROP))
+        width_epsilon = prop(WIDTH_EPSILON_PROP);
+
       for (size_t i = 0; CHARACTERISTIC_PROPS_LIST[i] != PROPS_LIST_END; ++i) {
         const char* prop = CHARACTERISTIC_PROPS_LIST[i];
         if (!this->has_extend_elem_prop(prop))
@@ -470,9 +478,9 @@ namespace BTS {
       }
       for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i) {
         set_extend_elem_prop(Tractlet::ACS_EXT_PROP,str(operator[](tractlet_i).acs()), tractlet_i);
-        set_extend_elem_prop(Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP,str(prop(LENGTH_EPSILON_PROP) *
+        set_extend_elem_prop(Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP,str(length_epsilon *
                                                       MR::Math::sqrt(operator[](tractlet_i)(0,1).norm())), tractlet_i);
-        set_extend_elem_prop(Tractlet::WIDTH_EPSILON_COMPONENT_EXT_PROP,str(prop(WIDTH_EPSILON_PROP) *
+        set_extend_elem_prop(Tractlet::WIDTH_EPSILON_COMPONENT_EXT_PROP,str(width_epsilon *
                                 (operator[](tractlet_i)(1,0).norm() + operator[](tractlet_i)(2,0).norm())), tractlet_i);
         set_extend_elem_prop(Tractlet::AVG_DENSITY_EXT_PROP, str(operator[](tractlet_i).average_density()), tractlet_i);
       }
