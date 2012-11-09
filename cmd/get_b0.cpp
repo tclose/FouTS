@@ -62,7 +62,7 @@ OPTIONS = {
     + Argument ("encoding").type_file(),
 
     Option("method", "Used to select the method used to get the b0, one of 'average', 'max', or 'median' (default).")
-    + Argument().type_str(METHOD_DEFAULT),
+    + Argument().type_text(METHOD_DEFAULT),
 
     Option()
 
@@ -91,7 +91,7 @@ EXECUTE {
 
   opt = get_options("method");
   if (opt.size())
-    method = opt[0][0];
+    method = opt[0][0].c_str();
 
   if (grad.rows() < 7 || grad.columns() != 4)
     throw Exception ("unexpected diffusion encoding matrix dimensions");
@@ -121,21 +121,23 @@ EXECUTE {
     if (mask.value() > 0.5) {
       for (size_t i = 0; i < bzeros.size(); i++) {
         dwi[3] = bzeros[i];
-        all_bzeros.append(dwi.value());
+        all_bzeros.push_back(dwi.value());
       }
     }
   }
   double b0;
 
-  if (method == "median")) {
-    std::vector<double>::iterator first = bzeros.begin();
-    std::vector<double>::iterator last = bzeros.end();
-    b0 = std::nth_element(first, (last - first)/ 2, last);
+  if (method == "median") {
+    std::vector<double>::iterator first = all_bzeros.begin();
+    std::vector<double>::iterator last = all_bzeros.end();
+    std::vector<double>::iterator middle = first + (last - first)/ 2;
+    std::nth_element(first, middle, last);
+    b0 = *middle;
   } else if (method == "max") {
-    b0 = std::max(bzeros.begin(), bzeros.end())
+    b0 = *std::max_element(all_bzeros.begin(), all_bzeros.end());
   } else if (method == "average") {
-    b0 = std::accumulate(bzeros.begin(), bzeros.end(), 0);
-    b0 /= (double)bzeros.size();
+    b0 = std::accumulate(all_bzeros.begin(), all_bzeros.end(), 0);
+    b0 /= (double)all_bzeros.size();
   } else
     throw Exception ("Unrecognised value '" + method + "' for method option, can be either 'median', 'max' or 'average'.");
 
