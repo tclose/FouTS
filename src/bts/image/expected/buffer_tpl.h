@@ -149,6 +149,8 @@ namespace BTS {
 
           template<typename U> void precalculate_section_weighting_gradients();
 
+          double                    get_base_intensity(double ref_b0);
+
           template<typename U> void
           precalculate_section_weighting_gradients_and_hessians();
 

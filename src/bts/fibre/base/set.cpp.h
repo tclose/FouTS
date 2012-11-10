@@ -794,6 +794,7 @@ namespace BTS {
         if (permuted_set.size() != this->size())
           throw Exception ("Size of output set (" + str(permuted_set.size()) + ") does not match size of set (" + str(this->size()) + ").");
 
+        //FIXME: This looks like it will change the behaviour of the function which is probably poor coding practice.
 #ifndef NDEBUG
         std::vector<size_t> unique_indices (indices);
 

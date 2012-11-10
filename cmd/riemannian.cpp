@@ -313,8 +313,7 @@ EXECUTE {
   // Auto-generate base intensity initial value/b_intens_gauss_mean //
   //----------------------------------------------------------------//
 
-  if (exp_base_intensity < 0)
-    exp_base_intensity = exp_image->base_intensity_default(obs_image, initial_location);
+  double base_intensity = exp_image->get_base_intensity(exp_b0);
 
 
   //-----------------------//
@@ -405,7 +404,8 @@ EXECUTE {
 
     Fibre::Strand::Set strands (initial_location);
 
-    strands.set_base_intensity(exp_base_intensity);
+    if (base_intensity)
+      strands.set_base_intensity(base_intensity);
 //    strands[0].acs = 1.0;
 
 
@@ -495,7 +495,8 @@ EXECUTE {
 
     Fibre::Tractlet::Set tractlets (initial_location);
 
-    tractlets.set_base_intensity(exp_base_intensity);
+    if (base_intensity)
+      tractlets.set_base_intensity(base_intensity);
 
 
     //------------------//

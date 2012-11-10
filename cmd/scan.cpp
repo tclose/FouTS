@@ -391,15 +391,6 @@ EXECUTE {
                                                          exp_enforce_bounds,
                                                          exp_half_width);
 
-
-//----------------------------------------------------------------//
-// Auto-generate base intensity initial value/b_intens_gauss_mean //
-//----------------------------------------------------------------//
-
-  if ((exp_base_intensity < 0) && !no_prob && (!only_prob.size() || only_prob.substr(0,16) == "Prob::Likelihood"))
-     exp_base_intensity = exp_image->base_intensity_default(obs_image, origin_location);
-
-
 //-----------------------//
 // Initialize Likelihood //
 //-----------------------//

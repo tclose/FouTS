@@ -84,7 +84,7 @@ function fig = plot_image(varargin)
 
     auto_offset = [(-img_struct.vox(1) * img_struct.dim(1) * 0.5), (-img_struct.vox(2) * img_struct.dim(2) * 0.5), (-img_struct.vox(3) * img_struct.dim(3) * 0.5)];
     auto_scale = min(img_struct.vox) / ( 2.25 * max_intensity);
-    auto_dim = img_struct.dim;
+    auto_dim = img_struct.dim(1:3);
 
   end  
   
@@ -103,8 +103,8 @@ function fig = plot_image(varargin)
                                       'string', 'Gradient encoding used.';...            
             'plot_directions',        '/home/tclose/Data/Tractography/diffusion/encoding/encoding_1000.b',...
                                       'string', 'The direction encoding used for the plotting.';...
-            'lmax           ',         8,        'natural', 'The lmax of the gradient encodings used.'};...
-         
+            'lmax           ',         8,        'natural', 'The lmax of the gradient encodings used.';...
+            'no_vox_lines   ',         0,        'bool', 'Whether to use vox lines to plot.'};
                                      
   
   parse_arguments      
@@ -179,11 +179,11 @@ function fig = plot_image(varargin)
   count = 0;
   
   
-  for (z = index_offset(3):(dim(3) + index_offset(3)))
+  for (z = (index_offset(3)+1):(dim(3) + index_offset(3)))
 
-    for (y = index_offset(2):(dim(2) + index_offset(2)))
+    for (y = (index_offset(2)+1):(dim(2) + index_offset(2)))
 
-      for (x = index_offset(1):(dim(1) + index_offset(1)))
+      for (x = (index_offset(1)+1):(dim(1) + index_offset(1)))
         
         voxel_signal = squeeze(img(x,y,z,:));
         
@@ -240,8 +240,9 @@ function fig = plot_image(varargin)
   
   hold off;  
   
-  add_vox_lines_to_plot(img_struct.vox(1), max(dim));
-  
+  if ~no_vox_lines
+    add_vox_lines_to_plot(img_struct.vox(1), max(dim));
+  end
 
   lighting gouraud;
 

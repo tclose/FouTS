@@ -35,8 +35,6 @@ namespace BTS {
       Argument (const char* name = NULL, const char* description = NULL)
         : MR::Argument(name, description) {}
 
-      Argument& type_string(const char* string);
-
   };
 
   class Option : public MR::Option {

@@ -50,14 +50,15 @@ parser.add_argument('--np', type=int, default=1, help='The the number of process
 (default: %(default)s)')
 parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to \
 (default: %(default)s)')
-parser.add_argument('--permute', action='store_true', help='Whether to permute the ')
+parser.add_argument('--combo', action='store_true', help='Instead of treating each ranging parameter sequence as the 1..N values for that parameter, all combinations of the provided parameters are tested.')
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other 
-# parameters in the set
+# parameters in the set. Otherwise if the '--combo' option is provided then loop through all combinations of the 
+# provided parameters. 
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low', 'prior_density_high',
                             'prior_hook', 'prior_thin', 'like_snr', 'width_epsilon', 'length_epsilon']
-ranging_params = hpc.permute_params(args, ranging_param_names, args.permute)
+ranging_params = hpc.combo_params(args, ranging_param_names, args.combo)
 # Get parameters directory
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
 output_parent_dir = os.path.realpath(os.path.join(os.environ['HOME'], 'output'))

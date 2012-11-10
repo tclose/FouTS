@@ -70,10 +70,6 @@ namespace BTS {
       const size_t                      Buffer::NUM_WIDTH_SECTIONS_DEFAULT   = 4;
       const bool                        Buffer::ENFORCE_BOUNDS_DEFAULT       = false;
 
-      const std::string                 Buffer::STRAND_BASE_INTENSITY_REFERENCE     = str(getenv("HOME")) + str("/git/BaFTrS/params/fibre/strand/single/x.str");
-      const std::string                 Buffer::TRACTLET_BASE_INTENSITY_REFERENCE   = str(getenv("HOME")) + str("/git/BaFTrS/params/fibre/tract/single/x-all.tct");
-
-
       Buffer*                     Buffer::factory(const std::string& type,
                                                       const Triple<size_t>& dims,
                                                       const Triple<double>& vox_lengths,
@@ -190,55 +186,6 @@ namespace BTS {
 
       }
 
-
-      double                        Buffer::base_intensity_default(const Image::Observed::Buffer& obs_image, const std::string& state_location) {
-
-        if (File::has_extension<Fibre::Strand>(state_location)) {
-
-//          Fibre::Strand::Set state (state_location);
-          Fibre::Strand::Set state (STRAND_BASE_INTENSITY_REFERENCE);
-          state.set_base_intensity(1.0);
-          this->expected_image(state);
-
-        } else if (File::has_extension<Fibre::Tractlet>(state_location)) {
-
-//          Fibre::Tractlet::Set state (state_location);
-          Fibre::Tractlet::Set state (TRACTLET_BASE_INTENSITY_REFERENCE);
-          state.set_base_intensity(1.0);
-          this->expected_image(state);
-
-        } else
-          return NAN;
-
-        this->save("/home/tclose/data/calibration_expected.mif");
-
-        return obs_image.max_b0() / this->max_b0();
-
-
-      }
-
-      double                        Buffer::base_intensity_default(const Image::Observed::Buffer& obs_image, Fibre::Strand::Set strands) {
-
-        strands.set_base_intensity(1.0);
-        this->expected_image(strands);
-
-        this->save("/home/tclose/data/calibration_expected.mif");
-
-        return obs_image.max_b0() / this->max_b0();
-
-      }
-
-
-      double                        Buffer::base_intensity_default(const Image::Observed::Buffer& obs_image, Fibre::Tractlet::Set tractlets) {
-
-        tractlets.set_base_intensity(1.0);
-        this->expected_image(tractlets);
-
-        this->save("/home/tclose/data/calibration_expected.mif");
-
-        return obs_image.max_b0() / this->max_b0();
-
-      }
 
 
       bool                            Buffer::dims_match(const Observed::Buffer& reference) {

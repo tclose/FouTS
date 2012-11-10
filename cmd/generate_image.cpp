@@ -216,11 +216,9 @@ EXECUTE {
 
       Fibre::Strand::Set strands (input_location, degree);
 
-      //exp_base_intensity is recorded in header so needs to be synchronised with base_intensity of strands
-      if (exp_base_intensity < 0)
-        exp_base_intensity = strands.base_intensity();
-      else
-        strands.set_base_intensity(exp_base_intensity);
+      //base_intensity is recorded in header so needs to be synchronised with base_intensity of strands
+      if (exp_b0)
+        throw Exception("exp_b0 option cannot be used with strands.");
 
       image->expected_image(strands);
 
@@ -228,11 +226,9 @@ EXECUTE {
 
       Fibre::Tractlet::Set tractlets (input_location);
 
-      //exp_base_intensity is recorded in header so needs to be synchronised with base_intensity of tractlets
-      if (exp_base_intensity < 0)
-        exp_base_intensity = tractlets.base_intensity();
-      else
-        tractlets.set_base_intensity(exp_base_intensity);
+      //base_intensity is recorded in header so needs to be synchronised with base_intensity of tractlets
+      if (exp_b0)
+        tractlets.set_base_intensity(image->get_base_intensity(exp_b0));
 
       image->expected_image(tractlets);
 

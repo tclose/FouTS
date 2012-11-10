@@ -92,7 +92,7 @@ EXECUTE {
 
 
   double acs      = 1.0;
-  double base_intensity = 1.0;
+  double base_intensity = 0.0;
   size_t degree         = DEGREE_DEFAULT;
   size_t num_points     = NUM_LENGTH_SECTIONS_DEFAULT;
   size_t set_size       = SET_SIZE_DEFAULT;
@@ -134,7 +134,7 @@ EXECUTE {
   MR::ProgressBar progress_bar ("Generating new fibres...");
 
   std::vector<const char*> props;
-  if (base_intensity >= 0.0)
+  if (base_intensity)
     props.push_back(Fibre::Strand::Set::BASE_INTENSITY_PROP);
 
   std::vector<const char*> elem_props;
@@ -148,7 +148,7 @@ EXECUTE {
 
     strands = initial_value;
 
-    if (base_intensity >= 0.0)
+    if (base_intensity)
       strands.set_base_intensity(base_intensity);
 
     if (acs >= 0.0)
@@ -182,7 +182,7 @@ EXECUTE {
 
     tractlets = initial_value;
 
-    if (base_intensity >= 0.0)
+    if (base_intensity)
       tractlets.set_base_intensity(base_intensity);
 
     if (acs >= 0.0)
@@ -216,7 +216,7 @@ EXECUTE {
 
     tcks = initial_value;
 
-    if (base_intensity >= 0.0)
+    if (base_intensity)
       tcks.set_base_intensity(base_intensity);
 
     if (acs >= 0.0)

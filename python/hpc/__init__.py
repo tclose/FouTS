@@ -27,18 +27,18 @@ def create_seed(seed):
         seed = int(seed)
     return seed
 
-def permute_params(args, ranging_params, permute=False):
+def combo_params(args, ranging_params, combo=False):
     """ 
-    Permutes the params (stored in the args variable) by the other variables provided or if permute is false replicate
+    Permutes the params (stored in the args variable) by the other variables provided or if combo is false replicate
     singleton dimensions to match the multiple parameters.
     
     @param args [namespace]: a namespace containing the members referenced in the 'ranging_params' list, usually the args passed by the ArgumentParser
     @param ranging_params [list(str)]: A list of strings that match selected fields in the 'args' namespace
-    @param permute [bool]: A flag to decide whether the parameters with multiple values are permuted or whether they are checked to be either the same length or singletons
+    @param combo [bool]: A flag to decide whether the parameters with multiple values are combod or whether they are checked to be either the same length or singletons
     """
     args = deepcopy(args) # Deep copy so as not to affect the inputted args
     ranged_params = []
-    if permute:
+    if combo:
         ranged_params.append(getattr(args, ranging_params[0]))
         for par_name in ranging_params[1:]:
             param = getattr(args, par_name)
