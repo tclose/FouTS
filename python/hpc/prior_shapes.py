@@ -30,10 +30,14 @@ parser.add_argument('--prior_aux_freq', default=[20.0], type=float, nargs='+', h
 parser.add_argument('--prior_density_high', default=[1], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_density_low', default=[1], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_hook', default=[100000.0], type=float, nargs='+', help='The scaling of the density prior')
-parser.add_argument('--permute', action='store_true', help='Whether to permute the ')
+parser.add_argument('--combo', action='store_true', help='Instead of treating each ranging parameter sequence as the 1..N values for that parameter, all combinations of the provided parameters are tested.')
 args = parser.parse_args()
+# For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
+# list it is assumed to be constant and that value that value is replicated to match the number of other of other 
+# parameters in the set. Otherwise if the '--combo' option is provided then loop through all combinations of the 
+# provided parameters. 
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low', 'prior_density_high', 'prior_hook']
-ranging_params = hpc.permute_params(args, ranging_param_names, args.permute)
+ranging_params = hpc.combo_params(args, ranging_param_names, args.combo)
 for i in xrange(args.num_runs):
     for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook in zip(*ranging_params):
         required_dirs = [os.path.join('params', 'fibre', 'tract', 'masks', 'mcmc', 'metropolis'), os.path.join('params', 'diffusion')]
