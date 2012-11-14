@@ -1,4 +1,4 @@
-function add_vox_lines_to_plot(vox_size, num_voxels, colourize)
+function add_vox_lines_to_plot(vox_size, num_voxels, colourize, offset)
 % function plot_vox_lines(vox_size)
 
   if ~exist('colourize')
@@ -20,6 +20,8 @@ function add_vox_lines_to_plot(vox_size, num_voxels, colourize)
     for col_pos = start_edge:vox_size:end_edge
       
       line_mat = [row_pos, col_pos, start_edge; row_pos, col_pos, end_edge];
+      line_mat(:,1) = offset + line_mat(:,1);
+      line_mat(:,2) = offset + line_mat(:,2);     
       
       for dim_i = 0:2
 

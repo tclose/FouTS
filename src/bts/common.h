@@ -348,7 +348,8 @@ namespace BTS {
 
   inline std::string                          cwd() {
      char buff[PATH_MAX];
-     getcwd(buff, PATH_MAX);
+     if (!getcwd(buff, PATH_MAX))
+       throw Exception ("Could not get the cwd directory");
      std::string work_dir(buff);
      return work_dir;
   }

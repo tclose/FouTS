@@ -107,7 +107,7 @@ namespace BTS {
       typename State::Writer samples (samples_location, initial_x, sample_header, elem_header, run_properties);
 //      typename State::Writer iterations (File::strip_extension(samples_location) + ".iter."  + File::extension(samples_location), run_properties, sample_header);
 
-#ifndef NDEBUG
+//#ifndef NDEBUG
 #ifndef TEST_BED
       std::string parent_dir = File::dirname(samples_location);
       // If parent dir is not a relative path
@@ -125,7 +125,7 @@ namespace BTS {
           throw Exception("Could not create directory '" + str(image_dir) + "'.");
       }
 #endif
-#endif
+//#endif
 
       State x = initial_x;
       State prop_x = x;
@@ -265,14 +265,7 @@ namespace BTS {
 
 //        x.properties.insert(component_values.begin(), component_values.end());
 
-#ifndef NDEBUG
-#ifndef TEST_BED
-        likelihood.get_expected_image().save(image_dir + str("/iter_") + str(sample_i) + ".mif");
-//        delete &exp_image;
-//        delete &blank_image;
-//        delete &dummy_image_gradient;
-#endif
-#endif
+
 
         //-------- End Debugging ------//
 
@@ -296,6 +289,17 @@ namespace BTS {
           std::cout << "elapsed time: " << elapsed_time;
           std::cout << std::endl;
         }
+
+//#ifndef NDEBUG
+#ifndef TEST_BED
+        Image::Expected::Buffer* exp_image = likelihood.get_expected_image().clone();
+        exp_image->save(image_dir + str("/iter_exp_") + str(sample_i) + ".mif");
+        Image::Observed::Buffer diff_image = likelihood.get_observed_image();
+        *exp_image -= diff_image;
+        exp_image->save(image_dir + str("/iter_diff_") + str(sample_i) + ".mif");
+        delete exp_image;
+#endif
+//#endif
 
         progress_bar++;
 

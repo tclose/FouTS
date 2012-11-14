@@ -141,7 +141,8 @@ function main_fig = plot_tracts(varargin)
             'no_voxline_highlight', 0, 'bool', 'Doesn''t highlight corner axes of voxel lines.';...
             'transparency'   ,1,            'float',   'Fix the transparency of the tracts to a set value.  If 0 the intensities of the of the tracts are used instead.';...
             'highlight_axes', 0,     'bool', 'Highlights the axes when printing in ''strand'' or ''line'' style';...
-            'invisible', 0,     'bool', 'Makes the figure invisible (for automatically saving afterwards).'};         
+            'invisible', 0,     'bool', 'Makes the figure invisible (for automatically saving afterwards).';...
+            'hold_on'          , 0, 'bool', 'plot on previous figure'};         
 
 
   parse_arguments      
@@ -213,8 +214,11 @@ function main_fig = plot_tracts(varargin)
   set_bundle_colours(num_required_colours);
 
   %Set up the figure
-  main_fig = my_figure(strrep(tracts_filename,'_',''), 1, 1, [1 1 1], 1, [],[],~invisible);
-  
+  if ~hold_on
+    main_fig = my_figure(strrep(tracts_filename,'_',''), 1, 1, [1 1 1], 1, [],[],~invisible);
+  else
+    hold on;
+  end  
   cameratoolbar('Show');
   cameratoolbar('SetMode','orbit');
   

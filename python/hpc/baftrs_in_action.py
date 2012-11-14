@@ -29,13 +29,13 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
 parser.add_argument('--num_iterations', default=100000, type=int, help='The number of interations in the metropolis sampling')
 parser.add_argument('--sample_period', default=1000, type=int, help='The sample period of the metropolis sampling')
-parser.add_argument('--degree', default=3, type=int, help='The degree of the strands to fit')
 parser.add_argument('--num_width_sections', default=4, help='The number of samples to use across a Fourier tracts cross-section')
 parser.add_argument('--interp_type', default='sinc', type=str, help='The type of interpolation used in the reference image')
 parser.add_argument('--interp_extent', default=1, type=int, help='The interpolation extent used in the reference image')
 parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The interpolation type used in the likelihood images')
-parser.add_argument('--prior_freq', default=[10.0], type=float, nargs='+', help='The scaling of the frequency prior')
-parser.add_argument('--prior_aux_freq', default=[20.0], type=float, nargs='+', help='The scaling of the frequency prior')
+parser.add_argument('--degree', default=5, type=int, help='The degree of the fibre used to sample from')
+parser.add_argument('--prior_freq', default=[15.0], type=float, nargs='+', help='The scaling of the frequency prior')
+parser.add_argument('--prior_aux_freq', default=[60.0], type=float, nargs='+', help='The scaling of the frequency prior')
 parser.add_argument('--prior_density_high', default=[1], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_density_low', default=[1], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_hook', default=[100000.0], type=float, nargs='+', help='The scaling of the density prior')
@@ -85,9 +85,12 @@ for i in xrange(args.num_runs):
             # Get the dataset path
             init_config_path = os.path.join(work_dir, 'params', 'image', 'reference', init_config)
             dataset_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset)
-            cmd_line = """      
+            cmd_line = """             
+# Create initial_fibres of appropriate degree
+redegree_fibres {init_config_path} {work_dir}/output/init.tct -degree {args.degree}
+                
 # Run metropolis
-metropolis {dataset_path} {init_config_path} {work_dir}/output/samples.tst -like_snr {like_snr} \
+metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
 -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \

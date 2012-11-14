@@ -390,6 +390,8 @@ namespace BTS {
 
           virtual Buffer& operator-=(const Buffer& buffer) = 0;
 
+          virtual Buffer& operator-=(const Image::Buffer_tpl<Observed::Voxel>& buffer) = 0;
+
           virtual iterator begin() {
             throw Exception("not implemented");
           }
@@ -518,6 +520,9 @@ namespace BTS {
               { this->Buffer_tpl<Voxel>::operator+= (buff); return *this; } \
  \
             Buffer&                       operator-= (const Buffer& buff) \
+              { this->Buffer_tpl<Voxel>::operator-= (buff); return *this; } \
+\
+            Buffer&                       operator-= (const Image::Buffer_tpl<Observed::Voxel>& buff) \
               { this->Buffer_tpl<Voxel>::operator-= (buff); return *this; } \
  \
             Buffer&                       operator*= (double M) \

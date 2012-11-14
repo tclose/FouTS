@@ -440,6 +440,21 @@ namespace BTS {
 
       }
 
+      template <typename T> Buffer_tpl<T>&       Buffer_tpl<T>::operator-=(const Image::Buffer_tpl<Observed::Voxel>& buff) {
+
+        if (this->dims() != buff.dims())
+          throw Exception ("Buffer dimensions do not match, " + str(buff.dims()) + " and " + str(this->dims()) + ".");
+
+        std::set<Index> non_empty = buff.non_empty();
+
+        for (std::set<Index>::iterator coord_it = non_empty.begin(); coord_it != non_empty.end(); ++coord_it)
+          this->operator()(*coord_it) -= buff(*coord_it);
+
+        return *this;
+
+      }
+
+
       template <typename T> std::set<T*>&                              Buffer_tpl<T>::get_neighbourhood(const Coord& point) {
 
         Index centre_coord = voxel_centre_coord(point);
