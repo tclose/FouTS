@@ -23,13 +23,12 @@ INIT_CONFIGS = [os.path.join('donald', 'init1.tct'),
 DATASETS = [os.path.join('donald')] * len(INIT_CONFIGS)
 #DATASETS = [os.path.join('donald', 'fornix.mif'), os.path.join('heath', 'fornix.mif'), os.path.join('lisa', 'fornix.mif')]
 # Required dirs for the script to run
-REQUIRED_DIRS = ['params/images/reference', 'params/diffusion']
+REQUIRED_DIRS = ['params/image/reference', 'params/diffusion']
 # Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
 parser.add_argument('--num_iterations', default=100000, type=int, help='The number of interations in the metropolis sampling')
 parser.add_argument('--sample_period', default=1000, type=int, help='The sample period of the metropolis sampling')
-parser.add_argument('--degree', default=3, type=int, help='The degree of the strands to fit')
 parser.add_argument('--num_width_sections', default=4, help='The number of samples to use across a Fourier tracts cross-section')
 parser.add_argument('--interp_type', default='sinc', type=str, help='The type of interpolation used in the reference image')
 parser.add_argument('--interp_extent', default=1, type=int, help='The interpolation extent used in the reference image')
