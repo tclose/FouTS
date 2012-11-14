@@ -114,6 +114,7 @@ function main_fig = plot_tracts_sets(varargin)
             'inv_happy_colours',         0,     'bool', 'Uses the inverse of ''happy colours''';...
             'true_tracts_plot',    0,     'bool', 'Plots true tracts (as determined from observed image)';...
             'no_density_plot',    0,     'bool', 'Omitts density from properties plot';...
+            'hold_on',        0, 'bool', 'Adds the plot to the previous figure';...
             'highlight_axes', 0,     'bool', 'Highlights the axes when printing in ''strand'' or ''line'' style';...
             'invisible', 0,     'bool', 'Makes the figure invisible (for automatically saving afterwards).'};         
 
@@ -249,7 +250,11 @@ function main_fig = plot_tracts_sets(varargin)
     
 
     %Set up the figure.
-    main_fig = my_figure(tracts_filename, 1, num_figs, [1 1 1], 1, [],[],~invisible);
+    if ~hold_on
+      main_fig = my_figure(tracts_filename, 1, num_figs, [1 1 1], 1, [],[],~invisible);
+    else
+      main_fig = gcf
+    end
         
     if isempty(include)
       include = 1:num_sets;
@@ -272,6 +277,12 @@ function main_fig = plot_tracts_sets(varargin)
       intensities = get_properties(elem_prop_keys, prop_values, 'intensity', 1.0, num_tracts);
       bundle_indices = get_properties(elem_prop_keys, prop_values, 'bundle_index', (0:1:(num_tracts-1))', num_tracts);
 
+      % If the hold_on option is used, then the tracts are added to the
+      % previous plot for reference
+      if hold_on
+        hold on
+      end
+      
       if strfind('tracts', style) == 1
 
         add_tracts_to_plot(tracts, colours_of_bundles, intensities, ones(num_tracts,1), tube_corners, num_length_sections, transparency, bundle_indices);
@@ -339,6 +350,10 @@ function main_fig = plot_tracts_sets(varargin)
     
   end
   
+  % Switch hold off again for the properties plots
+  if hold_on
+    hold off
+  end
   
   if properties_plot && length(include) ~= 1
 

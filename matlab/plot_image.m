@@ -82,7 +82,11 @@ function fig = plot_image(varargin)
       error('Neighbourhood contains no signal');
     end  
 
-    auto_offset = [(-img_struct.vox(1) * img_struct.dim(1) * 0.5), (-img_struct.vox(2) * img_struct.dim(2) * 0.5), (-img_struct.vox(3) * img_struct.dim(3) * 0.5)];
+    if isfield(img_struct, 'offsets')
+      auto_offset = img_struct.vox(1:3) .* str2num(img_struct.offsets);  %#ok<ST2NM>
+    else
+      auto_offset = [(-img_struct.vox(1) * img_struct.dim(1) * 0.5), (-img_struct.vox(2) * img_struct.dim(2) * 0.5), (-img_struct.vox(3) * img_struct.dim(3) * 0.5)];
+    end
     auto_scale = min(img_struct.vox) / ( 2.25 * max_intensity);
     auto_dim = img_struct.dim(1:3);
 
