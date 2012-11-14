@@ -273,6 +273,8 @@ namespace BTS {
 
           Buffer_tpl&                 operator-=(const Expected::Buffer& buffer);
 
+          Buffer_tpl&                 operator-=(const Image::Buffer_tpl<Observed::Voxel>& buffer);
+
       };
 
     }

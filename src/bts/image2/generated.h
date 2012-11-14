@@ -40,7 +40,7 @@ namespace BTS {
 
 			protected:
 
-		    template <typename T> class Lookup : public std::vector<int> {
+		    template <typename T> class Lookup : public std::vector<T> {
 
 		      public:
 		        int offset;
@@ -48,9 +48,11 @@ namespace BTS {
 		      public:
 
 		        T& operator[](size_t index) {
-              int index_diff = offset - index;
+              int index_diff;
               //If Lookup hasn't been initialised yet, manually set the index diff to one.
-              if (!size()) {
+              if (size())
+                index_diff = offset - index;
+              else {
                 index_diff = 1;
                 offset = index;
 		          }
@@ -58,16 +60,16 @@ namespace BTS {
               // < offset), and set the offset to the new index.
 		          if (index < offset || index_diff >= size()) {
 		            resize(size() + abs(index_diff));
-		            // If the new index is below the current one, shift all the indices up by one (could be really expensive
-		            // I suppose), but it is meant to be expensive write, fast read as this case hopefully shouldn't happen
-		            // very often.
+		            // If the new index is below the current one, shift all the indices up by one (could be expensive
+		            // I suppose, but it is meant to be expensive write, fast read as this case hopefully shouldn't happen
+		            // very often).
 		            if (index_diff < 0) {
 		              for (int i = size()-1; i >= size() + index_diff; --i)
-		                this->std::vector<int>::operator[](index) = this->std::vector<int>::operator[](index+index_diff);
+		                this->std::vector<T>::operator[](index) = this->std::vector<T>::operator[](index+index_diff);
 		              offset = index;
 		            }
 		          }
-              return this->std::vector<int>::operator[](index - offset);
+              return this->std::vector<T>::operator[](index - offset);
 		        }
 
 		    };
@@ -105,6 +107,14 @@ namespace BTS {
 		        initialise_voxel(voxel, index);
 		      return voxel;
 	      }
+
+		    bool           has_index(int x, int y, int z) {
+		      return has_index(Index(x,y,z));
+		    }
+
+		    bool           has_index(const Index& index) {
+		      return (bool)voxels.count(index);
+		    }
 		
 			//Protected member functions
 			protected:

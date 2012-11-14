@@ -126,11 +126,14 @@ namespace BTS {
         iterator                              begin()
           { return voxels.begin(); }
 
+
         const_iterator                        begin() const
           { return voxels.begin(); }
 
+
         iterator                              end()
           { return voxels.end(); }
+
 
         const_iterator                        end() const
           { return voxels.end(); }
@@ -158,6 +161,7 @@ namespace BTS {
         void                                  reset(const Triple<size_t>& dimensions)
           { reset(dimensions, enforce_bounds); }
 
+
         void                                  reset(const Triple<size_t>& dimensions, bool enforce_bounds)
           { this->dimensions = dimensions; this->enforce_bounds = enforce_bounds; voxels.clear(); }
 
@@ -166,11 +170,13 @@ namespace BTS {
         void                                  relax_bounds()
           { enforce_bounds = false; }
 
+
         void                                  clear_and_enforce_bounds();
 
 
         bool                                  bounds_are_enforced() const
           { return enforce_bounds; }
+
 
         Buffer_tpl<T>&                        operator+= (const Buffer_tpl<T>& buff);
 
