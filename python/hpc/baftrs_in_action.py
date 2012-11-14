@@ -20,10 +20,10 @@ INIT_CONFIGS = [os.path.join('donald', 'init1.tct'),
                 os.path.join('donald', 'init3.tct'),
                 os.path.join('donald', 'init4.tct'),
                 os.path.join('donald', 'init5.tct')]
-DATASETS = [os.path.join('donald')] * len(INIT_CONFIGS)
+DATASETS = [os.path.join('donald', 'fornix.mif')] * len(INIT_CONFIGS)
 #DATASETS = [os.path.join('donald', 'fornix.mif'), os.path.join('heath', 'fornix.mif'), os.path.join('lisa', 'fornix.mif')]
 # Required dirs for the script to run
-REQUIRED_DIRS = ['params/images/reference', 'params/diffusion']
+REQUIRED_DIRS = ['params/image/reference', 'params/diffusion']
 # Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
