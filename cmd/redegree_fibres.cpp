@@ -87,8 +87,7 @@ EXECUTE {
 
     Fibre::Strand::Set strands (input_location);
 
-    for (size_t strand_i = 0; strand_i < strands.size(); ++strand_i)
-      strands[strand_i].resize(degree,0.0);
+    strands.redegree(degree,0.0);
 
     strands.save(output_location);
 
@@ -96,8 +95,7 @@ EXECUTE {
 
     Fibre::Tractlet::Set tractlets (input_location);
 
-    for (size_t tract_i = 0; tract_i < tractlets.size(); ++tract_i)
-      tractlets[tract_i].redegree(degree,0.0);
+    tractlets.redegree(degree,0.0);
 
     tractlets.save(output_location);
 

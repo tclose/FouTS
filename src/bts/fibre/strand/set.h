@@ -271,6 +271,8 @@ namespace BTS {
 
         void                                        set_characteristics() {}
 
+        void                                        redegree(size_t new_degree, double default_value);
+
       private:
 
         void from_tractlet(const Tractlet& tractlet, size_t num_width_sections);

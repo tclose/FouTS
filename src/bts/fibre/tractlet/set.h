@@ -156,6 +156,8 @@ namespace BTS {
 
         BASE_SET_FUNCTIONS(Set);
 
+        void                                        redegree(size_t new_degree, double default_value);
+
         size_t                                      max_degree() const;
 
         size_t                                      degree() const

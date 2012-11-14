@@ -60,6 +60,7 @@ function fig = plot_image(varargin)
     auto_offset = 'auto_scale';
     auto_scale = 'auto_offset';
     auto_dim = 'auto_dim';
+    auto_plot_directions ='depends on number of voxels';
     
     help_display = 1;
     
@@ -89,6 +90,14 @@ function fig = plot_image(varargin)
     end
     auto_scale = min(img_struct.vox) / ( 2.25 * max_intensity);
     auto_dim = img_struct.dim(1:3);
+    
+    num_voxels = img_struct.dim(1) * img_struct.dim(2) * img_struct.dim(3);
+    
+    if num_voxels <= 125
+      auto_plot_directions = '/home/tclose/Data/Tractography/diffusion/encoding/encoding_1000.b';
+    else
+      auto_plot_directions = '/home/tclose/Data/Tractography/diffusion/encoding/encoding_60.b';
+    end
 
   end  
   
@@ -105,7 +114,7 @@ function fig = plot_image(varargin)
             'neg_colour     ',   [1 1 1],  'matrix_1x3', 'Colour of the negative lobes of the signal';...
             'grad_directions',        '/home/tclose/Data/Tractography/diffusion/encoding/encoding_60.b',...
                                       'string', 'Gradient encoding used.';...            
-            'plot_directions',        '/home/tclose/Data/Tractography/diffusion/encoding/encoding_1000.b',...
+            'plot_directions',        auto_plot_directions,...
                                       'string', 'The direction encoding used for the plotting.';...
             'lmax           ',         8,        'natural', 'The lmax of the gradient encodings used.';...
             'no_vox_lines   ',         0,        'bool', 'Whether to use vox lines to plot.'};

@@ -729,6 +729,26 @@ namespace BTS {
     }
 
 
+    //!Resizes each of the 3 axes to the new degree value.
+    void                                        Tractlet::Set::redegree(size_t new_degree, double default_value) {
+
+      if (!is_owner())
+        throw Exception("Redegree cannot be called when tractlet set does not an own the underlying data");
+
+      Tractlet::Set new_set (size(), new_degree, *this->props, *this->elem_props);
+      new_set.set(default_value);
+
+      for (size_t tractlet_i = 0; tractlet_i < size(); ++tractlet_i)
+        for (size_t ax_i = 0; ax_i < degree(); ++ax_i)
+          for (size_t degree_i = 0; degree_i < degree(); ++degree_i)
+            new_set[tractlet_i](ax_i,degree_i) = operator[](tractlet_i)(ax_i,degree_i);
+
+      new_set.copy_all_props(*this);
+
+      *this = new_set;
+
+    }
+
   }
 
 }

@@ -789,6 +789,26 @@ namespace BTS {
 
     }
 
+
+    //!Resizes each of the 3 axes to the new degree value.
+    void                                        Strand::Set::redegree(size_t new_degree, double default_value) {
+
+      if (!is_owner())
+        throw Exception("Redegree cannot be called when strand set does not an own the underlying data");
+
+      Strand::Set new_set (size(), new_degree, *this->props, *this->elem_props);
+      new_set.set(default_value);
+
+      for (size_t strand_i = 0; strand_i < size(); ++strand_i)
+         for (size_t degree_i = 0; degree_i < degree(); ++degree_i)
+            new_set[strand_i][degree_i] = operator[](strand_i)[degree_i];
+
+      new_set.copy_all_props(*this);
+
+      *this = new_set;
+
+    }
+
   }
 
 }
