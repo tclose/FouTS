@@ -112,7 +112,7 @@ namespace BTS {
    + Argument ("exp_half_width", "").type_float (SMALL_FLOAT, Image::Expected::Buffer::HALF_WIDTH_DEFAULT, LARGE_FLOAT), \
 \
   Option ("exp_b0", "The reference b0 for a \"full\" voxel with unity density. This is used to set the base intensity of the strands. If set to zero (the default) the existing base_intensity of the strands will be used instead.") \
-   + Argument ("exp_b0", "").type_float (0.0, 1.0, LARGE_FLOAT), \
+   + Argument ("exp_b0", "").type_float (0.0, 0.0, LARGE_FLOAT), \
 \
   Option ("exp_untie_width_intensity", "When not set, intensity will be coupled to the average cross-sectional area of the tract.")
 

@@ -266,6 +266,17 @@ namespace BTS {
 //        x.properties.insert(component_values.begin(), component_values.end());
 
 
+//#ifndef NDEBUG
+#ifndef TEST_BED
+        likelihood.get_expected_image().save(image_dir + str("/iter_exp_") + str(sample_i) + ".mif");
+        Image::Expected::Buffer* exp_image = likelihood.get_expected_image().clone();
+        exp_image->save(image_dir + str("/iter_exp_clone_") + str(sample_i) + ".mif");
+        Image::Observed::Buffer diff_image = likelihood.get_observed_image();
+        *exp_image -= diff_image;
+        exp_image->save(image_dir + str("/iter_diff_") + str(sample_i) + ".mif");
+        delete exp_image;
+#endif
+//#endif
 
         //-------- End Debugging ------//
 
@@ -290,16 +301,6 @@ namespace BTS {
           std::cout << std::endl;
         }
 
-//#ifndef NDEBUG
-#ifndef TEST_BED
-        Image::Expected::Buffer* exp_image = likelihood.get_expected_image().clone();
-        exp_image->save(image_dir + str("/iter_exp_") + str(sample_i) + ".mif");
-        Image::Observed::Buffer diff_image = likelihood.get_observed_image();
-        *exp_image -= diff_image;
-        exp_image->save(image_dir + str("/iter_diff_") + str(sample_i) + ".mif");
-        delete exp_image;
-#endif
-//#endif
 
         progress_bar++;
 

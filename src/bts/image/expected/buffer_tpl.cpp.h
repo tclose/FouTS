@@ -94,16 +94,15 @@ namespace BTS {
 
 
       template <typename T> template <typename U> void Buffer_tpl<T>::expected_image(const typename U::Set& fibres) {
-
+        if (fibres.base_intensity() <= 0.0)
+          throw Exception("Base intensity of the provided fibres needs to be positivie (" +
+                          str(fibres.base_intensity()) + ")");
         this->zero();
-
         for (size_t fibre_i = 0; fibre_i < fibres.size(); fibre_i++)
           part_image(fibres[fibre_i]);
-
         for (typename Buffer_tpl<T>::iterator vox_it = this->begin(); vox_it != this->end(); ++vox_it)
           for (size_t encode_i = 0; encode_i < num_encodings(); ++encode_i)
             vox_it->second[encode_i] *= fibres.base_intensity();
-
       }
 
 

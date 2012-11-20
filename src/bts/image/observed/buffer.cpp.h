@@ -167,10 +167,11 @@ namespace BTS {
 
               Image::Voxel<double> vox;
 
-              if (!this->is_empty(x,y,z))
+              if (!this->is_empty(x,y,z)) {
                 vox = this->operator()(x,y,z);
-              else
+              }else {
                 vox = Image::Voxel<double> (num_encodings());
+              }
 
               for (size_t encode_i = 0; encode_i < num_encodings(); encode_i++) {
                 datapoint.value() = vox[encode_i];
