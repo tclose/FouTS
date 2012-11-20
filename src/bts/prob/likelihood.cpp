@@ -192,8 +192,6 @@ namespace BTS {
 
         const Image::Expected::Voxel& exp_voxel = image.operator()(*coord_it);
 
-        VAR(exp_voxel);
-
         for (size_t encode_i = 0; encode_i < image.num_encodings(); encode_i++) {
 
           double observed;
