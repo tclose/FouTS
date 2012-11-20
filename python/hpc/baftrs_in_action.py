@@ -85,6 +85,9 @@ for i in xrange(args.num_runs):
             # Get the dataset path
             init_config_path = os.path.join(work_dir, 'params', 'image', 'reference', init_config)
             dataset_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset)
+            dataset_dir = os.path.dirname(dataset)
+            response_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'reponse.txt')
+            response_b0_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'reponse.b0.txt')
             cmd_line = """             
 # Create initial_fibres of appropriate degree
 redegree_fibres {init_config_path} {work_dir}/output/init.tct -degree {args.degree}
@@ -95,12 +98,14 @@ metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.t
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
 {prior_density_low} 100 -prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 \
--exp_num_width_sections {args.num_width_sections} -exp_type {args.interp_type}
+-exp_num_width_sections {args.num_width_sections} -exp_type {args.interp_type} -diff_response {diff_response} \
+-exp_b0 `cat {b0_path}`
 
     """.format(work_dir=work_dir, dataset_path=dataset_path, init_config_path=init_config_path, args=args,
                seed=seed, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,
                prior_density_high=prior_density_high, prior_hook=prior_hook, prior_thin=prior_thin, like_snr=like_snr,
-               width_epsilon=width_epsilon, length_epsilon=length_epsilon)
+               width_epsilon=width_epsilon, length_epsilon=length_epsilon, diff_response=response_path,
+               b0_path=response_b0_path)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
                                                                 dry_run=args.dry_run, copy_to_output=['summary.txt'])
