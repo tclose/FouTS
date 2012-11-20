@@ -86,8 +86,8 @@ for i in xrange(args.num_runs):
             init_config_path = os.path.join(work_dir, 'params', 'image', 'reference', init_config)
             dataset_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset)
             dataset_dir = os.path.dirname(dataset)
-            response_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'reponse.txt')
-            response_b0_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'reponse.b0.txt')
+            response_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.txt')
+            response_b0_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.b0.txt')
             cmd_line = """             
 # Create initial_fibres of appropriate degree
 redegree_fibres {init_config_path} {work_dir}/output/init.tct -degree {args.degree}
