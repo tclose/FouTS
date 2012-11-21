@@ -67,7 +67,8 @@ namespace BTS {
                                                       const MR::Math::Matrix<double>& response_SHs,
                                                       double adc,
                                                       double fa,
-                                                      bool include_isotropic) {
+                                                      bool include_isotropic,
+                                                      bool warn_on_b_mismatch) {
 
       Model model;
 
@@ -77,11 +78,11 @@ namespace BTS {
 
       //Else if response matrix only has one column assume that it meant to be a column vector.
       else if (response_SHs.columns() == 1)
-        model = Model(encodings_matrix, response_SHs.column(0), include_isotropic);
+        model = Model(encodings_matrix, response_SHs.column(0), include_isotropic, warn_on_b_mismatch);
 
       //Else if response matrix only has one row assume that it meant to be a row vector.
       else if (response_SHs.rows() == 1)
-        model = Model(encodings_matrix, response_SHs.row(0), include_isotropic);
+        model = Model(encodings_matrix, response_SHs.row(0), include_isotropic, warn_on_b_mismatch);
 
       //Otherwise assume that it has separate response coefficients on each row.
       else
@@ -225,7 +226,8 @@ namespace BTS {
 
 
 
-    Model::Model (const MR::Math::Matrix<double>& encodings_matrix, const MR::Math::Vector<double>& response_SH, bool include_isotropic) {
+    Model::Model (const MR::Math::Matrix<double>& encodings_matrix, const MR::Math::Vector<double>& response_SH,
+                  bool include_isotropic, bool warn_on_b_mismatch) {
 
       if (!encodings_matrix.rows())
         throw Exception ("No rows found in encodings matrix.");
@@ -242,20 +244,24 @@ namespace BTS {
 
         //If b value == previously set b value or the previous b value hasn't been set yet.
         if (encodings_matrix(row_i,3) == consistent_b_value || consistent_b_value == 0) {
-
           response_SHs.row(row_i) = response_SH;
-
           consistent_b_value = encodings_matrix(row_i,3);
-
         //If b value == 0. Set response coeffs to NAN, as they should be ignored in 'init' method.
         } else if (encodings_matrix(row_i,3) == 0)
-
           response_SHs.row(row_i) = NAN;
-
-        else
-
-          throw Exception ("Inconsistent b values used in encoding matrix, please either supply a seperate response harmonics for each row or use the automatic tensor harmonic calculation. Previously found b value " + str(consistent_b_value) +
-                                ", found " + str(encodings_matrix(row_i,3)) + " at row " + str(row_i) + ".");
+        else {
+          if (warn_on_b_mismatch) {
+            std::cout << "Inconsistent b values used in encoding matrix. Previously found b value " <<
+                      consistent_b_value <<  ", found " << encodings_matrix(row_i,3) << " at row " << row_i + "." <<
+                      std::endl;
+            response_SHs.row(row_i) = response_SH;
+            consistent_b_value = encodings_matrix(row_i,3);
+          } else
+            throw Exception("Inconsistent b values used in encoding matrix, please either supply a seperate " +
+                            str("response harmonics for each row or use the automatic tensor harmonic calculation. ") +
+                            "Previously found b value " + str(consistent_b_value) +  ", found "
+                            + str(encodings_matrix(row_i,3)) + " at row " + str(row_i) + ".");
+        }
 
       }
 

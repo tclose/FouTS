@@ -246,6 +246,9 @@ function fig = plot_image(varargin)
         count = count + 1;
         
         fprintf('.');
+        if mod(count,100) == 0
+          fprintf('\n')
+        end
 
       end
     end
@@ -253,7 +256,7 @@ function fig = plot_image(varargin)
   
   hold off;  
   
-  if ~no_vox_lines
+   if ~no_vox_lines
     add_vox_lines_to_plot(img_struct.vox(1), max(dim));
   end
 

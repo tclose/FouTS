@@ -4,6 +4,10 @@ function add_vox_lines_to_plot(vox_size, num_voxels, colourize, offset)
   if ~exist('colourize')
     colourize = true;
   end
+  
+  if ~exist('offset')
+    offset = [0 0 0];
+  end
 
   label_contrast = 0.8;
 
@@ -20,8 +24,8 @@ function add_vox_lines_to_plot(vox_size, num_voxels, colourize, offset)
     for col_pos = start_edge:vox_size:end_edge
       
       line_mat = [row_pos, col_pos, start_edge; row_pos, col_pos, end_edge];
-      line_mat(:,1) = offset + line_mat(:,1);
-      line_mat(:,2) = offset + line_mat(:,2);     
+      line_mat(:,1) = line_mat(:,1);
+      line_mat(:,2) = line_mat(:,2);     
       
       for dim_i = 0:2
 
@@ -31,8 +35,12 @@ function add_vox_lines_to_plot(vox_size, num_voxels, colourize, offset)
           colour = [0.5,0.5,0.5];
           colour(dim_i+1) = label_contrast;
         end
+        
+        X = line_mat(:,mod(0+dim_i,3)+1) + offset(1);
+        Y = line_mat(:,mod(1+dim_i,3)+1) + offset(2);
+        Z = line_mat(:,mod(2+dim_i,3)+1) + offset(3);
           
-        plot3(line_mat(:,mod(0+dim_i,3)+1),line_mat(:,mod(1+dim_i,3)+1),line_mat(:,mod(2+dim_i,3)+1), 'Color', colour);
+        plot3(X, Y, Z, 'Color', colour);
         
   
       end

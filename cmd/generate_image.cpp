@@ -178,7 +178,8 @@ EXECUTE {
                                                                 diff_response_SH,
                                                                 diff_adc,
                                                                 diff_fa,
-                                                                diff_isotropic);
+                                                                diff_isotropic,
+                                                                diff_warn_b_mismatch);
 
 
 //----------------------------------//

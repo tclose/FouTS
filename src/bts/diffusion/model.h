@@ -39,8 +39,9 @@
    + Argument ("diff_adc", "").type_float (SMALL_FLOAT, Diffusion::Model::ADC_DEFAULT, LARGE_FLOAT), \
 \
   Option ("diff_fa", "The fractional anisotropy (FA) of the diffusion tensor model.") \
-   + Argument ("diff_fa", "").type_float (0.0, Diffusion::Model::FA_DEFAULT, 1.0) \
+   + Argument ("diff_fa", "").type_float (0.0, Diffusion::Model::FA_DEFAULT, 1.0), \
 \
+  Option ("diff_warn_b_mismatch", "Show a warning (instead of throwing an error) when their is a mismatch between the b values of the loaded encodings and only one response vector is supplied.") \
 
 //  Option ("precision", "azimuthal angle precision", "precision of the samples about the azimuthal angle")
 //   + Argument ("precision", "precision of the samples about the azimuthal angle").type_integer (3,1e6,100))
@@ -54,6 +55,7 @@
   bool diff_isotropic                             = Diffusion::Model::ISOTROPIC_DEFAULT; \
   double diff_adc                                 = Diffusion::Model::ADC_DEFAULT; \
   double diff_fa                                  = Diffusion::Model::FA_DEFAULT; \
+  bool diff_warn_b_mismatch                       = false; \
 \
   Options diff_opt = get_options("diff_response_SH_location"); \
   if (diff_opt.size()) \
@@ -81,6 +83,10 @@
       std::cout << "WARNING!! Supplied value for diff_option '-diff_fa' (" + str(diff_fa) + ") will be ignored as supplied value for diff_option '-diff_response_SH' overrides it." << std::endl; \
   } \
 \
+  diff_opt = get_options("diff_warn_b_mismatch"); \
+  if (diff_opt.size()) \
+    diff_warn_b_mismatch = true; \
+\
   MR::Math::Matrix<double> diff_response_SH; \
   if (diff_response_SH_location.size()) { \
     diff_response_SH.load (diff_response_SH_location); \
@@ -98,6 +104,7 @@
 #define ADD_DIFFUSION_PROPERTIES(properties) \
   properties["diff_encodings_location"]     = str(diff_encodings_location); \
   properties["diff_isotropic"]              = str(diff_isotropic); \
+  properties["diff_warn_b_mismatch"]        = str(diff_warn_b_mismatch); \
   if (diff_response_SH.rows()) { \
     properties["diff_response_SH"]            = Math::matlab_str(diff_response_SH); \
     properties["diff_response_SH_location"]   = diff_response_SH_location; \
@@ -172,7 +179,8 @@ namespace BTS {
                                                         const MR::Math::Matrix<double>& response_SHs,
                                                         double adc,
                                                         double fa,
-                                                        bool include_isotropic);
+                                                        bool include_isotropic,
+                                                        bool warn_on_b_mismatch);
 
       //Public member functions
       public:
@@ -183,10 +191,12 @@ namespace BTS {
         Model (const MR::Math::Matrix<double>& encodings_matrix, double adc, double fa, bool include_isotropic);
 
         //TODO: Use take a matrix of response_SH, allowing a different response function per direction.
-        Model (const MR::Math::Matrix<double>& encodings_matrix, const MR::Math::Vector<double>& response_SH, bool include_isotropic);
+        Model (const MR::Math::Matrix<double>& encodings_matrix, const MR::Math::Vector<double>& response_SH,
+               bool include_isotropic, bool warn_on_b_mismatch = false);
 
 
-        Model (const MR::Math::Matrix<double>& encodings_matrix, const MR::Math::Matrix<double>& response_SHs, bool include_isotropic);
+        Model (const MR::Math::Matrix<double>& encodings_matrix, const MR::Math::Matrix<double>& response_SHs,
+               bool include_isotropic);
 
         
         Model (const Model& m)
