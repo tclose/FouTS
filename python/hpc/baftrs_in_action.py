@@ -99,7 +99,7 @@ metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.t
 -seed {seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
 {prior_density_low} 100 -prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 \
 -exp_num_width_sections {args.num_width_sections} -exp_type {args.interp_type} -diff_response {diff_response} \
--exp_b0 `cat {b0_path}`
+-exp_b0 `cat {b0_path}` -diff_warn
 
     """.format(work_dir=work_dir, dataset_path=dataset_path, init_config_path=init_config_path, args=args,
                seed=seed, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,
