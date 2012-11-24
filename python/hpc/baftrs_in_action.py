@@ -23,7 +23,7 @@ INIT_CONFIGS = [os.path.join('donald', 'init1.tct'),
 DATASETS = [os.path.join('donald', 'fornix.mif')] * len(INIT_CONFIGS)
 #DATASETS = [os.path.join('donald', 'fornix.mif'), os.path.join('heath', 'fornix.mif'), os.path.join('lisa', 'fornix.mif')]
 # Required dirs for the script to run
-REQUIRED_DIRS = ['params/image/reference', 'params/diffusion']
+REQUIRED_DIRS = ['params/image/reference', 'params/diffusion', 'params/fibre/tract/masks/mcmc/metropolis']
 # Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
@@ -99,7 +99,8 @@ metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.t
 -seed {seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
 {prior_density_low} 100 -prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 \
 -exp_num_width_sections {args.num_width_sections} -exp_type {args.interp_type} -diff_response {diff_response} \
--exp_b0 `cat {b0_path}` -diff_warn
+-exp_b0 `cat {b0_path}` -diff_warn -walk_step_location \
+{work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 
     """.format(work_dir=work_dir, dataset_path=dataset_path, init_config_path=init_config_path, args=args,
                seed=seed, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,
