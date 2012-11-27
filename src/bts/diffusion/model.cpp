@@ -236,7 +236,7 @@ namespace BTS {
         throw Exception ("Four columns required in encodings matrix, found " + str(encodings_matrix.columns()) + ".");
 
 
-      double consistent_b_value = 0;
+      double consistent_b_value = 0.0;
 
       MR::Math::Matrix<double> response_SHs(encodings_matrix.rows(), LMAX/2 + 1);
 
@@ -252,10 +252,9 @@ namespace BTS {
         else {
           if (warn_on_b_mismatch) {
             std::cout << "Inconsistent b values used in encoding matrix. Previously found b value " <<
-                      consistent_b_value <<  ", found " << encodings_matrix(row_i,3) << " at row " << row_i + "." <<
+                      consistent_b_value <<  ", found " << encodings_matrix(row_i,3) << " at row " << str(row_i) + "." <<
                       std::endl;
             response_SHs.row(row_i) = response_SH;
-            consistent_b_value = encodings_matrix(row_i,3);
           } else
             throw Exception("Inconsistent b values used in encoding matrix, please either supply a seperate " +
                             str("response harmonics for each row or use the automatic tensor harmonic calculation. ") +

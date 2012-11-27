@@ -20,10 +20,11 @@ INIT_CONFIGS = [os.path.join('donald', 'init1.tct'),
                 os.path.join('donald', 'init3.tct'),
                 os.path.join('donald', 'init4.tct'),
                 os.path.join('donald', 'init5.tct')]
+INIT_CONFIGS = [os.path.join('donald', 'init1.tct')]
 DATASETS = [os.path.join('donald', 'fornix.mif')] * len(INIT_CONFIGS)
 #DATASETS = [os.path.join('donald', 'fornix.mif'), os.path.join('heath', 'fornix.mif'), os.path.join('lisa', 'fornix.mif')]
 # Required dirs for the script to run
-REQUIRED_DIRS = ['params/image/reference', 'params/diffusion']
+REQUIRED_DIRS = ['params/image/reference', 'params/diffusion', 'params/fibre/tract/masks/mcmc/metropolis']
 # Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
@@ -51,7 +52,7 @@ parser.add_argument('--num_runs', default=1, type=int, help='The number of runs 
 parser.add_argument('--dry_run', action='store_true', help='Only perform a dry run (create jobscript then quit)')
 parser.add_argument('--np', type=int, default=1, help='The the number of processes to use for the simulation \
 (default: %(default)s)')
-parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to \
+parser.add_argument('--que_name', type=str, default='long', help='The the que to submit the job to \
 (default: %(default)s)')
 parser.add_argument('--combo', action='store_true', help='Instead of treating each ranging parameter sequence as the 1..N values for that parameter, all combinations of the provided parameters are tested.')
 args = parser.parse_args()
@@ -99,7 +100,8 @@ metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.t
 -seed {seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
 {prior_density_low} 100 -prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 \
 -exp_num_width_sections {args.num_width_sections} -exp_type {args.interp_type} -diff_response {diff_response} \
--exp_b0 `cat {b0_path}`
+-exp_b0 `cat {b0_path}` -diff_warn -walk_step_location \
+{work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 
     """.format(work_dir=work_dir, dataset_path=dataset_path, init_config_path=init_config_path, args=args,
                seed=seed, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,

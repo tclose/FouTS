@@ -123,7 +123,9 @@ namespace BTS {
       if ( !(status.st_mode & S_IFDIR) ) {
         if (mkdir(image_dir.c_str(),  S_IRWXU | S_IRWXG | S_IRWXO))
           throw Exception("Could not create directory '" + str(image_dir) + "'.");
+        stat(image_dir.c_str(), &status);
       }
+      std::cout << "Writing image files to image directory '" << image_dir << "'." << std::endl;
 #endif
 //#endif
 
