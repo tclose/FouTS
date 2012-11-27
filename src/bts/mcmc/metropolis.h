@@ -107,7 +107,7 @@ namespace BTS {
       typename State::Writer samples (samples_location, initial_x, sample_header, elem_header, run_properties);
 //      typename State::Writer iterations (File::strip_extension(samples_location) + ".iter."  + File::extension(samples_location), run_properties, sample_header);
 
-#ifndef NDEBUG
+//#ifndef NDEBUG
 #ifndef TEST_BED
       std::string parent_dir = File::dirname(samples_location);
       // If parent dir is not a relative path
@@ -123,9 +123,11 @@ namespace BTS {
       if ( !(status.st_mode & S_IFDIR) ) {
         if (mkdir(image_dir.c_str(),  S_IRWXU | S_IRWXG | S_IRWXO))
           throw Exception("Could not create directory '" + str(image_dir) + "'.");
+        stat(image_dir.c_str(), &status);
       }
+      std::cout << "Writing image files to image directory '" << image_dir << "'." << std::endl;
 #endif
-#endif
+//#endif
 
       State x = initial_x;
       State prop_x = x;
@@ -266,7 +268,7 @@ namespace BTS {
 //        x.properties.insert(component_values.begin(), component_values.end());
 
 
-#ifndef NDEBUG
+//#ifndef NDEBUG
 #ifndef TEST_BED
         likelihood.get_expected_image().save(image_dir + str("/iter_exp_") + str(sample_i) + ".mif");
         Image::Expected::Buffer* exp_image = likelihood.get_expected_image().clone();
@@ -276,7 +278,7 @@ namespace BTS {
         exp_image->save(image_dir + str("/iter_diff_") + str(sample_i) + ".mif");
         delete exp_image;
 #endif
-#endif
+//#endif
 
         //-------- End Debugging ------//
 

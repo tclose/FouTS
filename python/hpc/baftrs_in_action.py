@@ -20,6 +20,7 @@ INIT_CONFIGS = [os.path.join('donald', 'init1.tct'),
                 os.path.join('donald', 'init3.tct'),
                 os.path.join('donald', 'init4.tct'),
                 os.path.join('donald', 'init5.tct')]
+INIT_CONFIGS = [os.path.join('donald', 'init1.tct')]
 DATASETS = [os.path.join('donald', 'fornix.mif')] * len(INIT_CONFIGS)
 #DATASETS = [os.path.join('donald', 'fornix.mif'), os.path.join('heath', 'fornix.mif'), os.path.join('lisa', 'fornix.mif')]
 # Required dirs for the script to run
@@ -51,7 +52,7 @@ parser.add_argument('--num_runs', default=1, type=int, help='The number of runs 
 parser.add_argument('--dry_run', action='store_true', help='Only perform a dry run (create jobscript then quit)')
 parser.add_argument('--np', type=int, default=1, help='The the number of processes to use for the simulation \
 (default: %(default)s)')
-parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to \
+parser.add_argument('--que_name', type=str, default='long', help='The the que to submit the job to \
 (default: %(default)s)')
 parser.add_argument('--combo', action='store_true', help='Instead of treating each ranging parameter sequence as the 1..N values for that parameter, all combinations of the provided parameters are tested.')
 args = parser.parse_args()

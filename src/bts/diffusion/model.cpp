@@ -236,7 +236,7 @@ namespace BTS {
         throw Exception ("Four columns required in encodings matrix, found " + str(encodings_matrix.columns()) + ".");
 
 
-      double consistent_b_value = -1;
+      double consistent_b_value = 0.0;
 
       MR::Math::Matrix<double> response_SHs(encodings_matrix.rows(), LMAX/2 + 1);
 
@@ -245,8 +245,7 @@ namespace BTS {
         //If b value == previously set b value or the previous b value hasn't been set yet.
         if (encodings_matrix(row_i,3) == consistent_b_value || consistent_b_value == 0) {
           response_SHs.row(row_i) = response_SH;
-          if (consistent_b_value < 0)
-            consistent_b_value = encodings_matrix(row_i,3);
+          consistent_b_value = encodings_matrix(row_i,3);
         //If b value == 0. Set response coeffs to NAN, as they should be ignored in 'init' method.
         } else if (encodings_matrix(row_i,3) == 0)
           response_SHs.row(row_i) = NAN;
@@ -256,7 +255,6 @@ namespace BTS {
                       consistent_b_value <<  ", found " << encodings_matrix(row_i,3) << " at row " << str(row_i) + "." <<
                       std::endl;
             response_SHs.row(row_i) = response_SH;
-            consistent_b_value = encodings_matrix(row_i,3);
           } else
             throw Exception("Inconsistent b values used in encoding matrix, please either supply a seperate " +
                             str("response harmonics for each row or use the automatic tensor harmonic calculation. ") +
