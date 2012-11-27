@@ -20,27 +20,6 @@ CONF_INTERVAL = 0.99
 NOISE_MODELS = ['rician', 'gaussian', 'diff']
 PLOT_COLOURS = {'rician': 'orange', 'gaussian': 'dodgerblue', 'diff': 'indigo'}
 SUMMARISE_CONF_INTERVALS = True
-#Loop through each run for each SNR value and get minimums
-## Create proxy artists for legend
-#plot_index_mins = []
-#for snr_i, snr in enumerate(SNR_RANGE):
-#    run_plot_index_mins = [] # The minimums for each index of every plot
-#    for run_i in PLOT_RUNS:
-#        rician = np.loadtxt(os.path.join(WORK_DIR, 'rician_snr{snr}_run{run_i}.txt'.format(snr=snr, run_i=run_i)), comments='%')[:, 0]
-#        gauss = np.loadtxt(os.path.join(WORK_DIR, 'gaussian_snr{snr}_run{run_i}.txt'.format(snr=snr, run_i=run_i)), comments='%')[:, 0]
-#        # Count the number of samples
-#        num_samples = len(rician)
-#        assert(len(gauss) == num_samples)
-#        bin_width = math.pi / float(num_samples - 1) # The width of the bins used in the scan
-#        bin_width = math.pi / float(num_samples - 1) # The width of the bins used in the scan
-#        # Normalise probabilities
-#        rician -= np.log(np.sum(np.exp(rician)) * bin_width)
-#        gauss -= np.log(np.sum(np.exp(gauss)) * bin_width)
-#        run_index_mins = np.minimum(rician, gauss)
-#        run_plot_index_mins = np.minimum(run_plot_index_mins, run_index_mins) if len(run_plot_index_mins) else run_index_mins
-#    plot_index_mins.append(run_plot_index_mins)
-# Loop through each run and plot the results3   
-#plot_mins = [ np.min(x) for x in plot_index_mins]
 for snr_i, snr in enumerate(SNR_RANGE):
     fig = plt.figure()
     axes = fig.add_subplot(111) #fig.add_subplot(2, 2, snr_i + 1)
@@ -109,7 +88,7 @@ for snr_i, snr in enumerate(SNR_RANGE):
             angles = []
             for i, bin_index in enumerate(ci):
                 angles.append((float(bin_index) - float(num_samples) / 2.0) * bin_width)
-            conf_interval_sizes[noise_model].append(angles[1] - angles[0])
+            conf_interval_sizes[noise_model].append(abs(angles[1] - angles[0]))
             conf_interval_centres[noise_model].append(angles[0] + (angles[1] - angles[0]) / 2.0)
     # Add 5% of the original plot range to both plot min and plot max for buffer around plot
     plot_range = plot_max - plot_min
