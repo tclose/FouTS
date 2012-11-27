@@ -54,7 +54,9 @@ parser.add_argument('--np', type=int, default=1, help='The the number of process
 (default: %(default)s)')
 parser.add_argument('--que_name', type=str, default='long', help='The the que to submit the job to \
 (default: %(default)s)')
-parser.add_argument('--combo', action='store_true', help='Instead of treating each ranging parameter sequence as the 1..N values for that parameter, all combinations of the provided parameters are tested.')
+parser.add_argument('--combo', action='store_true', help="Instead of treating each ranging parameter sequence as the 1..N values " \
+                                                         "for that parameter, all combinations of the provided parameters are tested.")
+parser.add_argument('--default_response', action='store_true', help="Uses the default response function instead of creating own one")
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other 
@@ -87,7 +89,11 @@ for i in xrange(args.num_runs):
             init_config_path = os.path.join(work_dir, 'params', 'image', 'reference', init_config)
             dataset_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset)
             dataset_dir = os.path.dirname(dataset)
-            response_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.txt')
+            if args.default_response:
+                response_str = ""
+            else:
+                response_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.txt')
+                response_str = "-diff_response {}".format(response_path)
             response_b0_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.b0.txt')
             cmd_line = """             
 # Create initial_fibres of appropriate degree
@@ -99,14 +105,14 @@ metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.t
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
 {prior_density_low} 100 -prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 \
--exp_num_width_sections {args.num_width_sections} -exp_type {args.interp_type} -diff_response {diff_response} \
+-exp_num_width_sections {args.num_width_sections} -exp_type {args.interp_type} {response_str} \
 -exp_b0 `cat {b0_path}` -diff_warn -walk_step_location \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 
     """.format(work_dir=work_dir, dataset_path=dataset_path, init_config_path=init_config_path, args=args,
                seed=seed, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,
                prior_density_high=prior_density_high, prior_hook=prior_hook, prior_thin=prior_thin, like_snr=like_snr,
-               width_epsilon=width_epsilon, length_epsilon=length_epsilon, diff_response=response_path,
+               width_epsilon=width_epsilon, length_epsilon=length_epsilon, response_str=response_str,
                b0_path=response_b0_path)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
