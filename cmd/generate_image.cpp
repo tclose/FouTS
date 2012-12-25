@@ -164,7 +164,6 @@ EXECUTE {
   if (!img_offsets.valid())
     img_offsets = Image::Observed::Buffer::default_corner_offset(img_dims, img_vox_lengths);
 
-
   exp_enforce_bounds = true;
 
   if (!diff_isotropic && (noise_type == "rician"))

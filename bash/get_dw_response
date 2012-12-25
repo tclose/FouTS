@@ -38,13 +38,10 @@ gen_WM_mask $dwi_file ${pfx}mask.mif - | threshold - ${pfx}wm_mask.mif -abs $WM_
 dwi2tensor $dwi_file - | tensor2FA - - | mrmult - ${pfx}wm_mask.mif - | threshold - ${pfx}sf_mask.mif -abs $SF_FA_THRESHOLD
 
 # Mask single_fibre mask with whole brain mask 
-estimate_response $dwi_file ${pfx}sf_mask.mif $output -lmax 8 -normalise
-
-# For debugging
-#echo "get_b0 $dwi_file ${pfx}sf_mask.mif"
+#estimate_response $dwi_file ${pfx}sf_mask.mif $output -lmax 8
 
 # Save the average b0 to file for use in scaling the base intensity of the expected image
-get_b0 $dwi_file ${pfx}sf_mask.mif > ${output_base}.b0.$output_ext
+get_b0 $dwi_file ${pfx}sf_mask.mif -method median > ${output_base}.b0.$output_ext
 
 # Cleaning up temporary files
 rm "${pfx}"*

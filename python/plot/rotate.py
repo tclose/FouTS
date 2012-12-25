@@ -14,36 +14,25 @@ from matplotlib import pyplot as plt
 WORK_DIR = '/home/tclose/Documents/BaFTrS/data/rotate/'
 FIGURE_DIR = '/home/tclose/Documents/BaFTrS/figures/'
 SNR_RANGE = [2, 5, 10, 20]
-NUM_RUNS = 100
+ALL_RUNS = range(1, 1001)
+PLOT_RUNS = range(1, 31)
 CONF_INTERVAL = 0.99
-PLOT_COLOURS = {'Rician': 'indigo', 'Gaussian': 'dodgerblue', 'Difference': 'orange'}
-#Loop through each run for each SNR value
-# Create proxy artists for legend
-plot_index_mins = []
-for snr_i, snr in enumerate(SNR_RANGE):
-    run_plot_index_mins = [] # The minimums for each index of every plot
-    for run_i in xrange(1, NUM_RUNS):
-        rician = np.loadtxt(os.path.join(WORK_DIR, 'rician_snr{snr}_run{run_i}.txt'.format(snr=snr, run_i=run_i)), comments='%')[:, 0]
-        gauss = np.loadtxt(os.path.join(WORK_DIR, 'gaussian_snr{snr}_run{run_i}.txt'.format(snr=snr, run_i=run_i)), comments='%')[:, 0]
-        # Count the number of samples
-        num_samples = len(rician)
-        assert(len(gauss) == num_samples)
-        bin_width = math.pi / float(num_samples - 1) # The width of the bins used in the scan
-        bin_width = math.pi / float(num_samples - 1) # The width of the bins used in the scan
-        # Normalise probabilities
-        rician -= np.log(np.sum(np.exp(rician)) * bin_width)
-        gauss -= np.log(np.sum(np.exp(gauss)) * bin_width)
-        run_index_mins = np.minimum(rician, gauss)
-        run_plot_index_mins = np.minimum(run_plot_index_mins, run_index_mins) if len(run_plot_index_mins) else run_index_mins
-    plot_index_mins.append(run_plot_index_mins)
-plot_mins = [ np.min(x) for x in plot_index_mins]
+NOISE_MODELS = ['rician', 'gaussian', 'diff']
+PLOT_COLOURS = {'rician': 'orange', 'gaussian': 'dodgerblue', 'diff': 'indigo'}
+SUMMARISE_CONF_INTERVALS = True
 for snr_i, snr in enumerate(SNR_RANGE):
     fig = plt.figure()
     axes = fig.add_subplot(111) #fig.add_subplot(2, 2, snr_i + 1)
     # Calculate the minimum value for the current plot
-    for run_i in xrange(1, NUM_RUNS):
-        rician = np.loadtxt(os.path.join(WORK_DIR, 'rician_snr{snr}_run{run_i}.txt'.format(snr=snr, run_i=run_i)), comments='%')[:, 0]
-        gauss = np.loadtxt(os.path.join(WORK_DIR, 'gaussian_snr{snr}_run{run_i}.txt'.format(snr=snr, run_i=run_i)), comments='%')[:, 0]
+    conf_interval_sizes = {'rician': [], 'gaussian': [], 'diff': []}
+    conf_interval_centres = {'rician': [], 'gaussian': [], 'diff': []}
+    plot_min = float('inf')
+    plot_max = float('-inf')
+    for run_i in ALL_RUNS:
+        rician = np.loadtxt(os.path.join(WORK_DIR, 'rician_snr{snr}_run{run_i}.txt'.format(snr=snr, run_i=run_i)),
+                            comments='%')[:, 0]
+        gauss = np.loadtxt(os.path.join(WORK_DIR, 'gaussian_snr{snr}_run{run_i}.txt'.format(snr=snr, run_i=run_i)),
+                           comments='%')[:, 0]
         # Count the number of samples
         num_samples = len(rician)
         assert(len(gauss) == num_samples)
@@ -52,11 +41,16 @@ for snr_i, snr in enumerate(SNR_RANGE):
         rician -= np.log(np.sum(np.exp(rician)) * bin_width)
         gauss -= np.log(np.sum(np.exp(gauss)) * bin_width)
         angles = np.arange(-math.pi / 2.0, math.pi / 2.0, bin_width)
-        # Plot the differences
         diff = rician - gauss
-        axes.plot(angles, rician, PLOT_COLOURS['Rician'])
-        axes.plot(angles, gauss, PLOT_COLOURS['Gaussian'])
-        axes.plot(angles, diff, PLOT_COLOURS['Difference'])
+        # Plot the likelihood graphs if it is a run to plot
+        if run_i in PLOT_RUNS:
+            for prob, nm in zip((rician, gauss, diff), NOISE_MODELS):
+                axes.plot(angles, prob, PLOT_COLOURS[nm])
+                # Calculate the limits of the plot
+                if min(prob) < plot_min:
+                    plot_min = min(prob)
+                if max(prob) > plot_max:
+                    plot_max = max(prob)
         # Calculate the confidence intervals
         conf_intervals = []
         for dist in (gauss, rician):
@@ -87,16 +81,30 @@ for snr_i, snr in enumerate(SNR_RANGE):
             # Calculate the angles of the the interval start and ends
             conf_intervals.append((left_index, right_index))
         rician_ci, gauss_ci = conf_intervals
-        diff_ci = ((rician_ci[0] - gauss_ci[0] + num_samples // 2) % num_samples, (rician_ci[1] - gauss_ci[1] + num_samples // 2) % num_samples)
-        for ci, colour in zip((rician_ci, gauss_ci, diff_ci), (PLOT_COLOURS['Rician'], PLOT_COLOURS['Gaussian'],
-                                                                                            PLOT_COLOURS['Difference'])):
-            for index, style in zip(ci, ('--', ':')):
-                angle = (float(index) - float(num_samples) / 2.0) * bin_width
-                axes.plot((angle, angle), (plot_mins[snr_i], plot_index_mins[snr_i][index]), color=colour, linestyle=style)
-        if run_i % 100 == 0:
-            print "Finished {} runs".format(run_i)
+        # Calculate the median difference and the median centre and plot that for reference only
+        diff_ci = ((rician_ci[0] - gauss_ci[0] + num_samples // 2) % num_samples,
+                   (rician_ci[1] - gauss_ci[1] + num_samples // 2) % num_samples)
+        for noise_model, ci in (('rician', rician_ci), ('gaussian', gauss_ci), ('diff', diff_ci)):
+            angles = []
+            for i, bin_index in enumerate(ci):
+                angles.append((float(bin_index) - float(num_samples) / 2.0) * bin_width)
+            conf_interval_sizes[noise_model].append(abs(angles[1] - angles[0]))
+            conf_interval_centres[noise_model].append(angles[0] + (angles[1] - angles[0]) / 2.0)
+    # Add 5% of the original plot range to both plot min and plot max for buffer around plot
+    plot_range = plot_max - plot_min
+    plot_max = plot_max + plot_range * 0.05
+    plot_min = plot_min - plot_range * 0.05
+    print "SNR {}:".format(snr)
+    for nm, ci in zip(NOISE_MODELS, (rician_ci, gauss_ci, diff_ci)):
+        size = np.average(np.array(conf_interval_sizes[nm]))
+        centre = np.average(np.array(conf_interval_centres[nm]))
+        print "{nm} - size={size}, centre={centre}".format(nm=nm, size=size, centre=centre)
+        for angle in (centre - size / 2.0, centre + size / 2.0):
+            axes.plot((angle, angle), (plot_min, plot_max), color=PLOT_COLOURS[nm],
+                      linestyle='--')
+    axes.set_ylim((plot_min, plot_max))
+    axes.set_xlim((-math.pi / 2.0, math.pi / 2.0))
     axes.set_title('SNR {}'.format(snr))
     axes.set_xlabel('Rotation (Radians)')
     axes.set_ylabel('Probability Density')
-    print "Finished snr {}".format(snr)
 plt.show()
