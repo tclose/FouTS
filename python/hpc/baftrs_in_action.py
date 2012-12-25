@@ -56,7 +56,7 @@ parser.add_argument('--que_name', type=str, default='long', help='The the que to
 (default: %(default)s)')
 parser.add_argument('--combo', action='store_true', help="Instead of treating each ranging parameter sequence as the 1..N values " \
                                                          "for that parameter, all combinations of the provided parameters are tested.")
-parser.add_argument('--default_response', action='store_true', help="Uses the default response function instead of creating own one")
+parser.add_argument('--estimate_response', action='store_true', help="Uses an estimated diffusion response function instead of the default tensor one")
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other 
@@ -89,11 +89,11 @@ for i in xrange(args.num_runs):
             init_config_path = os.path.join(work_dir, 'params', 'image', 'reference', init_config)
             dataset_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset)
             dataset_dir = os.path.dirname(dataset)
-            if args.default_response:
-                response_str = ""
-            else:
+            if args.estimate_response:
                 response_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.txt')
                 response_str = "-diff_response {}".format(response_path)
+            else:
+                response_str = ""
             response_b0_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.b0.txt')
             cmd_line = """             
 # Create initial_fibres of appropriate degree
