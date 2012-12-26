@@ -20,6 +20,8 @@ INIT_CONFIGS = [os.path.join('donald', 'init1.tct'),
                 os.path.join('donald', 'init3.tct'),
                 os.path.join('donald', 'init4.tct'),
                 os.path.join('donald', 'init5.tct')]
+# Only select one config for debugging
+#INIT_CONFIGS = [os.path.join('donald', 'init1.tct')]
 #DATASETS = [os.path.join('donald', 'fornix.mif'), os.path.join('heath', 'fornix.mif'), os.path.join('lisa', 'fornix.mif')]
 DATASETS = [os.path.join('donald', 'fornix.mif')] * len(INIT_CONFIGS)
 # Required dirs for the script to run
