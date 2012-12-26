@@ -227,8 +227,10 @@ EXECUTE {
       Fibre::Tractlet::Set tractlets (input_location);
 
       //base_intensity is recorded in header so needs to be synchronised with base_intensity of tractlets
-      if (exp_b0)
-        tractlets.set_base_intensity(image->get_base_intensity(exp_b0));
+      if (exp_b0) {
+        double base_intensity = image->get_base_intensity(exp_b0);
+        tractlets.set_base_intensity(base_intensity);
+      }
 
       image->expected_image(tractlets);
 
