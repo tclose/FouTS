@@ -19,8 +19,6 @@ import gdb
 import itertools
 import re
 
-
-
 class TriplePrinter:
     "Print Triple<T>"
 
@@ -80,7 +78,6 @@ class FibreStrandTrackPrinter:
       return elem
 
 
-
 class FibreTractletPrinter:
     "Print Fibre::Strand and Fibre::Track objects"
 
@@ -91,9 +88,9 @@ class FibreTractletPrinter:
         self.size = self.val['sze']
         self.degree = self.val['dgree']
         self.vsize = self.val['size']
-        self.prop_start = self.vsize - (self.degree * 9)
-        self.num_props = self.vsize - self.prop_start
-        assert prop_start >= 0
+        self.bsize = self.degree * 9
+        self.num_props = self.vsize - self.bsize
+
 
     def children(self):
       for i in xrange(self.degree):
@@ -102,20 +99,19 @@ class FibreTractletPrinter:
                                                                      self.get_elem(i, 2, 0), self.get_elem(i, 2, 1), self.get_elem(i, 2, 2))
 
     def to_string(self):
-        alpha = float('nan')
+        alpha = 1
         if self.num_props:
             alpha = self.get_prop(0)
         return ("Fibre::Tractlet (degree={}, alpha={}): ".format(self.degree, alpha))
 
     def get_elem(self, degree_i, ax_i, dim_i):
-        address = self.data_ptr + ((ax_i * self.degree + degree_i) * 3 + dim_i) * self.stride
-        return address.dereference()
+      address = self.data_ptr + ((ax_i * self.degree + degree_i) * 3 + dim_i) * self.stride
+      return address.dereference()
 
     def get_prop(self, prop_index):
         assert prop_index < self.num_props
-        address = self.data_ptr + (self.prop_start + prop_index) * self.stride
+        address = self.data_ptr + (self.bsize + prop_index) * self.stride
         return address.dereference()
-
 class FibreSectionPrinter:
     "Print Fibre::Strand::Section"
 
