@@ -50,64 +50,6 @@ class CoordPrinter:
         return 'array'
 
 
-#
-#class FibreTractletPrinter:
-#    "Print Fibre::Strand and Fibre::Track objects"
-#
-#    class _iterator:
-#        def __init__ (self, size, degree, stride, data_ptr):
-#            self.size = size
-#            self.degree = degree
-#            self.stride = stride
-#            self.data_ptr = data_ptr
-#            self.count = 0
-#            self.x1_offset = 0
-#            self.y1_offset = stride
-#            self.z1_offset = stride * 2
-#            self.x2_offset = stride * degree * 3
-#            self.y2_offset = stride * (degree * 3 + 1)
-#            self.z2_offset = stride * (degree * 3 + 2)
-#            self.x3_offset = stride * (degree * 6)
-#            self.y3_offset = stride * (degree * 6 + 1)
-#            self.z3_offset = stride * (degree * 6 + 2)
-#
-#        def __iter__(self):
-#            return self
-#
-#        def next(self):
-#            if self.count == self.size:
-#                raise StopIteration
-#            count = self.count
-#            x1 = str((self.data_ptr + self.x1_offset).dereference())
-#            y1 = str((self.data_ptr + self.y1_offset).dereference())
-#            z1 = str((self.data_ptr + self.z1_offset).dereference())
-#            x2 = str((self.data_ptr + self.x2_offset).dereference())
-#            y2 = str((self.data_ptr + self.y2_offset).dereference())
-#            z2 = str((self.data_ptr + self.z2_offset).dereference())
-#            x3 = str((self.data_ptr + self.x3_offset).dereference())
-#            y3 = str((self.data_ptr + self.y3_offset).dereference())
-#            z3 = str((self.data_ptr + self.z3_offset).dereference())
-#            self.data_ptr = self.data_ptr + self.stride * 3
-#            self.count = self.count + 1
-#            return ('[%d]' % count, gdb.Value(x1 + " " + y1 + " " + z1 + " | " +
-#                                              x2 + " " + y2 + " " + z2 + " | " +
-#                                              x3 + " " + y3 + " " + z3))
-#
-#    def __init__(self, typename, val):
-#        self.typename = typename
-#        self.val = val
-#
-#    def children(self):
-#        return self._iterator(self.val['sze'],
-#                              self.val['dgree'],
-#                              self.val['stride'],
-#                              self.val['data'])
-#
-#    def to_string(self):
-#        return ("%s: size %d" % (self.typename, self.val['sze']))
-
-#def get_element():
-
 class FibreStrandTrackPrinter:
     "Print Fibre::Strand and Fibre::Track objects"
 
@@ -148,6 +90,10 @@ class FibreTractletPrinter:
         self.data_ptr = val['data']
         self.size = self.val['sze']
         self.degree = self.val['dgree']
+        self.vsize = self.val['size']
+        self.prop_start = self.vsize - (self.degree * 9)
+        self.num_props = self.vsize - self.prop_start
+        assert prop_start >= 0
 
     def children(self):
       for i in xrange(self.degree):
@@ -156,13 +102,19 @@ class FibreTractletPrinter:
                                                                      self.get_elem(i, 2, 0), self.get_elem(i, 2, 1), self.get_elem(i, 2, 2))
 
     def to_string(self):
-        return ("Fibre::Tractlet (degree={}): ".format(self.degree))
+        alpha = float('nan')
+        if self.num_props:
+            alpha = self.get_prop(0)
+        return ("Fibre::Tractlet (degree={}, alpha={}): ".format(self.degree, alpha))
 
     def get_elem(self, degree_i, ax_i, dim_i):
-      address = self.data_ptr + ((ax_i * self.degree + degree_i) * 3 + dim_i) * self.stride
-      return address.dereference()
+        address = self.data_ptr + ((ax_i * self.degree + degree_i) * 3 + dim_i) * self.stride
+        return address.dereference()
 
-
+    def get_prop(self, prop_index):
+        assert prop_index < self.num_props
+        address = self.data_ptr + (self.prop_start + prop_index) * self.stride
+        return address.dereference()
 
 class FibreSectionPrinter:
     "Print Fibre::Strand::Section"
