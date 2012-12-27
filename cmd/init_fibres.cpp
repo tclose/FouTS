@@ -45,9 +45,12 @@ using namespace BTS;
 const double  BASE_INTENSITY_DEFAULT = 0.0;
 const size_t  DEGREE_DEFAULT = 3;
 const size_t  NUM_FIBRES_DEFAULT = 5;
-const float   LENGTH_STDDEV_DEFAULT = 0.02;
-const float   WIDTH_MEAN_DEFAULT= 0.05;
-const float   WIDTH_STDDEV_DEFAULT= 0.005;
+//const float   LENGTH_STDDEV_DEFAULT = 0.02;
+//const float   WIDTH_MEAN_DEFAULT= 0.05;
+//const float   WIDTH_STDDEV_DEFAULT= 0.005;
+const float   LENGTH_STDDEV_DEFAULT = 0.3;
+const float   WIDTH_MEAN_DEFAULT= 0.75;
+const float   WIDTH_STDDEV_DEFAULT= 0.075;
 const float   REJECT_RADIUS_DEFAULT = NAN;
 const float   DEFAULT_REJECT_RADIUS_SCALE = 1.5;
 const double  EDGE_BUFFER_DEFAULT = 0.075;
@@ -59,7 +62,9 @@ SET_AUTHOR ("Thomas G. Close");
 SET_COPYRIGHT (NULL);
 
 DESCRIPTION = {
-  "new_fibres",
+  "Initialises Fourier tracts within the image bounds with uniformly distributed orientations, normally distributed "
+  "lengths and widths for the initialisation of Bayesian sampling. The default values produce small tracts to allow "
+  "the tracts to ""grow"" in the direction of the underlying fibre orientation.",
   "",
   NULL
 };
@@ -90,13 +95,15 @@ OPTIONS = {
   Option("width_mean", "Mean width of the initialised fibres.")
    + Argument("width_mean","").type_float(SMALL_FLOAT, WIDTH_MEAN_DEFAULT,LARGE_FLOAT),
 
-  Option("width_stddev", "Standard deviation of width of the initialised fibres.")
+  Option("width_stddev", "Standard deviation of width of the initialised fibres")
    + Argument("width_stddev","").type_float(SMALL_FLOAT, WIDTH_STDDEV_DEFAULT,LARGE_FLOAT),
 
-  Option("reject_radius", "If a centre of a randomly generated fibre lies withinness the radius of a previously generated strand it is rejected.")
+  Option("reject_radius", "If a centre of a randomly generated fibre lies withinness the radius of a previously "
+                          "generated strand it is rejected.")
    + Argument("reject_radius","").type_float(SMALL_FLOAT, REJECT_RADIUS_DEFAULT,LARGE_FLOAT),
 
-  Option("edge_buffer", "Restrict the distributed_centres of the generated fibres to be withinness a certain distance from the edge of the ROI.")
+  Option("edge_buffer", "Restrict the distributed_centres of the generated fibres to be withinness a certain distance "
+                        "from the edge of the ROI.")
    + Argument("edge_buffer","").type_float(SMALL_FLOAT, EDGE_BUFFER_DEFAULT,LARGE_FLOAT),
 
   Option("curve_stddev", "The standard deviation of the curvature parameters.")

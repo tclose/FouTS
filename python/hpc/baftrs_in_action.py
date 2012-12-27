@@ -26,7 +26,7 @@ DATASETS = [os.path.join('donald', 'fornix.mif')] * len(INIT_CONFIGS)
 REQUIRED_DIRS = ['params/image/reference', 'params/diffusion', 'params/fibre/tract/masks/mcmc/metropolis']
 # Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
+parser.add_argument('--step_scale', default=0.015, type=float, help='The scale of the steps used for the metropolis sampling')
 parser.add_argument('--num_iterations', default=100000, type=int, help='The number of interations in the metropolis sampling')
 parser.add_argument('--sample_period', default=1000, type=int, help='The sample period of the metropolis sampling')
 parser.add_argument('--num_width_sections', default=4, help='The number of samples to use across a Fourier tracts cross-section')

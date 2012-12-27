@@ -132,7 +132,8 @@ generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif \
 # Initialise fibres
 init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
 -img_dims "{img_dim} {img_dim} {img_dim}" -degree {args.degree} -seed {init_seed} -base_intensity 1.0 \
--width_epsilon {width_epsilon} -length_epsilon {length_epsilon}
+-width_epsilon {width_epsilon} -length_epsilon {length_epsilon} -length_std 0.02 -width_mean 0.05 \
+-width_std 0.005
 
 # Run metropolis
 metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
