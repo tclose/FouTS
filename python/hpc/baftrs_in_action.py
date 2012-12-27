@@ -20,6 +20,11 @@ INIT_CONFIGS = [os.path.join('donald', 'init1.tct'),
                 os.path.join('donald', 'init3.tct'),
                 os.path.join('donald', 'init4.tct'),
                 os.path.join('donald', 'init5.tct')]
+INIT_ROIS = [((111, 119, 73), (1, 1, 1)),
+             ((118, 112, 70), (1, 1, 1)),
+             ((110, 120, 77), (1, 1, 1)),
+             ((120, 113, 79), (1, 1, 1)),
+             ((112, 117, 74), (1, 1, 1))]
 #DATASETS = [os.path.join('donald', 'fornix.mif'), os.path.join('heath', 'fornix.mif'), os.path.join('lisa', 'fornix.mif')]
 DATASETS = [os.path.join('donald', 'fornix.mif')] * len(INIT_CONFIGS)
 # Required dirs for the script to run
@@ -69,7 +74,7 @@ seed = int(time.time() * 100)
 for i in xrange(args.num_runs):
     for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin, like_snr, \
                                                                 width_epsilon, length_epsilon in zip(*ranging_params):
-        for init_config, dataset in zip(INIT_CONFIGS, DATASETS):
+        for roi, dataset in zip(INIT_ROIS, DATASETS):
             # Create work directory and get path for output directory
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
             with open(os.path.join(work_dir, 'summary.txt'), 'w') as f:
@@ -96,7 +101,8 @@ for i in xrange(args.num_runs):
             response_b0_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.b0.txt')
             cmd_line = """             
 # Create initial_fibres of appropriate degree
-redegree_fibres {init_config_path} {work_dir}/output/init.tct -degree {args.degree}
+#redegree_fibres {init_config_path} {work_dir}/output/init.tct -degree {args.degree}
+init_fibres {work_dir}/output/init.tct -degree {args.degree} -num_fibres 1 -img_dims "{roi_length[0]} {roi_length[1]} {roi_length[2]}" -img_offset "{roi_offset[0]} {roi_offset[1]} {roi_offset[2]}" -edge_buffer 0.0 -seed {init_seed} -base_intensity 1.0
                 
 # Run metropolis
 metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
@@ -112,7 +118,7 @@ metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.t
                seed=seed, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,
                prior_density_high=prior_density_high, prior_hook=prior_hook, prior_thin=prior_thin, like_snr=like_snr,
                width_epsilon=width_epsilon, length_epsilon=length_epsilon, response_str=response_str,
-               b0_path=response_b0_path)
+               b0_path=response_b0_path, roi_length=roi[1], roi_offset=roi[0])
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
                                                                 dry_run=args.dry_run, copy_to_output=['summary.txt'])
