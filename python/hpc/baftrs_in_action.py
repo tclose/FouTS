@@ -20,13 +20,15 @@ INIT_CONFIGS = [os.path.join('donald', 'init1.tct'),
                 os.path.join('donald', 'init3.tct'),
                 os.path.join('donald', 'init4.tct'),
                 os.path.join('donald', 'init5.tct')]
+# Only select one config for debugging
+#INIT_CONFIGS = [os.path.join('donald', 'init1.tct')]
 INIT_ROIS = [((111, 119, 73), (1, 1, 1)),
              ((118, 112, 70), (1, 1, 1)),
              ((110, 120, 77), (1, 1, 1)),
              ((120, 113, 79), (1, 1, 1)),
              ((112, 117, 74), (1, 1, 1))]
 #DATASETS = [os.path.join('donald', 'fornix.mif'), os.path.join('heath', 'fornix.mif'), os.path.join('lisa', 'fornix.mif')]
-DATASETS = [os.path.join('donald', 'fornix.mif')] * len(INIT_CONFIGS)
+DATASETS = [os.path.join('donald', 'fornix.mif')] * len(INIT_ROIS)
 # Required dirs for the script to run
 REQUIRED_DIRS = ['params/image/reference', 'params/diffusion', 'params/fibre/tract/masks/mcmc/metropolis']
 # Arguments that can be given to the script
