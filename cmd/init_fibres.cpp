@@ -104,7 +104,7 @@ OPTIONS = {
 
   Option("edge_buffer", "Restrict the distributed_centres of the generated fibres to be withinness a certain distance "
                         "from the edge of the ROI.")
-   + Argument("edge_buffer","").type_float(SMALL_FLOAT, EDGE_BUFFER_DEFAULT,LARGE_FLOAT),
+   + Argument("edge_buffer","").type_float(-SMALL_FLOAT, EDGE_BUFFER_DEFAULT,LARGE_FLOAT),
 
   Option("curve_stddev", "The standard deviation of the curvature parameters.")
    + Argument("curve_stddev", "").type_float(0, 0, LARGE_FLOAT),

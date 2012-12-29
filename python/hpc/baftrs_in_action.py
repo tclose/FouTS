@@ -76,23 +76,23 @@ seed = int(time.time() * 100)
 for i in xrange(args.num_runs):
     for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin, like_snr, \
                                                                 width_epsilon, length_epsilon in zip(*ranging_params):
-        for roi, dataset in zip(INIT_ROIS, DATASETS):
+        for init_roi, dataset in zip(INIT_ROIS, DATASETS):
             # Create work directory and get path for output directory
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
             with open(os.path.join(work_dir, 'summary.txt'), 'w') as f:
-                f.write(init_config + '\n')
+                #f.write(init_config + '\n')
                 f.write(dataset + '\n')
                 for par_name in ranging_param_names:
                     f.write('{par}: {val}\n'.format(par=par_name, val=eval(par_name)))
             # Create a file in the output directory with just the dataset printed in it (usefulf for quickly 
             # determining what the dataset is
-            with open(os.path.join(work_dir, 'output', 'config_name.txt'), 'w') as dataset_file:
-                dataset_file.write(init_config + '\n')
+            #with open(os.path.join(work_dir, 'output', 'config_name.txt'), 'w') as dataset_file:
+                #dataset_file.write(init_config + '\n')
             with open(os.path.join(work_dir, 'output', 'dataset_name.txt'), 'w') as dataset_file:
                 dataset_file.write(dataset + '\n')
             # Strip dataset of symbols for tract number and img dimension
             # Get the dataset path
-            init_config_path = os.path.join(work_dir, 'params', 'image', 'reference', init_config)
+            #init_config_path = os.path.join(work_dir, 'params', 'image', 'reference', init_config)
             dataset_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset)
             dataset_dir = os.path.dirname(dataset)
             if args.estimate_response:
@@ -103,8 +103,8 @@ for i in xrange(args.num_runs):
             response_b0_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.b0.txt')
             cmd_line = """             
 # Create initial_fibres of appropriate degree
-#redegree_fibres {init_config_path} {work_dir}/output/init.tct -degree {args.degree}
-init_fibres {work_dir}/output/init.tct -degree {args.degree} -num_fibres 1 -img_dims "{roi_length[0]} {roi_length[1]} {roi_length[2]}" -img_offset "{roi_offset[0]} {roi_offset[1]} {roi_offset[2]}" -edge_buffer 0.0 -seed {init_seed} -base_intensity 1.0
+#redegree_fibres init_config_path {work_dir}/output/init.tct -degree {args.degree}
+init_fibres {work_dir}/output/init.tct -degree {args.degree} -num_fibres 1 -img_dims "{roi_length[0]} {roi_length[1]} {roi_length[2]}" -img_offset "{roi_offset[0]} {roi_offset[1]} {roi_offset[2]}" -edge_buffer 0.0 -seed 123455 -base_intensity 1.0
                 
 # Run metropolis
 metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
@@ -116,11 +116,11 @@ metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.t
 -exp_b0 `cat {b0_path}` -diff_warn -walk_step_location \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 
-    """.format(work_dir=work_dir, dataset_path=dataset_path, init_config_path=init_config_path, args=args,
+    """.format(work_dir=work_dir, dataset_path=dataset_path, args=args,
                seed=seed, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,
                prior_density_high=prior_density_high, prior_hook=prior_hook, prior_thin=prior_thin, like_snr=like_snr,
                width_epsilon=width_epsilon, length_epsilon=length_epsilon, response_str=response_str,
-               b0_path=response_b0_path, roi_length=roi[1], roi_offset=roi[0])
+               b0_path=response_b0_path, roi_length=init_roi[1], roi_offset=init_roi[0])
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
                                                                 dry_run=args.dry_run, copy_to_output=['summary.txt'])
