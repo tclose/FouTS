@@ -95,7 +95,7 @@ for i in xrange(args.num_runs):
             cmd_line = """             
 # Create initial_fibres of appropriate degree
 init_fibres {work_dir}/output/init.tct -degree {args.degree} -num_fibres 1 -width_epsilon {args.width_epsilon} \
--length_epsilon {args.length_epsilon} -edge_buffer 0.0 -seed {init_seed} -base_intensity 1.0 
+-length_epsilon {args.length_epsilon} -edge_buffer 0.0 -seed {init_seed} -base_intensity 1.0 \
 -img_dims "{init_extent[0]} {init_extent[1]} {init_extent[2]}" \
 -img_offset "{init_offset[0]} {init_offset[1]} {init_offset[2]}" 
 
