@@ -10,25 +10,11 @@
 import hpc
 import argparse
 import os.path
-import subprocess as sp
 import time
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'baftrs_in_action'
-# Datasets and corresponding initial configurations to run the metropolis with
-INIT_CONFIGS = [os.path.join('donald', 'init1.tct'),
-                os.path.join('donald', 'init2.tct'),
-                os.path.join('donald', 'init3.tct'),
-                os.path.join('donald', 'init4.tct'),
-                os.path.join('donald', 'init5.tct')]
-# Only select one config for debugging
-#INIT_CONFIGS = [os.path.join('donald', 'init1.tct')]
-INIT_ROIS = [((111, 119, 73), (1, 1, 1)),
-             ((118, 112, 70), (1, 1, 1)),
-             ((110, 120, 77), (1, 1, 1)),
-             ((120, 113, 79), (1, 1, 1)),
-             ((112, 117, 74), (1, 1, 1))]
+DATASETS = [os.path.join('donald', 'fornix.mif')]
 #DATASETS = [os.path.join('donald', 'fornix.mif'), os.path.join('heath', 'fornix.mif'), os.path.join('lisa', 'fornix.mif')]
-DATASETS = [os.path.join('donald', 'fornix.mif')] * len(INIT_ROIS)
 # Required dirs for the script to run
 REQUIRED_DIRS = ['params/image/reference', 'params/diffusion', 'params/fibre/tract/masks/mcmc/metropolis']
 # Arguments that can be given to the script
@@ -50,8 +36,13 @@ parser.add_argument('--prior_thin', default=[0.0], type=float, nargs='+', help='
 parser.add_argument('--width_epsilon', default=[0.01], type=float, nargs='+', help='The amount of width epsilon to use')
 parser.add_argument('--length_epsilon', default=[0.01], type=float, nargs='+', help='The amount of length epsilon to use')
 parser.add_argument('--img_snr', default=20.0, type=float, help='The snr to used in the noisy image')
-parser.add_argument('--like_snr', default=[20.0], type=float, nargs='+', help='The assumed snr to used in the likelihood function in \
-the metropolis sampling')
+parser.add_argument('--like_snr', default=[20.0], type=float, nargs='+',
+                    help='The assumed snr to used in the likelihood function in the metropolis sampling')
+parser.add_argument('--init_offset', default=(115, 117, 75), nargs=3, type=float,
+                    help='The offset of the ROI in which the inital tracts are generated')
+parser.add_argument('--init_extent', default=(10, 10, 10), nargs=3, type=int,
+                    help='The extent (in number of voxels) of the ROI in which the inital tracts are generated')
+parser.add_argument('--seed', type=int, help="The random seed for the whole run")
 parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory \
 will be created (defaults to $HOME/Output)')
 parser.add_argument('--num_runs', default=1, type=int, help='The number of runs to submit to the que')
@@ -72,27 +63,27 @@ ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low', 'pri
                             'prior_hook', 'prior_thin', 'like_snr', 'width_epsilon', 'length_epsilon']
 ranging_params = hpc.combo_params(args, ranging_param_names, args.combo)
 # Generate a random seed to seed the random number generators of the cmds
-seed = int(time.time() * 100)
+if not args.seed:
+    seed = int(time.time() * 100)
+    print "Using seed {}".format(seed)
+else:
+    seed = args.seed
 for i in xrange(args.num_runs):
     for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin, like_snr, \
                                                                 width_epsilon, length_epsilon in zip(*ranging_params):
-        for roi, dataset in zip(INIT_ROIS, DATASETS):
+        for dataset in DATASETS:
             # Create work directory and get path for output directory
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
             with open(os.path.join(work_dir, 'summary.txt'), 'w') as f:
-                f.write(init_config + '\n')
                 f.write(dataset + '\n')
                 for par_name in ranging_param_names:
                     f.write('{par}: {val}\n'.format(par=par_name, val=eval(par_name)))
             # Create a file in the output directory with just the dataset printed in it (usefulf for quickly 
             # determining what the dataset is
-            with open(os.path.join(work_dir, 'output', 'config_name.txt'), 'w') as dataset_file:
-                dataset_file.write(init_config + '\n')
             with open(os.path.join(work_dir, 'output', 'dataset_name.txt'), 'w') as dataset_file:
                 dataset_file.write(dataset + '\n')
             # Strip dataset of symbols for tract number and img dimension
             # Get the dataset path
-            init_config_path = os.path.join(work_dir, 'params', 'image', 'reference', init_config)
             dataset_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset)
             dataset_dir = os.path.dirname(dataset)
             if args.estimate_response:
@@ -103,8 +94,9 @@ for i in xrange(args.num_runs):
             response_b0_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.b0.txt')
             cmd_line = """             
 # Create initial_fibres of appropriate degree
-#redegree_fibres {init_config_path} {work_dir}/output/init.tct -degree {args.degree}
-init_fibres {work_dir}/output/init.tct -degree {args.degree} -num_fibres 1 -img_dims "{roi_length[0]} {roi_length[1]} {roi_length[2]}" -img_offset "{roi_offset[0]} {roi_offset[1]} {roi_offset[2]}" -edge_buffer 0.0 -seed {init_seed} -base_intensity 1.0
+init_fibres {work_dir}/output/init.tct -degree {args.degree} -num_fibres 1 \
+-img_dims "{init_extent[0]} {init_extent[1]} {init_extent[2]}" \
+-img_offset "{init_offset[0]} {init_offset[1]} {init_offset[2]}" -edge_buffer 0.0 -seed {init_seed} -base_intensity 1.0
                 
 # Run metropolis
 metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
@@ -116,12 +108,13 @@ metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.t
 -exp_b0 `cat {b0_path}` -diff_warn -walk_step_location \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 
-    """.format(work_dir=work_dir, dataset_path=dataset_path, init_config_path=init_config_path, args=args,
-               seed=seed, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,
-               prior_density_high=prior_density_high, prior_hook=prior_hook, prior_thin=prior_thin, like_snr=like_snr,
-               width_epsilon=width_epsilon, length_epsilon=length_epsilon, response_str=response_str,
-               b0_path=response_b0_path, roi_length=roi[1], roi_offset=roi[0])
+    """.format(work_dir=work_dir, dataset_path=dataset_path, args=args,
+               seed=seed, init_seed=seed + 1, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq,
+               prior_density_low=prior_density_low, prior_density_high=prior_density_high, prior_hook=prior_hook,
+               prior_thin=prior_thin, like_snr=like_snr, width_epsilon=width_epsilon, length_epsilon=length_epsilon,
+               response_str=response_str, b0_path=response_b0_path, init_extent=args.init_extent,
+               init_offset=args.init_offset)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
                                                                 dry_run=args.dry_run, copy_to_output=['summary.txt'])
-        seed += 1
+        seed += 2
