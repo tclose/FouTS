@@ -127,7 +127,8 @@ OPTIONS = {
 Option() };
 
 
-std::vector< Triple<double> >    distributed_centres(const Triple<double>& roi_extent, size_t num_fibres, gsl_rng* rand_gen, double reject_radius);
+std::vector< Triple<double> >    distributed_centres(const Triple<double>& img_offsets, const Triple<double>& roi_extent,
+                                                     size_t num_fibres, gsl_rng* rand_gen, double reject_radius);
 
 std::vector< Triple<double> >    distant_centres(size_t num_fibres, double centre_radius, gsl_rng* rand_gen);
 
@@ -272,10 +273,11 @@ EXECUTE {
       strands.set_base_intensity(base_intensity);
 
     std::vector< Triple<double> > centres;
+    // Select between initialising the strands on a shell of "centre_radius" or uniformly distributed with an roi
     if (centre_radius > 0)
       centres = distant_centres(num_fibres, centre_radius, rand_gen);
     else
-      centres = distributed_centres(roi_extent, num_fibres, rand_gen, reject_radius);
+      centres = distributed_centres(img_offsets, roi_extent, num_fibres, rand_gen, reject_radius);
 
     std::vector< Triple<double> > orients = orientations(num_fibres, rand_gen, length_stddev);
 
@@ -313,7 +315,7 @@ EXECUTE {
     if (centre_radius > 0)
       centres = distant_centres(num_fibres, centre_radius, rand_gen);
     else
-      centres = distributed_centres(roi_extent, num_fibres, rand_gen, reject_radius);
+      centres = distributed_centres(img_offsets, roi_extent, num_fibres, rand_gen, reject_radius);
 
     std::vector< Triple<double> > orients = orientations(num_fibres, rand_gen, length_stddev);
 
@@ -348,7 +350,8 @@ EXECUTE {
 
 
 //Randomly generate centre points withinness the region of interest
-std::vector< Triple<double> >    distributed_centres(const Triple<double>& roi_extent, size_t num_fibres, gsl_rng* rand_gen, double reject_radius) {
+std::vector< Triple<double> >    distributed_centres(const Triple<double>& img_offsets, const Triple<double>& roi_extent,
+                                                     size_t num_fibres, gsl_rng* rand_gen, double reject_radius) {
 
   std::vector< Triple<double> > points;
 
@@ -361,7 +364,8 @@ std::vector< Triple<double> >    distributed_centres(const Triple<double>& roi_e
     for (size_t attempt_i = 0; attempt_i < MAX_NUM_ATTEMPTS; ++attempt_i) {
 
       for (size_t dim_i = 0; dim_i < 3; ++dim_i)
-        centre[dim_i] = gsl_ran_flat(rand_gen, -roi_extent[Z], roi_extent[Z]);
+        centre[dim_i] = gsl_ran_flat(rand_gen, img_offsets[dim_i] - roi_extent[dim_i],
+                                               img_offsets[dim_i] + roi_extent[dim_i]);
 
       bool reject = false;
 
