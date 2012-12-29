@@ -69,8 +69,7 @@ if not args.seed:
 else:
     seed = args.seed
 for i in xrange(args.num_runs):
-    for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin, like_snr, \
-                                                                width_epsilon, length_epsilon in zip(*ranging_params):
+    for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin, like_snr in zip(*ranging_params):
 
         for dataset in DATASETS:
             # Create work directory and get path for output directory
