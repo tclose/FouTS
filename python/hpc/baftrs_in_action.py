@@ -33,8 +33,8 @@ parser.add_argument('--prior_density_high', default=[1], type=float, nargs='+', 
 parser.add_argument('--prior_density_low', default=[1], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_hook', default=[100000.0], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_thin', default=[0.0], type=float, nargs='+', help='The scaling of the density prior')
-parser.add_argument('--width_epsilon', default=[0.01], type=float, nargs='+', help='The amount of width epsilon to use')
-parser.add_argument('--length_epsilon', default=[0.01], type=float, nargs='+', help='The amount of length epsilon to use')
+parser.add_argument('--width_epsilon', default=0.15, type=float, help='The amount of width epsilon to use')
+parser.add_argument('--length_epsilon', default=0.15, type=float, help='The amount of length epsilon to use')
 parser.add_argument('--img_snr', default=20.0, type=float, help='The snr to used in the noisy image')
 parser.add_argument('--like_snr', default=[20.0], type=float, nargs='+',
                     help='The assumed snr to used in the likelihood function in the metropolis sampling')
@@ -60,7 +60,7 @@ args = parser.parse_args()
 # parameters in the set. Otherwise if the '--combo' option is provided then loop through all combinations of the 
 # provided parameters. 
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low', 'prior_density_high',
-                            'prior_hook', 'prior_thin', 'like_snr', 'width_epsilon', 'length_epsilon']
+                            'prior_hook', 'prior_thin', 'like_snr']
 ranging_params = hpc.combo_params(args, ranging_param_names, args.combo)
 # Generate a random seed to seed the random number generators of the cmds
 if not args.seed:
@@ -95,10 +95,11 @@ for i in xrange(args.num_runs):
             response_b0_path = os.path.join(work_dir, 'params', 'image', 'reference', dataset_dir, 'response.b0.txt')
             cmd_line = """             
 # Create initial_fibres of appropriate degree
-init_fibres {work_dir}/output/init.tct -degree {args.degree} -num_fibres 1 \
+init_fibres {work_dir}/output/init.tct -degree {args.degree} -num_fibres 1 -width_epsilon {args.width_epsilon} \
+-length_epsilon {args.length_epsilon} -edge_buffer 0.0 -seed {init_seed} -base_intensity 1.0 
 -img_dims "{init_extent[0]} {init_extent[1]} {init_extent[2]}" \
--img_offset "{init_offset[0]} {init_offset[1]} {init_offset[2]}" -edge_buffer 0.0 -seed {init_seed} -base_intensity 1.0
-                
+-img_offset "{init_offset[0]} {init_offset[1]} {init_offset[2]}" 
+
 # Run metropolis
 metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
 -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
@@ -112,9 +113,8 @@ metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.t
     """.format(work_dir=work_dir, dataset_path=dataset_path, args=args,
                seed=seed, init_seed=seed + 1, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq,
                prior_density_low=prior_density_low, prior_density_high=prior_density_high, prior_hook=prior_hook,
-               prior_thin=prior_thin, like_snr=like_snr, width_epsilon=width_epsilon, length_epsilon=length_epsilon,
-               response_str=response_str, b0_path=response_b0_path, init_extent=args.init_extent,
-               init_offset=args.init_offset)
+               prior_thin=prior_thin, like_snr=like_snr, response_str=response_str, b0_path=response_b0_path,
+               init_extent=args.init_extent, init_offset=args.init_offset)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
                                                                 dry_run=args.dry_run, copy_to_output=['summary.txt'])
