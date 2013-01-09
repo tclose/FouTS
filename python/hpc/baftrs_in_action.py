@@ -22,8 +22,9 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--step_scale', default=0.015, type=float, help='The scale of the steps used for the metropolis sampling (default: %(default)s)')
 parser.add_argument('--num_iterations', default=100000, type=int, help='The number of interations in the metropolis sampling (default: %(default)s)')
 parser.add_argument('--sample_period', default=1000, type=int, help='The sample period of the metropolis sampling (default: %(default)s)')
-parser.add_argument('--num_norms', type=int, default=3, help='The number of times the num_width_sections and num_length_sections are normalised %(default)s')
-parser.add_argument('--num_width_sections', default=4, help='The number of samples to use across a Fourier tracts cross-section (default: %(default)s)')
+parser.add_argument('--num_norms', type=int, default=3, help='The number of times the num_width_sections and num_length_sections are normalised (default: %(default)s)')
+parser.add_argument('--strands_per_acs', type=float, default=100, help='The number of strands to use per ACS when renormalising the tractlets at the start of each major iteration (default: %(default)s)')
+parser.add_argument('--samples_per_length', type=float, default=100, help='The number of length samples to use per ACS when renormalising the tractlets at the start of each major iteration (default: %(default)s)')
 parser.add_argument('--interp_type', default='sinc', type=str, help='The type of interpolation used in the reference image (default: %(default)s)')
 parser.add_argument('--interp_extent', default=1, type=int, help='The interpolation extent used in the reference image (default: %(default)s)')
 parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The interpolation type used in the likelihood images (default: %(default)s)')
@@ -101,6 +102,15 @@ init_fibres {work_dir}/output/init.tct -degree {args.degree} -num_fibres 1 -widt
 -img_dims "{init_extent[0]} {init_extent[1]} {init_extent[2]}" \
 -img_offset "{init_offset[0]} {init_offset[1]} {init_offset[2]}" 
 
+cp {work_dir}/output/init.tct {work_dir}/tracts.tct
+cp {work_dir}/output/init.tctx {work_dir}/tracts.tctx
+"""
+            for norm_count in range(args.num_norms):
+                cmd_line += """
+# Calculate appropriate number of length and width samples                
+calculate_num_samples -strands_per_acs {args.strands_per_acs} -samples_per_length {args.samples_per_length} \
+{work_dir}/tracts.tct {work_dir}/num_samples
+                
 # Run metropolis
 metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.tst -like_snr {like_snr} \
 -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
@@ -115,7 +125,7 @@ metropolis {dataset_path} {work_dir}/output/init.tct {work_dir}/output/samples.t
                seed=seed, init_seed=seed + 1, prior_freq=prior_freq, prior_aux_freq=prior_aux_freq,
                prior_density_low=prior_density_low, prior_density_high=prior_density_high, prior_hook=prior_hook,
                prior_thin=prior_thin, like_snr=like_snr, response_str=response_str, b0_path=response_b0_path,
-               init_extent=args.init_extent, init_offset=args.init_offset)
+               init_extent=args.init_extent, init_offset=args.init_offset, norm_count=norm_count)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
                                                                 dry_run=args.dry_run, copy_to_output=['summary.txt'])
