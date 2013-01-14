@@ -167,7 +167,8 @@ namespace BTS {
         }
 
         //!Resizes each of the 3 axes to the new degree value.
-        void                          redegree(size_t new_degree, double default_value = NAN);
+        void                          redegree(size_t new_degree,
+                                               double default_value = NAN);
 
         double                        acs() const;
 
@@ -275,10 +276,11 @@ namespace BTS {
 
         double                        rotation() const;
 
-
         //! Only included to get template function to work (a strand will never have element properties.
         Tractlet&                     push_back(const Strand& strand, bool without_properties)
           { return push_back(strand); }
+
+        double                        path_length(size_t num_points=1000) const;
 
       protected:
 

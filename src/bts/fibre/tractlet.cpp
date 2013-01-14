@@ -175,8 +175,22 @@ namespace BTS {
 
     }
 
+    /*!
+     * Approximates the path length of the backbone of the backbone evaluated at
+     * 'num_points' number of samples along its length.
+     *
+     * @param num_points The number of samples to take along the backbone. \
+     * The more samples, the more accurate (but slower) the approximation.
+     * @return
+     */
+    double                          Tractlet::path_length(size_t num_points) const {
 
-
+      Track tck = this->backbone().to_track(num_points);
+      double length = 0.0;
+      for (size_t point_i = 0; point_i < num_points-1; ++point_i)
+        length += (tck[point_i+1] - tck[point_i]).norm();
+      return length;
+    }
 
 
     //Ensure that tractlets do not pass through themselves
