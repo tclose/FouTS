@@ -167,7 +167,8 @@ for i in xrange(args.num_runs):
             response_b0_path = os.path.join(work_dir, 'params', 'image',
                                             'reference', dataset_dir,
                                             'response.b0.txt')
-            cmd_line = """
+            cmd_line = \
+"""
 # Initialise empty set to hold the initial locations of the tractlets
 new_fibres -set_size 0 -acs 1.0 {work_dir}/output/init_0.tct
             
@@ -175,7 +176,8 @@ new_fibres -set_size 0 -acs 1.0 {work_dir}/output/init_0.tct
             if not len(init_locations):
                 raise Exception("Initial locations list was empty")
             for i, init_location in enumerate(init_locations):
-                cmd_line += """             
+                cmd_line += \
+"""             
 # Create initial_fibres of appropriate degree
 init_fibres {work_dir}/init_location_{i}.tct -degree {args.degree} \
 -num_fibres 1 -width_epsilon {args.width_epsilon} \
@@ -193,33 +195,33 @@ mv {work_dir}/tmp.tctx {work_dir}/output/init_0.tctx
 """.format(work_dir=work_dir, i=i, init_location=init_location, args=args,
            seed=seed)
                 seed += 1
-            # Set required properties and normalise the density of the initial 
+            # Normalise the density of the initial 
             # tracts
-            cmd_line += """
-# Set required properties
-set_properties {work_dir}/output/init_0.tct \
--set length_epsilon {args.length_epsilon} \
--set width_epsilon {args.width_epsilon} -set base_intensity 1.0
-
+            cmd_line += \
+"""
 # Normalise the density of the initial tracts
 normalise_density {work_dir}/output/init_0.tct
 
 """.format(work_dir=work_dir, args=args)
 
             for norm_count in range(args.num_norms):
-                cmd_line += """
-                
+                cmd_line += \
+""" 
 # Calculate appropriate number of length and width samples                
 calculate_num_samples --samples_per_acs {args.samples_per_acs} \
 --samples_per_length {args.samples_per_length} --strategy max \
 --min_length_samples {args.min_length_samples} \
 --min_width_samples {args.min_width_samples} \
-{work_dir}/init_{norm_count}.tct {work_dir}/num_samples 
+{work_dir}/output/init_{norm_count}.tct {work_dir}/num_samples 
 
+# Set required properties for the initial tracts
+set_properties {work_dir}/output/init_{norm_count}.tct \
+-set length_epsilon {args.length_epsilon} \
+-set width_epsilon {args.width_epsilon} -set base_intensity 1.0
                 
 # Run metropolis
 metropolis {dataset_path} {work_dir}/output/init_{norm_count}.tct \
-{work_dir}/output/samples_{norm_count}.tst -like_snr {like_snr} 
+{work_dir}/output/samples_{norm_count}.tst -like_snr {like_snr} \
 -exp_interp_extent {args.assumed_interp_extent} \
 -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -seed {seed} \
@@ -232,7 +234,12 @@ metropolis {dataset_path} {work_dir}/output/init_{norm_count}.tct \
 -exp_type {args.interp_type} {response_str} -exp_b0 `cat {b0_path}` \
 -diff_warn -walk_step_location \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
-""" .format(work_dir=work_dir, dataset_path=dataset_path, args=args,
+
+# Get last sample
+select_fibres {work_dir}/output/samples_{norm_count}.tst \
+{work_dir}/output/init_{next_norm_count}.tct --include {last_sample}
+
+""".format(work_dir=work_dir, dataset_path=dataset_path, args=args,
                 seed=seed, init_seed=seed + 1, prior_freq=prior_freq,
                 prior_aux_freq=prior_aux_freq,
                 prior_density_low=prior_density_low,
@@ -240,9 +247,16 @@ metropolis {dataset_path} {work_dir}/output/init_{norm_count}.tct \
                 prior_hook=prior_hook,
                 prior_thin=prior_thin, like_snr=like_snr,
                 response_str=response_str, b0_path=response_b0_path,
-                norm_count=norm_count)
+                norm_count=norm_count, next_norm_count=norm_count + 1,
+                last_sample=(args.num_iterations // args.sample_period) - 1)
                 # Increment the seed used for the random initialisation
                 seed += 1
+            cmd_line += \
+"""
+# Rename the final init_??.tct to last.tct
+mv {work_dir}/output/init_{num_norms}.tct {work_dir}/output/last.tct
+mv {work_dir}/output/init_{num_norms}.tctx {work_dir}/output/last.tctx
+""".format(work_dir=work_dir, num_norms=args.num_norms)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
                            que_name=args.que_name, dry_run=args.dry_run,
