@@ -13,8 +13,6 @@ import os.path
 import time
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'baftrs_in_action'
-DATASETS = [os.path.join('donald', 'fornix.mif')]
-INIT_LOCATIONS = [((111, 119, 73), (111, 80, 75))]
 # Required dirs for the script to run
 REQUIRED_DIRS = ['params/image/reference', 'params/diffusion',
                  'params/fibre/tract/masks/mcmc/metropolis']
@@ -115,12 +113,23 @@ parser.add_argument('--combo', action='store_true',
 parser.add_argument('--estimate_response', action='store_true',
                     help="Uses an estimated diffusion response function instead"
                          " of the default tensor one")
+parser.add_argument('--dataset', action='append', type=str,
+                    default=[os.path.join('donald', 'fornix.mif')],
+                    help="The datasets to use (default: %(default)s).")
+parser.add_argument('--init_locations', action='append', type=str,
+                    default=[((111, 119, 73), (111, 80, 75))],
+                    help="The initial locations of the tracts (default: "
+                         "%(default)s).")
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter 
 # values match, or if they are a singleton list it is assumed to be constant 
 # and that value that value is replicated to match the number of other of other 
 # parameters in the set. Otherwise if the '--combo' option is provided then loop
 # through all combinations of the provided parameters. 
+if len(args.dataset) != len(args.init_locations):
+    raise Exception("The same amount of 'dataset' and 'init_locations' must be"
+                    "supplied ({} and {} supplied respectively)"
+                    .format(args.dataset, args.init_locations))
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
                        'prior_density_high', 'prior_hook', 'prior_thin',
                        'like_snr']
@@ -135,7 +144,7 @@ for i in xrange(args.num_runs):
     for (prior_freq, prior_aux_freq, prior_density_low, prior_density_high,
                 prior_hook, prior_thin, like_snr) in zip(*ranging_params):
 
-        for dataset, init_locations in zip(DATASETS, INIT_LOCATIONS):
+        for dataset, init_locations in zip(args.dataset, args.init_locations):
             # Create work directory and get path for output directory
             work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME,
                                                        args.output_dir,
