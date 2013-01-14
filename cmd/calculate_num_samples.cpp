@@ -119,9 +119,14 @@ EXECUTE {
 
   Fibre::Tractlet::Set tcts(input_location);
   size_t num_tracts = tcts.size();
+  if (!num_tracts)
+    throw Exception("No tracts loaded from location '" + input_location + "'");
 
   std::vector<double> acs_vector;
   std::vector<double> length_vector;
+
+  MR::ProgressBar avg_progress_bar("Calculating appropriate number of samples "
+                                   "given tract sizes...");
 
   for (size_t tract_i = 0; tract_i < tcts.size(); ++tract_i) {
     acs_vector.push_back(tcts[tract_i].acs());
@@ -160,12 +165,12 @@ EXECUTE {
   std::ofstream out;
 
   // Write width value to file
-  out.open((output_prefix + "width.txt").c_str(), std::ios::out);
+  out.open((output_prefix + ".width.txt").c_str(), std::ios::out);
   out << num_width_samples << std::endl;
   out.close();
 
   // Write length value to file
-  out.open((output_prefix + "length.txt").c_str(), std::ios::out);
+  out.open((output_prefix + ".length.txt").c_str(), std::ios::out);
   out << num_length_samples << std::endl;
   out.close();
 
