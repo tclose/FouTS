@@ -101,9 +101,10 @@ EXECUTE {
 
     Diffusion::Encoding::Set dw_scheme(in.get_DW_scheme());
 
-    Triple<double> spatial_offset(in.vox(X) * offsets[X] + in.transform()(X,3),
-        in.vox(Y) * offsets[Y] + in.transform()(Y,3),
-        in.vox(Z) * offsets[Z] + in.transform()(Z,3));
+    Triple<double> spatial_offset(
+        in.vox(X) * offsets[X] + in.transform()(X,3) - in.vox(X) / 2.0,
+        in.vox(Y) * offsets[Y] + in.transform()(Y,3) - in.vox(Y) / 2.0,
+        in.vox(Z) * offsets[Z] + in.transform()(Z,3) - in.vox(Z) / 2.0);
 
     Image::Observed::Buffer out(dims,
         Triple<double>(in.vox(X), in.vox(Y), in.vox(Z)), spatial_offset,

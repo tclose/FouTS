@@ -282,8 +282,6 @@ EXECUTE {
   //----------------------------------------------------------------//
 
   double base_intensity = exp_image->get_base_intensity(exp_b0);
-  VAR(base_intensity);
-  VAR(exp_b0);
 
   //-----------------------//
   // Initialize Likelihood //
