@@ -56,7 +56,8 @@ DESCRIPTION = {
 };
 
 ARGUMENTS= {
-  Argument ("initial", "The initial image the second image will be subtracted from.").type_image_in(),
+  Argument ("initial", "The initial image the second image will be subtracted "
+            "from.").type_image_in(),
 
   Argument ("output_image", "The resulting image").type_file (),
 
@@ -68,11 +69,12 @@ OPTIONS= {
   Option ("dims", "The number of voxels along each dimension")
   + Argument ("dims", "").type_text ("[3,3,3]"),
 
-  Option ("offsets", "The offset of the centre of the image from the origin (0,0,0).")
+  Option ("offsets", "The offset of the centre of the image from the origin "
+          "(0,0,0).")
   + Argument ("offsets", "").type_text ("auto"),
 
-  Option("remove_isotropic", "Removes the isotropic component of the signal (assumes that the signal is acquired at a \
-      constant b value"),
+  Option("remove_isotropic", "Removes the isotropic component of the signal "
+         "(assumes that the signal is acquired at a constant b value"),
 
   Option()
 
@@ -102,9 +104,9 @@ EXECUTE {
     Diffusion::Encoding::Set dw_scheme(in.get_DW_scheme());
 
     Triple<double> spatial_offset(
-        in.vox(X) * offsets[X] + in.transform()(X,3) - in.vox(X) / 2.0,
-        in.vox(Y) * offsets[Y] + in.transform()(Y,3) - in.vox(Y) / 2.0,
-        in.vox(Z) * offsets[Z] + in.transform()(Z,3) - in.vox(Z) / 2.0);
+        in.vox(X) * offsets[X] + in.transform()(X, 3) - in.vox(X) / 2.0,
+        in.vox(Y) * offsets[Y] + in.transform()(Y, 3) - in.vox(Y) / 2.0,
+        in.vox(Z) * offsets[Z] + in.transform()(Z, 3) - in.vox(Z) / 2.0);
 
     Image::Observed::Buffer out(dims,
         Triple<double>(in.vox(X), in.vox(Y), in.vox(Z)), spatial_offset,
@@ -136,7 +138,7 @@ EXECUTE {
             ++progress_bar;
             if (encoding_i >= dw_scheme.num_encodings())
               throw Exception("Incremented past the end of the number of "
-                              "encodings dimension, something has gone wrong.");
+                  "encodings dimension, something has gone wrong.");
           }
         }
       }
