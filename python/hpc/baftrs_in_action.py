@@ -31,11 +31,11 @@ parser.add_argument('--num_norms', type=int, default=3,
                     help="The number of times the num_width_sections and "
                          "num_length_sections are normalised "
                          "(default: %(default)s)")
-parser.add_argument('--samples_per_acs', type=float, default=100,
+parser.add_argument('--samples_per_acs', type=float, default=2,
                     help="The number of strands to use per ACS when "
                          "renormalising the tractlets at the start of each "
                          "major iteration (default: %(default)s)")
-parser.add_argument('--samples_per_length', type=float, default=100,
+parser.add_argument('--samples_per_length', type=float, default=5,
                     help="The number of length samples to use per ACS when "
                          "renormalising the tractlets at the start of each "
                          "major iteration (default: %(default)s)")
