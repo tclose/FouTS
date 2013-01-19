@@ -526,7 +526,6 @@ EXECUTE {
     } else
       burnt_tractlets = tractlets;
 
-    VAR(burnt_tractlets);
     MCMC::metropolis <Fibre::Tractlet::Set,
                       Prob::Likelihood,
                       Prob::Prior> (
