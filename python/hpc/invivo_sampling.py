@@ -12,7 +12,7 @@ import argparse
 import os.path
 import time
 #Name of the script for the output directory and submitted mpi job
-SCRIPT_NAME = 'baftrs_in_action'
+SCRIPT_NAME = 'invio_sampling'
 # Required dirs for the script to run
 REQUIRED_DIRS = ['params/image/reference', 'params/diffusion',
                  'params/fibre/tract/masks/mcmc/metropolis']
