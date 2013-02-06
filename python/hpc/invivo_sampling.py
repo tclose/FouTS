@@ -88,7 +88,7 @@ parser.add_argument('--img_snr', default=20.0, type=float,
 parser.add_argument('--like_snr', default=[20.0], type=float, nargs='+',
                     help="The assumed snr to used in the likelihood function "
                          "in the metropolis sampling")
-parser.add_argument('--init_extent', default=(3, 3, 3), nargs=3, type=int,
+parser.add_argument('--init_extent', default=(1, 1, 1), nargs=3, type=int,
                     help="The extent (in number of voxels) of the ROI in which "
                          "the inital tracts are generated")
 parser.add_argument('--seed', type=int, help="The random seed for the whole "
@@ -114,7 +114,7 @@ parser.add_argument('--estimate_response', action='store_true',
                     help="Uses an estimated diffusion response function instead"
                          " of the default tensor one")
 parser.add_argument('--dataset', action='append', type=str,
-                    default=[os.path.join('donald', 'corpus_callosum.mif')],
+                    default=[os.path.join('donald', 'corpus_callosum-trimmed.mif')],
                     help="The datasets to use (default: %(default)s).")
 parser.add_argument('--init_locations', action='append', type=str,
                     default=[((111, 119, 73), (111, 80, 75))],
