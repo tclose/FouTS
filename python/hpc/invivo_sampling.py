@@ -117,7 +117,7 @@ parser.add_argument('--dataset', action='append', type=str,
                     default=[os.path.join('donald', 'corpus_callosum-trimmed.mif')],
                     help="The datasets to use (default: %(default)s).")
 parser.add_argument('--init_locations', action='append', type=str,
-                    default=[((111, 119, 73), (111, 80, 75))],
+                    default=[((2.78, 56.52, 5.47), (0.47, 9.45, 8.16))],
                     help="The initial locations of the tracts (default: "
                          "%(default)s).")
 args = parser.parse_args()
