@@ -136,7 +136,7 @@ if not args.init_locations:
     elif args.dataset == os.path.join('lisa', 'corpus_callosum.mif'):
         args.init_locations=[(0.0, 59.0, -30.0), (0.0, 38.0, -19.5), 
                              (0.0, 15.0, -19.5), (0.0, 1.5, -30.5)]
-    if args.dataset == os.path.join('donald', 'fornix.mif'):
+    elif args.dataset == os.path.join('donald', 'fornix.mif'):
         args.init_locations=[(0.0, 32.0, 0.0)]
     elif args.dataset == os.path.join('heath', 'fornix.mif'):
         args.init_locations=[(0.0, 35.0, 20.0)]
@@ -144,7 +144,8 @@ if not args.init_locations:
         args.init_locations=[(0.0, 35.0, -27.0)]
     else:
         raise Exception("dataset '{}' wasn't one with preconfigured initial "
-                        "locations, therefore they need to be provided")
+                        "locations, therefore they need to be provided"
+                        .format(args.dataset))
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
                        'prior_density_high', 'prior_hook', 'prior_thin',
                        'like_snr']
@@ -174,12 +175,12 @@ for i in xrange(args.num_runs):
         with open(os.path.join(work_dir, 'output', 'dataset_name.txt'),
                   'w') \
                 as dataset_file:
-            dataset_file.write(dataset + '\n')
+            dataset_file.write(args.dataset + '\n')
         # Strip dataset of symbols for tract number and img dimension
         # Get the dataset path
         dataset_path = os.path.join(work_dir, 'params', 'image',
-                                    'reference', dataset)
-        dataset_dir = os.path.dirname(dataset)
+                                    'reference', args.dataset)
+        dataset_dir = os.path.dirname(args.dataset)
         if args.estimate_response:
             response_path = os.path.join(work_dir, 'params', 'image',
                                          'reference', dataset_dir,
@@ -216,8 +217,8 @@ mv {work_dir}/tmp.tct {work_dir}/output/init_0.tct
 mv {work_dir}/tmp.tctx {work_dir}/output/init_0.tctx
 
 """.format(work_dir=work_dir, i=i, init_location=init_location, args=args,
-           seed=seed)
-             seed += 1
+                    seed=seed)
+            seed += 1
         # Normalise the density of the initial 
         # tracts
         cmd_line += \
