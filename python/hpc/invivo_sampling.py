@@ -113,10 +113,10 @@ parser.add_argument('--combo', action='store_true',
 parser.add_argument('--estimate_response', action='store_true',
                     help="Uses an estimated diffusion response function instead"
                          " of the default tensor one")
-parser.add_argument('--dataset', action='append', type=str,
-                    default=[os.path.join('donald', 'corpus_callosum-trimmed.mif')],
-                    help="The datasets to use (default: %(default)s).")
-parser.add_argument('--init_locations', action='append', type=str,
+parser.add_argument('--dataset',  type=str,
+                    default=os.path.join('donald', 'corpus_callosum-trimmed.mif'),
+                    help="The dataset to use (default: %(default)s).")
+parser.add_argument('--init_locations', nargs='+', type=int,
                     default=[((111, 119, 73), (111, 80, 75))],
                     help="The initial locations of the tracts (default: "
                          "%(default)s).")
