@@ -21,13 +21,13 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--step_scale', default=0.015, type=float,
                     help="The scale of the steps used for the metropolis "
                          "sampling (default: %(default)s)")
-parser.add_argument('--num_iterations', default=100000, type=int,
+parser.add_argument('--num_iterations', default=20000, type=int,
                     help="The number of interations in the metropolis sampling "
                          "(default: %(default)s)")
-parser.add_argument('--sample_period', default=1000, type=int,
+parser.add_argument('--sample_period', default=100, type=int,
                     help="The sample period of the metropolis sampling "
                           "(default: %(default)s)")
-parser.add_argument('--num_norms', type=int, default=2,
+parser.add_argument('--num_norms', type=int, default=1,
                     help="The number of times the num_width_sections and "
                          "num_length_sections are normalised "
                          "(default: %(default)s)")
@@ -39,11 +39,11 @@ parser.add_argument('--samples_per_length', type=float, default=5,
                     help="The number of length samples to use per ACS when "
                          "renormalising the tractlets at the start of each "
                          "major iteration (default: %(default)s)")
-parser.add_argument('--min_length_samples', type=float, default=15,
+parser.add_argument('--min_length_samples', type=float, default=25,
                     help="The number of strands to use per ACS when "
                          "renormalising the tractlets at the start of each "
                          "major iteration (default: %(default)s)")
-parser.add_argument('--min_width_samples', type=float, default=4,
+parser.add_argument('--min_width_samples', type=float, default=6,
                     help="The number of length samples to use per ACS when "
                          "renormalising the tractlets at the start of each "
                          "major iteration (default: %(default)s)")
@@ -113,24 +113,38 @@ parser.add_argument('--combo', action='store_true',
 parser.add_argument('--estimate_response', action='store_true',
                     help="Uses an estimated diffusion response function instead"
                          " of the default tensor one")
-parser.add_argument('--dataset', action='append', type=str,
-                    default=[os.path.join('donald', 'corpus_callosum.mif')],
-                    help="The datasets to use (default: %(default)s).")
-parser.add_argument('--init_locations', action='append', type=str,
-                    default=[((3.94, 55.8, 6.51), (-0.68, 10.65, 8.99))],
+parser.add_argument('--dataset',  type=str,
+                    default=os.path.join('donald', 'corpus_callosum.mif'),
+                    help="The dataset to use (default: %(default)s).")
+parser.add_argument('--init_locations', nargs='+', type=float, default=None,
                     help="The initial locations of the tracts (default: "
                          "%(default)s).")
-                    #default=[((2.78, 56.52, 5.47), (0.47, 9.45, 8.16))],
+                    #default=[(3.94, 55.8, 6.51), (-0.68, 10.65, 8.99)],
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter 
 # values match, or if they are a singleton list it is assumed to be constant 
 # and that value that value is replicated to match the number of other of other 
 # parameters in the set. Otherwise if the '--combo' option is provided then loop
 # through all combinations of the provided parameters. 
-if len(args.dataset) != len(args.init_locations):
-    raise Exception("The same amount of 'dataset' and 'init_locations' must be"
-                    "supplied ({} and {} supplied respectively)"
-                    .format(args.dataset, args.init_locations))
+if not args.init_locations:
+    if args.dataset == os.path.join('donald', 'corpus_callosum.mif'):
+        args.init_locations=[(0.0, 59.0, 0.0), (0.0, 43.0, 11.0), 
+                             (0.0, 18.0, 11.5), (0.0, -2.5, 0.5)]
+    elif args.dataset == os.path.join('heath', 'corpus_callosum.mif'):
+        args.init_locations=[(0.0, 58.0, 18.0), (0.0, 36.0, 30.0), 
+                             (0.0, 18.0, 26.5), (0.0, -2.5, 14.5)]
+    elif args.dataset == os.path.join('lisa', 'corpus_callosum.mif'):
+        args.init_locations=[(0.0, 59.0, -30.0), (0.0, 38.0, -19.5), 
+                             (0.0, 15.0, -19.5), (0.0, 1.5, -30.5)]
+    if args.dataset == os.path.join('donald', 'fornix.mif'):
+        args.init_locations=[(0.0, 32.0, 0.0)]
+    elif args.dataset == os.path.join('heath', 'fornix.mif'):
+        args.init_locations=[(0.0, 35.0, 20.0)]
+    elif args.dataset == os.path.join('lisa', 'fornix.mif'):
+        args.init_locations=[(0.0, 35.0, -27.0)]
+    else:
+        raise Exception("dataset '{}' wasn't one with preconfigured initial "
+                        "locations, therefore they need to be provided")
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
                        'prior_density_high', 'prior_hook', 'prior_thin',
                        'like_snr']
@@ -145,48 +159,47 @@ for i in xrange(args.num_runs):
     for (prior_freq, prior_aux_freq, prior_density_low, prior_density_high,
                 prior_hook, prior_thin, like_snr) in zip(*ranging_params):
 
-        for dataset, init_locations in zip(args.dataset, args.init_locations):
-            # Create work directory and get path for output directory
-            work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME,
-                                                       args.output_dir,
-                                                       required_dirs=\
-                                                       REQUIRED_DIRS)
-            with open(os.path.join(work_dir, 'summary.txt'), 'w') as f:
-                f.write(dataset + '\n')
-                for par_name in ranging_param_names:
-                    f.write('{par}: {val}\n'.format(par=par_name,
-                                                    val=eval(par_name)))
-            # Create a file in the output directory with just the dataset 
-            # printed in it (useful for quickly determining what the dataset is)
-            with open(os.path.join(work_dir, 'output', 'dataset_name.txt'),
-                      'w') \
-                    as dataset_file:
-                dataset_file.write(dataset + '\n')
-            # Strip dataset of symbols for tract number and img dimension
-            # Get the dataset path
-            dataset_path = os.path.join(work_dir, 'params', 'image',
-                                        'reference', dataset)
-            dataset_dir = os.path.dirname(dataset)
-            if args.estimate_response:
-                response_path = os.path.join(work_dir, 'params', 'image',
-                                             'reference', dataset_dir,
-                                             'response.txt')
-                response_str = "-diff_response {}".format(response_path)
-            else:
-                response_str = ""
-            response_b0_path = os.path.join(work_dir, 'params', 'image',
-                                            'reference', dataset_dir,
-                                            'response.b0.txt')
-            cmd_line = \
+        # Create work directory and get path for output directory
+        work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME,
+                                                   args.output_dir,
+                                                   required_dirs=\
+                                                   REQUIRED_DIRS)
+        with open(os.path.join(work_dir, 'summary.txt'), 'w') as f:
+            f.write(args.dataset + '\n')
+            for par_name in ranging_param_names:
+                f.write('{par}: {val}\n'.format(par=par_name,
+                                                val=eval(par_name)))
+        # Create a file in the output directory with just the dataset 
+        # printed in it (useful for quickly determining what the dataset is)
+        with open(os.path.join(work_dir, 'output', 'dataset_name.txt'),
+                  'w') \
+                as dataset_file:
+            dataset_file.write(dataset + '\n')
+        # Strip dataset of symbols for tract number and img dimension
+        # Get the dataset path
+        dataset_path = os.path.join(work_dir, 'params', 'image',
+                                    'reference', dataset)
+        dataset_dir = os.path.dirname(dataset)
+        if args.estimate_response:
+            response_path = os.path.join(work_dir, 'params', 'image',
+                                         'reference', dataset_dir,
+                                         'response.txt')
+            response_str = "-diff_response {}".format(response_path)
+        else:
+            response_str = ""
+        response_b0_path = os.path.join(work_dir, 'params', 'image',
+                                        'reference', dataset_dir,
+                                        'response.b0.txt')
+        cmd_line = \
 """
 # Initialise empty set to hold the initial locations of the tractlets
 new_fibres -set_size 0 -acs 1.0 {work_dir}/output/init_0.tct
             
 """.format(work_dir=work_dir)
-            if not len(init_locations):
-                raise Exception("Initial locations list was empty")
-            for i, init_location in enumerate(init_locations):
-                cmd_line += \
+        if not len(args.init_locations):
+            raise Exception("Initial locations list was empty")
+        for i, init_location in enumerate(args.init_locations):
+            cmd_line += \
 """             
 # Create initial_fibres of appropriate degree
 init_fibres {work_dir}/init_location_{i}.tct -degree {args.degree} \
@@ -204,18 +217,18 @@ mv {work_dir}/tmp.tctx {work_dir}/output/init_0.tctx
 
 """.format(work_dir=work_dir, i=i, init_location=init_location, args=args,
            seed=seed)
-                seed += 1
-            # Normalise the density of the initial 
-            # tracts
-            cmd_line += \
+             seed += 1
+        # Normalise the density of the initial 
+        # tracts
+        cmd_line += \
 """
 # Normalise the density of the initial tracts
 normalise_density {work_dir}/output/init_0.tct
 
 """.format(work_dir=work_dir, args=args)
 
-            for norm_count in range(args.num_norms):
-                cmd_line += \
+        for norm_count in range(args.num_norms):
+            cmd_line += \
 """ 
 # Calculate appropriate number of length and width samples                
 calculate_num_samples --samples_per_acs {args.samples_per_acs} \
@@ -250,25 +263,25 @@ select_fibres {work_dir}/output/samples_{norm_count}.tst \
 {work_dir}/output/init_{next_norm_count}.tct --include {last_sample}
 
 """.format(work_dir=work_dir, dataset_path=dataset_path, args=args,
-                seed=seed, init_seed=seed + 1, prior_freq=prior_freq,
-                prior_aux_freq=prior_aux_freq,
-                prior_density_low=prior_density_low,
-                prior_density_high=prior_density_high,
-                prior_hook=prior_hook,
-                prior_thin=prior_thin, like_snr=like_snr,
-                response_str=response_str, b0_path=response_b0_path,
-                norm_count=norm_count, next_norm_count=norm_count + 1,
-                last_sample=(args.num_iterations // args.sample_period) - 1)
-                # Increment the seed used for the random initialisation
-                seed += 1
-            cmd_line += \
+                     seed=seed, init_seed=seed + 1, prior_freq=prior_freq,
+                     prior_aux_freq=prior_aux_freq,
+                     prior_density_low=prior_density_low,
+                     prior_density_high=prior_density_high,
+                     prior_hook=prior_hook,
+                     prior_thin=prior_thin, like_snr=like_snr,
+                     response_str=response_str, b0_path=response_b0_path,
+                     norm_count=norm_count, next_norm_count=norm_count + 1,
+                     last_sample=(args.num_iterations // args.sample_period) - 1)
+                     # Increment the seed used for the random initialisation
+            seed += 1
+        cmd_line += \
 """
 # Rename the final init_??.tct to last.tct
 mv {work_dir}/output/init_{num_norms}.tct {work_dir}/output/last.tct
 mv {work_dir}/output/init_{num_norms}.tctx {work_dir}/output/last.tctx
 """.format(work_dir=work_dir, num_norms=args.num_norms)
             # Submit job to que
-            hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
-                           que_name=args.que_name, dry_run=args.dry_run,
-                           copy_to_output=['summary.txt'])
+        hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
+                       que_name=args.que_name, dry_run=args.dry_run,
+                       copy_to_output=['summary.txt'])
 
