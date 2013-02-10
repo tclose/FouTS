@@ -118,14 +118,16 @@ namespace BTS {
       if (prepend_cwd)
         parent_dir = cwd() + parent_dir;
       std::string image_dir = parent_dir + str("/images");
-      struct stat status;
-      stat(image_dir.c_str(), &status);
-      if ( !(status.st_mode & S_IFDIR) ) {
-        if (mkdir(image_dir.c_str(),  S_IRWXU | S_IRWXG | S_IRWXO))
-          throw Exception("Could not create directory '" + str(image_dir) + "'.");
+      if (save_images) {
+        struct stat status;
         stat(image_dir.c_str(), &status);
+        if ( !(status.st_mode & S_IFDIR) ) {
+          if (mkdir(image_dir.c_str(),  S_IRWXU | S_IRWXG | S_IRWXO))
+            throw Exception("Could not create directory '" + str(image_dir) + "'.");
+          stat(image_dir.c_str(), &status);
+        }
+        std::cout << "Writing image files to image directory '" << image_dir << "'." << std::endl;
       }
-      std::cout << "Writing image files to image directory '" << image_dir << "'." << std::endl;
 #endif
 //#endif
 
@@ -270,13 +272,15 @@ namespace BTS {
 
 //#ifndef NDEBUG
 #ifndef TEST_BED
-        likelihood.get_expected_image().save(image_dir + str("/iter_exp_") + str(sample_i) + ".mif");
-        Image::Expected::Buffer* exp_image = likelihood.get_expected_image().clone();
-        exp_image->save(image_dir + str("/iter_exp_clone_") + str(sample_i) + ".mif");
-        Image::Observed::Buffer diff_image = likelihood.get_observed_image();
-        *exp_image -= diff_image;
-        exp_image->save(image_dir + str("/iter_diff_") + str(sample_i) + ".mif");
-        delete exp_image;
+        if (save_images) {
+          likelihood.get_expected_image().save(image_dir + str("/iter_exp_") + str(sample_i) + ".mif");
+          Image::Expected::Buffer* exp_image = likelihood.get_expected_image().clone();
+          exp_image->save(image_dir + str("/iter_exp_clone_") + str(sample_i) + ".mif");
+          Image::Observed::Buffer diff_image = likelihood.get_observed_image();
+          *exp_image -= diff_image;
+          exp_image->save(image_dir + str("/iter_diff_") + str(sample_i) + ".mif");
+          delete exp_image;
+        }
 #endif
 //#endif
 
@@ -286,12 +290,6 @@ namespace BTS {
 
         // Save sample.
         samples.append(x);
-
-
-        if (save_images) {
-          likelihood.get_expected_image().save(samples_location + ".exp.mif");
-        }
-
 
         // Print out sample properties.
         if (verbose) {

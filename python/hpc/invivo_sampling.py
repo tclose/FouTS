@@ -12,7 +12,7 @@ import argparse
 import os.path
 import time
 #Name of the script for the output directory and submitted mpi job
-SCRIPT_NAME = 'baftrs_in_action'
+SCRIPT_NAME = 'invivo_sampling'
 # Required dirs for the script to run
 REQUIRED_DIRS = ['params/image/reference', 'params/diffusion',
                  'params/fibre/tract/masks/mcmc/metropolis']
@@ -27,7 +27,7 @@ parser.add_argument('--num_iterations', default=100000, type=int,
 parser.add_argument('--sample_period', default=1000, type=int,
                     help="The sample period of the metropolis sampling "
                           "(default: %(default)s)")
-parser.add_argument('--num_norms', type=int, default=3,
+parser.add_argument('--num_norms', type=int, default=2,
                     help="The number of times the num_width_sections and "
                          "num_length_sections are normalised "
                          "(default: %(default)s)")
@@ -114,7 +114,7 @@ parser.add_argument('--estimate_response', action='store_true',
                     help="Uses an estimated diffusion response function instead"
                          " of the default tensor one")
 parser.add_argument('--dataset', action='append', type=str,
-                    default=[os.path.join('donald', 'fornix.mif')],
+                    default=[os.path.join('donald', 'corpus_callosum-trimmed.mif')],
                     help="The datasets to use (default: %(default)s).")
 parser.add_argument('--init_locations', action='append', type=str,
                     default=[((111, 119, 73), (111, 80, 75))],
