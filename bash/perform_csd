@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+if [ ! -d csd ]; then 
+   read -p "No 'csd' folder found in current directory '$PWD', do you wish to create one [y] or exit [n]: " yn
+   if [ $yn == "yes" ] || [ $yn == "y" ]; then
+       mkdir csd
+   else
+       exit
+   fi
+fi
+cd csd
+average ../dwi.mif -axis 3 - | threshold - - | median3D - - | median3D - mask.mif
+dwi2tensor ../dwi.mif dt.mif
+tensor2FA dt.mif - | mrmult - mask.mif fa.mif
+erode mask.mif -npass 3 - | mrmult fa.mif - - | threshold - -abs 0.7 sf.mif
+estimate_response ../dwi.mif sf.mif response.txt
+disp_profile -response response.txt
+csdeconv ../dwi.mif response.txt -lmax 8 -mask mask.mif CSD8.mif
+mrview ../dwi.mif

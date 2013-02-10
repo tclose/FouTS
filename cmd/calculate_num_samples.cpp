@@ -20,6 +20,7 @@
 
  */
 
+#include "math/math.h"
 #include "bts/cmd.h"
 
 #include "bts/common.h"
@@ -38,8 +39,8 @@
 
 using namespace BTS;
 
-const float SAMPLES_PER_ACS_DEFAULT = 1000;
-const float SAMPLES_PER_LENGTH_DEFAULT = 1000;
+const float SAMPLES_PER_ACS_DEFAULT = 2.0;
+const float SAMPLES_PER_LENGTH_DEFAULT = 5.0;
 const size_t MIN_WIDTH_SAMPLES_DEFAULT = 4;
 const size_t MIN_LENGTH_SAMPLES_DEFAULT = 4;
 const char* STRATEGY_DEFAULT = "max";
@@ -72,12 +73,12 @@ OPTIONS= {
   + Argument ("samples_per_length")
   .type_float (0,SAMPLES_PER_LENGTH_DEFAULT,LARGE_FLOAT),
 
-  Option ("min_length_samples","")
-  + Argument ("min_length_samples")
+  Option ("min_length_sections","")
+  + Argument ("min_length_sections")
   .type_integer (1,MIN_LENGTH_SAMPLES_DEFAULT,LARGE_INT),
 
-  Option ("min_width_samples","")
-  + Argument ("min_width_samples")
+  Option ("min_width_sections","")
+  + Argument ("min_width_sections")
   .type_integer (1,MIN_WIDTH_SAMPLES_DEFAULT,LARGE_INT),
 
   Option ("strategy","The strategy used to handle multiple Fourier tracts."
@@ -93,8 +94,8 @@ EXECUTE {
 
   double samples_per_acs = SAMPLES_PER_ACS_DEFAULT;
   double samples_per_length = SAMPLES_PER_LENGTH_DEFAULT;
-  size_t min_width_samples = MIN_WIDTH_SAMPLES_DEFAULT;
-  size_t min_length_samples = MIN_LENGTH_SAMPLES_DEFAULT;
+  size_t min_width_sections = MIN_WIDTH_SAMPLES_DEFAULT;
+  size_t min_length_sections = MIN_LENGTH_SAMPLES_DEFAULT;
   std::string strategy = STRATEGY_DEFAULT;
 
   Options opt = get_options("samples_per_acs");
@@ -105,13 +106,13 @@ EXECUTE {
   if (opt.size())
     samples_per_length = opt[0][0];
 
-  opt = get_options("min_width_samples");
+  opt = get_options("min_width_sections");
   if (opt.size())
-    min_width_samples = opt[0][0];
+    min_width_sections = opt[0][0];
 
-  opt = get_options("min_length_samples");
+  opt = get_options("min_length_sections");
   if (opt.size())
-    min_length_samples = opt[0][0];
+    min_length_sections = opt[0][0];
 
   opt = get_options("strategy");
   if (opt.size())
@@ -154,24 +155,24 @@ EXECUTE {
         "Unrecognised argument to 'strategy' option '" + strategy
             + "' (can be either 'max', 'average', or 'median').");
 
-  size_t num_width_samples = round(acs * samples_per_acs);
-  size_t num_length_samples = round(length * samples_per_length);
+  size_t num_width_sections = MR::Math::sqrt(round(acs * samples_per_acs));
+  size_t num_length_sections = round(length * samples_per_length);
 
-  if (num_width_samples < min_width_samples)
-    num_width_samples = min_width_samples;
-  if (num_length_samples < min_length_samples)
-    num_length_samples = min_length_samples;
+  if (num_width_sections < min_width_sections)
+    num_width_sections = min_width_sections;
+  if (num_length_sections < min_length_sections)
+    num_length_sections = min_length_sections;
 
   std::ofstream out;
 
   // Write width value to file
   out.open((output_prefix + ".width.txt").c_str(), std::ios::out);
-  out << num_width_samples << std::endl;
+  out << num_width_sections << std::endl;
   out.close();
 
   // Write length value to file
   out.open((output_prefix + ".length.txt").c_str(), std::ios::out);
-  out << num_length_samples << std::endl;
+  out << num_length_sections << std::endl;
   out.close();
 
 
