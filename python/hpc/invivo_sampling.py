@@ -21,10 +21,10 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--step_scale', default=0.015, type=float,
                     help="The scale of the steps used for the metropolis "
                          "sampling (default: %(default)s)")
-parser.add_argument('--num_iterations', default=20000, type=int,
+parser.add_argument('--num_iterations', default=40000, type=int,
                     help="The number of interations in the metropolis sampling "
                          "(default: %(default)s)")
-parser.add_argument('--sample_period', default=100, type=int,
+parser.add_argument('--sample_period', default=200, type=int,
                     help="The sample period of the metropolis sampling "
                           "(default: %(default)s)")
 parser.add_argument('--num_norms', type=int, default=1,
@@ -128,14 +128,14 @@ args = parser.parse_args()
 # through all combinations of the provided parameters. 
 if not args.init_locations:
     if args.dataset == os.path.join('donald', 'corpus_callosum.mif'):
-        args.init_locations=[(0.0, 59.0, 0.0), (0.0, 43.0, 11.0), 
-                             (0.0, 18.0, 11.5), (0.0, -2.5, 0.5)]
+        args.init_locations=[(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0), 
+                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
     elif args.dataset == os.path.join('heath', 'corpus_callosum.mif'):
-        args.init_locations=[(0.0, 58.0, 18.0), (0.0, 36.0, 30.0), 
-                             (0.0, 18.0, 26.5), (0.0, -2.5, 14.5)]
+        args.init_locations=[(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0), 
+                             (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
     elif args.dataset == os.path.join('lisa', 'corpus_callosum.mif'):
-        args.init_locations=[(0.0, 59.0, -30.0), (0.0, 38.0, -19.5), 
-                             (0.0, 15.0, -19.5), (0.0, 1.5, -30.5)]
+        args.init_locations=[(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5), 
+                             (0.0, 20.0, -16.5), (0.0, 9.0, -21.5), (0.0, 0.0, -30.5)]
     elif args.dataset == os.path.join('donald', 'fornix.mif'):
         args.init_locations=[(0.0, 32.0, 0.0)]
     elif args.dataset == os.path.join('heath', 'fornix.mif'):
