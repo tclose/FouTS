@@ -21,10 +21,10 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--step_scale', default=0.015, type=float,
                     help="The scale of the steps used for the metropolis "
                          "sampling (default: %(default)s)")
-parser.add_argument('--num_iterations', default=40000, type=int,
+parser.add_argument('--num_iterations', default=75000, type=int,
                     help="The number of interations in the metropolis sampling "
                          "(default: %(default)s)")
-parser.add_argument('--sample_period', default=200, type=int,
+parser.add_argument('--sample_period', default=250, type=int,
                     help="The sample period of the metropolis sampling "
                           "(default: %(default)s)")
 parser.add_argument('--num_norms', type=int, default=1,
@@ -135,7 +135,7 @@ if not args.init_locations:
                              (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
     elif args.dataset == os.path.join('lisa', 'corpus_callosum.mif'):
         args.init_locations=[(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5), 
-                             (0.0, 20.0, -16.5), (0.0, 9.0, -21.5), (0.0, 0.0, -30.5)]
+                             (0.0, 27.0, -16.5), (0.0, 14.0, -19.5), (0.0, 1.5, -28.5)]
     elif args.dataset == os.path.join('donald', 'fornix.mif'):
         args.init_locations=[(0.0, 32.0, 0.0)]
     elif args.dataset == os.path.join('heath', 'fornix.mif'):
@@ -143,25 +143,25 @@ if not args.init_locations:
     elif args.dataset == os.path.join('lisa', 'fornix.mif'):
         args.init_locations=[(0.0, 35.0, -27.0)]
     elif args.dataset == os.path.join('donald', 'corpus_callosum.60.mif'):
-        args.init_locations=[(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0), 
-                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
+        args.init_locations=[(0.0, 69.0, -5.0), (0.0, 56.0, 7.0), (0.0, 35.0, 10.0), 
+                             (0.0, 25.0, 9.5), (0.0, 15.0, 5.0), (0.0, 6.0, -5.0)]
     elif args.dataset == os.path.join('heath', 'corpus_callosum.60.mif'):
-        args.init_locations=[(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0), 
-                             (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
+        args.init_locations=[(0.0, 66.0, 10.0), (0.0, 57.0, 20.0), (0.0, 42.0, 23.0), 
+                             (0.0, 27.5, 22.5), (0.0, 16.5, 18.5), (0.0, 7.5, 11.5)]
     elif args.dataset == os.path.join('lisa', 'corpus_callosum.60.mif'):
-        args.init_locations=[(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5), 
-                             (0.0, 20.0, -16.5), (0.0, 9.0, -21.5), (0.0, 0.0, -30.5)]
+        args.init_locations=[(0.0, 56.0, 23.5), (0.0, 44.0, 33.0), (0.0, 28.0, 36.0), 
+                             (0.0, 16.0, 35.5), (0.0, 6.0, 31.5), (0.0, -5.5, 20.5)]
     elif args.dataset == os.path.join('donald', 'fornix.60.mif'):
-        args.init_locations=[(0.0, 32.0, 0.0)]
+        args.init_locations=[(0.0, 41.5, -3.0)]
     elif args.dataset == os.path.join('heath', 'fornix.60.mif'):
-        args.init_locations=[(0.0, 35.0, 20.0)]
+        args.init_locations=[(0.0, 42.0, 14.0)]
     elif args.dataset == os.path.join('lisa', 'fornix.60.mif'):
-        args.init_locations=[(0.0, 35.0, -27.0)]
+        args.init_locations=[(0.0, 31.0, 24.0)]
     elif args.dataset == os.path.join('donald', 'corpus_callosum.20.mif'):
-        args.init_locations=[(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0), 
-                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
+        args.init_locations=[(0.0, 65.0, -7.5), (0.0, 54.0, 4.5), (0.0, 41.5, 7.5), 
+                             (0.0, 28.0, 7.5), (0.0, 17.5, 5.5), (0.0, 3.5, -5.5)]
     elif args.dataset == os.path.join('donald', 'fornix.20.mif'):
-        args.init_locations=[(0.0, 32.0, 0.0)]
+        args.init_locations=[(3.0, 38.0, -6.5)]
     else:
         raise Exception("dataset '{}' wasn't one with preconfigured initial "
                         "locations, therefore they need to be provided"
