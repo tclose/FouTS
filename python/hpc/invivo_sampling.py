@@ -142,6 +142,26 @@ if not args.init_locations:
         args.init_locations=[(0.0, 35.0, 20.0)]
     elif args.dataset == os.path.join('lisa', 'fornix.mif'):
         args.init_locations=[(0.0, 35.0, -27.0)]
+    elif args.dataset == os.path.join('donald', 'corpus_callosum.60.mif'):
+        args.init_locations=[(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0), 
+                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
+    elif args.dataset == os.path.join('heath', 'corpus_callosum.60.mif'):
+        args.init_locations=[(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0), 
+                             (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
+    elif args.dataset == os.path.join('lisa', 'corpus_callosum.60.mif'):
+        args.init_locations=[(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5), 
+                             (0.0, 20.0, -16.5), (0.0, 9.0, -21.5), (0.0, 0.0, -30.5)]
+    elif args.dataset == os.path.join('donald', 'fornix.60.mif'):
+        args.init_locations=[(0.0, 32.0, 0.0)]
+    elif args.dataset == os.path.join('heath', 'fornix.60.mif'):
+        args.init_locations=[(0.0, 35.0, 20.0)]
+    elif args.dataset == os.path.join('lisa', 'fornix.60.mif'):
+        args.init_locations=[(0.0, 35.0, -27.0)]
+    elif args.dataset == os.path.join('donald', 'corpus_callosum.20.mif'):
+        args.init_locations=[(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0), 
+                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
+    elif args.dataset == os.path.join('donald', 'fornix.20.mif'):
+        args.init_locations=[(0.0, 32.0, 0.0)]
     else:
         raise Exception("dataset '{}' wasn't one with preconfigured initial "
                         "locations, therefore they need to be provided"
