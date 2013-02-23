@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 invivo_sampling.py --dataset donald/corpus_callosum.mif --num_runs 5
-#invivo_sampling.py --dataset donald/fornix.mif --num_runs 5
+invivo_sampling.py --dataset donald/fornix.mif --num_runs 5
 invivo_sampling.py --dataset heath/corpus_callosum.mif --num_runs 5
-#invivo_sampling.py --dataset heath/fornix.mif --num_runs 5
+invivo_sampling.py --dataset heath/fornix.mif --num_runs 5
 invivo_sampling.py --dataset lisa/corpus_callosum.mif --num_runs 5
-#invivo_sampling.py --dataset lisa/fornix.mif --num_runs 5
+invivo_sampling.py --dataset lisa/fornix.mif --num_runs 5
+invivo_sampling.py --dataset donald/corpus_callosum.60.mif --num_runs 5
+invivo_sampling.py --dataset donald/fornix.60.mif --num_runs 5
+invivo_sampling.py --dataset heath/corpus_callosum.60.mif --num_runs 5
+invivo_sampling.py --dataset heath/fornix.60.mif --num_runs 5
+invivo_sampling.py --dataset lisa/corpus_callosum.60.mif --num_runs 5
+invivo_sampling.py --dataset lisa/fornix.60.mif --num_runs 5
+invivo_sampling.py --dataset donald/corpus_callosum.20.mif --num_runs 5
+invivo_sampling.py --dataset donald/fornix.20.mif --num_runs 5
