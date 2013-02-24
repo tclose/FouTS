@@ -115,26 +115,29 @@ EXECUTE {
 
     for (size_t tract_i = 0; tract_i < tracts.size(); ++tract_i) {
 
-      Fibre::Strand::Set strands = tracts[tract_i].to_strands(num_strands);
-      Fibre::Strand::Set pos, neg;
+      if (!include.size() ||
+          std::find(include.begin(), include.end(), tract_i) != include.end()) {
 
-      Triple<double> centre_midpoint = tracts[tract_i].backbone().midpoint();
+        Fibre::Strand::Set strands = tracts[tract_i].to_strands(num_strands);
+        Fibre::Strand::Set pos, neg;
 
-      for (size_t strand_i = 0; strand_i < strands.size(); ++strand_i) {
+        Triple<double> centre_midpoint = tracts[tract_i].backbone().midpoint();
 
-        Triple<double> disp = strands[strand_i].midpoint();
-        disp -= centre_midpoint;
+        for (size_t strand_i = 0; strand_i < strands.size(); ++strand_i) {
 
-        if (disp.dot(orient) >= 0)
-          pos.push_back(strands[strand_i]);
-        else
-          neg.push_back(strands[strand_i]);
+          Triple<double> disp = strands[strand_i].midpoint();
+          disp -= centre_midpoint;
 
+          if (disp.dot(orient) >= 0)
+            pos.push_back(strands[strand_i]);
+          else
+            neg.push_back(strands[strand_i]);
+
+        }
+
+        output_tracts.push_back(pos.to_tractlets((size_t)1)[0]);
+        output_tracts.push_back(neg.to_tractlets((size_t)1)[0]);
       }
-
-      output_tracts.push_back(pos.to_tractlets((size_t)1)[0]);
-      output_tracts.push_back(neg.to_tractlets((size_t)1)[0]);
-
     }
 
     output_tracts.save(output_location);
