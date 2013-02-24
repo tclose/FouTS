@@ -202,8 +202,8 @@ OPTIONS = {
   Option ("include","The indices of the strands to include")
     + Argument ("include","").type_text(),
 
-   Option ("bundle_include","The indices of the strands to bundle_include")
-     + Argument ("bundle_include","").type_text(),
+  Option ("bundle_include","The indices of the strands to bundle_include")
+    + Argument ("bundle_include","").type_text(),
 
   Option ("num_length_sections", "Number of samples to take along the strand path")
    + Argument ("num_length_sections", "").type_integer (1, 100, 2000),

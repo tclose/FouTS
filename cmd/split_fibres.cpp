@@ -58,7 +58,7 @@
 using namespace BTS;
 
 const double THRESHOLD_DEFAULT = -0.5;
-const size_t NUM_LENGTH_SECTIONS_DEFAULT = 5;
+const size_t NUM_STRANDS_DEFAULT = 4;
 SET_VERSION_DEFAULT
 ;
 SET_AUTHOR("Thomas G. Close");
@@ -78,48 +78,62 @@ ARGUMENTS= {
 
 OPTIONS= {
 
-  Option ("orientation", "The orientation of the plane to split the Fourier "
-      "tract into.",
-      "(1,0,0).")
+  Option ("orientation", "The orientation of the plane to split the Fourier tract into.")
   + Argument ("offsets", "").type_text ("auto"),
+
+  Option ("num_strands", "The number of strands to split the tracts into")
+  + Argument ("num_strands", "").type_text ("auto"),
+
+  Option ("include","The indices of the strands to include")
+    + Argument ("include","").type_text(),
 
   Option()};
 
 EXECUTE {
 
-    std::string obs_image_location = argument[0];
-    std::string input_location = argument[1];
-    std::string output_location = argument[2];
+    std::string input_location = argument[0];
+    std::string output_location = argument[1];
 
     Triple<double> orient(1.0, 0.0, 0.0);
+    size_t num_strands = NUM_STRANDS_DEFAULT;
+    std::vector<size_t> include;
 
     Options opt = get_options("orientation");
     if (opt.size())
-      orient = parse_triple<size_t>(std::string(opt[0][0]));
+      orient = parse_triple<double>(std::string(opt[0][0])).normalise();
 
-    orient.normalise();
+    opt = get_options("num_strands");
+    if (opt.size())
+      num_strands = opt[0][0];
+
+    opt = get_options("include");
+    if (opt.size())
+      include = parse_sequence<size_t> (opt[0][0]);
 
     Fibre::Tractlet::Set tracts(input_location);
     Fibre::Tractlet::Set output_tracts;
 
     for (size_t tract_i = 0; tract_i < tracts.size(); ++tract_i) {
 
-      Fibre::Tractlet t = tracts[tract_i];
-      Fibre::Tractlet t1, t2;
+      Fibre::Strand::Set strands = tracts[tract_i].to_strands(num_strands);
+      Fibre::Strand::Set pos, neg;
 
-      double disp = MR::Math::abs(orient.dot(t[1][0])) +
-                    MR::Math::abs(orient.dot(t[2][0])));
+      Triple<double> centre_midpoint = tracts[tract_i].backbone().midpoint();
 
-      t[1][0] *= scale;
-      t[2][0] *= scale
+      for (size_t strand_i = 0; strand_i < strands.size(); ++strand_i) {
 
-      t1 = t2 = t;
+        Triple<double> disp = strands[strand_i].midpoint();
+        disp -= centre_midpoint;
 
-      t1[0][0] -= disp * orient;
-      t2[0][0] -= disp * orient;
+        if (disp.dot(orient) >= 0)
+          pos.push_back(strands[strand_i]);
+        else
+          neg.push_back(strands[strand_i]);
 
-      output_tracts.push_back(t1);
-      output_tracts.push_back(t2);
+      }
+
+      output_tracts.push_back(pos.to_tractlets((size_t)1)[0]);
+      output_tracts.push_back(neg.to_tractlets((size_t)1)[0]);
 
     }
 
