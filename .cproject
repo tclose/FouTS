@@ -129,7 +129,7 @@
 								<option id="gnu.cpp.compiler.exe.release.option.debugging.level.308665036" name="Debug Level" superClass="gnu.cpp.compiler.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.1059143936" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -march=x86-64 -Wno-deprecated" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.704846218" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BaFTrS/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FouTS/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MRtrix/src}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1135111829" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
@@ -146,7 +146,7 @@
 								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.exe.release.option.optimization.level.1602397617" name="Optimization Level" superClass="gnu.c.compiler.exe.release.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.release.option.debugging.level.700131530" name="Debug Level" superClass="gnu.c.compiler.exe.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1007440903" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BaFTrS/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FouTS/src}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1341257584" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_GLIBCXX_DEBUG"/>
@@ -178,7 +178,7 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.release.176715614" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.release">
 								<option id="gnu.both.asm.option.include.paths.1014163684" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BaFTrS/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FouTS/src}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1338936594" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>

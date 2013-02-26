@@ -3,7 +3,7 @@ import sys
 
 #Set pretty printers system paths.
 sys.path.insert(0, '/home/tclose/Code/python/gdb_printers/python')
-sys.path.insert(0, '/home/tclose/git/BaFTrS/gdb_printers/python')
+sys.path.insert(0, '/home/tclose/git/FouTS/gdb_printers/python')
 sys.path.insert(0, '/home/tclose/git/MRtrix/gdb_printers/python')
 
 #Import and register 'std::*' pretty printers.

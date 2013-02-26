@@ -111,17 +111,23 @@ EXECUTE {
       include = parse_sequence<size_t> (opt[0][0]);
 
     Fibre::Tractlet::Set tracts(input_location);
-    Fibre::Tractlet::Set output_tracts;
+    Fibre::Tractlet::Set output_tracts(0, tracts.degree());
+    output_tracts.add_elem_prop(Fibre::Base::Object::ALPHA_PROP);
 
     for (size_t tract_i = 0; tract_i < tracts.size(); ++tract_i) {
 
       if (!include.size() ||
           std::find(include.begin(), include.end(), tract_i) != include.end()) {
 
-        Fibre::Strand::Set strands = tracts[tract_i].to_strands(num_strands);
-        Fibre::Strand::Set pos, neg;
+        const Fibre::Tractlet& tract = tracts[tract_i];
 
-        Triple<double> centre_midpoint = tracts[tract_i].backbone().midpoint();
+        Fibre::Strand::Set strands = tract.to_strands(num_strands);
+        strands.freeze_elem_degree();
+        Fibre::Strand::Set pos(0, strands.degree()), neg(0, strands.degree());
+        pos.add_elem_prop(Fibre::Base::Object::ALPHA_PROP);
+        neg.add_elem_prop(Fibre::Base::Object::ALPHA_PROP);
+
+        Triple<double> centre_midpoint = tract.backbone().midpoint();
 
         for (size_t strand_i = 0; strand_i < strands.size(); ++strand_i) {
 
@@ -135,8 +141,16 @@ EXECUTE {
 
         }
 
-        output_tracts.push_back(pos.to_tractlets((size_t)1)[0]);
-        output_tracts.push_back(neg.to_tractlets((size_t)1)[0]);
+        Fibre::Tractlet::Set pos_tract = pos.to_tractlets((size_t)1);
+        Fibre::Tractlet::Set neg_tract = neg.to_tractlets((size_t)1);
+
+        double acs_value = tract.acs() / 2.0;
+        pos_tract[0].set_acs(acs_value);
+        neg_tract[0].set_acs(acs_value);
+
+        output_tracts.push_back(pos_tract[0]);
+        output_tracts.push_back(neg_tract[0]);
+
       }
     }
 

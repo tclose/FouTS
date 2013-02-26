@@ -1406,6 +1406,9 @@ namespace BTS {
         if (!is_owner())
           throw Exception ("Cannot add element property to a fibre object that does not own the underlying data (i.e. is a view onto part of a larger structure).");
 
+        if (!rsize)
+          throw Exception("Cannot add element property to unfixed row size (theoretically possible but I haven't worked out the best algorithm yet)");
+
         //Loop through properties and insert the new property in the appropriate position for alphabetical order
         size_t insert_index = 0;
 
