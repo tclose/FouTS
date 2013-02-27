@@ -43,7 +43,7 @@ namespace BTS {
 
   namespace Diffusion {
 
-    const std::string                   Model::ENCODINGS_LOCATION_DEFAULT   = str(getenv("HOME")) + str("/git/BaFTrS/params/diffusion/encoding_60.b");
+    const std::string                   Model::ENCODINGS_LOCATION_DEFAULT   = str(getenv("HOME")) + str("/git/FouTS/params/diffusion/encoding_60.b");
     const bool                          Model::ISOTROPIC_DEFAULT            = 0;
     const double                        Model::ADC_DEFAULT                  = 5e-4;
     const double                        Model::FA_DEFAULT                   = 0.8;

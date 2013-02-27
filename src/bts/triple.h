@@ -81,6 +81,7 @@ namespace BTS {
       T*                get ()                                { return (p);  }
       const T*          get () const                          { return (p); }
       void              copy_to(double* array)                { array[X] = (double)p[X]; array[Y] = (double)p[Y]; array[Z] = (double)p[Z]; }
+      void              copy_to(size_t* array)                { array[X] = (size_t)p[X]; array[Y] = (size_t)p[Y]; array[Z] = (size_t)p[Z]; }
 
       Triple<T>&        set (T x_value, T y_value, T z_value) { p[X] = x_value; p[Y] = y_value; p[Z] = z_value; return *this; }
       Triple<T>&        set (const T point[3])                { set(point[X], point[Y], point[Z]); return *this; }

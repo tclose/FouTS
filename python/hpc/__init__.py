@@ -129,7 +129,7 @@ def create_env(work_dir):
     """
     env = os.environ.copy()
     env['PATH'] = env['PATH'] + os.pathsep + \
-                  os.path.join(env['HOME'], 'git', 'BaFTrS', 'bin') + os.pathsep + \
+                  os.path.join(env['HOME'], 'git', 'FouTS', 'bin') + os.pathsep + \
                   os.path.join(env['HOME'], 'git', 'MRtrix', 'bin')
     env['LD_LIBRARY_PATH'] = '/opt/mpi/gnu/openmpi-1.6.3/lib' + os.pathsep + \
                   os.path.join(env['HOME'], 'git', 'MRtrix', 'lib')
