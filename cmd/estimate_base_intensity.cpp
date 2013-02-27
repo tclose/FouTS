@@ -122,23 +122,10 @@ EXECUTE {
   for (loop.start(mask, dwi); loop.ok(); loop.next(mask, dwi)) {
 
   }
-  double b0;
+  double estimated_base_intensity;
 
-  if (method == "median") {
-    std::vector<double>::iterator first = all_bzeros.begin();
-    std::vector<double>::iterator last = all_bzeros.end();
-    std::vector<double>::iterator middle = first + (last - first)/ 2;
-    std::nth_element(first, middle, last);
-    b0 = *middle;
-  } else if (method == "max") {
-    b0 = *std::max_element(all_bzeros.begin(), all_bzeros.end());
-  } else if (method == "average") {
-    b0 = std::accumulate(all_bzeros.begin(), all_bzeros.end(), 0);
-    b0 /= (double)all_bzeros.size();
-  } else
-    throw Exception ("Unrecognised value '" + method + "' for method option, can be either 'median', 'max' or 'average'.");
 
-  std::cout << b0 << std::endl;
+  std::cout << estimated_base_intensity << std::endl;
 
 }
 
