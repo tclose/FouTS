@@ -20,16 +20,12 @@
 
  */
 
-
 #ifndef __bts_image_expected_gaussian_voxel_h__
 #define __bts_image_expected_gaussian_voxel_h__
-
 
 #include "bts/common.h"
 
 #include "bts/triple.h"
-
-
 
 #include "bts/image/expected/buffer.h"
 #include "bts/image/observed/buffer.h"
@@ -38,65 +34,63 @@
 
 #include "bts/diffusion/model.h"
 
-
 namespace BTS {
-
-  namespace Image {
-
-    namespace Expected {
-
-      namespace Gaussian {
-      
-        class Voxel : public Expected::Voxel {
-
-          public:
-
-            typedef Gaussian::Buffer Buffer;
-
-          protected:
-
-            Buffer* image;
-
-          public:
-
-            Voxel() {}
-
-
-            Voxel(Buffer& buffer, const Index& coord);
-
-
-            Voxel(const Voxel& voxel)
-              : Expected::Voxel(voxel), image(voxel.image) {}
-
-
-            Voxel&            operator= (const Voxel& v)
-              { Expected::Voxel::operator=(v); image = v.image; return *this; }
     
+    namespace Image {
         
-            ~Voxel() {}
+        namespace Expected {
+            
+            namespace Gaussian {
+                
+                class Voxel: public Expected::Voxel {
+                        
+                    public:
+                        
+                        typedef Gaussian::Buffer Buffer;
 
+                    protected:
+                        
+                        Buffer* image;
 
-    //      protected:
+                    public:
+                        
+                        Voxel() {
+                        }
+                        
+                        Voxel(Buffer& buffer, const Index& coord);
 
-            double             interpolate(const Coord& pos);
+                        Voxel(const Voxel& voxel)
+                                : Expected::Voxel(voxel), image(voxel.image) {
+                        }
+                        
+                        Voxel& operator=(const Voxel& v) {
+                            Expected::Voxel::operator=(v);
+                            image = v.image;
+                            return *this;
+                        }
+                        
+                        ~Voxel() {
+                        }
+                        
+                        //      protected:
+                        
+                        double interpolate(const Coord& pos);
 
-            double             interpolate(const Coord& pos, Coord& gradient);
+                        double interpolate(const Coord& pos, Coord& gradient);
 
-            double             interpolate(const Coord& triple, Coord& gradient, Coord::Tensor& hessian)
-              {  throw Exception ("Not implemented yet."); }
-
-
-
-
-        };
-
-      }
-
+                        double interpolate(const Coord& triple, Coord& gradient,
+                                           Coord::Tensor& hessian) {
+                            throw Exception("Not implemented yet.");
+                        }
+                        
+                };
+            
+            }
+        
+        }
+    
     }
 
-  }
-
 }
-
 
 #endif

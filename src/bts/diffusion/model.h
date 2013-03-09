@@ -23,7 +23,6 @@
 #ifndef __bts_diffusion_model_h__
 #define __bts_diffusion_model_h__
 
-
 //Defines the parameters required to initialise a Proposal::Distribution object.
 #define DIFFUSION_PARAMETERS \
 \
@@ -45,7 +44,6 @@
 
 //  Option ("precision", "azimuthal angle precision", "precision of the samples about the azimuthal angle")
 //   + Argument ("precision", "precision of the samples about the azimuthal angle").type_integer (3,1e6,100))
-
 
 //Loads the 'proposal' parameters into variables
 #define SET_DIFFUSION_PARAMETERS \
@@ -114,143 +112,145 @@
   } \
 
 
-
-
 namespace BTS {
-  namespace Diffusion {
-  
-    class Model;
+    namespace Diffusion {
+        
+        class Model;
     
-  }
+    }
 }
 
 #include <vector>
 
 #include "bts/fibre/strand/set.h"
 
-
 #include "bts/diffusion/encoding.h"
 #include "bts/diffusion/response.h"
- 
+
 #define LOOP(op) \
 for (std::vector<Response>::iterator response_it = responses.begin(); response_it != responses.end(); ++response_it) { op }
 
 namespace BTS {
-
-  namespace Diffusion {
-
-    class Model {
-
-      //Public const static members
-      public:
+    
+    namespace Diffusion {
         
-        const static std::string                 ENCODINGS_LOCATION_DEFAULT;
+        class Model {
+                
+                //Public const static members
+            public:
+                
+                const static std::string ENCODINGS_LOCATION_DEFAULT;
 
-        const static bool                        ISOTROPIC_DEFAULT;
+                const static bool ISOTROPIC_DEFAULT;
 
-        const static double                      ADC_DEFAULT;
-        const static double                      FA_DEFAULT;
+                const static double ADC_DEFAULT;
+                const static double FA_DEFAULT;
 //        const static double                      B_VALUE_DEFAULT;
-
-        const static double                      AZ_PRECISION_DEFAULT;
+                
+                const static double AZ_PRECISION_DEFAULT;
 //        const static char*                       SPHERICAL_HARMONIC_LOCATION_DEFAULT;
 //        const static char*                       RESPONSE_SH_LOCATION_DEFAULT;
+                
+                const static size_t LMAX;    //Maximum lmax that can be calculated;
+                
+                //0-8th order m=0 Associated Legendre polynomial coefficients multiplied by the common factor for each order.
+                static const double M0_HARMONIC_L0[5], M0_HARMONIC_L2[5], M0_HARMONIC_L4[5],
+                        M0_HARMONIC_L6[5], M0_HARMONIC_L8[5];
 
-        const static size_t LMAX; //Maximum lmax that can be calculated;
+                //Protected member variables
+            protected:
+                
+                std::vector<Response> responses;
+                bool includes_iso;
 
-        //0-8th order m=0 Associated Legendre polynomial coefficients multiplied by the common factor for each order.
-        static const double M0_HARMONIC_L0[5], M0_HARMONIC_L2[5], M0_HARMONIC_L4[5], M0_HARMONIC_L6[5], M0_HARMONIC_L8[5];
+            public:
+                
+                static MR::Math::Vector<double> tensor_m0_SH(double adc, double fa, double b_value);
 
+                static MR::Math::Vector<double> SH_to_coeffs(
+                        MR::Math::Vector<double> spherical_harmonics, bool include_isotropic);
 
-      //Protected member variables
-      protected:
-        
-        std::vector<Response>                   responses;
-        bool                                    includes_iso;
+                static Model factory(const MR::Math::Matrix<double>& encodings_matrix,
+                                     const MR::Math::Matrix<double>& response_SHs, double adc,
+                                     double fa, bool include_isotropic, bool warn_on_b_mismatch);
 
-      public:
+                //Public member functions
+            public:
+                
+                Model() {
+                }
+                
+                //TODO: Use b_value from encoding matrix to generate response function per direction.
+                Model(const MR::Math::Matrix<double>& encodings_matrix, double adc, double fa,
+                      bool include_isotropic);
 
+                //TODO: Use take a matrix of response_SH, allowing a different response function per direction.
+                Model(const MR::Math::Matrix<double>& encodings_matrix,
+                      const MR::Math::Vector<double>& response_SH, bool include_isotropic,
+                      bool warn_on_b_mismatch = false);
 
-        static MR::Math::Vector<double>         tensor_m0_SH(double adc, double fa, double b_value);
+                Model(const MR::Math::Matrix<double>& encodings_matrix,
+                      const MR::Math::Matrix<double>& response_SHs, bool include_isotropic);
 
-        static MR::Math::Vector<double>         SH_to_coeffs(MR::Math::Vector<double> spherical_harmonics, bool include_isotropic);
+                Model(const Model& m)
+                        : responses(m.responses), includes_iso(m.includes_iso) {
+                }
+                
+                Model& operator=(const Model& m) {
+                    
+                    this->responses = m.responses;
+                    this->includes_iso = m.includes_iso;
+                    
+                    return *this;
+                }
+                
+                const static double default_strand_volume_fraction = 0.2262 * .0005 * 1e5 * 2.0;
 
-        static Model                            factory(const MR::Math::Matrix<double>& encodings_matrix,
-                                                        const MR::Math::Matrix<double>& response_SHs,
-                                                        double adc,
-                                                        double fa,
-                                                        bool include_isotropic,
-                                                        bool warn_on_b_mismatch);
+                size_t num_encodings() const {
+                    return responses.size();
+                }
+                size_t size() const {
+                    return responses.size();
+                }
+                
+                Response& operator[](size_t index) {
+                    return responses[index];
+                }
+                const Response& operator[](size_t index) const {
+                    return responses[index];
+                }
+                
+                const Encoding& encoding(size_t index) const {
+                    return responses[index];
+                }
+                
+                void precalculate_weightings(Fibre::Strand::Section& section) const;
 
-      //Public member functions
-      public:
+                void precalculate_weightings_and_gradients(Fibre::Strand::Section& section) const;
 
-        Model() {}
+                void precalculate_weightings_gradients_and_hessians(
+                        Fibre::Strand::Section& section) const;
 
-        //TODO: Use b_value from encoding matrix to generate response function per direction.
-        Model (const MR::Math::Matrix<double>& encodings_matrix, double adc, double fa, bool include_isotropic);
+                void scale_coeffs(double scalar);
 
-        //TODO: Use take a matrix of response_SH, allowing a different response function per direction.
-        Model (const MR::Math::Matrix<double>& encodings_matrix, const MR::Math::Vector<double>& response_SH,
-               bool include_isotropic, bool warn_on_b_mismatch = false);
+                bool includes_isotropic() const {
+                    return includes_iso;
+                }
+                
+                MR::Math::Vector<double> weightings(MR::Math::Vector<double> weightings,
+                                                    MR::Math::Matrix<double> orientations);
 
+            protected:
+                
+                void init(const MR::Math::Matrix<double>& encodings_matrix,
+                          const MR::Math::Matrix<double>& response_SHs, bool include_isotropic);
 
-        Model (const MR::Math::Matrix<double>& encodings_matrix, const MR::Math::Matrix<double>& response_SHs,
-               bool include_isotropic);
-
-        
-        Model (const Model& m)
-          : responses(m.responses), includes_iso(m.includes_iso)
-          {}
-      
-      
-        Model&                              operator= (const Model& m) {
-
-          this->responses = m.responses;
-          this->includes_iso = m.includes_iso;
-        
-          return *this;
-        }
-      
-
-        const static double                 default_strand_volume_fraction = 0.2262 * .0005 * 1e5 * 2.0;
-
-        size_t                              num_encodings() const
-          { return responses.size(); }
-        size_t                              size() const
-          { return responses.size(); }
-        
-        Response&                           operator[](size_t index)
-          { return responses[index]; }
-        const Response&                     operator[](size_t index) const
-          { return responses[index]; }
-
-        const Encoding&                     encoding(size_t index) const
-          { return responses[index]; }
-        
-        void                                precalculate_weightings(Fibre::Strand::Section& section) const;
-
-        void                                precalculate_weightings_and_gradients(Fibre::Strand::Section& section) const;
-
-        void                                precalculate_weightings_gradients_and_hessians(Fibre::Strand::Section& section) const;
-
-        void                                scale_coeffs(double scalar);
-        
-        bool                                includes_isotropic() const
-          { return includes_iso; }
-
-        MR::Math::Vector<double>            weightings(MR::Math::Vector<double> weightings,
-                                                                                MR::Math::Matrix<double> orientations);
-
-      protected:
-
-        void                                init(const MR::Math::Matrix<double>& encodings_matrix, const MR::Math::Matrix<double>& response_SHs, bool include_isotropic);
-
-      friend std::ostream& operator<< (std::ostream& stream, const Diffusion::Model& model);
-
-    };
-
-  }
+                friend std::ostream& operator<<(std::ostream& stream,
+                                                const Diffusion::Model& model);
+                
+        };
+    
+    }
 }
 
 #undef LOOP

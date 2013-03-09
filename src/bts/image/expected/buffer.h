@@ -24,16 +24,16 @@
 #define __bts_image_expected_buffer_h__
 
 namespace BTS {
-
-  namespace Image {
-
-    namespace Expected {
-
-      class Buffer;
-
+    
+    namespace Image {
+        
+        namespace Expected {
+            
+            class Buffer;
+        
+        }
+    
     }
-
-  }
 
 }
 
@@ -82,7 +82,6 @@ namespace BTS {
 
 //  Triple<size_t>  img_dims (img_dim);
 //  Triple<double> img_vox_lengths  (img_vox_length);
-
 
 //Adds the  parameters to the properties to be saved with the data.
 #define ADD_IMAGE_PROPERTIES(properties) \
@@ -185,222 +184,225 @@ exp_opt = get_options("exp_num_width_sections"); \
 #include "bts/image/expected/voxel.h"
 
 namespace BTS {
+    
+    namespace Image {
+        
+        namespace Expected {
+            
+            namespace Gaussian {
+                class Buffer;
+                class Voxel;
+            }
+            namespace Quartic {
+                class Buffer;
+                class Voxel;
+            }
+            namespace Trilinear {
+                class Buffer;
+                class Voxel;
+            }
+            namespace TopHat {
+                class Buffer;
+                class Voxel;
+            }
+            namespace Sinc {
+                class Buffer;
+                class Voxel;
+            }
+            namespace ReverseSqrt {
+                class Buffer;
+                class Voxel;
+            }
+            namespace Realistic {
+                class Buffer;
+                class Voxel;
+            }
+            
+            class Buffer {
+                    
+                public:
+                    
+                    typedef std::map<Index, Voxel>::iterator iterator;
+                    typedef std::map<Index, Voxel>::const_iterator const_iterator;
+
+                public:
+                    
+                    const static size_t NUM_LENGTH_SECTIONS_DEFAULT;
+                    const static size_t NUM_WIDTH_SECTIONS_DEFAULT;
+
+                    const static Triple<size_t> DIMS_DEFAULT;
+                    const static Triple<double> VOX_LENGTHS_DEFAULT;
+                    const static Triple<double> OFFSETS_DEFAULT;
+                    const static std::string FILE_EXTENSION;
+
+                    const static double INTERP_EXTENT_DEFAULT;
+                    const static bool ENFORCE_BOUNDS_DEFAULT;
+                    const static double HALF_WIDTH_DEFAULT;
+                    const static char* TYPE_DEFAULT;
+
+                    const static std::string STRAND_BASE_INTENSITY_REFERENCE;
+                    const static std::string TRACTLET_BASE_INTENSITY_REFERENCE;
+
+                    //Public static methods.
+                public:
+                    
+                    static Buffer* factory(const std::string& type, const Triple<size_t>& dims,
+                                           const Triple<double>& vox_lengths,
+                                           const Diffusion::Model& diffusion_model,
+                                           size_t num_length_sections, size_t num_width_sections,
+                                           double interp_extent, const Triple<double>& offsets,
+                                           bool enforce_bounds, double gaussian_half_width);
+
+                    static Buffer* factory(const std::string& type,
+                                           const Observed::Buffer& obs_image,
+                                           const Diffusion::Model& diffusion_model,
+                                           size_t num_length_sections, size_t num_width_sections,
+                                           double interp_extent, bool enforce_bounds,
+                                           double gaussian_half_width)
+
+                                           {
+                        return factory(type, obs_image.dims(), obs_image.vox_lengths(),
+                                diffusion_model, num_length_sections, num_width_sections,
+                                interp_extent, obs_image.offsets(), enforce_bounds,
+                                gaussian_half_width);
+                    }
+                    
+                    //Used for pretty printing in gdb. Is set in the constructor of derived classes.
+                protected:
+                    
+                    char type[50];
 
-  namespace Image {
-
-    namespace Expected {
+                public:
+                    
+                    virtual Voxel& operator()(int x, int y, int z) = 0;
 
-      namespace Gaussian {
-        class Buffer;
-        class Voxel;
-      }
-      namespace Quartic {
-        class Buffer;
-        class Voxel;
-      }
-      namespace Trilinear {
-        class Buffer;
-        class Voxel;
-      }
-      namespace TopHat {
-        class Buffer;
-        class Voxel;
-      }
-      namespace Sinc {
-        class Buffer;
-        class Voxel;
-      }
-      namespace ReverseSqrt {
-        class Buffer;
-        class Voxel;
-      }
-      namespace Realistic {
-        class Buffer;
-        class Voxel;
-      }
+                    virtual const Voxel& operator()(int x, int y, int z) const = 0;
 
+                    virtual Voxel& operator()(Index c) = 0;
 
-      class Buffer {
+                    virtual const Voxel& operator()(Index c) const = 0;
 
-        public:
+                    virtual const Triple<size_t>& dims() const = 0;
 
-          typedef std::map<Index, Voxel>::iterator iterator;
-          typedef std::map<Index, Voxel>::const_iterator const_iterator;
+                    virtual const Triple<double>& vox_lengths() const = 0;
 
-        public:
+                    //! Offset of the lowest corner of the lowest voxel coordinate ([0,0,0]) of the image.
+                    virtual const Triple<double>& offsets() const = 0;
 
-          const static size_t NUM_LENGTH_SECTIONS_DEFAULT;
-          const static size_t NUM_WIDTH_SECTIONS_DEFAULT;
+                    virtual size_t dim(size_t dim_index) const = 0;
 
-          const static Triple<size_t> DIMS_DEFAULT;
-          const static Triple<double> VOX_LENGTHS_DEFAULT;
-          const static Triple<double> OFFSETS_DEFAULT;
-          const static std::string FILE_EXTENSION;
+                    virtual double vox_length(size_t dim_index) const = 0;
 
-          const static double INTERP_EXTENT_DEFAULT;
-          const static bool ENFORCE_BOUNDS_DEFAULT;
-          const static double HALF_WIDTH_DEFAULT;
-          const static char* TYPE_DEFAULT;
+                    //! Offset of the lowest corner of the lowest voxel coordinate ([0,0,0]) of the image.
+                    virtual double offset(size_t dim_index) const = 0;
 
-          const static std::string STRAND_BASE_INTENSITY_REFERENCE;
-          const static std::string TRACTLET_BASE_INTENSITY_REFERENCE;
+                    virtual size_t num_encodings() const = 0;
 
-          //Public static methods.
-        public:
+                    virtual const Diffusion::Encoding& encoding(size_t index) const = 0;
 
-          static Buffer* factory(const std::string& type,
-              const Triple<size_t>& dims, const Triple<double>& vox_lengths,
-              const Diffusion::Model& diffusion_model,
-              size_t num_length_sections, size_t num_width_sections,
-              double interp_extent, const Triple<double>& offsets,
-              bool enforce_bounds, double gaussian_half_width);
+                    virtual size_t num_length_sections() const = 0;
 
-          static Buffer* factory(const std::string& type,
-              const Observed::Buffer& obs_image,
-              const Diffusion::Model& diffusion_model,
-              size_t num_length_sections, size_t num_width_sections,
-              double interp_extent, bool enforce_bounds,
-              double gaussian_half_width)
+                    virtual size_t num_width_sections() const = 0;
 
-          {
-            return factory(type, obs_image.dims(), obs_image.vox_lengths(),
-                diffusion_model, num_length_sections, num_width_sections,
-                interp_extent, obs_image.offsets(), enforce_bounds,
-                gaussian_half_width);
-          }
+                    virtual void save(const std::string& location) const = 0;
 
-          //Used for pretty printing in gdb. Is set in the constructor of derived classes.
-        protected:
+                    virtual Buffer& expected_image(const Fibre::Strand::Set& strands) = 0;
 
-          char type[50];
+                    virtual Buffer& part_image(const Fibre::Strand& strand) = 0;
 
-        public:
+                    virtual Buffer
+                    & expected_image(const Fibre::Tractlet::Set& tractlets) = 0;
 
-          virtual Voxel& operator()(int x, int y, int z) = 0;
+                    virtual Reference::Buffer<Fibre::Strand::Section>::Set
+                    & expected_image_with_references(const Fibre::Strand::Set& fibres) = 0;
 
-          virtual const Voxel& operator()(int x, int y, int z) const = 0;
+                    virtual Reference::Buffer<Fibre::Tractlet::Section>::Set
+                    & expected_image_with_references(const Fibre::Tractlet::Set& fibres) = 0;
 
-          virtual Voxel& operator()(Index c) = 0;
+                    virtual Buffer& expected_image(
+                            const Fibre::Strand::Set& strands,
+                            Container::Buffer<Fibre::Strand>::Set& gradients) = 0;
 
-          virtual const Voxel& operator()(Index c) const = 0;
+                    virtual Buffer& expected_image(
+                            const Fibre::Tractlet::Set& tractlets,
+                            Container::Buffer<Fibre::Tractlet>::Set& gradients) = 0;
 
-          virtual const Triple<size_t>& dims() const = 0;
+                    virtual Buffer& expected_image(
+                            const Fibre::Strand::Set& strands,
+                            Container::Buffer<Fibre::Strand>::Set& gradients,
+                            Container::Buffer<Fibre::Strand::Tensor>::Set& hessians) = 0;
 
-          virtual const Triple<double>& vox_lengths() const = 0;
+                    virtual Buffer& expected_image(
+                            const Fibre::Tractlet::Set& tractlets,
+                            Container::Buffer<Fibre::Tractlet>::Set& gradients,
+                            Container::Buffer<Fibre::Tractlet::Tensor>::Set& hessians) = 0;
 
-          //! Offset of the lowest corner of the lowest voxel coordinate ([0,0,0]) of the image.
-          virtual const Triple<double>& offsets() const = 0;
+                    virtual void precalculate_section_weighting_gradients(
+                            const Fibre::Strand& dummy) = 0;
 
-          virtual size_t dim(size_t dim_index) const = 0;
+                    virtual void precalculate_section_weighting_gradients_and_hessians(
+                            const Fibre::Strand& dummy) = 0;
 
-          virtual double vox_length(size_t dim_index) const = 0;
+                    virtual void precalculate_section_weighting_gradients(
+                            const Fibre::Tractlet& dummy) = 0;
 
-          //! Offset of the lowest corner of the lowest voxel coordinate ([0,0,0]) of the image.
-          virtual double offset(size_t dim_index) const = 0;
+                    virtual void precalculate_section_weighting_gradients_and_hessians(
+                            const Fibre::Tractlet& dummy) = 0;
 
-          virtual size_t num_encodings() const = 0;
+                    virtual Buffer* clone() const = 0;
 
-          virtual const Diffusion::Encoding& encoding(size_t index) const = 0;
+                    virtual const Diffusion::Model& get_diffusion_model() const = 0;
 
-          virtual size_t num_length_sections() const = 0;
+                    virtual std::ostream& to_stream(std::ostream& stream) const = 0;
 
-          virtual size_t num_width_sections() const = 0;
+                    Image::Buffer clean_buffer();
 
-          virtual void save(const std::string& location) const = 0;
+                    virtual double get_base_intensity(double ref_b0) = 0;
 
-          virtual Buffer& expected_image(const Fibre::Strand::Set& strands) = 0;
+                    bool dims_match(const Observed::Buffer& reference);
 
-          virtual Buffer& part_image(const Fibre::Strand& strand) = 0;
+                    virtual Properties& properties() = 0;
 
-          virtual Buffer
-          & expected_image(const Fibre::Tractlet::Set& tractlets) = 0;
+                    virtual const Properties& properties() const = 0;
 
-          virtual Reference::Buffer<Fibre::Strand::Section>::Set
-          & expected_image_with_references(const Fibre::Strand::Set& fibres) = 0;
+                    virtual double rms(bool include_b0s) const = 0;
 
-          virtual Reference::Buffer<Fibre::Tractlet::Section>::Set
-              & expected_image_with_references(
-                  const Fibre::Tractlet::Set& fibres) = 0;
+                    virtual double max_b0() const = 0;
 
-          virtual Buffer& expected_image(const Fibre::Strand::Set& strands,
-              Container::Buffer<Fibre::Strand>::Set& gradients) = 0;
+                    virtual Buffer& zero() = 0;
 
-          virtual Buffer& expected_image(const Fibre::Tractlet::Set& tractlets,
-              Container::Buffer<Fibre::Tractlet>::Set& gradients) = 0;
+                    virtual Buffer& clear() = 0;
 
-          virtual Buffer& expected_image(const Fibre::Strand::Set& strands,
-              Container::Buffer<Fibre::Strand>::Set& gradients,
-              Container::Buffer<Fibre::Strand::Tensor>::Set& hessians) = 0;
+                    virtual Buffer& negate() = 0;
 
-          virtual Buffer& expected_image(const Fibre::Tractlet::Set& tractlets,
-              Container::Buffer<Fibre::Tractlet>::Set& gradients,
-              Container::Buffer<Fibre::Tractlet::Tensor>::Set& hessians) = 0;
+                    virtual std::set<Index> non_empty() const = 0;
 
-          virtual void precalculate_section_weighting_gradients(
-              const Fibre::Strand& dummy) = 0;
+                    virtual std::set<Index> non_empty_or_inbounds() const = 0;
 
-          virtual void precalculate_section_weighting_gradients_and_hessians(
-              const Fibre::Strand& dummy) = 0;
+                    virtual std::set<Index> empty_inbounds() const = 0;
 
-          virtual void precalculate_section_weighting_gradients(
-              const Fibre::Tractlet& dummy) = 0;
+                    virtual bool bounds_are_enforced() const = 0;
 
-          virtual void precalculate_section_weighting_gradients_and_hessians(
-              const Fibre::Tractlet& dummy) = 0;
+                    virtual void clear_and_enforce_bounds() = 0;
 
-          virtual Buffer* clone() const = 0;
+                    virtual void relax_bounds() = 0;
 
-          virtual const Diffusion::Model& get_diffusion_model() const = 0;
+                    virtual Buffer& operator+=(const Buffer& buffer) = 0;
 
-          virtual std::ostream& to_stream(std::ostream& stream) const = 0;
+                    virtual Buffer& operator-=(const Buffer& buffer) = 0;
 
-          Image::Buffer clean_buffer();
+                    virtual Buffer& operator-=(
+                            const Image::Buffer_tpl<Observed::Voxel>& buffer) = 0;
 
-          virtual double get_base_intensity(double ref_b0) = 0;
-
-          bool dims_match(const Observed::Buffer& reference);
-
-          virtual Properties& properties() = 0;
-
-          virtual const Properties& properties() const = 0;
-
-          virtual double rms(bool include_b0s) const = 0;
-
-          virtual double max_b0() const = 0;
-
-          virtual Buffer& zero() = 0;
-
-          virtual Buffer& clear() = 0;
-
-          virtual Buffer& negate() = 0;
-
-          virtual std::set<Index> non_empty() const = 0;
-
-          virtual std::set<Index> non_empty_or_inbounds() const = 0;
-
-          virtual std::set<Index> empty_inbounds() const = 0;
-
-          virtual bool bounds_are_enforced() const = 0;
-
-          virtual void clear_and_enforce_bounds() = 0;
-
-          virtual void relax_bounds() = 0;
-
-          virtual Buffer& operator+=(const Buffer& buffer) = 0;
-
-          virtual Buffer& operator-=(const Buffer& buffer) = 0;
-
-          virtual Buffer& operator-=(const Image::Buffer_tpl<Observed::Voxel>& buffer) = 0;
-
-          virtual iterator begin() {
-            throw Exception("not implemented");
-          }
-
-          virtual iterator end() {
-            throw Exception("not implemented");
-          }
-      };
-
+                    virtual iterator begin() {
+                        throw Exception("not implemented");
+                    }
+                    
+                    virtual iterator end() {
+                        throw Exception("not implemented");
+                    }
+            };
+            
 #define EXPECTED_BUFFER_FUNCTIONS \
  \
             void                        save(const std::string& location) const \
@@ -585,19 +587,17 @@ namespace BTS {
               { strncpy (this->type, SHORT_NAME.c_str(), 50); } \
 \
           friend class Voxel
-
-      inline std::ostream& operator<<(std::ostream& stream, const Buffer& image) {
-
-        return image.to_stream(stream);
-
-      }
-
+            
+            inline std::ostream& operator<<(std::ostream& stream, const Buffer& image) {
+                
+                return image.to_stream(stream);
+                
+            }
+        
+        }
+    
     }
 
-  }
-
 }
-
-
 
 #endif

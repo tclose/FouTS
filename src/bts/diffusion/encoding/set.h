@@ -28,71 +28,72 @@
 #include "bts/diffusion/encoding.h"
 #include "bts/diffusion/model.h"
 
-
-
-
-
-
 namespace BTS {
+    
+    namespace Diffusion {
+        
+        class Encoding::Set {
+                
+            protected:
+                
+                std::vector<Encoding> encodings;
 
-  namespace Diffusion {
+                //Public member functions
+            public:
+                
+                Set() {
+                }
+                
+                Set(const MR::Math::Matrix<double>& encodings_matrix) {
+                    set(encodings_matrix);
+                }
+                
+                Set(const std::string& location) {
+                    load(location);
+                }
+                
+                Set(const Set& s)
+                        : encodings(s.encodings) {
+                }
+                
+                Set(const Model& m);
 
-    class Encoding::Set {
+                Set& operator=(const Set& s) {
+                    
+                    this->encodings = s.encodings;
+                    
+                    return *this;
+                }
+                
+                void load(const std::string& location);
 
-      protected:
+                void set(const MR::Math::Matrix<double>& encodings_matrix);
 
-        std::vector<Encoding>                   encodings;
-
-
-      //Public member functions
-      public:
-
-
-        Set() {}
-
-        Set (const MR::Math::Matrix<double>& encodings_matrix)
-          { set(encodings_matrix); }
-
-        Set (const std::string& location)
-          { load(location); }
-
-        Set (const Set& s) :
-                encodings(s.encodings)
-          {}
-
-
-        Set (const Model& m);
-
-
-        Set&                              	operator= (const Set& s) {
-
-          this->encodings = s.encodings;
-
-          return *this;
-        }
-
-        void                                load(const std::string& location);
-
-        void                                set(const MR::Math::Matrix<double>& encodings_matrix);
-
-        Encoding&                           operator[](size_t index)            { return encodings[index]; }
-        const Encoding&                     operator[](size_t index) const      { return encodings[index]; }
-
-        size_t                                num_encodings() const             { return encodings.size(); }
-        size_t                                size() const                      {
-          return encodings.size();
-        }
-
-        const Encoding&                     encoding(size_t index) const        { return encodings[index]; }
-
-      friend std::ostream&                  operator<<(std::ostream& stream, const Encoding::Set& encodings);
-    };
-
-    std::ostream&                           operator<< (std::ostream& stream, const Encoding::Set& encodings);
-
-  }
+                Encoding& operator[](size_t index) {
+                    return encodings[index];
+                }
+                const Encoding& operator[](size_t index) const {
+                    return encodings[index];
+                }
+                
+                size_t num_encodings() const {
+                    return encodings.size();
+                }
+                size_t size() const {
+                    return encodings.size();
+                }
+                
+                const Encoding& encoding(size_t index) const {
+                    return encodings[index];
+                }
+                
+                friend std::ostream& operator<<(std::ostream& stream,
+                                                const Encoding::Set& encodings);
+        };
+        
+        std::ostream& operator<<(std::ostream& stream, const Encoding::Set& encodings);
+    
+    }
 }
-
-
 
 #endif

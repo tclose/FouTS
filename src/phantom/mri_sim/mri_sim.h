@@ -28,7 +28,6 @@
 #include "phantom/shared/strand_collection.h"
 #include "phantom/mri_sim/strand_collection_stats.h"
 
-
 #define FA_DEFAULT 0.8
 
 #define DIFFUSIVITY_DEFAULT 0.0009
@@ -44,5 +43,7 @@
 #define GRAD_DIR_BLOCK_SIZE 100
 #define SUBVOXEL_ROUND_DOWN_WARNING_THRESHOLD 0.00001
 
-
-float* mri_sim(Strand_collection *c, double fa, double diffusivity, int num_voxels, double voxel_size, int num_subvoxels, int num_grad_directions, double *grad_directions, double *b_values, Strand_collection_stats *stats, int save_subvoxels, double **subvoxel_orientations) ;
+float* mri_sim(Strand_collection *c, double fa, double diffusivity, int num_voxels,
+               double voxel_size, int num_subvoxels, int num_grad_directions,
+               double *grad_directions, double *b_values, Strand_collection_stats *stats,
+               int save_subvoxels, double **subvoxel_orientations);

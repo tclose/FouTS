@@ -21,66 +21,66 @@
 #include "k_means/KMfilterCenters.h"
 #include "k_means/KMrand.h"
 
-					// standard constructor
+// standard constructor
 KMfilterCenters::KMfilterCenters(int k, KMdata& p, double df)
-    : KMcenters(k, p) {
+        : KMcenters(k, p) {
     if (p.getKcTree() == NULL) {	// kc-tree not yet built?
-      kmError("Building kc-tree", KMwarn);
-      p.buildKcTree();			// build it now
+        kmError("Building kc-tree", KMwarn);
+        p.buildKcTree();			// build it now
     }
-    sums	= kmAllocPts(kCtrs, getDim());
-    sumSqs	= new double[kCtrs];
-    weights	= new int[kCtrs];
-    dists	= new double[kCtrs];
-    currDist	= KM_HUGE;
-    dampFactor	= df;
+    sums = kmAllocPts(kCtrs, getDim());
+    sumSqs = new double[kCtrs];
+    weights = new int[kCtrs];
+    dists = new double[kCtrs];
+    currDist = KM_HUGE;
+    dampFactor = df;
     invalidate();			// distortions are initially invalid
 }
-					// copy constructor
+// copy constructor
 KMfilterCenters::KMfilterCenters(const KMfilterCenters& s)
-	: KMcenters(s) {
-    sums	= kmAllocCopyPts(kCtrs, getDim(), s.sums);
-    sumSqs	= kmAllocCopy(kCtrs, s.sumSqs);
-    weights	= kmAllocCopy(kCtrs, s.weights);
-    dists	= kmAllocCopy(kCtrs, s.dists);
-    currDist	= s.currDist;
-    dampFactor	= s.dampFactor;
-    valid	= s.valid;
+        : KMcenters(s) {
+    sums = kmAllocCopyPts(kCtrs, getDim(), s.sums);
+    sumSqs = kmAllocCopy(kCtrs, s.sumSqs);
+    weights = kmAllocCopy(kCtrs, s.weights);
+    dists = kmAllocCopy(kCtrs, s.dists);
+    currDist = s.currDist;
+    dampFactor = s.dampFactor;
+    valid = s.valid;
 }
-					// assignment operator
+// assignment operator
 KMfilterCenters& KMfilterCenters::operator=(const KMfilterCenters& s) {
     if (this != &s) {			// avoid self copy (x=x)
-					// different sizes?
-	if (kCtrs != s.kCtrs || getDim() != s.getDim()) {
-	    kmDeallocPts(sums);		// deallocate old storage
-	    delete [] sumSqs;
-	    delete [] weights;
-	    delete [] dists;
-	    				// allocate new storage
-	    sums    = kmAllocPts(s.kCtrs, s.getDim());
-	    sumSqs  = new double[s.kCtrs];
-	    weights = new int[s.kCtrs];
-	    dists   = new double[s.kCtrs];
-	}
-	KMcenters& base = *this;	
-	base.operator=(s);		// copy base class
-					// copy array contents
-	kmCopyPts(kCtrs, getDim(), s.sums, sums);
-	kmCopy(kCtrs, s.sumSqs, sumSqs);
-	kmCopy(kCtrs, s.weights, weights);
-	kmCopy(kCtrs, s.dists, dists);
-	valid   = s.valid;
+        // different sizes?
+        if (kCtrs != s.kCtrs || getDim() != s.getDim()) {
+            kmDeallocPts(sums);		// deallocate old storage
+            delete[] sumSqs;
+            delete[] weights;
+            delete[] dists;
+            // allocate new storage
+            sums = kmAllocPts(s.kCtrs, s.getDim());
+            sumSqs = new double[s.kCtrs];
+            weights = new int[s.kCtrs];
+            dists = new double[s.kCtrs];
+        }
+        KMcenters& base = *this;
+        base.operator=(s);		// copy base class
+        // copy array contents
+        kmCopyPts(kCtrs, getDim(), s.sums, sums);
+        kmCopy(kCtrs, s.sumSqs, sumSqs);
+        kmCopy(kCtrs, s.weights, weights);
+        kmCopy(kCtrs, s.dists, dists);
+        valid = s.valid;
     }
     currDist = s.currDist;
     dampFactor = s.dampFactor;
     return *this;
 }
-    					// virtual destructor
+// virtual destructor
 KMfilterCenters::~KMfilterCenters() {
     kmDeallocPts(sums);
-    delete [] sumSqs;
-    delete [] weights;
-	delete [] dists;
+    delete[] sumSqs;
+    delete[] weights;
+    delete[] dists;
 }
 
 //----------------------------------------------------------------------
@@ -112,26 +112,27 @@ KMfilterCenters::~KMfilterCenters() {
 //	distortions.
 //----------------------------------------------------------------------
 
-void KMfilterCenters::computeDistortion() // compute distortions
+void KMfilterCenters::computeDistortion()    // compute distortions
 {
     // *kmOut << "------------------------------Computing Distortions" << endl;
     KCtree* t = getData().getKcTree();
-    assert(t != NULL);				// tree better exist
+    assert(t != NULL);
+    // tree better exist
     t->getNeighbors(*this);			// get neighbors
     double totDist = 0;
     for (int j = 0; j < kCtrs; j++) {
-	double cDotC = 0;			// init: (c[j] . c[j])
-	double cDotS = 0;			// init: (c[j] . sum[j])
-	for (int d = 0; d < getDim(); d++) {	// compute dot products
-	    cDotC += ctrs[j][d] * ctrs[j][d];
-	    cDotS += ctrs[j][d] * sums[j][d];
-	}
-						// final distortion
-	dists[j] = sumSqs[j] - 2*cDotS + weights[j]*cDotC;
-	totDist += dists[j];
+        double cDotC = 0;			// init: (c[j] . c[j])
+        double cDotS = 0;			// init: (c[j] . sum[j])
+        for (int d = 0; d < getDim(); d++) {	// compute dot products
+            cDotC += ctrs[j][d] * ctrs[j][d];
+            cDotS += ctrs[j][d] * sums[j][d];
+        }
+        // final distortion
+        dists[j] = sumSqs[j] - 2 * cDotS + weights[j] * cDotC;
+        totDist += dists[j];
     }
     currDist = totDist;				// save total distortion
-
+            
     validate();					// distortions are now valid
 }
 
@@ -146,13 +147,14 @@ void KMfilterCenters::computeDistortion() // compute distortions
 //	status.
 //----------------------------------------------------------------------
 //
-void KMfilterCenters::getAssignments(	// get point assignments
-    KMctrIdxArray	closeCtr,		// closest center per point
-    double*		sqDist)			// sq'd dist to center
-{
+void KMfilterCenters::getAssignments(    // get point assignments
+        KMctrIdxArray closeCtr,		// closest center per point
+        double* sqDist)			// sq'd dist to center
+        {
     KCtree* t = getData().getKcTree();
-    assert(t != NULL);				// tree better exist
-    t->getAssignments(*this, closeCtr, sqDist);	// ask KC tree to do it
+    assert(t != NULL);
+    // tree better exist
+    t->getAssignments(*this, closeCtr, sqDist);    // ask KC tree to do it
 }
 
 //----------------------------------------------------------------------
@@ -172,17 +174,17 @@ void KMfilterCenters::getAssignments(	// get point assignments
 //
 //----------------------------------------------------------------------
 
-void KMfilterCenters::moveToCentroid()	// move center to cluster centroid
+void KMfilterCenters::moveToCentroid()    // move center to cluster centroid
 {
-    if (!valid) computeDistortion();		// compute sums if needed
+    if (!valid)
+        computeDistortion();		// compute sums if needed
     for (int j = 0; j < kCtrs; j++) {
-	int wgt = weights[j];			// weight of this center
-	if (wgt > 0) {				// update only if weight > 0
-	    for (int d = 0; d < getDim(); d++) {
-    		ctrs[j][d] = (1 - dampFactor) * ctrs[j][d] +
-				dampFactor * sums[j][d]/wgt;
-	    }
-	}
+        int wgt = weights[j];			// weight of this center
+        if (wgt > 0) {				// update only if weight > 0
+            for (int d = 0; d < getDim(); d++) {
+                ctrs[j][d] = (1 - dampFactor) * ctrs[j][d] + dampFactor * sums[j][d] / wgt;
+            }
+        }
     }
     invalidate();				// distortions now invalid
 }
@@ -194,8 +196,8 @@ void KMfilterCenters::moveToCentroid()	// move center to cluster centroid
 //	(including the point being replaced).
 //----------------------------------------------------------------------
 void KMfilterCenters::swapOneCenter(		// swap one center
-    bool allowDuplicate)			// allow duplicate centers
-{
+        bool allowDuplicate)			// allow duplicate centers
+        {
     int rj = kmRanInt(kCtrs);			// index of center to replace
     int dim = getDim();
     KMpoint p = kmAllocPt(dim);			// alloc replacement point
@@ -203,15 +205,15 @@ void KMfilterCenters::swapOneCenter(		// swap one center
     if (!allowDuplicate) {			// duplicates not allowed?
         bool dupFound;				// was a duplicate found?
         do {					// repeat until successful
-	    dupFound = false;
-	    for (int j = 0; j < kCtrs; j++) { 	// search for duplicates
-		if (kmEqualPts(dim, p, ctrs[j])) {
-		    dupFound = true;
-		    pts->sampleCtr(p);		// try again
-		    break;
-		}
-	    }
-	} while (dupFound);
+            dupFound = false;
+            for (int j = 0; j < kCtrs; j++) {    // search for duplicates
+                if (kmEqualPts(dim, p, ctrs[j])) {
+                    dupFound = true;
+                    pts->sampleCtr(p);		// try again
+                    break;
+                }
+            }
+        } while (dupFound);
     }
     kmCopyPt(dim, p, ctrs[rj]);			// copy sampled point
     if (kmStatLev >= STEP) {			// output swap info
@@ -228,10 +230,10 @@ void KMfilterCenters::swapOneCenter(		// swap one center
 //----------------------------------------------------------------------
 
 void KMfilterCenters::print(bool fancy)		// print centers and distortion
-{
+        {
     for (int j = 0; j < kCtrs; j++) {
-	*kmOut << "    " << setw(4) << j << "\t";
-	kmPrintPt(ctrs[j], getDim(), true);
-	*kmOut << " dist = " << setw(8) << dists[j] << endl;
+        *kmOut << "    " << setw(4) << j << "\t";
+        kmPrintPt(ctrs[j], getDim(), true);
+        *kmOut << " dist = " << setw(8) << dists[j] << endl;
     }
 }

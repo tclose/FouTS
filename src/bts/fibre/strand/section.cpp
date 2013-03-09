@@ -20,21 +20,16 @@
  *
  */
 
-
-
 #include "bts/fibre/strand.h"
 #include "bts/fibre/strand/section.h"
 
-
-
 namespace BTS {
+    
+    namespace Fibre {
+        
+        const std::string Strand::Section::FILE_EXTENSION = "ssc";
+        const Coord Strand::Section::FILE_SEPARATOR = Coord(-INFINITY, NAN, NAN);
+    
+    }
 
-  namespace Fibre {
-
-    const std::string   Strand::Section::FILE_EXTENSION = "ssc";
-    const Coord                  Strand::Section::FILE_SEPARATOR = Coord (-INFINITY, NAN, NAN);
-              
-
-  }
-      
 }

@@ -20,14 +20,11 @@
 
  */
 
-
 #include "bts/cmd.h"
 
 #include "bts/common.h"
 
-
 #include "bts/fibre/strand/set.h"
-
 
 #include "bts/fibre/strand/set.h"
 #include "bts/fibre/track/set.h"
@@ -36,42 +33,40 @@
 #include "bts/fibre/base/set_reader.h"
 #include "bts/fibre/base/set_writer.h"
 
-
 #include "bts/inline_functions.h"
 
 using namespace BTS;
-
-SET_VERSION_DEFAULT;
-SET_AUTHOR ("Thomas G. Close");
-SET_COPYRIGHT (NULL);
+SET_VERSION_DEFAULT
+;
+SET_AUTHOR("Thomas G. Close");
+SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Print strands to screen",
-  "",
-  NULL
+    "Print strands to screen",
+    "",
+    NULL
 };
 
-ARGUMENTS = {
-  Argument()
+ARGUMENTS= {
+    Argument()
 };
 
+OPTIONS= {
 
-OPTIONS = {
-
-Option() };
+    Option()};
 
 using MR::Math::Vector;
 
 EXECUTE {
-
-  Vector<double> v(10);
-  for (size_t i =0; i < 10; ++i)
-    v[i] = (double)i;
-
-  bool sw = false;
-
-  Vector<double> v2(sw ? v.view() : v);
-
-  std::cout << v2 << std::endl;
-
-}
+    
+        Vector<double> v(10);
+        for (size_t i = 0; i < 10; ++i)
+            v[i] = (double) i;
+        
+        bool sw = false;
+        
+        Vector<double> v2(sw ? v.view() : v);
+        
+        std::cout << v2 << std::endl;
+        
+    }

@@ -1,36 +1,35 @@
 /*
-    Copyright 2010 Brain Research Institute/National ICT Australia (NICTA), Melbourne, Australia
+ Copyright 2010 Brain Research Institute/National ICT Australia (NICTA), Melbourne, Australia
 
-    Written by Thomas G Close, 5/05/09.
+ Written by Thomas G Close, 5/05/09.
 
-    This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Bayesian Tractlet Sampling (BTS).
 
-    BTS is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ BTS is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    BTS is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ BTS is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU General Public License
+ along with BTS.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
-
+ */
 
 #ifndef __bts_prob_likelihood_h__
 #define __bts_prob_likelihood_h__
 
 namespace BTS {
-
-  namespace Prob {
-
-    class Likelihood;
-
-  }
+    
+    namespace Prob {
+        
+        class Likelihood;
+    
+    }
 
 }
 
@@ -110,185 +109,198 @@ namespace BTS {
 #include "bts/fibre/tractlet/set.h"
 #include "bts/mcmc/state.h"
 
-
-
 namespace BTS {
-
-  namespace Prob {
-  
-    class Likelihood {
-
-      //Public nested classes.
-      public:
-
-        class Gaussian;
-        class OneSidedGaussian;
-        class Rician;
-
-      //Public static constants
-      public:
-              
-        const static char*         TYPE_DEFAULT;
-        const static double        SNR_DEFAULT;
-        const static char*         B0_INCLUDE_DEFAULT;
-        const static double        OUTSIDE_SCALE_DEFAULT;
-        const static char*         REF_B0_DEFAULT;
-
-
-        const static Image::Observed::Buffer dummy_observed_buffer;
-        const static Image::Expected::Trilinear::Buffer dummy_expected_buffer;
-
-      public:
-
-        static Likelihood*                     factory(const std::string& type,
-                                                      const Image::Observed::Buffer& obs_image,
-                                                      Image::Expected::Buffer* exp_image,
-                                                      double assumed_snr,
-                                                      const std::string& b0_include,
-                                                      double outside_scale,
-                                                      const std::string& ref_b0,
-                                                      double ref_signal);
-
-
-        protected:
-
-          double sigma2;
-
-          Image::Observed::Buffer obs_image;
-          Image::Expected::Buffer* exp_image;
-
-          Image::Container::Buffer<Fibre::Strand>::Set recycled_strand_gradients;
-          Image::Container::Buffer<Fibre::Tractlet>::Set recycled_tractlet_gradients;
-          Image::Container::Buffer<Fibre::Strand::Tensor>::Set recycled_strand_hessians;
-          Image::Container::Buffer<Fibre::Tractlet::Tensor>::Set recycled_tractlet_hessians;
-
-          size_t difference_mode;
-
-          std::string b0_include;
-
-      public:
-
-        Likelihood(const Image::Observed::Buffer& observed_image,
-              Image::Expected::Buffer* const expected_image,
-              double assumed_snr,
-              const std::string& b0_include,
-              double outside_scale,
-              const std::string& ref_b0,
-              double ref_signal);
-
-
-        Likelihood(const Likelihood& l);
-
-
-        virtual ~Likelihood()
-          { delete this->exp_image; }
-
-
-        Likelihood&                     operator= (const Likelihood& l);
-
-        virtual double                  log_prob(Image::Expected::Buffer& image);
-
-        double                          log_prob(const Fibre::Strand& strand)
-          { Fibre::Strand::Set set; set.push_back(strand); return log_prob(set); }
-
-        double                          log_prob(const Fibre::Tractlet& tractlet)
-          { Fibre::Tractlet::Set set; set.push_back(tractlet); return log_prob(set); }
-
-        double                          log_prob(const Fibre::Strand& strand, Fibre::Strand& gradient)
-          { Fibre::Strand::Set set, set_gradient; set.push_back(strand); set_gradient = set; double lprob = log_prob(set, set_gradient); gradient = set_gradient[0]; return lprob; }
-
-        double                          log_prob(const Fibre::Tractlet& tractlet, Fibre::Tractlet& gradient)
-        { Fibre::Tractlet::Set set, set_gradient; set.push_back(tractlet); set_gradient = set; double lprob = log_prob(set, set_gradient); gradient = set_gradient[0]; return lprob; }
-
-        virtual double                          log_prob(const Fibre::Strand::Set& strands)
-          { return log_prob_tpl<Fibre::Strand>(strands); }
-
-        virtual double                          log_prob(const Fibre::Tractlet::Set& tractlets)
-          { return log_prob_tpl<Fibre::Tractlet>(tractlets); }
-
-        virtual double                          log_prob(const Fibre::Strand::Set& strands, Fibre::Strand::Set& gradient)
-          { return log_prob_tpl<Fibre::Strand>(strands, gradient); }
-
-
-        virtual double                          log_prob(const Fibre::Tractlet::Set& tractlets, Fibre::Tractlet::Set& gradient)
-          { return log_prob_tpl<Fibre::Tractlet>(tractlets, gradient); }
-
-
-        virtual double                          log_prob(const Fibre::Strand::Set& strands, Fibre::Strand::Set& gradient, Fibre::Strand::Set::Tensor& hessian)
-          { return log_prob_tpl<Fibre::Strand>(strands, gradient, hessian); }
-
-
-        virtual double                          log_prob(const Fibre::Tractlet::Set& tractlets, Fibre::Tractlet::Set& gradient, Fibre::Tractlet::Set::Tensor& hessian)
-          { return log_prob_tpl<Fibre::Tractlet>(tractlets, gradient, hessian); }
-
-
-        virtual double                          log_prob_and_fisher( const Fibre::Strand::Set& strands,
-                                                  Fibre::Strand::Set& gradient,
-                                                  Fibre::Strand::Set::Tensor& fisher_info)
-          { throw Exception ("should be implemented in derrived class."); }
-
-        virtual double                          log_prob_and_fisher( const Fibre::Tractlet::Set& strands,
-                                                  Fibre::Tractlet::Set& gradient,
-                                                  Fibre::Tractlet::Set::Tensor& fisher_info)
-          { throw Exception ("should be implemented in derrived class."); }
-
-
-        template <typename T> double    log_prob_tpl(const typename T::Set& fibres);
-
-
-        template <typename T> double    log_prob_tpl(const typename T::Set& fibres, typename T::Set& gradient);
-
-
-        template <typename T> double    log_prob_tpl(const typename T::Set& fibres, typename T::Set& gradient, typename T::Set::Tensor& hessian);
-
-
-        virtual double                  log_prob(double expected, double observed) = 0;
-
-
-        virtual double                  b0_log_prob(double expected, double observed) = 0;
-
-
-        virtual double                  log_prob(double expected, double observed, double& d_lprob) = 0;
-
-
-        virtual double                  log_prob(double expected, double observed, double& d_lprob, double& d2_lprob2) = 0;
-
-
-        void                            save_expected_image(const std::string& location) //Used for debugging
-          { exp_image->save(location); }
-
-
-        const Image::Expected::Buffer&  get_expected_image() //Used for debugging
-          { return *exp_image; }
-
-
-        const Image::Observed::Buffer&  get_observed_image() //Used for debugging
-          { return obs_image; }
-
-
-        void                            set_enforce_bounds(bool flag);
-
-
-				void 				                    set_assumed_snr(double snr, const std::string& ref_b0, double ref_signal);
-
-      protected:
-
-        //! Used to get the right used gradients for the templated type.
-        template <typename T> typename Image::Container::Buffer<T>::Set&                   get_recycled_gradients();
-
-        //! Used to get the right used hessians for the templated type.
-        template <typename T> typename Image::Container::Buffer<typename T::Tensor>::Set&  get_recycled_hessians();
-
-        Likelihood() {}
-
-      friend std::ostream&              operator<< (std::ostream& stream, const Likelihood& likelihood);
-
-    };
     
-  
-  }
-  
-}
+    namespace Prob {
+        
+        class Likelihood {
+                
+                //Public nested classes.
+            public:
+                
+                class Gaussian;
+                class OneSidedGaussian;
+                class Rician;
 
+                //Public static constants
+            public:
+                
+                const static char* TYPE_DEFAULT;
+                const static double SNR_DEFAULT;
+                const static char* B0_INCLUDE_DEFAULT;
+                const static double OUTSIDE_SCALE_DEFAULT;
+                const static char* REF_B0_DEFAULT;
+
+                const static Image::Observed::Buffer dummy_observed_buffer;
+                const static Image::Expected::Trilinear::Buffer dummy_expected_buffer;
+
+            public:
+                
+                static Likelihood* factory(const std::string& type,
+                                           const Image::Observed::Buffer& obs_image,
+                                           Image::Expected::Buffer* exp_image, double assumed_snr,
+                                           const std::string& b0_include, double outside_scale,
+                                           const std::string& ref_b0, double ref_signal);
+
+            protected:
+                
+                double sigma2;
+
+                Image::Observed::Buffer obs_image;
+                Image::Expected::Buffer* exp_image;
+
+                Image::Container::Buffer<Fibre::Strand>::Set recycled_strand_gradients;
+                Image::Container::Buffer<Fibre::Tractlet>::Set recycled_tractlet_gradients;
+                Image::Container::Buffer<Fibre::Strand::Tensor>::Set recycled_strand_hessians;
+                Image::Container::Buffer<Fibre::Tractlet::Tensor>::Set recycled_tractlet_hessians;
+
+                size_t difference_mode;
+
+                std::string b0_include;
+
+            public:
+                
+                Likelihood(const Image::Observed::Buffer& observed_image,
+                           Image::Expected::Buffer* const expected_image, double assumed_snr,
+                           const std::string& b0_include, double outside_scale,
+                           const std::string& ref_b0, double ref_signal);
+
+                Likelihood(const Likelihood& l);
+
+                virtual ~Likelihood() {
+                    delete this->exp_image;
+                }
+                
+                Likelihood& operator=(const Likelihood& l);
+
+                virtual double log_prob(Image::Expected::Buffer& image);
+
+                double log_prob(const Fibre::Strand& strand) {
+                    Fibre::Strand::Set set;
+                    set.push_back(strand);
+                    return log_prob(set);
+                }
+                
+                double log_prob(const Fibre::Tractlet& tractlet) {
+                    Fibre::Tractlet::Set set;
+                    set.push_back(tractlet);
+                    return log_prob(set);
+                }
+                
+                double log_prob(const Fibre::Strand& strand, Fibre::Strand& gradient) {
+                    Fibre::Strand::Set set, set_gradient;
+                    set.push_back(strand);
+                    set_gradient = set;
+                    double lprob = log_prob(set, set_gradient);
+                    gradient = set_gradient[0];
+                    return lprob;
+                }
+                
+                double log_prob(const Fibre::Tractlet& tractlet, Fibre::Tractlet& gradient) {
+                    Fibre::Tractlet::Set set, set_gradient;
+                    set.push_back(tractlet);
+                    set_gradient = set;
+                    double lprob = log_prob(set, set_gradient);
+                    gradient = set_gradient[0];
+                    return lprob;
+                }
+                
+                virtual double log_prob(const Fibre::Strand::Set& strands) {
+                    return log_prob_tpl<Fibre::Strand>(strands);
+                }
+                
+                virtual double log_prob(const Fibre::Tractlet::Set& tractlets) {
+                    return log_prob_tpl<Fibre::Tractlet>(tractlets);
+                }
+                
+                virtual double log_prob(const Fibre::Strand::Set& strands,
+                                        Fibre::Strand::Set& gradient) {
+                    return log_prob_tpl<Fibre::Strand>(strands, gradient);
+                }
+                
+                virtual double log_prob(const Fibre::Tractlet::Set& tractlets,
+                                        Fibre::Tractlet::Set& gradient) {
+                    return log_prob_tpl<Fibre::Tractlet>(tractlets, gradient);
+                }
+                
+                virtual double log_prob(const Fibre::Strand::Set& strands,
+                                        Fibre::Strand::Set& gradient,
+                                        Fibre::Strand::Set::Tensor& hessian) {
+                    return log_prob_tpl<Fibre::Strand>(strands, gradient, hessian);
+                }
+                
+                virtual double log_prob(const Fibre::Tractlet::Set& tractlets,
+                                        Fibre::Tractlet::Set& gradient,
+                                        Fibre::Tractlet::Set::Tensor& hessian) {
+                    return log_prob_tpl<Fibre::Tractlet>(tractlets, gradient, hessian);
+                }
+                
+                virtual double log_prob_and_fisher(const Fibre::Strand::Set& strands,
+                                                   Fibre::Strand::Set& gradient,
+                                                   Fibre::Strand::Set::Tensor& fisher_info) {
+                    throw Exception("should be implemented in derrived class.");
+                }
+                
+                virtual double log_prob_and_fisher(const Fibre::Tractlet::Set& strands,
+                                                   Fibre::Tractlet::Set& gradient,
+                                                   Fibre::Tractlet::Set::Tensor& fisher_info) {
+                    throw Exception("should be implemented in derrived class.");
+                }
+                
+                template<typename T> double log_prob_tpl(const typename T::Set& fibres);
+
+                template<typename T> double log_prob_tpl(const typename T::Set& fibres,
+                                                         typename T::Set& gradient);
+
+                template<typename T> double log_prob_tpl(const typename T::Set& fibres,
+                                                         typename T::Set& gradient,
+                                                         typename T::Set::Tensor& hessian);
+
+                virtual double log_prob(double expected, double observed) = 0;
+
+                virtual double b0_log_prob(double expected, double observed) = 0;
+
+                virtual double log_prob(double expected, double observed, double& d_lprob) = 0;
+
+                virtual double log_prob(double expected, double observed, double& d_lprob,
+                                        double& d2_lprob2) = 0;
+
+                void save_expected_image(const std::string& location)    //Used for debugging
+                        {
+                    exp_image->save(location);
+                }
+                
+                const Image::Expected::Buffer& get_expected_image()    //Used for debugging
+                {
+                    return *exp_image;
+                }
+                
+                const Image::Observed::Buffer& get_observed_image()    //Used for debugging
+                {
+                    return obs_image;
+                }
+                
+                void set_enforce_bounds(bool flag);
+
+                void set_assumed_snr(double snr, const std::string& ref_b0, double ref_signal);
+
+            protected:
+                
+                //! Used to get the right used gradients for the templated type.
+                template<typename T> typename Image::Container::Buffer<T>::Set& get_recycled_gradients();
+
+                //! Used to get the right used hessians for the templated type.
+                template<typename T> typename Image::Container::Buffer<typename T::Tensor>::Set& get_recycled_hessians();
+
+                Likelihood() {
+                }
+                
+                friend std::ostream& operator<<(std::ostream& stream, const Likelihood& likelihood);
+                
+        };
+    
+    }
+
+}
 
 #endif

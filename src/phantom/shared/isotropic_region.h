@@ -32,18 +32,18 @@
 #include "phantom/shared/strand.h"
 
 typedef struct _isotropic_region {
-	
-	Strand strand;
-	Segment segment;
-	double control_point_grad[3];
-	
-	double diffusivity;
-	double baseline_signal;  //Change in signal baseline due to differring T2 decay. Note that diffusion signal baseline for strands is 1.
-	double radius;
-	double weighting;
-		
-	double pos[3];
-		
+        
+        Strand strand;
+        Segment segment;
+        double control_point_grad[3];
+
+        double diffusivity;
+        double baseline_signal;    //Change in signal baseline due to differring T2 decay. Note that diffusion signal baseline for strands is 1.
+        double radius;
+        double weighting;
+
+        double pos[3];
+        
 } Isotropic_region;
 
 #include "phantom/shared/strand_collection.h"
@@ -53,11 +53,10 @@ typedef struct _isotropic_region {
 #ifndef ISOTROPIC_REGION_H
 #define ISOTROPIC_REGION_H
 
-void init_isotropic_region(Isotropic_region *isotropic_region, double pos[3], double radius, double diffusivity, double baseline_signal, double weighting);
+void init_isotropic_region(Isotropic_region *isotropic_region, double pos[3], double radius,
+                           double diffusivity, double baseline_signal, double weighting);
 
-void set_isotropic_regions_weightings(Strand_collection *c, double relative_isotropic_repulsion_weight);
-
-
-
+void set_isotropic_regions_weightings(Strand_collection *c,
+                                      double relative_isotropic_repulsion_weight);
 
 #endif

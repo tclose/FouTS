@@ -30,31 +30,26 @@
 
 #include "phantom/optimise/sample.h"
 
-
 #define REFERENCE_BLOCK_SIZE 1000
 
 typedef struct _reference_block {
-	
-	//The index of the next free reference in the 'reference reference' array.
-	int reference_count;
-	
-	int next_i;
-	
-	//Create an array to hold the reference references
-	Sample *references[REFERENCE_BLOCK_SIZE];
-	
-	int init_check;
-	
-	int next_block_open;
-			
-	//Reference to the next reference reference block in the linked list (will be NULL if the reference reference block is the last in the list).
-	struct _reference_block *next_block;
-	
+        
+        //The index of the next free reference in the 'reference reference' array.
+        int reference_count;
 
-	
+        int next_i;
+
+        //Create an array to hold the reference references
+        Sample *references[REFERENCE_BLOCK_SIZE];
+
+        int init_check;
+
+        int next_block_open;
+
+        //Reference to the next reference reference block in the linked list (will be NULL if the reference reference block is the last in the list).
+        struct _reference_block *next_block;
+        
 } Reference_block;
-
-
 
 void reset_reference_block(Reference_block *reference_block);
 
@@ -64,8 +59,7 @@ void add_reference(Reference_block **reference_block, Sample *sample);
 
 Sample* next_reference(Reference_block **reference_block);
 
-Sample* first_reference(Reference_block **reference_block); 
-
+Sample* first_reference(Reference_block **reference_block);
 
 void free_reference_blocks(Reference_block *start_block);
 

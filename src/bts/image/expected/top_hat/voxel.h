@@ -20,7 +20,6 @@
 
  */
 
-
 #ifndef __bts_image_expected_tophat_voxel_h__
 #define __bts_image_expected_tophat_voxel_h__
 
@@ -35,64 +34,70 @@
 
 #include "bts/diffusion/model.h"
 
-
-
 namespace BTS {
-
-  namespace Image {
-
-    namespace Expected {
-
-      namespace TopHat {
-
-        class Voxel : public Expected::Voxel {
-
-          public:
-
-            //TODO: Use this typedef to try to move set_image out of derived voxel classes and into Expected::Voxel class.
-            typedef TopHat::Buffer Buffer;
-
-          protected:
-
-            Buffer* image;
-
-          public:
-
-            Voxel() {}
-
-            Voxel(Buffer& buffer, const Index& index);
-
-            Voxel(const Voxel& voxel)
-              : Expected::Voxel(voxel), image(voxel.image) {}
     
-            Voxel&            operator= (const Voxel& v)
-              { Expected::Voxel::operator=(v); image = v.image; return *this; }
+    namespace Image {
         
-            ~Voxel() {}
+        namespace Expected {
+            
+            namespace TopHat {
+                
+                class Voxel: public Expected::Voxel {
+                        
+                    public:
+                        
+                        //TODO: Use this typedef to try to move set_image out of derived voxel classes and into Expected::Voxel class.
+                        typedef TopHat::Buffer Buffer;
 
-            void              set_image(Buffer* image)
-              { this->image = image; }
+                    protected:
+                        
+                        Buffer* image;
 
+                    public:
+                        
+                        Voxel() {
+                        }
+                        
+                        Voxel(Buffer& buffer, const Index& index);
 
-    //      protected:
+                        Voxel(const Voxel& voxel)
+                                : Expected::Voxel(voxel), image(voxel.image) {
+                        }
+                        
+                        Voxel& operator=(const Voxel& v) {
+                            Expected::Voxel::operator=(v);
+                            image = v.image;
+                            return *this;
+                        }
+                        
+                        ~Voxel() {
+                        }
+                        
+                        void set_image(Buffer* image) {
+                            this->image = image;
+                        }
+                        
+                        //      protected:
+                        
+                        double interpolate(const Coord& pos);
 
-            double             interpolate(const Coord& pos);
-
-            double             interpolate(const Coord& pos, Coord& gradient)
-              {  throw Exception ("Gradient is not defined for Top-hat interpolation."); }
-
-            double             interpolate(const Coord& triple, Coord& gradient, Coord::Tensor& hessian)
-              {  throw Exception ("Gradient is not defined for Top-hat interpolation."); }
-
-        };
-      
-      }
-
+                        double interpolate(const Coord& pos, Coord& gradient) {
+                            throw Exception("Gradient is not defined for Top-hat interpolation.");
+                        }
+                        
+                        double interpolate(const Coord& triple, Coord& gradient,
+                                           Coord::Tensor& hessian) {
+                            throw Exception("Gradient is not defined for Top-hat interpolation.");
+                        }
+                        
+                };
+            
+            }
+        
+        }
+    
     }
 
-  }
-
 }
-
 
 #endif

@@ -20,12 +20,10 @@
 
  */
 
-
 extern "C" {
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 }
-
 
 #include "bts/cmd.h"
 #include "progressbar.h"
@@ -37,104 +35,92 @@ extern "C" {
 #include "bts/image/noise.h"
 #include "bts/image/noise/gaussian.h"
 
-
-
 #include "bts/inline_functions.h"
 
 using namespace BTS;
-
-SET_VERSION_DEFAULT;
-SET_AUTHOR ("Thomas G. Close");
-SET_COPYRIGHT (NULL);
+SET_VERSION_DEFAULT
+;
+SET_AUTHOR("Thomas G. Close");
+SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Selects a rectangular ROI from a larger image",
-  "",
-  NULL
+    "Selects a rectangular ROI from a larger image",
+    "",
+    NULL
 };
 
-ARGUMENTS = {
-  Argument ("initial", "The initial image the second image will be subtracted from.").type_file(),
+ARGUMENTS= {
+    Argument ("initial", "The initial image the second image will be subtracted from.").type_file(),
 
-  Argument ("output_image", "The resulting image").type_file (),
+    Argument ("output_image", "The resulting image").type_file (),
 
-  Argument()
+    Argument()
 };
 
+OPTIONS= {
 
-OPTIONS = {
+    NOISE_PARAMETERS,
 
-  NOISE_PARAMETERS,
-
-  Option ("seed", "Random seed used to initialise the random generator.")
-   + Argument ("", "").type_float (1e-9, INFINITY, 0.1),
-
-  Option ("dim", "dimensions of the ")
+    Option ("seed", "Random seed used to initialise the random generator.")
     + Argument ("", "").type_float (1e-9, INFINITY, 0.1),
 
-Option()
+    Option ("dim", "dimensions of the ")
+    + Argument ("", "").type_float (1e-9, INFINITY, 0.1),
+
+    Option()
 
 };
 
-
-
 EXECUTE {
-
-
+    
 //------------------------------//
 //  Load Input Image Buffer //
 //------------------------------//
-
-
-
-  size_t seed = time(NULL);
-
-  Options opt;
-
-  SET_NOISE_PARAMETERS;
-
-
-  opt = get_options("seed");
-  if (opt.size())
-    seed = opt[0][0];
-
-
+    
+        size_t seed = time(NULL);
+        
+        Options opt;
+        
+        SET_NOISE_PARAMETERS;
+        
+        opt = get_options("seed");
+        if (opt.size())
+            seed = opt[0][0];
+        
 //--------------------------//
 //  Load Input Image Buffer //
 //--------------------------//
-
-  std::string input_location    = argument[0];
-  std::string output_location   = argument[1];
-
-  Image::Observed::Buffer image(input_location);
-
+        
+        std::string input_location = argument[0];
+        std::string output_location = argument[1];
+        
+        Image::Observed::Buffer image(input_location);
+        
 //------------//
 //  Add noise //
 //------------//
-
-
-  gsl_rng* rand_gen = gsl_rng_alloc(gsl_rng_taus);
-  gsl_rng_set(rand_gen, seed);
-
-  Image::Noise* noise = Image::Noise::factory(rand_gen, noise_type, noise_snr, noise_ref_signal);
-
-  noise->noisify(image);
-
+        
+        gsl_rng* rand_gen = gsl_rng_alloc(gsl_rng_taus);
+        gsl_rng_set(rand_gen, seed);
+        
+        Image::Noise* noise = Image::Noise::factory(rand_gen, noise_type, noise_snr,
+                noise_ref_signal);
+        
+        noise->noisify(image);
+        
 //---------------------------//
 //  Add Properties to header //
 //---------------------------//
-
-  ADD_NOISE_PROPERTIES(image.properties());
-
-  image.properties()["seed"] = str(seed);
-
+        
+        ADD_NOISE_PROPERTIES(image.properties());
+        
+        image.properties()["seed"] = str(seed);
+        
 //-------------//
 //  Save Image //
 //-------------//
-
-  image.save(output_location);
-
-
-}
-
-
+        
+        image.save(output_location);
+        
+    }
+    

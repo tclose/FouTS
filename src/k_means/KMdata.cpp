@@ -20,9 +20,9 @@
 
 #include "k_means/KMdata.h"
 #include "k_means/KMrand.h"			// provides kmRanInt()
-
-					// standard constructor
-KMdata::KMdata(int d, int n) : dim(d), maxPts(n), nPts(n) {
+// standard constructor
+KMdata::KMdata(int d, int n)
+        : dim(d), maxPts(n), nPts(n) {
     pts = kmAllocPts(n, d);
     kcTree = NULL;
 }
@@ -33,20 +33,21 @@ KMdata::~KMdata() {			// destructor
 }
 
 void KMdata::buildKcTree() {		// build kc-tree for points
-    if (kcTree != NULL) delete kcTree;		// destroy existing tree
+    if (kcTree != NULL)
+        delete kcTree;		// destroy existing tree
     kcTree = new KCtree(pts, nPts, dim);	// construct the tree
 }
 
-void KMdata::resize(int d, int n) {	// resize point array
+void KMdata::resize(int d, int n) {    // resize point array
     if (d != dim || n != nPts) {		// size change?
-	dim = d;
-	nPts = n;
-	kmDeallocPts(pts);			// deallocate old points
-	pts = kmAllocPts(nPts, dim);
+        dim = d;
+        nPts = n;
+        kmDeallocPts(pts);			// deallocate old points
+        pts = kmAllocPts(nPts, dim);
     }
     if (kcTree != NULL) {			// kc-tree exists?
-	delete kcTree;				// deallocate kc-tree
-	kcTree = NULL;
+        delete kcTree;				// deallocate kc-tree
+        kcTree = NULL;
     }
 }
 
@@ -56,8 +57,8 @@ void KMdata::resize(int d, int n) {	// resize point array
 //------------------------------------------------------------------------
 
 void KMdata::sampleCtr(			// sample a center point
-    KMcenter	sample)				// where to store sample
-{
+        KMcenter sample)				// where to store sample
+        {
     int ri = kmRanInt(nPts);			// generate random index
     kmCopyPt(dim, pts[ri], sample);		// copy to destination
 }
@@ -70,32 +71,33 @@ void KMdata::sampleCtr(			// sample a center point
 //------------------------------------------------------------------------
 
 void KMdata::sampleCtrs(			// sample points randomly
-    KMcenterArray	sample,			// where to store sample
-    int			k,			// number of points to sample
-    bool		allowDuplicate)		// sample with replacement?
-{
+        KMcenterArray sample,			// where to store sample
+        int k,			// number of points to sample
+        bool allowDuplicate)		// sample with replacement?
+        {
     if (!allowDuplicate)			// duplicates not allowed
-	assert(k <= nPts);			// can't do more than nPts
-
+        assert(k <= nPts);
+    // can't do more than nPts
+    
     int* sampIdx = new int[k];			// allocate index array
-
+    
     for (int i = 0; i < k; i++) {		// sample each point of sample
-	int ri = kmRanInt(nPts);		// random index in pts
-	if (!allowDuplicate) {			// duplicates not allowed?
-	    bool dupFound;			// duplicate found flag
-    	    do {				// repeat until successful
-		dupFound = false;
-		for (int j = 0; j < i; j++) { 	// search for duplicates
-		    if (sampIdx[j] == ri) {	// duplicate found
-			dupFound = true;
-			ri = kmRanInt(nPts);	// try again
-			break;
-		    }
-	    	}
-	    } while (dupFound);
-	}
-	kmCopyPt(dim, pts[ri], sample[i]);	// copy sample point
-	sampIdx[i] = ri;			// save index
+        int ri = kmRanInt(nPts);		// random index in pts
+        if (!allowDuplicate) {			// duplicates not allowed?
+            bool dupFound;			// duplicate found flag
+            do {				// repeat until successful
+                dupFound = false;
+                for (int j = 0; j < i; j++) {    // search for duplicates
+                    if (sampIdx[j] == ri) {    // duplicate found
+                        dupFound = true;
+                        ri = kmRanInt(nPts);	// try again
+                        break;
+                    }
+                }
+            } while (dupFound);
+        }
+        kmCopyPt(dim, pts[ri], sample[i]);    // copy sample point
+        sampIdx[i] = ri;			// save index
     }
-    delete [] sampIdx;
+    delete[] sampIdx;
 }

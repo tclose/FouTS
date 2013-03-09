@@ -20,7 +20,6 @@
 
  */
 
-
 #ifndef __bts_prob_priorcomponent_frequency_h__
 #define __bts_prob_priorcomponent_frequency_h__
 
@@ -31,62 +30,78 @@
 #include "bts/fibre/strand/set/tensor.h"
 
 namespace BTS {
+    
+    namespace Prob {
+        
+        namespace PriorComponent {
+            
+            class Frequency {
+                    
+                public:
+                    
+                    const static double SCALE_DEFAULT;
+                    const static double AUX_SCALE_DEFAULT;
+                    const static std::string NAME;
 
-  namespace Prob {
+                    //Protected member variables.
+                protected:
+                    
+                    double scale;
+                    double aux_scale;
 
-    namespace PriorComponent {
+                public:
+                    
+                    Frequency(double scale, double aux_scale)
+                            : scale(scale), aux_scale(aux_scale) {
+                    }
+                    
+                    Frequency(const Frequency& m)
+                            : scale(m.scale), aux_scale(aux_scale) {
+                    }
+                    
+                    Frequency& operator=(const Frequency& m) {
+                        scale = m.scale;
+                        aux_scale = m.aux_scale;
+                        return *this;
+                    }
+                    
+                    ~Frequency() {
+                    }
+                    
+                    Frequency* clone() const {
+                        return new Frequency(*this);
+                    }
+                    
+                    double log_prob(const Fibre::Strand strand, Fibre::Strand gradient);
 
-      class Frequency {
+                    double log_prob(const Fibre::Tractlet, Fibre::Tractlet gradient);
 
-        public:
-
-          const static double             SCALE_DEFAULT;
-          const static double             AUX_SCALE_DEFAULT;
-          const static std::string        NAME;
-
-        //Protected member variables.
-        protected:
-
-          double scale;
-          double aux_scale;
-
-        public:
-
-          Frequency (double scale, double aux_scale)
-            : scale(scale), aux_scale(aux_scale) {}
-
-          Frequency(const Frequency& m)
-            : scale(m.scale), aux_scale(aux_scale) {}
-
-          Frequency&  operator=(const Frequency& m)
-            { scale = m.scale; aux_scale = m.aux_scale; return *this; }
-
-          ~Frequency() {}
-
-          Frequency*      clone() const
-            { return new Frequency(*this); }
-
-          double          log_prob(const Fibre::Strand strand, Fibre::Strand gradient);
-
-          double          log_prob(const Fibre::Tractlet, Fibre::Tractlet gradient);
-
-          double          log_prob(const Fibre::Strand strand, Fibre::Strand gradient, Fibre::Strand::Tensor hessian)  { throw Exception ("Not implemented yet."); }
-
-          double          log_prob_and_fisher(const Fibre::Strand strand, Fibre::Strand gradient, Fibre::Strand::Tensor fisher) { throw Exception ("Not implemented yet."); }
-
-
-          double          log_prob_and_fisher(const Fibre::Strand strand, Fibre::Strand gradient, Fibre::Strand::Tensor fisher, std::vector<Fibre::Strand::Tensor>& fisher_gradient) { throw Exception ("Not implemented yet."); }
-
-          const std::string&  get_name()
-            { return NAME; }
-      };
-
+                    double log_prob(const Fibre::Strand strand, Fibre::Strand gradient,
+                                    Fibre::Strand::Tensor hessian) {
+                        throw Exception("Not implemented yet.");
+                    }
+                    
+                    double log_prob_and_fisher(const Fibre::Strand strand, Fibre::Strand gradient,
+                                               Fibre::Strand::Tensor fisher) {
+                        throw Exception("Not implemented yet.");
+                    }
+                    
+                    double log_prob_and_fisher(
+                            const Fibre::Strand strand, Fibre::Strand gradient,
+                            Fibre::Strand::Tensor fisher,
+                            std::vector<Fibre::Strand::Tensor>& fisher_gradient) {
+                        throw Exception("Not implemented yet.");
+                    }
+                    
+                    const std::string& get_name() {
+                        return NAME;
+                    }
+            };
+        
+        }
+    
     }
 
-  }
-
 }
-
-
 
 #endif

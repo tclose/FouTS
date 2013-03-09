@@ -24,31 +24,28 @@
  *  along with 'Numerical Fibre Generator'.  If not, see <http://www.gnu.org/licenses/>
  *
  */
- 
- 
+
 #ifndef VOXEL_H
 #define VOXEL_H 
- 
+
 #include "phantom/shared/segment.h" 
 #include "phantom/mri_sim/segment_register.h" 
 #include "phantom/mri_sim/isotropic_region_register.h"
 #include "phantom/mri_sim/subvoxel.h"
 
-
 typedef struct _voxel {
+        
+        double size[3];
+        double origin[3];
+        int num_subvoxels[3];
 
-	double size[3];
-	double origin[3];
-	int num_subvoxels[3];
-	
-	Subvoxel *subvoxels;
-	double *orientations;
+        Subvoxel *subvoxels;
+        double *orientations;
 
-	Segment_register *segment_register;
-	Isotropic_region_register *isotropic_region_register;
-
+        Segment_register *segment_register;
+        Isotropic_region_register *isotropic_region_register;
+        
 } Voxel;
-
 
 void voxel_init(Voxel *voxel, double voxel_size[3], double voxel_origin[3], int num_subvoxels[3]);
 
@@ -59,6 +56,5 @@ void register_segment(Voxel *voxel, Segment *segment);
 void register_isotropic_region(Voxel *voxel, Isotropic_region *isotropic_region);
 
 void plot_strand_orientations_in_voxel(Voxel *voxel);
-
 
 #endif

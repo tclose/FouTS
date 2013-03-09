@@ -30,12 +30,11 @@
 
 #include "phantom/shared/strand_collection.h"
 
-
 #define NEW_SPHERE_R_DEFAULT 1.0
 #define LENGTH_REJECT_THRESHOLD_DEFAULT 0.2
 #define SAVE_SEPERATE_BUNDLES_DEFAULT 0
 
-void trim(Strand_collection *trim_c, Strand_collection *c, double new_sphere_r, double length_reject_threshold, int save_seperate_bundles, int trim_to_cube);
-
+void trim(Strand_collection *trim_c, Strand_collection *c, double new_sphere_r,
+          double length_reject_threshold, int save_seperate_bundles, int trim_to_cube);
 
 #endif

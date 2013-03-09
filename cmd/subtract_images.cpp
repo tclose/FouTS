@@ -20,9 +20,6 @@
 
  */
 
-
-
-
 #include "bts/cmd.h"
 #include "progressbar.h"
 
@@ -30,67 +27,52 @@
 #include "bts/image/expected/buffer.h"
 #include "bts/image/observed/buffer.h"
 
-
-
-
 #include "bts/inline_functions.h"
 
-
 using namespace BTS;
-
-SET_VERSION_DEFAULT;
-SET_AUTHOR ("Thomas G. Close");
-SET_COPYRIGHT (NULL);
+SET_VERSION_DEFAULT
+;
+SET_AUTHOR("Thomas G. Close");
+SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Subtractlets one image from another",
-  "",
-  NULL
+    "Subtractlets one image from another",
+    "",
+    NULL
 };
 
-ARGUMENTS = {
-  Argument ("initial", "The initial image the second image will be subtracted from.").type_image_in(),
+ARGUMENTS= {
+    Argument ("initial", "The initial image the second image will be subtracted from.").type_image_in(),
 
-  Argument ("subtract", "The image that will be subtracted from the initial image.").type_image_in(),
+    Argument ("subtract", "The image that will be subtracted from the initial image.").type_image_in(),
 
-  Argument ("output_image", "The resulting image").type_image_out (),
+    Argument ("output_image", "The resulting image").type_image_out (),
 
-  Argument()
+    Argument()
 };
 
+OPTIONS= {
 
-OPTIONS = {
-
-Option()
+    Option()
 
 };
-
-
 
 EXECUTE {
-
-
+    
 //------------------------------//
 //  Load Input Image Buffer //
 //------------------------------//
-
-
-  std::string image_location = argument[0];
-  std::string subtract_image_location = argument[1];
-  std::string output_location = argument[2];
-
-  Image::Observed::Buffer image(image_location);
-  Image::Observed::Buffer subtract_image (subtract_image_location);
-
-  image -= subtract_image;
-
-  image.save(output_location);
-
-
-}
-
-
-
-
-
-
+    
+        std::string image_location = argument[0];
+        std::string subtract_image_location = argument[1];
+        std::string output_location = argument[2];
+        
+        Image::Observed::Buffer image(image_location);
+        Image::Observed::Buffer subtract_image(subtract_image_location);
+        
+        image -= subtract_image;
+        
+        image.save(output_location);
+        
+    }
+    

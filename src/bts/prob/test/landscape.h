@@ -74,113 +74,119 @@
 #include "bts/image/expected/buffer.h"
 
 namespace BTS {
+    
+    namespace Prob {
+        
+        namespace Test {
+            
+            class Landscape {
+                    
+                public:
+                    
+                    class Peak;
 
-  namespace Prob {
+                public:
+                    
+                    const static char* LOCATION_DEFAULT;
 
-    namespace Test {
+                    const static size_t NUM_DIMS_DEFAULT = 2;
+                    const static size_t NUM_PEAKS_DEFAULT = 40;
+                    const static double WIDTH_MU_DEFAULT;
+                    const static double WIDTH_SIGMA_DEFAULT;
+                    const static double WIDTH_MIN_DEFAULT;
+                    const static double HEIGHT_VAR_DEFAULT;
+                    const static double ROI_RADIUS_DEFAULT;
+                    const static double FRACTION_PYRAMID_DEFAULT;
+                    const static double BARRIER_RATE_DEFAULT;
 
-      class Landscape {
+                    //TODO: remove
+                    //          BTS::Image::Expected::Buffer* exp_image;
+                    
+                public:
+                    
+                    static Landscape randomly_generate(size_t num_dims, size_t num_peaks,
+                                                       double peak_width_mu,
+                                                       double peak_width_sigma,
+                                                       double peak_width_min,
+                                                       double peak_height_var, double roi_radius,
+                                                       double fraction_pyramid,
+                                                       double barrier_rate = BARRIER_RATE_DEFAULT,
+                                                       size_t seed = time(NULL));
 
-        public:
+                protected:
+                    
+                    size_t ndims;
 
-          class Peak;
+                    double roi_radius;
 
-        public:
+                    double barrier_rate;
 
-          const static char* LOCATION_DEFAULT;
+                    std::vector<Peak> peaks;
 
-          const static size_t NUM_DIMS_DEFAULT = 2;
-          const static size_t NUM_PEAKS_DEFAULT = 40;
-          const static double WIDTH_MU_DEFAULT;
-          const static double WIDTH_SIGMA_DEFAULT;
-          const static double WIDTH_MIN_DEFAULT;
-          const static double HEIGHT_VAR_DEFAULT;
-          const static double ROI_RADIUS_DEFAULT;
-          const static double FRACTION_PYRAMID_DEFAULT;
-          const static double BARRIER_RATE_DEFAULT;
+                public:
+                    
+                    Landscape(double roi_radius = ROI_RADIUS_DEFAULT, double barrier_rate =
+                            BARRIER_RATE_DEFAULT);
 
-          //TODO: remove
-          //          BTS::Image::Expected::Buffer* exp_image;
+                    Landscape(const std::string& location, double roi_radius = ROI_RADIUS_DEFAULT,
+                              double barrier_rate = BARRIER_RATE_DEFAULT);
 
-        public:
+                    ~Landscape();
 
-          static Landscape randomly_generate( size_t num_dims,
-                                              size_t num_peaks,
-                                              double peak_width_mu,
-                                              double peak_width_sigma,
-                                              double peak_width_min,
-                                              double peak_height_var,
-                                              double roi_radius,
-                                              double fraction_pyramid,
-                                              double barrier_rate = BARRIER_RATE_DEFAULT,
-                                              size_t seed = time(NULL));
+                    Landscape(double frequency, size_t num_points, double spacing, size_t seed =
+                            time(NULL));
 
-        protected:
+                    double log_prob(const MCMC::State& test_state);
 
-          size_t ndims;
+                    double log_prob(const MCMC::State& test_state, MCMC::State& gradient);
 
-          double roi_radius;
+                    double log_prob(const MCMC::State& test_state, MCMC::State& gradient,
+                                    MCMC::State::Tensor& hessian);
 
-          double barrier_rate;
+                    double log_prob(const MCMC::State& test_state, MCMC::State& gradient,
+                                    MCMC::State::Tensor& hessian,
+                                    std::vector<MCMC::State::Tensor>& rank3_hessian);
 
-          std::vector<Peak> peaks;
+                    void save(const std::string& location);
 
-        public:
+                    void load(const std::string& location);
 
-          Landscape(double roi_radius = ROI_RADIUS_DEFAULT,
-              double barrier_rate = BARRIER_RATE_DEFAULT);
-
-          Landscape(const std::string& location, double roi_radius =
-              ROI_RADIUS_DEFAULT, double barrier_rate = BARRIER_RATE_DEFAULT);
-
-          ~Landscape();
-
-          Landscape(double frequency, size_t num_points, double spacing,
-              size_t seed = time(NULL));
-
-          double log_prob(const MCMC::State& test_state);
-
-          double log_prob(const MCMC::State& test_state, MCMC::State& gradient);
-
-          double log_prob(const MCMC::State& test_state, MCMC::State& gradient, MCMC::State::Tensor& hessian);
-
-          double log_prob(const MCMC::State& test_state, MCMC::State& gradient, MCMC::State::Tensor& hessian, std::vector<MCMC::State::Tensor>& rank3_hessian);
-
-          void save(const std::string& location);
-
-          void load(const std::string& location);
-
-          size_t num_dims() const {
-            return ndims;
-          }
-
-          Peak& operator[](size_t index) {
-            return peaks[index];
-          }
-
-          const Peak& operator[](size_t index) const {
-            return peaks[index];
-          }
-
-          void set_assumed_snr(double assumed_snr, const std::string& ref_b0, double ref_signal) {
-          }
-
-          void                            set_enforce_bounds(bool flag) {}
-
-          std::vector<std::string> list_components() { return std::vector<std::string>(); }
-
-          template <typename T> std::map<std::string, double> get_component_values(T& t) { return std::map<std::string, double>(); }
-
-          friend std::ostream& operator<<(std::ostream& stream,
-              const Landscape& test);
-
-      };
-
-      std::ostream& operator<<(std::ostream& stream, const Landscape& test);
-
+                    size_t num_dims() const {
+                        return ndims;
+                    }
+                    
+                    Peak& operator[](size_t index) {
+                        return peaks[index];
+                    }
+                    
+                    const Peak& operator[](size_t index) const {
+                        return peaks[index];
+                    }
+                    
+                    void set_assumed_snr(double assumed_snr, const std::string& ref_b0,
+                                         double ref_signal) {
+                    }
+                    
+                    void set_enforce_bounds(bool flag) {
+                    }
+                    
+                    std::vector<std::string> list_components() {
+                        return std::vector<std::string>();
+                    }
+                    
+                    template<typename T> std::map<std::string, double> get_component_values(T& t) {
+                        return std::map<std::string, double>();
+                    }
+                    
+                    friend std::ostream& operator<<(std::ostream& stream, const Landscape& test);
+                    
+            };
+            
+            std::ostream& operator<<(std::ostream& stream, const Landscape& test);
+        
+        }
+    
     }
-
-  }
 
 }
 

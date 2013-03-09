@@ -28,58 +28,53 @@
 #include "bts/image/expected/buffer.h"
 #include "bts/image/expected/buffer_tpl.h"
 
-
 namespace BTS {
+    
+    namespace Image {
+        
+        namespace Expected {
+            
+            namespace Sinc {
+                
+                class Buffer: public Expected::Buffer, public Expected::Buffer_tpl<Sinc::Voxel> {
+                        
+                        //Public static constants
+                    public:
+                        
+                        const static std::string SHORT_NAME;
 
-  namespace Image {
+                    public:
+                        
+                        Buffer()
+                                : Buffer_tpl<Sinc::Voxel>(this) {
+                        }
+                        
+                        Buffer(const Triple<size_t>& dimensions, const Triple<double>& voxel_sizes,
+                               const Diffusion::Model& diffusion_model, size_t num_sections =
+                                       Expected::Buffer::NUM_LENGTH_SECTIONS_DEFAULT,
+                               size_t num_strands = Expected::Buffer::NUM_WIDTH_SECTIONS_DEFAULT,
+                               double extent = Expected::Buffer::INTERP_EXTENT_DEFAULT,
+                               const Triple<double>& corner_offset = Triple<double>(),
+                               bool enforce_bounds = true);
 
-    namespace Expected {
-      
-      namespace Sinc {
+                        Buffer(const Buffer& buffer);
 
-        class Buffer : public Expected::Buffer, public Expected::Buffer_tpl<Sinc::Voxel> {
-
-          //Public static constants
-          public:
-
-            const static std::string SHORT_NAME;
-
-          public:
-
-            Buffer() : Buffer_tpl<Sinc::Voxel>(this) {}
-
-            Buffer( const Triple<size_t>& dimensions,
-                    const Triple<double>& voxel_sizes,
-                    const Diffusion::Model& diffusion_model,
-                    size_t num_sections = Expected::Buffer::NUM_LENGTH_SECTIONS_DEFAULT,
-                    size_t num_strands = Expected::Buffer::NUM_WIDTH_SECTIONS_DEFAULT,
-                    double extent = Expected::Buffer::INTERP_EXTENT_DEFAULT,
-                    const Triple<double>& corner_offset = Triple<double> (),
-                    bool enforce_bounds = true
-                    );
-
-
-            Buffer(const Buffer& buffer);
-
-
-            ~Buffer() {}
-
-            EXPECTED_BUFFER_FUNCTIONS;
-
-        };
-
-
-
-        std::ostream& operator<< (std::ostream& stream, const Buffer& buffer);
-
-
-      }
-
+                        ~Buffer() {
+                        }
+                        
+                        EXPECTED_BUFFER_FUNCTIONS
+                        ;
+                        
+                };
+                
+                std::ostream& operator<<(std::ostream& stream, const Buffer& buffer);
+            
+            }
+        
+        }
+    
     }
 
-  }
-
 }
-
 
 #endif

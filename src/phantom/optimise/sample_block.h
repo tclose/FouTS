@@ -37,24 +37,22 @@
 #define SAMPLE_BLOCK_SIZE 68
 
 typedef struct _sample_block {
-	
-	//The index of the next free sample in the 'sample' array.
-	int sample_count;
-	
-	//Used when iterating through the existing values.
-	int next_i;
-	
-	//Create an array to hold the sample coordinates, the cost_function gradient at those coordinates and its sample fraction (the fraction between its two generating points it lies) 
-	Sample samples[SAMPLE_BLOCK_SIZE];
-	
-		
-	int init_check;
-	int next_block_open;
-	
-	//Reference to the next sample block in the linked list (will be NULL if the sample block is the last in the list).
-	struct _sample_block *next_block;
+        
+        //The index of the next free sample in the 'sample' array.
+        int sample_count;
 
-	
+        //Used when iterating through the existing values.
+        int next_i;
+
+        //Create an array to hold the sample coordinates, the cost_function gradient at those coordinates and its sample fraction (the fraction between its two generating points it lies) 
+        Sample samples[SAMPLE_BLOCK_SIZE];
+
+        int init_check;
+        int next_block_open;
+
+        //Reference to the next sample block in the linked list (will be NULL if the sample block is the last in the list).
+        struct _sample_block *next_block;
+        
 } Sample_block;
 
 void reset_sample_block(Sample_block *sample_block);

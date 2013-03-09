@@ -28,7 +28,8 @@
 #ifndef SIM_VOXEL_INTENSITY_H 
 #define SIM_VOXEL_INTENSITY_H
 
-double* sim_voxel_intensities(Voxel *voxel, int num_grad_directions, double *grad_directions, double *b_values, double fa, double diffusivity);
+double* sim_voxel_intensities(Voxel *voxel, int num_grad_directions, double *grad_directions,
+                              double *b_values, double fa, double diffusivity);
 
 double sample_tensor(double tensor[3][3], double b_value, double *grad_direction);
 

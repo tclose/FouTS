@@ -20,28 +20,26 @@
  
  */
 
-
 #ifndef __bts_mcmc_common_h__
 #define __bts_mcmc_common_h__
 
 namespace BTS {
-
-  namespace MCMC {
-
-    const std::string LOG_PROB_PROP         = "log_px";
-    const std::string ANNEAL_LOG_PROB_PROP  = "anneal_log_px";
-    const std::string ACCEPTANCE_RATIO_PROP = "acceptance_ratio"; 
-    const std::string ELAPSED_TIME_PROP     = "elapsed_time"; 
-    const std::string H_PROP                = "H";
-    const std::string PROPOSED_H_PROP       = "Proposed H";    
-
-    typedef std::map<std::string,std::string>     SampleProperties;
-    typedef std::vector<std::string> SamplePropertyHeader;
     
-  }
-  
-}
+    namespace MCMC {
+        
+        const std::string LOG_PROB_PROP = "log_px";
+        const std::string ANNEAL_LOG_PROB_PROP = "anneal_log_px";
+        const std::string ACCEPTANCE_RATIO_PROP = "acceptance_ratio";
+        const std::string ELAPSED_TIME_PROP = "elapsed_time";
+        const std::string H_PROP = "H";
+        const std::string PROPOSED_H_PROP = "Proposed H";
+        
+        typedef std::map<std::string, std::string> SampleProperties;
+        typedef std::vector<std::string> SamplePropertyHeader;
+    
+    }
 
+}
 
 #endif
 

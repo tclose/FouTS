@@ -25,46 +25,48 @@
 #include "bts/diffusion/inline_functions.h"
 
 namespace BTS {
-
-  namespace Diffusion {
-
-
-    Encoding::Set::Set (const Model& m) {
-
-      for (size_t encode_i = 0; encode_i < m.num_encodings(); encode_i++)
-        encodings.push_back(m.encoding(encode_i));
-
+    
+    namespace Diffusion {
+        
+        Encoding::Set::Set(const Model& m) {
+            
+            for (size_t encode_i = 0; encode_i < m.num_encodings(); encode_i++)
+                encodings.push_back(m.encoding(encode_i));
+            
+        }
+        
+        void Encoding::Set::load(const std::string& location) {
+            
+            MR::Math::Matrix<double> encodings_matrix(location);
+            set(encodings_matrix);
+            
+        }
+        
+        void Encoding::Set::set(const MR::Math::Matrix<double>& encodings_matrix) {
+            
+            encodings.clear();
+            
+            if (encodings_matrix.columns() != 4)
+                throw Exception(
+                        "Encoding matrix must have exactly 4 columns (" + str(
+                                encodings_matrix.columns())
+                        + " found).");
+            
+            for (size_t encode_i = 0; encode_i < encodings_matrix.rows(); encode_i++)
+                encodings.push_back(Encoding(encodings_matrix.row(encode_i)));
+            
+        }
+        
+        std::ostream& operator<<(std::ostream& stream, const Encoding::Set& e_set) {
+            
+            for (std::vector<Encoding>::const_iterator encode_it = e_set.encodings.begin();
+                    encode_it != e_set.encodings.end(); encode_it++)
+                stream << *encode_it;
+            
+            return stream;
+            
+        }
+    
     }
-
-
-    void                                Encoding::Set::load(const std::string& location) {
-
-      MR::Math::Matrix<double> encodings_matrix (location);
-      set(encodings_matrix);
-
-    }
-
-    void                                Encoding::Set::set(const MR::Math::Matrix<double>& encodings_matrix) {
-
-      encodings.clear();
-
-      if (encodings_matrix.columns() != 4)
-        throw Exception ("Encoding matrix must have exactly 4 columns (" + str(encodings_matrix.columns()) + " found).");
-
-      for (size_t encode_i = 0; encode_i < encodings_matrix.rows(); encode_i++)
-        encodings.push_back(Encoding(encodings_matrix.row(encode_i)));
-
-    }
-
-    std::ostream&                       operator<< (std::ostream& stream, const Encoding::Set& e_set) {
-
-      for (std::vector<Encoding>::const_iterator encode_it = e_set.encodings.begin(); encode_it != e_set.encodings.end(); encode_it++)
-        stream << *encode_it;
-
-      return stream;
-
-    }
-
-  }
 
 }

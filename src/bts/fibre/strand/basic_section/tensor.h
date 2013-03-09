@@ -29,68 +29,83 @@
 #include "bts/coord/tensor.h"
 
 namespace BTS {
-
-  namespace Fibre {
-
-    class Strand::BasicSection::Tensor : public Base::Tensor<Strand::BasicSection> {
-
-
-      public:
-
-        Tensor()
-          : Base::Tensor<Strand::BasicSection>(Strand::BasicSection()) {}
-
-        Tensor(const MR::Math::Matrix<double>::View& view)
-          : Base::Tensor<Strand::BasicSection>(Strand::BasicSection(), view) {  assert(view.rows() == 7); assert(view.columns() == 7); }
-
-        Strand::BasicSection 	      position(size_t dim_i)
-          { return Strand::BasicSection(row(dim_i), tmpl.props); }
-
-        const Strand::BasicSection 	position(size_t dim_i) const
-          { return Strand::BasicSection(row(dim_i), tmpl.props); }
-
-        Strand::BasicSection 	      tangent(size_t dim_i)
-          { return Strand::BasicSection(row(dim_i + 3), tmpl.props); }
-
-        const Strand::BasicSection 	tangent(size_t dim_i) const
-          { return Strand::BasicSection(row(dim_i + 3), tmpl.props); }
-
-        Strand::BasicSection 	      intensity()
-          { return Strand::BasicSection(row(6), tmpl.props); }
-
-        const Strand::BasicSection 	intensity() const
-          { return Strand::BasicSection(row(6), tmpl.props); }
-
-        Coord::Tensor 	            position()
-          { return Coord::Tensor(sub((size_t)0,(size_t)2,(size_t)0,(size_t)2)); }
-
-        const Coord::Tensor 	      position() const
-          { return Coord::Tensor(sub((size_t)0,(size_t)2,(size_t)0,(size_t)2)); }
-
-        Coord::Tensor 	            tangent()
-          { return Coord::Tensor(sub((size_t)3,(size_t)5,(size_t)3,(size_t)5)); }
-
-        const Coord::Tensor tangent() const
-          { return Coord::Tensor(sub((size_t)3,(size_t)5,(size_t)3,(size_t)5)); }
-
-
-        Coord::Tensor 	            position_tangent()
-          { return Coord::Tensor(sub((size_t)0,(size_t)2,(size_t)3,(size_t)5)); }
-
-        const Coord::Tensor 	      position_tangent() const
-          { return Coord::Tensor(sub((size_t)0,(size_t)2,(size_t)3,(size_t)5)); }
-
-
-        Coord::Tensor 	            tangent_position()
-          { return Coord::Tensor(sub((size_t)3,(size_t)5,(size_t)0,(size_t)2)); }
-
-        const Coord::Tensor 	      tangent_position() const
-          { return Coord::Tensor(sub((size_t)3,(size_t)5,(size_t)0,(size_t)2)); }
-
-        void                        unnormalise_hessian(const Triple<double>& vox_lengths);
-    };
-
-  }
+    
+    namespace Fibre {
+        
+        class Strand::BasicSection::Tensor: public Base::Tensor<Strand::BasicSection> {
+                
+            public:
+                
+                Tensor()
+                        : Base::Tensor<Strand::BasicSection>(Strand::BasicSection()) {
+                }
+                
+                Tensor(const MR::Math::Matrix<double>::View& view)
+                        : Base::Tensor<Strand::BasicSection>(Strand::BasicSection(), view) {
+                    assert(view.rows() == 7);
+                    assert(view.columns() == 7);
+                }
+                
+                Strand::BasicSection position(size_t dim_i) {
+                    return Strand::BasicSection(row(dim_i), tmpl.props);
+                }
+                
+                const Strand::BasicSection position(size_t dim_i) const {
+                    return Strand::BasicSection(row(dim_i), tmpl.props);
+                }
+                
+                Strand::BasicSection tangent(size_t dim_i) {
+                    return Strand::BasicSection(row(dim_i + 3), tmpl.props);
+                }
+                
+                const Strand::BasicSection tangent(size_t dim_i) const {
+                    return Strand::BasicSection(row(dim_i + 3), tmpl.props);
+                }
+                
+                Strand::BasicSection intensity() {
+                    return Strand::BasicSection(row(6), tmpl.props);
+                }
+                
+                const Strand::BasicSection intensity() const {
+                    return Strand::BasicSection(row(6), tmpl.props);
+                }
+                
+                Coord::Tensor position() {
+                    return Coord::Tensor(sub((size_t) 0, (size_t) 2, (size_t) 0, (size_t) 2));
+                }
+                
+                const Coord::Tensor position() const {
+                    return Coord::Tensor(sub((size_t) 0, (size_t) 2, (size_t) 0, (size_t) 2));
+                }
+                
+                Coord::Tensor tangent() {
+                    return Coord::Tensor(sub((size_t) 3, (size_t) 5, (size_t) 3, (size_t) 5));
+                }
+                
+                const Coord::Tensor tangent() const {
+                    return Coord::Tensor(sub((size_t) 3, (size_t) 5, (size_t) 3, (size_t) 5));
+                }
+                
+                Coord::Tensor position_tangent() {
+                    return Coord::Tensor(sub((size_t) 0, (size_t) 2, (size_t) 3, (size_t) 5));
+                }
+                
+                const Coord::Tensor position_tangent() const {
+                    return Coord::Tensor(sub((size_t) 0, (size_t) 2, (size_t) 3, (size_t) 5));
+                }
+                
+                Coord::Tensor tangent_position() {
+                    return Coord::Tensor(sub((size_t) 3, (size_t) 5, (size_t) 0, (size_t) 2));
+                }
+                
+                const Coord::Tensor tangent_position() const {
+                    return Coord::Tensor(sub((size_t) 3, (size_t) 5, (size_t) 0, (size_t) 2));
+                }
+                
+                void unnormalise_hessian(const Triple<double>& vox_lengths);
+        };
+    
+    }
 
 }
 

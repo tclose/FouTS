@@ -31,10 +31,10 @@
 #include "bts/image/buffer.cpp.h"
 
 namespace BTS {
-
-  namespace Prob {
-
-    const std::string     Uniform::NAME = "uniform";
-
-  }
+    
+    namespace Prob {
+        
+        const std::string Uniform::NAME = "uniform";
+    
+    }
 }

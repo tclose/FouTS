@@ -20,7 +20,6 @@
 
  */
 
-
 #ifndef __bts_prob_priorcomponent_length_h__
 #define __bts_prob_priorcomponent_length_h__
 
@@ -29,55 +28,61 @@
 #include "bts/fibre/strand/set.h"
 
 namespace BTS {
+    
+    namespace Prob {
+        
+        namespace PriorComponent {
+            
+            class Length {
+                    
+                public:
+                    
+                    const static double SCALE_DEFAULT;
+                    const static double MEAN_DEFAULT;
+                    const static std::string NAME;
 
-  namespace Prob {
+                    //Protected member variables.
+                protected:
+                    
+                    double scale;
+                    double mean;
 
-    namespace PriorComponent {
+                public:
+                    
+                    Length(double scale, double mean)
+                            : scale(scale), mean(mean) {
+                    }
+                    
+                    Length(const Length& m)
+                            : scale(m.scale), mean(m.mean) {
+                    }
+                    
+                    Length& operator=(const Length& m) {
+                        scale = m.scale;
+                        mean = m.mean;
+                        return *this;
+                    }
+                    
+                    ~Length() {
+                    }
+                    
+                    Length* clone() const {
+                        return new Length(*this);
+                    }
+                    
+                    double log_prob(const Fibre::Strand strand);
 
-      class Length {
+                    double log_prob(const Fibre::Strand strand, Fibre::Strand gradient);
 
-        public:
-
-          const static double             SCALE_DEFAULT;
-          const static double             MEAN_DEFAULT;
-          const static std::string        NAME;
-
-        //Protected member variables.
-        protected:
-
-          double scale;
-          double mean;
-
-        public:
-
-          Length (double scale, double mean)
-          : scale(scale), mean(mean) {}
-
-          Length(const Length& m)
-            : scale(m.scale), mean(m.mean) {}
-
-          Length&  operator=(const Length& m)
-            { scale = m.scale; mean = m.mean; return *this; }
-
-          ~Length() {}
-
-          Length*       clone() const
-            { return new Length(*this); }
-
-          double          log_prob(const Fibre::Strand strand);
-
-          double          log_prob(const Fibre::Strand strand, Fibre::Strand gradient);
-
-          const std::string&  get_name()
-            { return NAME; }
-      };
-
+                    const std::string& get_name() {
+                        return NAME;
+                    }
+            };
+        
+        }
+    
     }
 
-  }
-
 }
-
-
 
 #endif

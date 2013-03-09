@@ -23,43 +23,44 @@
 #include "math/math.h"
 #include "bts/prob/prior_component/acs.h"
 
-
 namespace BTS {
-
-  namespace Prob {
-
-    namespace PriorComponent {
-
-      const double            ACS::SCALE_DEFAULT     = 0.0; //1000
-      const double            ACS::MEAN_DEFAULT     = 0.05;
-      const std::string       ACS::NAME              = "acs";
-
-      double          ACS::log_prob(const Fibre::Tractlet tractlet) {
-
-        return -scale * MR::Math::pow2(tractlet.acs() - mean);
-
-      }
-
-
-      double          ACS::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
-
-        // If gradient hasn't been initialised, initialise it to the size of the tractlet, otherwise check its degree.
-        if (!gradient.degree()) {
-          gradient = tractlet;
-          gradient.zero();
-        } else if (gradient.degree() != tractlet.degree())
-          throw Exception ("Tractlet degree (" + str(tractlet.degree()) + ") does not match that of the supplied gradient (" + str(gradient.degree()) + ").");
-
-        double lprob = -scale * MR::Math::pow2(tractlet.acs() - mean);
-
-        if (tractlet.has_var_acs())
-          gradient.alpha() -= 4.0 * scale * tractlet.alpha() *  (tractlet.acs() - mean) ;
-
-        return lprob;
-      }
-
+    
+    namespace Prob {
+        
+        namespace PriorComponent {
+            
+            const double ACS::SCALE_DEFAULT = 0.0;    //1000
+            const double ACS::MEAN_DEFAULT = 0.05;
+            const std::string ACS::NAME = "acs";
+            
+            double ACS::log_prob(const Fibre::Tractlet tractlet) {
+                
+                return -scale * MR::Math::pow2(tractlet.acs() - mean);
+                
+            }
+            
+            double ACS::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
+                
+                // If gradient hasn't been initialised, initialise it to the size of the tractlet, otherwise check its degree.
+                if (!gradient.degree()) {
+                    gradient = tractlet;
+                    gradient.zero();
+                } else if (gradient.degree() != tractlet.degree())
+                    throw Exception(
+                            "Tractlet degree (" + str(tractlet.degree())
+                            + ") does not match that of the supplied gradient ("
+                            + str(gradient.degree()) + ").");
+                
+                double lprob = -scale * MR::Math::pow2(tractlet.acs() - mean);
+                
+                if (tractlet.has_var_acs())
+                    gradient.alpha() -= 4.0 * scale * tractlet.alpha() * (tractlet.acs() - mean);
+                
+                return lprob;
+            }
+        
+        }
+    
     }
-
-  }
 
 }

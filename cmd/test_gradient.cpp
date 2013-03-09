@@ -1,25 +1,24 @@
 /*
-    Copyright 2010 Brain Research Institute/National ICT Australia (NICTA), Melbourne, Australia
+ Copyright 2010 Brain Research Institute/National ICT Australia (NICTA), Melbourne, Australia
 
-    Written by Tom G. Close, 4/03/10.
+ Written by Tom G. Close, 4/03/10.
 
-    This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Bayesian Tractlet Sampling (BTS).
 
-    BTS is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ BTS is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    BTS is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ BTS is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU General Public License
+ along with BTS.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
-
+ */
 
 #include "bts/cmd.h"
 
@@ -56,10 +55,6 @@
 #include "bts/prob/uniform.h"
 #include "bts/prob/prior.h"
 
-
-
-
-
 #include "bts/prob/likelihood.h"
 #include "bts/prob/likelihood.h"
 #include "bts/prob/likelihood/one_sided_gaussian.h"
@@ -75,7 +70,6 @@
 #include "bts/math/common.h"
 
 #include "bts/fibre/base/tensor_writer.cpp.h"
-
 
 #include "bts/inline_functions.h"
 
@@ -475,7 +469,6 @@
   analytic_writer.close(); \
   numeric_writer.close();
 
-
 #define TEST_DIRECTION_HESSIAN(State, function, image_instance) \
   State state; \
   State::Reader reader (state_location); \
@@ -515,7 +508,6 @@
 \
   analytic_writer.close(); \
   numeric_writer.close();
-
 
 #define TEST_IMAGE_POINTER_GRADIENT(State, Object, function, object_instance, state) \
   State* analytic_gradient = state.clone(); \
@@ -673,97 +665,95 @@
 
 #define ONLY_ACTIVE_FUNCTIONS
 
-using namespace BTS; 
-
-SET_VERSION_DEFAULT;
-SET_AUTHOR ("Thomas G. Close");
-SET_COPYRIGHT (NULL);
+using namespace BTS;
+SET_VERSION_DEFAULT
+;
+SET_AUTHOR("Thomas G. Close");
+SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Compare analytically calculated gradients against numerical approximations.",
-  NULL
+    "Compare analytically calculated gradients against numerical approximations.",
+    NULL
 };
 
-ARGUMENTS = {
-  Argument ("state", "State about which the gradient will be tested.").type_file (),
-  Argument ("output", "Output analysis file").type_file (),
-  Argument()
+ARGUMENTS= {
+    Argument ("state", "State about which the gradient will be tested.").type_file (),
+    Argument ("output", "Output analysis file").type_file (),
+    Argument()
 };
 
-OPTIONS = {
+OPTIONS= {
 
+    Option ("object_type", "The object_type that the function belongs to.")
+    + Argument ("object_type", "").type_text(),
 
-  Option ("object_type", "The object_type that the function belongs to.")
-   + Argument ("object_type", "").type_text(),
+    Option ("state_type", "The state to pass to the test_function.")
+    + Argument ("state_type", "").type_text(),
 
-  Option ("state_type", "The state to pass to the test_function.")
-   + Argument ("state_type", "").type_text(),
-  
-  Option ("function_name", "The name of the function to test.")
-   + Argument ("function_name", "").type_text(),
-  
-  Option ("hessian", "Calculate Hessian instead of gradient."),
+    Option ("function_name", "The name of the function to test.")
+    + Argument ("function_name", "").type_text(),
+
+    Option ("hessian", "Calculate Hessian instead of gradient."),
 
 //  Option ("fisher_info", "Calculate gradient of the Fisher information gradient."),
+    
+    Option ("rank3_hessian", "Calculate 3rd order Hessian instead of gradient."),
 
-  Option ("rank3_hessian", "Calculate 3rd order Hessian instead of gradient."),
+    Option ("step_size", "The size of the steps used to build the numerical approximation.")
+    + Argument ("step_size", "").type_float (SMALL_FLOAT, 1e-4, LARGE_FLOAT),
 
-  Option ("step_size", "The size of the steps used to build the numerical approximation.")
-   + Argument ("step_size", "").type_float (SMALL_FLOAT, 1e-4, LARGE_FLOAT),
+    Option ("encoding_orientation", "Test encoding orientation.")
+    + Argument ("encoding_orientation", "").type_text(),
 
-  Option ("encoding_orientation", "Test encoding orientation.")
-   + Argument ("encoding_orientation", "").type_text(),
-
-  Option ("axis_scales_location", "Location of the file containing the scales of the Gaussian axes")
-   + Argument ("axis_scales_location", "").type_text (Prob::Test::Gaussian::AXIS_SCALES_LOCATION_DEFAULT),
+    Option ("axis_scales_location", "Location of the file containing the scales of the Gaussian axes")
+    + Argument ("axis_scales_location", "").type_text (Prob::Test::Gaussian::AXIS_SCALES_LOCATION_DEFAULT),
 
 //  Option ("diff_encode_index", "Index of the diffusion encoding to use")
 //   + Argument ("diff_encode_index", "").type_integer (0, 1000, 1),
+    
+    Option ("element_index", "Index of the 'Object' element to use.")
+    + Argument("element_index", "").type_integer(0,0, LARGE_INT),
 
-  Option ("element_index", "Index of the 'Object' element to use.")
-   + Argument("element_index", "").type_integer(0,0, LARGE_INT),
+    DIFFUSION_PARAMETERS,
 
-  DIFFUSION_PARAMETERS,
-  
-  IMAGE_PARAMETERS,
+    IMAGE_PARAMETERS,
 
-  EXPECTED_IMAGE_PARAMETERS,
+    EXPECTED_IMAGE_PARAMETERS,
 
-  LIKELIHOOD_PARAMETERS,
+    LIKELIHOOD_PARAMETERS,
 
-  PRIOR_PARAMETERS,
-  
-  TEST_LANDSCAPE_PARAMETERS,
+    PRIOR_PARAMETERS,
 
-  COMMON_PARAMETERS,  
+    TEST_LANDSCAPE_PARAMETERS,
 
-  Option ("obs_image", "The location of the reference image that is to be set")
-   + Argument ("obs_image", "").type_image_in(),
+    COMMON_PARAMETERS,
 
-  Option()
+    Option ("obs_image", "The location of the reference image that is to be set")
+    + Argument ("obs_image", "").type_image_in(),
+
+    Option()
 };
 
-
-
-
 EXECUTE {
-
-
-
-
-  //-----------------//
-  //  Load Arguments //
-  //-----------------//
-
-  std::string state_location = argument[0];
-  std::string output_location = argument[1];
-  
-  if (File::extension(state_location) != File::extension(output_location))
-    throw Exception ("Extension of output, '" +  File::extension(output_location) + ", does not match extension of input, '" + File::extension(state_location) + "'.");
-
-  std::string analytic_output_location = File::strip_extension(output_location) + str(".analytic.") + File::extension(output_location);
-  std::string numeric_output_location = File::strip_extension(output_location) + str(".numeric.") + File::extension(output_location);
-
+    
+    //-----------------//
+    //  Load Arguments //
+    //-----------------//
+    
+        std::string state_location = argument[0];
+        std::string output_location = argument[1];
+        
+        if (File::extension(state_location) != File::extension(output_location))
+            throw Exception(
+                    "Extension of output, '" + File::extension(output_location)
+                    + ", does not match extension of input, '" + File::extension(state_location)
+                    + "'.");
+        
+        std::string analytic_output_location = File::strip_extension(output_location)
+                + str(".analytic.") + File::extension(output_location);
+        std::string numeric_output_location = File::strip_extension(output_location)
+                + str(".numeric.") + File::extension(output_location);
+        
 //
 //
 //
@@ -1728,7 +1718,6 @@ EXECUTE {
 //  else
 //    std::cout << "plot_gradient " + output_location << "\n\n" << std::endl;
 ////
-
-}
-
-
+        
+    }
+    

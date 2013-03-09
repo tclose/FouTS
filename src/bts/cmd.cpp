@@ -8,7 +8,7 @@
 
 #include "bts/cmd.h"
 
-namespace BTS { 
+namespace BTS {
 //
 //  void App::print_help () const
 //  {
@@ -69,5 +69,5 @@ namespace BTS {
 //      print_formatted_paragraph (std::string ("-") + opt->id, opt->desc, HELP_OPTION_INDENT);
 //    fprintf (stderr, "\n");
 //  }
-  
+
 }

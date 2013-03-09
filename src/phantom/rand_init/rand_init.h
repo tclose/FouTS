@@ -48,12 +48,18 @@
 #define GREY_MATTER_WEIGHTING_DEFAULT 0.5
 
 /* Randomly initialises a collection of strands by generating pairs of points on a sphere then joining them with evenly spaced control points */
-int rand_init_collection(Strand_collection *c, double sphere_r, double control_point_freq, double strand_r_lbound, double strand_r_ubound, double strand_r_buffer_ratio, gsl_rng *rand_gen, int max_attempts, int num_isotropic_regions, Isotropic_region *isotropic_regions);
+int rand_init_collection(Strand_collection *c, double sphere_r, double control_point_freq,
+                         double strand_r_lbound, double strand_r_ubound,
+                         double strand_r_buffer_ratio, gsl_rng *rand_gen, int max_attempts,
+                         int num_isotropic_regions, Isotropic_region *isotropic_regions);
 
 /* As the name suggests, randomly generates a point on a sphere */
 void rand_gen_point_on_sphere(double *point, double sphere_r, const gsl_rng *random_gen);
 
+void rand_init_grey_matters(Isotropic_region *isotropic_regions, int num_grey_matters,
+                            double grey_matter_r_lbound, double grey_matter_r_ubound,
+                            double grey_matter_location_lbound, double grey_matter_location_ubound,
+                            double grey_matter_diffusivity, double grey_matter_baseline_signal,
+                            double grey_matter_weighting, gsl_rng *rand_gen);
 
-void rand_init_grey_matters(Isotropic_region *isotropic_regions, int num_grey_matters, double grey_matter_r_lbound, double grey_matter_r_ubound, double grey_matter_location_lbound, double grey_matter_location_ubound, double grey_matter_diffusivity, double grey_matter_baseline_signal, double grey_matter_weighting, gsl_rng *rand_gen);
-	
 #endif

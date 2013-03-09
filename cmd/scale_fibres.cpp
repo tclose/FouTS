@@ -20,14 +20,11 @@
 
  */
 
-
 #include "bts/cmd.h"
 
 #include "bts/common.h"
 
-
 #include "bts/fibre/strand/set.h"
-
 
 #include "bts/fibre/strand/set.h"
 #include "bts/fibre/track/set.h"
@@ -35,117 +32,110 @@
 #include "bts/fibre/base/set_reader.h"
 #include "bts/fibre/base/set_writer.h"
 
-
 #include "bts/inline_functions.h"
 
 using namespace BTS;
 
-const double SCALE_DEFAULT=1.0;
-
-SET_VERSION_DEFAULT;
-SET_AUTHOR ("Thomas G. Close");
-SET_COPYRIGHT (NULL);
+const double SCALE_DEFAULT = 1.0;
+SET_VERSION_DEFAULT
+;
+SET_AUTHOR("Thomas G. Close");
+SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Scale the size of all fibres",
-  "",
-  NULL
+    "Scale the size of all fibres",
+    "",
+    NULL
 };
 
-
-ARGUMENTS = {
-  Argument ("input", "The fibres to be trimmed.").type_file (),
-  Argument ("output", "The returned trimmed fibres.").optional().type_file(),
-  Argument()
+ARGUMENTS= {
+    Argument ("input", "The fibres to be trimmed.").type_file (),
+    Argument ("output", "The returned trimmed fibres.").optional().type_file(),
+    Argument()
 };
 
+OPTIONS= {
 
-OPTIONS = {
+    Option ("scale", "The scalar the fibres will be multiplied by.")
+    + Argument ("scale", "").type_float (SMALL_FLOAT, SCALE_DEFAULT, LARGE_FLOAT),
 
-  Option ("scale", "The scalar the fibres will be multiplied by.")
-   + Argument ("scale", "").type_float (SMALL_FLOAT, SCALE_DEFAULT, LARGE_FLOAT),
+    Option ("include_acs", "Scale the acs and base intensities as well as the rest of the strand."),
 
-  Option ("include_acs", "Scale the acs and base intensities as well as the rest of the strand."),
-
-Option() };
-
+    Option()};
 
 EXECUTE {
-
-
-  std::string input_location = argument[0];
-  std::string output_location;
-
-  if (argument.size() > 1)
-    output_location = argument[1].c_str();
-  else
-    output_location = input_location;
-
-
-  double scale = SCALE_DEFAULT;
-  bool include_acs = false;
-
-  Options opt = get_options("scale");
-  if (opt.size())
-    scale = opt[0][0];
-
-  opt = get_options("include_acs");
-  if (opt.size())
-    include_acs = true;
-
-
-  if (File::has_extension<Fibre::Strand>(input_location)) {
-
-    Fibre::Strand::Set strands(input_location);
-
-    Fibre::Strand::Set output = strands * scale;
-
-    if (!include_acs) {
-
-      output.set_base_intensity(strands.base_intensity());
-
-      for (size_t strand_i = 0; strand_i < strands.size(); ++strand_i)
-        output[strand_i].set_acs(strands[strand_i].acs());
-
+    
+        std::string input_location = argument[0];
+        std::string output_location;
+        
+        if (argument.size() > 1)
+            output_location = argument[1].c_str();
+        else
+            output_location = input_location;
+        
+        double scale = SCALE_DEFAULT;
+        bool include_acs = false;
+        
+        Options opt = get_options("scale");
+        if (opt.size())
+            scale = opt[0][0];
+        
+        opt = get_options("include_acs");
+        if (opt.size())
+            include_acs = true;
+        
+        if (File::has_extension<Fibre::Strand>(input_location)) {
+            
+            Fibre::Strand::Set strands(input_location);
+            
+            Fibre::Strand::Set output = strands * scale;
+            
+            if (!include_acs) {
+                
+                output.set_base_intensity(strands.base_intensity());
+                
+                for (size_t strand_i = 0; strand_i < strands.size(); ++strand_i)
+                    output[strand_i].set_acs(strands[strand_i].acs());
+                
+            }
+            
+            output.save(output_location);
+            
+        } else if (File::has_extension<Fibre::Track>(input_location)) {
+            
+            Fibre::Track::Set tcks(input_location);
+            
+            Fibre::Track::Set output = tcks * scale;
+            
+            if (!include_acs) {
+                
+                output.set_base_intensity(tcks.base_intensity());
+                
+                for (size_t tck_i = 0; tck_i < tcks.size(); ++tck_i)
+                    output[tck_i].set_acs(tcks[tck_i].acs());
+                
+            }
+            
+            output.save(output_location);
+            
+        } else if (File::has_extension<Fibre::Tractlet>(input_location)) {
+            
+            Fibre::Tractlet::Set tracts(input_location);
+            
+            Fibre::Tractlet::Set output = tracts * scale;
+            
+            if (!include_acs) {
+                
+                output.set_base_intensity(tracts.base_intensity());
+                
+                for (size_t tract_i = 0; tract_i < tracts.size(); ++tract_i)
+                    output[tract_i].set_acs(tracts[tract_i].acs());
+                
+            }
+            
+            output.save(output_location);
+            
+        } else
+            throw Exception("Unrecognised file extension of input file '" + input_location + "'.");
+        
     }
-
-    output.save(output_location);
-
-  } else if (File::has_extension<Fibre::Track>(input_location)) {
-
-    Fibre::Track::Set tcks(input_location);
-
-    Fibre::Track::Set output = tcks * scale;
-
-    if (!include_acs) {
-
-      output.set_base_intensity(tcks.base_intensity());
-
-      for (size_t tck_i = 0; tck_i < tcks.size(); ++tck_i)
-        output[tck_i].set_acs(tcks[tck_i].acs());
-
-    }
-
-    output.save(output_location);
-
-  } else if (File::has_extension<Fibre::Tractlet>(input_location)) {
-
-    Fibre::Tractlet::Set tracts(input_location);
-
-    Fibre::Tractlet::Set output = tracts * scale;
-
-    if (!include_acs) {
-
-      output.set_base_intensity(tracts.base_intensity());
-
-      for (size_t tract_i = 0; tract_i < tracts.size(); ++tract_i)
-        output[tract_i].set_acs(tracts[tract_i].acs());
-
-    }
-
-    output.save(output_location);
-
-  } else
-    throw Exception ("Unrecognised file extension of input file '" + input_location + "'.");
-
-}

@@ -29,7 +29,6 @@
 #include "bts/image/inline_functions.h"
 #include "bts/diffusion/inline_functions.h"
 
-
 #define LOOP(op) \
 for (size_t z = 0; z < this->dim(Z); z++) { \
   for (size_t y = 0; y < this->dim(Y); y++) { \
@@ -40,42 +39,38 @@ for (size_t z = 0; z < this->dim(Z); z++) { \
 }
 
 namespace BTS {
-
-  namespace Image {
-
-    namespace Expected {
-
-      namespace Realistic {
-
-        const std::string Buffer::SHORT_NAME = "realistic";
-
-
-        Buffer::Buffer(  const Triple<size_t>& dimensions,
-                          const Triple<double>& voxel_sizes,
-                          const Diffusion::Model& diffusion_model,
-                          size_t num_sections,
-                          size_t num_strands,
-                          double extent,
-                          const Triple<double>& corner_offset,
-                          bool enforce_bounds)
-          : Buffer_tpl<Voxel>(dimensions, voxel_sizes, diffusion_model, num_sections, num_strands, extent, corner_offset, enforce_bounds)
-          { name_init(); }
-
-
-        Buffer::Buffer(const Buffer& buffer)
-          : Buffer_tpl<Voxel>(buffer)
-          { name_init(); }
-
-
-        std::ostream& operator<< (std::ostream& stream, const Buffer& buffer)
-          { return buffer.to_stream(stream); }
-
-      }
-      
+    
+    namespace Image {
+        
+        namespace Expected {
+            
+            namespace Realistic {
+                
+                const std::string Buffer::SHORT_NAME = "realistic";
+                
+                Buffer::Buffer(const Triple<size_t>& dimensions, const Triple<double>& voxel_sizes,
+                               const Diffusion::Model& diffusion_model, size_t num_sections,
+                               size_t num_strands, double extent,
+                               const Triple<double>& corner_offset, bool enforce_bounds)
+                        : Buffer_tpl<Voxel>(dimensions, voxel_sizes, diffusion_model, num_sections,
+                                num_strands, extent, corner_offset, enforce_bounds) {
+                    name_init();
+                }
+                
+                Buffer::Buffer(const Buffer& buffer)
+                        : Buffer_tpl<Voxel>(buffer) {
+                    name_init();
+                }
+                
+                std::ostream& operator<<(std::ostream& stream, const Buffer& buffer) {
+                    return buffer.to_stream(stream);
+                }
+            
+            }
+        
+        }
+    
     }
-
-
-  }
 
 }
 

@@ -25,23 +25,16 @@
  *
  */
 
-
-
-
-
 #ifndef BUNDLE_H
 #define BUNDLE_H
 
 typedef struct _bundle {
-	
-	int bundle_i;
-	int num_strands;
-	struct _strand **strands;	
-	
+        
+        int bundle_i;
+        int num_strands;
+        struct _strand **strands;
+        
 } Bundle;
-
-
-
 
 int construct_bundles(Bundle *bundles, int *bundle_i_of_strand, int num_strands, Strand *strands);
 
@@ -58,9 +51,6 @@ double calculate_volumes(Bundle *bundle);
 double calculate_average_strand_length(Bundle *bundle);
 
 int compare_bundle_volumes(const void *a, const void *b);
-
-
-
 
 #endif
 

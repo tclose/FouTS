@@ -1,29 +1,27 @@
 /*
-    Copyright 2010 Brain Research Institute/National ICT Australia (NICTA), Melbourne, Australia
+ Copyright 2010 Brain Research Institute/National ICT Australia (NICTA), Melbourne, Australia
 
-    Written by Thomas G Close, 5/05/09.
+ Written by Thomas G Close, 5/05/09.
 
-    This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Bayesian Tractlet Sampling (BTS).
 
-    BTS is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your prior_option) any later version.
+ BTS is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your prior_option) any later version.
 
-    BTS is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ BTS is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU General Public License
+ along with BTS.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
-
+ */
 
 #ifndef __bts_prob_prior_h__
 #define __bts_prob_prior_h__
-
 
 //Defines the parameters that are required to initialise the prior objects.
 #define PRIOR_PARAMETERS \
@@ -192,129 +190,130 @@
 #include "bts/fibre/tractlet/set.h"
 #include "bts/mcmc/state.h"
 
-
 namespace BTS {
+    
+    namespace Prob {
+        
+        class Prior {
+                
+            public:
+                
+                const static char* TYPE_DEFAULT;
+                const static double SCALE_DEFAULT;
 
-  namespace Prob {
+            protected:
+                
+                double scale;
+                PriorComponent::Frequency frequency;
+                PriorComponent::Hook hook;
+                PriorComponent::Density density;
+                PriorComponent::ACS acs;
+                PriorComponent::Length length;
+                PriorComponent::Thinness thinness;
 
-    class Prior {
+            public:
+                
+                Prior(double scale, double freq_scale, double freq_aux_scale, double hook_scale,
+                      double hook_num_points, double hook_num_width_sections,
+                      double density_high_scale, double density_low_scale,
+                      double density_num_points, double acs_scale, double acs_mean,
+                      double length_scale, double length_mean, double thinness_scale,
+                      size_t thinness_power);
 
-      public:
+                Prior(const Prior& p)
+                        : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(
+                                  p.acs), length(p.length), thinness(p.thinness) {
+                }
+                
+                Prior& operator=(const Prior& p) {
+                    scale = p.scale;
+                    frequency = p.frequency;
+                    hook = p.hook;
+                    density = p.density;
+                    acs = p.acs;
+                    length = p.length;
+                    thinness = p.thinness;
+                    return *this;
+                }
+                
+                virtual ~Prior() {
+                }
+                
+                std::vector<std::string> list_components() const {
+                    std::vector<std::string> components;
+                    components.push_back(PriorComponent::Frequency::NAME);
+                    components.push_back(PriorComponent::Hook::NAME);
+                    components.push_back(PriorComponent::Density::NAME);
+                    components.push_back(PriorComponent::ACS::NAME);
+                    components.push_back(PriorComponent::Length::NAME);
+                    components.push_back(PriorComponent::Thinness::NAME);
+                    return components;
+                }
+                
+                std::map<std::string, double> get_component_values(const Fibre::Strand strand);
 
-        const static char*         TYPE_DEFAULT;
-        const static double        SCALE_DEFAULT;
+                std::map<std::string, double> get_component_values(const Fibre::Tractlet tractlet);
 
-      protected:
+                template<typename T> std::map<std::string, double> get_component_values(
+                        const T fibres) {
+                    std::map<std::string, double> overall_map, elem_map;
+                    std::vector<string> components = list_components();
+                    for (std::vector<std::string>::iterator comp_it = components.begin();
+                            comp_it != components.end(); ++comp_it)
+                        overall_map[*comp_it] = 0.0;
+                    for (size_t fibre_i = 0; fibre_i < fibres.size(); ++fibre_i) {
+                        elem_map = get_component_values(fibres[fibre_i]);
+                        for (std::map<std::string, double>::iterator comp_it = elem_map.begin();
+                                comp_it != elem_map.end(); ++comp_it)
+                            overall_map[comp_it->first] += comp_it->second;
+                    }
+                    return overall_map;
+                }
+                
+                double log_prob(const Fibre::Strand strand, Fibre::Strand gradient);
 
-        double scale;
-        PriorComponent::Frequency frequency;
-        PriorComponent::Hook hook;
-        PriorComponent::Density density;
-        PriorComponent::ACS acs;
-        PriorComponent::Length length;
-        PriorComponent::Thinness thinness;
+                double log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient);
 
-      public:
-
-        Prior(double scale,
-              double freq_scale,
-              double freq_aux_scale,
-              double hook_scale,
-              double hook_num_points,
-              double hook_num_width_sections,
-              double density_high_scale,
-              double density_low_scale,
-              double density_num_points,
-              double acs_scale,
-              double acs_mean,
-              double length_scale,
-              double length_mean,
-              double thinness_scale,
-              size_t thinness_power);
-
-        Prior(const Prior& p)
-         : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(p.acs), length(p.length),
-                                                                                           thinness(p.thinness) {}
-
-        Prior& operator=(const Prior& p)
-          { scale =p.scale; frequency = p.frequency; hook = p.hook; density = p.density; acs = p.acs; length = p.length;
-                                                                              thinness = p.thinness; return *this; }
-
-        virtual ~Prior() {}
-
-        std::vector<std::string>        list_components() const {
-          std::vector<std::string> components;
-          components.push_back(PriorComponent::Frequency::NAME);
-          components.push_back(PriorComponent::Hook::NAME);
-          components.push_back(PriorComponent::Density::NAME);
-          components.push_back(PriorComponent::ACS::NAME);
-          components.push_back(PriorComponent::Length::NAME);
-          components.push_back(PriorComponent::Thinness::NAME);
-          return components;
-        }
-
-        std::map<std::string, double> get_component_values(const Fibre::Strand strand);
-
-        std::map<std::string, double> get_component_values(const Fibre::Tractlet tractlet);
-
-        template <typename T> std::map<std::string, double> get_component_values(const T fibres) {
-          std::map<std::string,double> overall_map, elem_map;
-          std::vector<string> components = list_components();
-          for (std::vector<std::string>::iterator comp_it = components.begin(); comp_it != components.end(); ++comp_it)
-            overall_map[*comp_it] = 0.0;
-          for (size_t fibre_i = 0; fibre_i < fibres.size(); ++fibre_i) {
-            elem_map = get_component_values(fibres[fibre_i]);
-            for (std::map<std::string, double>::iterator comp_it = elem_map.begin(); comp_it != elem_map.end(); ++comp_it)
-              overall_map[comp_it->first] += comp_it->second;
-          }
-          return overall_map;
-        }
-
-        double                          log_prob(const Fibre::Strand strand, Fibre::Strand gradient);
-
-        double                          log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient);
-
-        template <typename T> double    log_prob(const T fibres, T gradient) {
-
-          double lprob = 0.0;
-
-          if (scale)
-            for (size_t fibre_i = 0; fibre_i < fibres.size(); ++fibre_i)
-              lprob += log_prob(fibres[fibre_i], gradient[fibre_i]);
-
-          return lprob;
-        }
-
-        template <typename T> double    log_prob(const T& fibre) {
-
-          T dummy_gradient;
-          dummy_gradient = fibre;
-
-          return log_prob(fibre, dummy_gradient);
-
-        }
-
-        template <typename T> double    log_prob(const T strand, T gradient, typename T::Tensor hessian)
-          { throw Exception ("Not implemented yet."); }
-
-
-        template <typename T> double    log_prob_and_fisher(const T strand, T gradient, typename T::Tensor fisher)
-          { throw Exception ("Not implemented yet."); }
-
-
-        template <typename T> double    log_prob_and_fisher(const T strand,
-                                                            T gradient, typename T::Tensor fisher,
-                                                            std::vector<typename T::Tensor> fisher_gradient)
-          { throw Exception ("Not implemented yet."); }
-
-    };
-
-
-  }
+                template<typename T> double log_prob(const T fibres, T gradient) {
+                    
+                    double lprob = 0.0;
+                    
+                    if (scale)
+                        for (size_t fibre_i = 0; fibre_i < fibres.size(); ++fibre_i)
+                            lprob += log_prob(fibres[fibre_i], gradient[fibre_i]);
+                    
+                    return lprob;
+                }
+                
+                template<typename T> double log_prob(const T& fibre) {
+                    
+                    T dummy_gradient;
+                    dummy_gradient = fibre;
+                    
+                    return log_prob(fibre, dummy_gradient);
+                    
+                }
+                
+                template<typename T> double log_prob(const T strand, T gradient,
+                                                     typename T::Tensor hessian) {
+                    throw Exception("Not implemented yet.");
+                }
+                
+                template<typename T> double log_prob_and_fisher(const T strand, T gradient,
+                                                                typename T::Tensor fisher) {
+                    throw Exception("Not implemented yet.");
+                }
+                
+                template<typename T> double log_prob_and_fisher(
+                        const T strand, T gradient, typename T::Tensor fisher,
+                        std::vector<typename T::Tensor> fisher_gradient) {
+                    throw Exception("Not implemented yet.");
+                }
+                
+        };
+    
+    }
 
 }
-
-
-
 
 #endif

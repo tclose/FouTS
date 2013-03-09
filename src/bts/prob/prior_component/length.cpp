@@ -23,47 +23,50 @@
 #include "math/math.h"
 #include "bts/prob/prior_component/length.h"
 
-
 namespace BTS {
-
-  namespace Prob {
-
-    namespace PriorComponent {
-
-      const double            Length::SCALE_DEFAULT     = 0.0; //10
-      const double            Length::MEAN_DEFAULT     = 0.05;
-      const std::string       Length::NAME              = "length";
-
-      double          Length::log_prob(const Fibre::Strand strand) {
-
-        return - scale * MR::Math::pow2(strand[1].norm() - mean);
-
-      }
-
-
-      double          Length::log_prob(const Fibre::Strand strand, Fibre::Strand gradient) {
-
-        assert(!gradient.is_owner());
-
-        // If gradient hasn't been initialised, initialise it to the size of the tractlet, otherwise check its degree.
-        if (!gradient.degree()) {
-          gradient = strand;
-          gradient.zero();
-        } else if (gradient.degree() != strand.degree())
-          throw Exception ("Tractlet degree (" + str(strand.degree()) + ") does not match that of the supplied gradient (" +
-                                                                                        str(gradient.degree()) + ").");
-
-        double lprob = -scale * MR::Math::pow2(strand[1].norm() - mean);
-
-        gradient[1][X] = -2.0 * scale * strand[1][X] * (strand[1].norm() - mean) / strand[1].norm();
-        gradient[1][Y] = -2.0 * scale * strand[1][Y] * (strand[1].norm() - mean) / strand[1].norm();
-        gradient[1][Z] = -2.0 * scale * strand[1][Z] * (strand[1].norm() - mean) / strand[1].norm();
-
-        return lprob;
-      }
-
+    
+    namespace Prob {
+        
+        namespace PriorComponent {
+            
+            const double Length::SCALE_DEFAULT = 0.0;    //10
+            const double Length::MEAN_DEFAULT = 0.05;
+            const std::string Length::NAME = "length";
+            
+            double Length::log_prob(const Fibre::Strand strand) {
+                
+                return -scale * MR::Math::pow2(strand[1].norm() - mean);
+                
+            }
+            
+            double Length::log_prob(const Fibre::Strand strand, Fibre::Strand gradient) {
+                
+                assert(!gradient.is_owner());
+                
+                // If gradient hasn't been initialised, initialise it to the size of the tractlet, otherwise check its degree.
+                if (!gradient.degree()) {
+                    gradient = strand;
+                    gradient.zero();
+                } else if (gradient.degree() != strand.degree())
+                    throw Exception(
+                            "Tractlet degree (" + str(strand.degree())
+                            + ") does not match that of the supplied gradient ("
+                            + str(gradient.degree()) + ").");
+                
+                double lprob = -scale * MR::Math::pow2(strand[1].norm() - mean);
+                
+                gradient[1][X] = -2.0 * scale * strand[1][X] * (strand[1].norm() - mean)
+                        / strand[1].norm();
+                gradient[1][Y] = -2.0 * scale * strand[1][Y] * (strand[1].norm() - mean)
+                        / strand[1].norm();
+                gradient[1][Z] = -2.0 * scale * strand[1][Z] * (strand[1].norm() - mean)
+                        / strand[1].norm();
+                
+                return lprob;
+            }
+        
+        }
+    
     }
-
-  }
 
 }

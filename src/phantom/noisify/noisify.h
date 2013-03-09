@@ -35,7 +35,4 @@
 
 void noisify(float *image, int image_size, double noise_level, gsl_rng *rand_gen);
 
-
-
-
 #endif
