@@ -152,7 +152,8 @@ exp_opt = get_options("exp_num_width_sections"); \
 \
   exp_opt = get_options("exp_b0"); \
   if (exp_opt.size()) \
-    exp_b0 = exp_opt[0][0];
+    exp_b0 = exp_opt[0][0]; \
+\
 
 //Adds the parameters to the properties to be saved with the data.
 #define ADD_EXPECTED_IMAGE_PROPERTIES(properties) \

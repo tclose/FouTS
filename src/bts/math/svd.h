@@ -33,13 +33,13 @@ extern "C" {
 #include "bts/common.h"
 
 namespace BTS {
-    
+
     namespace Math {
-        
+
         class USV {
-                
+
             public:
-                
+
                 MR::Math::Matrix<double> u;
                 MR::Math::Matrix<double> v;
                 MR::Math::Vector<double> sigma;
@@ -49,37 +49,49 @@ namespace BTS {
                 }
                 ~USV() {
                 }
-                
+
         };
-        
+
         // Protects M from being copied over by U in the gsl SVD computation.
         inline USV svd(const MR::Math::Matrix<double>& matrix) {
-            
+
             USV usv(matrix.rows(), matrix.columns());
-            
+
             usv.u = matrix;
-            
+
             MR::Math::Vector<double> work(usv.sigma.size());
-            
+
             gsl_linalg_SV_decomp(usv.u.gsl(), usv.v.gsl(), usv.sigma.gsl(), work.gsl());
-            
+
             return usv;
-            
+
         }
-        
+
         // 'matrix' will be replaced by 'u' in the SVD computation.  This saves copying although the input matrix is destroyed.
         inline MR::Math::Vector<double>& svd(MR::Math::Matrix<double>& matrix,
                                              MR::Math::Matrix<double>& v,
                                              MR::Math::Vector<double>& sigma) {
-            
+
             MR::Math::Vector<double> work(sigma.size());
-            
+
             gsl_linalg_SV_decomp(matrix.gsl(), v.gsl(), sigma.gsl(), work.gsl());
-            
+
             return sigma;
-            
+
         }
-    
+
+        // 'matrix' will be replaced by 'u' in the SVD computation.  This saves copying although the input matrix is destroyed.
+        inline MR::Math::Vector<double>& solve_psuedo_inverse(MR::Math::Vector<double>& b,
+                                                              MR::Math::Vector<double>& x,
+                                                              const USV& usv) {
+
+
+            gsl_linalg_SV_solve(usv.u.gsl(), usv.v.gsl(), usv.sigma.gsl(), b.gsl(), x.gsl());
+
+            return x;
+
+        }
+
     }
 
 }
