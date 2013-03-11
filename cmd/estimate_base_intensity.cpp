@@ -30,6 +30,8 @@
 #include "dataset/subset.h"
 #include "math/eigen.h"
 
+#include "bts/math/svd.h"
+
 #include "bts/image/expected/buffer.h"
 #include "bts/image/expected/trilinear/buffer.h"
 #include "bts/image/expected/gaussian/buffer.h"
@@ -49,7 +51,7 @@ SET_VERSION_DEFAULT
 SET_AUTHOR("Thomas G. Close");
 SET_COPYRIGHT(NULL);
 
-const size_t ONE_VOX[3] = {1, 1, 1}
+const size_t ONE_VOX[3] = {1, 1, 1};
 const double FA_THRESHOLD_DEFAULT = 0.6;
 
 DESCRIPTION = {
@@ -77,6 +79,7 @@ OPTIONS= {
 
     Option ("fa_threshold", "The minimum threshold for the calculated Fractional Anisotropy (FA) "
             "below which the provided will be omitted (with warning).")
+    + Argument ().type_float(SMALL_FLOAT, FA_THRESHOLD_DEFAULT, LARGE_FLOAT),
 
     DIFFUSION_PARAMETERS,
 
@@ -154,7 +157,7 @@ EXECUTE {
         // Caluculate the singular value decomposition on the tensor encodings matrix
         Math::USV usv = Math::svd(tensor_encodings);
         // Reference the b_values for readibility
-        MR::Math::Vector<float>& b_values = encodings.column(DW);
+        const MR::Math::Vector<float>& b_values = encodings.column(DW);
         // Create the expected image voxel
         Diffusion::Model diffusion_model = Diffusion::Model::factory(encodings, diff_response_SH,
                 diff_adc, diff_fa, diff_isotropic, diff_warn_b_mismatch);
@@ -164,7 +167,7 @@ EXECUTE {
         double est_base_intensity = 0.0;
         // Loop through all the provided single fibre indices and calculate the optimum b0
         size_t num_samples = argument.size() - 1;
-        for (size_t sample_i = 0; sample_i < (argument.size() - 1); ++sample_i) {
+        for (size_t sample_i = 0; sample_i < num_samples; ++sample_i) {
             // The following is quite a clunky way to get an observed buffer consisting of a single
             // voxel from the index given as a triple. NB the first argument to this script is the
             // image location hence the offset by one.
@@ -193,7 +196,7 @@ EXECUTE {
             }
             tensor(X, Z) = tensor(Z, X) = tensor_vec[4];
             // Get the eigenvectors of the tensor matrix
-            MR::Math::Matrix<double> evec(3);
+            MR::Math::Matrix<double> evec(3, 3);
             MR::Math::Vector<double> eval(3);
             MR::Math::Eigen::SymmV<double> symmv(3);
             symmv(eval, tensor, evec);
@@ -206,9 +209,10 @@ EXECUTE {
                             / (MR::Math::pow2(eval[0]) + MR::Math::pow2(eval[1])
                                + MR::Math::pow2(eval[2])));
             if (fa < fa_threshold)
-                throw Exception("Sample index '" + str(ref_index) + "' has a FA of less than "
-                           + str(fa_threshold) + " (" + str(fa) + "). It will be omitted from the "
-                           "estimation.")
+                throw Exception(
+                        "Sample index '" + str(ref_index) + "' has a FA of less than "
+                        + str(fa_threshold) + " (" + str(fa) + "). It will be omitted from the "
+                        "estimation.");
             // Create a tract that spans the space that voxel will draw signal from and is aligned
             // with the principle eigenvector of the estimated diffusion tensor.
             Coord tract_extent = exp_interp_extent * vox_lengths * 2.0;
@@ -231,7 +235,7 @@ EXECUTE {
             // The estimated base intensity is then the average scaling required to get the expected
             // intensity to match the observed intensity.
             for (size_t encode_i = 0; encode_i < num_encodings; ++encode_i)
-                est_base_intensity += observed[encode_i] / exp_image(0, 0, 0)[encode_i];
+                est_base_intensity += observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i];
         }
 
         est_base_intensity /= num_encodings * (argument.size() - 1);

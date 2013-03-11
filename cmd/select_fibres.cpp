@@ -665,7 +665,7 @@ EXECUTE {
         
         MR::ProgressBar progress_bar("Selecting fibres ...");
         
-        ifONE_CONVERSIONS (Strand)
+    if ONE_CONVERSIONS (Strand)
     else if
     ONE_CONVERSIONS(Tractlet)
     else if
