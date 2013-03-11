@@ -51,7 +51,6 @@ SET_VERSION_DEFAULT
 SET_AUTHOR("Thomas G. Close");
 SET_COPYRIGHT(NULL);
 
-const size_t ONE_VOX[3] = {1, 1, 1};
 const double FA_THRESHOLD_DEFAULT = 0.6;
 
 DESCRIPTION = {
@@ -124,43 +123,47 @@ EXECUTE {
             throw Exception("unexpected diffusion encoding matrix dimensions");
         if (dwi.dim(3) != (int)grad.rows())
             throw Exception("number of studies in base image does not match that in encoding file");
-        MR::DWI::normalise_grad(grad);
-        std::vector<int> bzeros, dwis;
-        MR::DWI::guess_DW_directions(dwis, bzeros, grad);
         // Set the FA anisotropy threshold
         opt = get_options("fa_threshold");
         if (opt.size())
             fa_threshold = opt[0][0];
-        // Create a 1-voxel buffer to hold the single fibre voxels the base intensity will be estimated
-        // against
+        // Get the indices of the b=0 encoding directions
+        MR::DWI::normalise_grad(grad);
+        std::vector<int> bzeros, dwis;
+        MR::DWI::guess_DW_directions(dwis, bzeros, grad);
+        // Get the matrix of non b=0 encoding directions
         Triple<double> vox_lengths(dwi.vox(X), dwi.vox(Y), dwi.vox(Z));
         Triple<size_t> dims(1.0, 1.0, 1.0);
         Triple<double> offsets(0.0, 0.0, 0.0);
-        MR::Math::Matrix<float> encodings = dwi.get_DW_scheme();
-        size_t num_encodings = encodings.rows();
+        MR::Math::Matrix<float> all_encodings = dwi.get_DW_scheme();
+        MR::Math::Matrix<double> nonb0_encodings(dwis.size(), 4);
+        size_t num_nonb0_encodings = 0;
+        for (size_t encode_i = 0; encode_i < dwi.get_DW_scheme().rows(); ++encode_i)
+            if (std::find(bzeros.begin(), bzeros.end(), encode_i) == bzeros.end())
+                nonb0_encodings.row(num_nonb0_encodings++) = all_encodings.row(encode_i);
         // Create the matrix used to calculate the diffusion tensor
         // The order of the rows is d_xx, d_yy, d_zz, d_xy, d_xz, dyz
-        MR::Math::Matrix<double> tensor_encodings(num_encodings, 6);
+        MR::Math::Matrix<double> tensor_encodings(num_nonb0_encodings, 6);
         for (size_t dim_i = 0; dim_i < 3; ++dim_i) {
             // Do the d_xx, d_yy and d_zz columns
-            tensor_encodings.column(dim_i) = encodings.column(dim_i);
-            tensor_encodings.column(dim_i) *= encodings.column(dim_i);
+            tensor_encodings.column(dim_i) = nonb0_encodings.column(dim_i);
+            tensor_encodings.column(dim_i) *= nonb0_encodings.column(dim_i);
             // Make the d_xy and d_yz columns
             if (dim_i < 2) {
-                tensor_encodings.column(dim_i * 2 + 3) = encodings.column(dim_i);
-                tensor_encodings.column(dim_i * 2 + 3) *= encodings.column(dim_i + 1);
+                tensor_encodings.column(dim_i * 2 + 3) = nonb0_encodings.column(dim_i);
+                tensor_encodings.column(dim_i * 2 + 3) *= nonb0_encodings.column(dim_i + 1);
             }
         }
         // Finish of with the d_xz column
-        tensor_encodings.column(4) = encodings.column(X);
-        tensor_encodings.column(4) *= encodings.column(Z);
+        tensor_encodings.column(4) = nonb0_encodings.column(X);
+        tensor_encodings.column(4) *= nonb0_encodings.column(Z);
         // Caluculate the singular value decomposition on the tensor encodings matrix
         Math::USV usv = Math::svd(tensor_encodings);
         // Reference the b_values for readibility
-        const MR::Math::Vector<float>& b_values = encodings.column(DW);
+        const MR::Math::Vector<float>& b_values = nonb0_encodings.column(DW);
         // Create the expected image voxel
-        Diffusion::Model diffusion_model = Diffusion::Model::factory(encodings, diff_response_SH,
-                diff_adc, diff_fa, diff_isotropic, diff_warn_b_mismatch);
+        Diffusion::Model diffusion_model = Diffusion::Model::factory(nonb0_encodings,
+                diff_response_SH, diff_adc, diff_fa, diff_isotropic, diff_warn_b_mismatch);
         Image::Expected::Buffer* exp_image = Image::Expected::Buffer::factory(exp_type, dims,
                 vox_lengths, diffusion_model, exp_num_length_sections, exp_num_width_sections,
                 exp_interp_extent, offsets, exp_enforce_bounds, exp_half_width);
@@ -171,22 +174,31 @@ EXECUTE {
             // The following is quite a clunky way to get an observed buffer consisting of a single
             // voxel from the index given as a triple. NB the first argument to this script is the
             // image location hence the offset by one.
-            MR::Math::Vector<double> observed(num_encodings);
+            MR::Math::Vector<double> observed(num_nonb0_encodings);
             Triple<size_t> ref_index = parse_triple<size_t>(std::string(argument[sample_i + 1]));
-            size_t index[3];
+            size_t index[4] = {0, 0, 0, 0};
             ref_index.copy_to(index);
             MR::Image::Voxel<float> vox(dwi);
-            MR::DataSet::Subset<MR::Image::Voxel<float> > vox_subset(vox, index, ONE_VOX);
-            MR::DataSet::Loop loop(0, 3);
-            size_t encode_i = 0;
-            for (loop.start(vox_subset); loop.ok(); loop.next(vox_subset))
-                observed[encode_i] = (double)vox_subset.value();
+            size_t loop_dims[4] = {1, 1, 1, all_encodings.rows()};
+            MR::DataSet::Subset<MR::Image::Voxel<float> > vox_subset(vox, index, loop_dims);
+            MR::DataSet::Loop loop(3, 4);
+            size_t all_encode_i = 0;
+            size_t nonb0_encode_i = 0;
+            double b0 = 0.0;
+            for (loop.start(vox_subset); loop.ok(); loop.next(vox_subset)) {
+                if (std::find(bzeros.begin(), bzeros.end(), all_encode_i) == bzeros.end())
+                    observed[nonb0_encode_i++] = (double)vox_subset.value();
+                else
+                    b0 += (double)vox_subset.value();
+                ++all_encode_i;
+            }
+            b0 /= bzeros.size();
             // Calculate the diffusion tensor from the observed intensities
-            MR::Math::Vector<double> observed_scaled_logged(num_encodings), tensor_vec(6);
-            for (size_t encode_i = 0; encode_i < num_encodings; ++encode_i)
-                observed_scaled_logged[encode_i] = -MR::Math::log(observed[encode_i])
+            MR::Math::Vector<double> observed_log_ratio(num_nonb0_encodings), tensor_vec(6);
+            for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i)
+                observed_log_ratio[encode_i] = -MR::Math::log(observed[encode_i] / b0)
                         / b_values[encode_i];
-            Math::solve_psuedo_inverse(observed_scaled_logged, tensor_vec, usv);
+            Math::solve_psuedo_inverse(observed_log_ratio, tensor_vec, usv);
             MR::Math::Matrix<double> tensor(3, 3);
             for (size_t dim_i = 0; dim_i < 3; ++dim_i) {
                 tensor(dim_i, dim_i) = tensor_vec[dim_i];
@@ -234,11 +246,11 @@ EXECUTE {
             exp_image->expected_image(tcts);
             // The estimated base intensity is then the average scaling required to get the expected
             // intensity to match the observed intensity.
-            for (size_t encode_i = 0; encode_i < num_encodings; ++encode_i)
+            for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i)
                 est_base_intensity += observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i];
         }
 
-        est_base_intensity /= num_encodings * (argument.size() - 1);
+        est_base_intensity /= (double)(num_nonb0_encodings * (argument.size() - 1));
 
         std::cout << est_base_intensity;
     }
