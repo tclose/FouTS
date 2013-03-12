@@ -111,6 +111,8 @@ EXECUTE {
         // Loads extra parameters to construct Image::Expected::*::Buffer ('exp_' prefix)
         SET_EXPECTED_IMAGE_PARAMETERS
 
+        diff_isotropic = true;
+
         Options opt = get_options("grad");
         if (opt.size())
             grad.load(opt[0][0]);
@@ -131,6 +133,8 @@ EXECUTE {
         MR::DWI::normalise_grad(grad);
         std::vector<int> bzeros, dwis;
         MR::DWI::guess_DW_directions(dwis, bzeros, grad);
+        if (!bzeros.size())
+            throw Exception("No b=0 encodings found in gradient encoding scheme");
         // Get the matrix of non b=0 encoding directions
         Triple<double> vox_lengths(dwi.vox(X), dwi.vox(Y), dwi.vox(Z));
         Triple<size_t> dims(1.0, 1.0, 1.0);
@@ -181,18 +185,28 @@ EXECUTE {
             MR::Image::Voxel<float> vox(dwi);
             size_t loop_dims[4] = {1, 1, 1, all_encodings.rows()};
             MR::DataSet::Subset<MR::Image::Voxel<float> > vox_subset(vox, index, loop_dims);
-            MR::DataSet::Loop loop(3, 4);
+            MR::DataSet::Loop loop(0, 4);
             size_t all_encode_i = 0;
             size_t nonb0_encode_i = 0;
             double b0 = 0.0;
+            double max_value = 0.0;
             for (loop.start(vox_subset); loop.ok(); loop.next(vox_subset)) {
+                double value = (double)vox_subset.value();
+                if (value > max_value)
+                    max_value = value;
+                if (value < 0)
+                    throw Exception("Negative value found in observed image (" + str(value) + "). "
+                                    "NB: The diffusion tensor can not be found for images with no "
+                                    "istropic components");
                 if (std::find(bzeros.begin(), bzeros.end(), all_encode_i) == bzeros.end())
-                    observed[nonb0_encode_i++] = (double)vox_subset.value();
+                    observed[nonb0_encode_i++] = value;
                 else
-                    b0 += (double)vox_subset.value();
+                    b0 += value;
                 ++all_encode_i;
             }
             b0 /= bzeros.size();
+            if (max_value == 0.0)
+                throw Exception("Selected voxel '" + str(ref_index) + "' contains no signal.");
             // Calculate the diffusion tensor from the observed intensities
             MR::Math::Vector<double> observed_log_ratio(num_nonb0_encodings), tensor_vec(6);
             for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i)
@@ -246,8 +260,11 @@ EXECUTE {
             exp_image->expected_image(tcts);
             // The estimated base intensity is then the average scaling required to get the expected
             // intensity to match the observed intensity.
-            for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i)
+            for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i) {
                 est_base_intensity += observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i];
+                std::cout << observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i] << std::endl;
+            }
+
         }
 
         est_base_intensity /= (double)(num_nonb0_encodings * (argument.size() - 1));
