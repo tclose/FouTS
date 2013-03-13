@@ -112,40 +112,25 @@ class FibreTractletPrinter:
         assert prop_index < self.num_props
         address = self.data_ptr + (self.bsize + prop_index) * self.stride
         return address.dereference()
+
 class FibreSectionPrinter:
     "Print Fibre::Strand::Section"
 
     class _iterator:
-        def __init__ (self, section, stride, data):
-            self.field = 'position'
+        def __init__ (self, stride, data_ptr):
             self.stride = stride
-            self.data = data
+            self.data_ptr = data_ptr
 
         def __iter__(self):
-            return self
-
-        def next(self):
-            if self.field == 'end':
-                raise StopIteration
-            elif self.field == 'position':
-                self.field = 'tangent'
-                x = str(self.data_ptr.dereference())
-                y = str((self.data_ptr + self.stride * 1).dereference())
-                z = str((self.data_ptr + self.stride * 2).dereference())
-                return ('position', gdb.Value("[" + x + ", " + y + ", " + z + "]"))
-            elif self.field == 'tangent':
-                self.field = 'intensity'
-                x = str((self.data_ptr + self.stride * 3).dereference())
-                y = str((self.data_ptr + self.stride * 4).dereference())
-                z = str((self.data_ptr + self.stride * 5).dereference())
-                return ('tangent', gdb.Value("[" + x + ", " + y + ", " + z + "]"))
-            elif self.field == 'intensity':
-                self.field = 'end'
-                intensity = (self.data + 6 * self.stride).dereference()
-                return ('intensity', gdb.Value(intensity))
-
-            else:
-                raise StopIteration
+            yield ('position', gdb.Value("[{}, {}, {}]"
+                                         .format(self.data_ptr.dereference(),
+                                                (self.data_ptr + self.stride * 1).dereference(),
+                                                (self.data_ptr + self.stride * 2).dereference())))
+            yield ('tangent', gdb.Value("[{}, {}, {}]"
+                             .format((self.data_ptr + self.stride * 3).dereference(),
+                                    (self.data_ptr + self.stride * 4).dereference(),
+                                    (self.data_ptr + self.stride * 5).dereference())))
+            yield ('intensity', str((self.data_ptr + 6 * self.stride).dereference()))
 
 
     def __init__(self, typename, val):

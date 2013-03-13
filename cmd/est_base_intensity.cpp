@@ -91,28 +91,24 @@ OPTIONS= {
 };
 
 EXECUTE {
-
         if (argument.size() < 2)
             throw Exception(
                     "Found less than two arguments (" + str(argument.size()) + "). The reference"
                     " image and at least one " "single fibre" " index needs to be provided");
-
         MR::Image::Header dwi(argument[0]);
-
         if (dwi.ndim() != 4)
             throw Exception("dwi image should contain 4 dimensions");
-
+        // Set the script defaults
         MR::Math::Matrix<float> grad;
         double fa_threshold = FA_THRESHOLD_DEFAULT;
-
         // Loads parameters to construct Diffusion::Model ('diff_' prefix)
         SET_DIFFUSION_PARAMETERS;
-
         // Loads extra parameters to construct Image::Expected::*::Buffer ('exp_' prefix)
         SET_EXPECTED_IMAGE_PARAMETERS
-
+        // Set the diffusion model to isotropic (overiding the default) because diffusion tensors
+        // only work with isotropic images
         diff_isotropic = true;
-
+        // Supply the DW gradient scheme if required
         Options opt = get_options("grad");
         if (opt.size())
             grad.load(opt[0][0]);
@@ -257,17 +253,16 @@ EXECUTE {
             // to calculate the required base intensity value to match that of the reference.
             tcts.normalise_densities();
             tcts.set_base_intensity(1.0);
+            tcts.save("/home/tclose/Desktop/ref.tct");
             exp_image->expected_image(tcts);
             // The estimated base intensity is then the average scaling required to get the expected
             // intensity to match the observed intensity.
             for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i) {
                 est_base_intensity += observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i];
-                std::cout << observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i] << std::endl;
             }
-
         }
-
+        // Divide the sum of the scaling factor required to scale each
         est_base_intensity /= (double)(num_nonb0_encodings * (argument.size() - 1));
-
+        // Print the estimated intensity for use with other commands
         std::cout << est_base_intensity;
     }

@@ -84,10 +84,12 @@ namespace BTS {
                 void set(const Tractlet& tractlet,
                          const MR::Math::Vector<double>::View& position_coeffs,
                          const MR::Math::Vector<double>::View& tangent_coeffs, double ax1_fraction,
-                         double ax2_fraction, double length_fraction, double width_fraction) {
+                         double ax2_fraction, double length_fraction, double width_fraction,
+                         double intensity_scale) {
                     
                     Strand::Section::set(tractlet.acs(), position_coeffs, tangent_coeffs,
                             length_fraction);
+                    this->intensity() *= intensity_scale;
                     
                     this->ax1_fraction = ax1_fraction;
                     this->ax2_fraction = ax2_fraction;
