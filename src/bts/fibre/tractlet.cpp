@@ -314,16 +314,7 @@ namespace BTS {
             double length_fraction = 1.0 / (double)num_length_sections;
             double width_fraction = 1.0 / (double)num_width_sections;
 
-            size_t num_strands = 0
-            for (double ax1_frac = (-1.0 + width_fraction); ax1_frac < 1.0;
-                    ax1_frac += 2.0 * width_fraction)
-                for (double ax2_frac = (-1.0 + width_fraction); ax2_frac < 1.0;
-                        ax2_frac += 2.0 * width_fraction)
-                    if (MR::Math::pow2(ax1_frac) + MR::Math::pow2(ax2_frac) <= (1.0
-                            - width_fraction / 2.0))
-                        ++num_strands;
-
-            double intensity_scale = 1.0 / (double)num_strands;
+            double intensity_scale = 1.0 / (double)(MR::Math::pow2(num_width_sections));
 
             const MR::Math::Matrix<double>& position_matrix = Strand::position_matrix(
                     num_length_sections, this->degree());

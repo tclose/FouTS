@@ -70,14 +70,14 @@ namespace BTS {
                         const MR::Math::Vector<double>::View& position_coeffs,
                         const MR::Math::Vector<double>::View& tangent_coeffs, double ax1_fraction,
                         double ax2_fraction, double length_fraction, double width_fraction,
-                        size_t init_precalc_size = 0)
+                        double intensity_scale, size_t init_precalc_size = 0)
                         
                         : Strand::Section(init_precalc_size)
 
                 {
                     
                     set(tractlet, position_coeffs, tangent_coeffs, ax1_fraction, ax2_fraction,
-                            length_fraction, width_fraction);
+                            length_fraction, width_fraction, intensity_scale);
                     
                 }
                 
