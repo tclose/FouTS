@@ -30,6 +30,8 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
     error(['''-num_strands'' must be greater than zero (' num2str(num_strands) ').']);  
   end
   
+  %ax_fractions = (-1+width_fraction):(2*width_fraction):(1-width_fraction);
+  
   ax_fractions = (-1+width_fraction):(2*width_fraction):(1-width_fraction);
   
   for tract_i = 1:num_tracts
@@ -44,13 +46,11 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
 
       for ax3_frac = ax_fractions
 
-          
         if (sqrt(ax2_frac^2 + ax3_frac^2) <= 1.0) || oblong
           strand_count = strand_count + 1;
 
           strands{strand_count} = tracts{tract_i, 1} + (tracts{tract_i, 2} * ax2_frac + tracts{tract_i, 3} * ax3_frac) * base_widths(tract_i);
           
-                    
           if highlight_axes
             
             if ax2_frac == 0 && ax3_frac == 0
