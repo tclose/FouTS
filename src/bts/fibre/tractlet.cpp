@@ -283,6 +283,55 @@ namespace BTS {
 
         }
 
+        /*!
+         * Generates a Nx2 matrix containing a set of fractions of tractlet auxiliary axes that
+         * will produce a hexagonal packing of strands/width sections
+         *
+         * @param num_width_sections Number of width_sections/strands that will surround the centre
+         * strand in a hexagonal packing arrangement (i.e. num_width_sections==1 produces a
+         * 7 strand packing with one strand surrounding the central strand along the 6 corners of
+         * the hexagon)
+         * @return
+         */
+        MR::Math::Matrix<double> generate_width_section_fractions(size_t num_width_sections) {
+
+            size_t num_ax2_sections = (size_t)ceil(num_width_sections * 2.0 / SQRT_3);
+
+            // Initially set the size of the fractions matrix to the maximum number it can be
+            MR::Math::Matrix<double> fractions(num_width_sections * num_ax2_sections, 2);
+
+            // Get the spacing between rows of strands
+            double strand_radius = 1.0 / (2.0 * num_width_sections + 1);
+            double ax1_incr = strand_radius * 2.0;
+            double ax2_incr = strand_radius * SQRT_3;
+
+            size_t num_strands = 0;
+            for (size_t ax2_i = 0; ax2_i <= num_ax2_sections; ++ax2_i) {
+                double ax1_offset = (double)(ax2_i % 2) * strand_radius;
+                double ax2_disp = (double)ax2_i * ax2_incr;
+                double ax2_step = (ax2_disp != 0) ? ax2_disp * 2.0 : 1.0;
+                for (double ax2_frac = -ax2_disp; ax2_frac <= ax2_disp; ax2_frac +=ax2_step) {
+                    for (size_t ax1_i = 0; ax1_i <= num_width_sections; ++ax1_i) {
+                        double ax1_disp = (double)ax1_i * ax1_incr;
+                        double ax1_step = (ax1_disp != 0) ? ax1_disp * 2.0 : 1.0;
+                        for (double ax1_frac = -ax1_disp + ax1_offset;
+                                ax1_frac <= ax1_disp + ax1_offset; ax1_frac += ax1_step) {
+                            if ((MR::Math::pow2(ax1_frac) + MR::Math::pow2(ax2_frac)) <=
+                                    (1.0 - strand_radius)) {
+                                fractions(num_strands, 0) = ax1_frac;
+                                fractions(num_strands, 1) = ax2_frac;
+                                ++num_strands;
+                            }
+                        }
+                    }
+                }
+            }
+
+            fractions.resize(num_strands, 2);
+            return fractions;
+
+        }
+
         size_t Tractlet::num_width_strands(size_t num_width_sections) {
 
             size_t num_strands = 0;

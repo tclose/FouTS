@@ -97,6 +97,8 @@ namespace BTS {
                     return num_width_strands(num_width_sections) * num_length_sections;
                 }
                 
+                MR::Math::Matrix<double> generate_width_section_fractions(size_t num_width_sections);
+
                 //Protected member variables.
             protected:
                 
