@@ -290,12 +290,12 @@ namespace BTS {
             size_t num_ax2_sections = (size_t)ceil(num_width_sections * 2.0 / SQRT_3);
             double ax1_incr = sub_strand_radius * 2.0;
             double ax2_incr = sub_strand_radius * SQRT_3;
-            for (size_t ax2_i = 0; ax2_i < num_ax2_sections; ++ax2_i) {
+            for (size_t ax2_i = 0; ax2_i <= num_ax2_sections; ++ax2_i) {
                 double ax1_offset = (double)(ax2_i % 2) * sub_strand_radius;
                 double ax2_disp = (double)ax2_i * ax2_incr;
                 double ax2_step = (ax2_disp != 0) ? ax2_disp * 2.0 : 1.0;
                 for (double ax2_frac = -ax2_disp; ax2_frac <= ax2_disp; ax2_frac +=ax2_step) {
-                    for (size_t ax1_i = 0; ax1_i < num_width_sections; ++ax1_i) {
+                    for (size_t ax1_i = 0; ax1_i <= num_width_sections; ++ax1_i) {
                         double ax1_disp = (double)ax1_i * ax1_incr;
                         double ax1_step = (ax1_disp != 0) ? ax1_disp * 2.0 : 1.0;
                         for (double ax1_frac = -ax1_disp + ax1_offset; ax1_frac <= ax1_disp + ax1_offset; ax1_frac += ax1_step) {
@@ -343,12 +343,12 @@ namespace BTS {
             size_t num_ax2_sections = (size_t)ceil(num_width_sections * 2.0 / SQRT_3);
             double ax1_incr = sub_strand_radius * 2.0;
             double ax2_incr = sub_strand_radius * SQRT_3;
-            for (size_t ax2_i = 0; ax2_i < num_ax2_sections; ++ax2_i) {
+            for (size_t ax2_i = 0; ax2_i <= num_ax2_sections; ++ax2_i) {
                 double ax1_offset = (double)(ax2_i % 2) * sub_strand_radius;
                 double ax2_disp = (double)ax2_i * ax2_incr;
                 double ax2_step = (ax2_disp != 0) ? ax2_disp * 2.0 : 1.0;
                 for (double ax2_frac = -ax2_disp; ax2_frac <= ax2_disp; ax2_frac += ax2_step) {
-                    for (size_t ax1_i = 0; ax1_i < num_width_sections; ++ax1_i) {
+                    for (size_t ax1_i = 0; ax1_i <= num_width_sections; ++ax1_i) {
                         double ax1_disp = (double)ax1_i * ax1_incr;
                         double ax1_step = (ax1_disp != 0) ? ax1_disp * 2.0 : 1.0;
                         for (double ax1_frac = -ax1_disp + ax1_offset; ax1_frac <= ax1_disp + ax1_offset; ax1_frac += ax1_step) {
@@ -361,13 +361,13 @@ namespace BTS {
                                     ++section_count;
                                 }
                                 debug_num_strands++;
-                                std::cout << "(" << ax1_frac << "," << ax2_frac << ")" << std::endl;
+                                std::cout << std::setprecision(5) << ax1_frac << "," << ax2_frac << std::endl;
                             }
                         }
                     }
                 }
             }
-            std::cout << debug_num_strands << std::endl;
+            std::cout << debug_num_strands << "=" << num_width_strands(num_width_sections) << std::endl;
 
 //            size_t section_count = 0;
 //            //Loop over length of tractlet.
