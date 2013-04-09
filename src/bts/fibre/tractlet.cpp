@@ -293,12 +293,12 @@ namespace BTS {
          * the hexagon)
          * @return
          */
-        MR::Math::Matrix<double> generate_width_section_fractions(size_t num_width_sections) {
+        MR::Math::Matrix<double> Tractlet::width_section_matrix(size_t num_width_sections) {
 
             size_t num_ax2_sections = (size_t)ceil(num_width_sections * 2.0 / SQRT_3);
 
             // Initially set the size of the fractions matrix to the maximum number it can be
-            MR::Math::Matrix<double> fractions(num_width_sections * num_ax2_sections, 2);
+            MR::Math::Matrix<double> fractions(4 * (num_width_sections + 1) * (num_ax2_sections + 1), 2);
 
             // Get the spacing between rows of strands
             double strand_radius = 1.0 / (2.0 * num_width_sections + 1);
@@ -334,30 +334,7 @@ namespace BTS {
 
         size_t Tractlet::num_width_strands(size_t num_width_sections) {
 
-            size_t num_strands = 0;
-            double sub_strand_radius = 1.0 / (2.0 * num_width_sections + 1);
-            size_t num_ax2_sections = (size_t)ceil(num_width_sections * 2.0 / SQRT_3);
-            double ax1_incr = sub_strand_radius * 2.0;
-            double ax2_incr = sub_strand_radius * SQRT_3;
-            for (size_t ax2_i = 0; ax2_i <= num_ax2_sections; ++ax2_i) {
-                double ax1_offset = (double)(ax2_i % 2) * sub_strand_radius;
-                double ax2_disp = (double)ax2_i * ax2_incr;
-                double ax2_step = (ax2_disp != 0) ? ax2_disp * 2.0 : 1.0;
-                for (double ax2_frac = -ax2_disp; ax2_frac <= ax2_disp; ax2_frac +=ax2_step) {
-                    for (size_t ax1_i = 0; ax1_i <= num_width_sections; ++ax1_i) {
-                        double ax1_disp = (double)ax1_i * ax1_incr;
-                        double ax1_step = (ax1_disp != 0) ? ax1_disp * 2.0 : 1.0;
-                        for (double ax1_frac = -ax1_disp + ax1_offset; ax1_frac <= ax1_disp + ax1_offset; ax1_frac += ax1_step) {
-                            if ((MR::Math::pow2(ax1_frac) + MR::Math::pow2(ax2_frac)) <= (1.0 - sub_strand_radius)) {
-                                ++num_strands;
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            return num_strands;
+            return width_section_matrix(num_width_sections).rows();
 
         }
 
@@ -368,11 +345,10 @@ namespace BTS {
                                                            const Triple<double>& offsets,
                                                            size_t num_encodings) const {
 
-            sections.resize(total_num_sections(num_length_sections, num_width_sections),
-                    Tractlet::Section(num_encodings));
+            MR::Math::Matrix<double> width_fractions = width_section_matrix(num_width_sections);
 
-//            sections.reserve(num_length_sections * num_width_sections *
-//                    (num_width_sections * 2.0 * SQRT_3));
+            sections.resize(width_fractions.rows() * num_length_sections,
+                    Tractlet::Section(num_encodings));
 
             double length_fraction = 1.0 / (double)num_length_sections;
             double width_fraction = 1.0 / (double)num_width_sections;
@@ -384,73 +360,18 @@ namespace BTS {
             const MR::Math::Matrix<double>& tangent_matrix = Strand::tangent_matrix(
                     num_length_sections, this->degree());
 
-            // The following fairly complicated looping structure produces a hexagonal packing
-            // within the radius of the tractlet.
             size_t section_count = 0;
-            size_t debug_num_strands = 0;
-            double sub_strand_radius = 1.0 / (2.0 * num_width_sections + 1);
-            size_t num_ax2_sections = (size_t)ceil(num_width_sections * 2.0 / SQRT_3);
-            double ax1_incr = sub_strand_radius * 2.0;
-            double ax2_incr = sub_strand_radius * SQRT_3;
-            for (size_t ax2_i = 0; ax2_i <= num_ax2_sections; ++ax2_i) {
-                double ax1_offset = (double)(ax2_i % 2) * sub_strand_radius;
-                double ax2_disp = (double)ax2_i * ax2_incr;
-                double ax2_step = (ax2_disp != 0) ? ax2_disp * 2.0 : 1.0;
-                for (double ax2_frac = -ax2_disp; ax2_frac <= ax2_disp; ax2_frac += ax2_step) {
-                    for (size_t ax1_i = 0; ax1_i <= num_width_sections; ++ax1_i) {
-                        double ax1_disp = (double)ax1_i * ax1_incr;
-                        double ax1_step = (ax1_disp != 0) ? ax1_disp * 2.0 : 1.0;
-                        for (double ax1_frac = -ax1_disp + ax1_offset; ax1_frac <= ax1_disp + ax1_offset; ax1_frac += ax1_step) {
-                            if ((MR::Math::pow2(ax1_frac) + MR::Math::pow2(ax2_frac)) <= (1.0 - sub_strand_radius)) {
-                                for (size_t section_i = 0; section_i < num_length_sections; section_i++) {
-                                    sections[section_count].set(*this, position_matrix.row(section_i),
-                                            tangent_matrix.row(section_i), ax1_frac, ax2_frac,
-                                            length_fraction, width_fraction, intensity_scale);
-                                    sections[section_count].normalize(vox_lengths, offsets);
-                                    ++section_count;
-                                }
-                                debug_num_strands++;
-                                std::cout << std::setprecision(5) << ax1_frac << "," << ax2_frac << std::endl;
-                            }
-                        }
-                    }
+            for (size_t width_i = 0; width_i < width_fractions.rows(); ++width_i) {
+                for (size_t section_i = 0; section_i < num_length_sections; section_i++) {
+                    sections[section_count].set(*this, position_matrix.row(section_i),
+                                                tangent_matrix.row(section_i),
+                                                width_fractions(width_i, 0),
+                                                width_fractions(width_i, 1),
+                                                length_fraction, width_fraction, intensity_scale);
+                    sections[section_count].normalize(vox_lengths, offsets);
+                    ++section_count;
                 }
             }
-            std::cout << debug_num_strands << "=" << num_width_strands(num_width_sections) << std::endl;
-
-//            size_t section_count = 0;
-//            //Loop over length of tractlet.
-//            for (size_t section_i = 0; section_i < num_length_sections; section_i++) {
-//
-//                // Loop across cross-section of tractlet. Loop each perturbation axis from a 'width_fraction' from -1 to a width_fraction
-//                // from +1, in intervals of 2*width_fraction's. It is performed this way because each section is to represent the
-//                // tractlet +- a width fraction in both directions about its centre ('position').
-//                for (double ax1_frac = (-1.0 + width_fraction); ax1_frac < 1.0;
-//                        ax1_frac += 2.0 * width_fraction) {
-//
-//                    for (double ax2_frac = (-1.0 + width_fraction); ax2_frac < 1.0;
-//                            ax2_frac += 2.0 * width_fraction) {
-//
-//                        // Include section if the "coordinate" consisting of the combined fractions along each perturbation axes lies
-//                        // withinness the unit circle minus a half a width_fraction. This will give the resulting cross-sections an
-//                        // elliptical shape (or circular if axes are equal).
-//                        if (MR::Math::pow2(ax1_frac) + MR::Math::pow2(ax2_frac) <= (1.0
-//                                - width_fraction / 2.0)) {
-//
-//                            sections[section_count].set(*this, position_matrix.row(section_i),
-//                                    tangent_matrix.row(section_i), ax1_frac, ax2_frac,
-//                                    length_fraction, width_fraction, intensity_scale);
-//                            sections[section_count].normalize(vox_lengths, offsets);
-//
-//                            ++section_count;
-//
-//                        }
-//
-//                    }
-//
-//                }
-//
-//            }
 
             return sections;
 
