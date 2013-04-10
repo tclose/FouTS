@@ -301,6 +301,13 @@ mv {work_dir}/tmp.tctx {work_dir}/output/init.tctx
 normalise_density {work_dir}/output/init.tct
 
 """.format(work_dir=work_dir, args=args)
+        
+        cmd_line += \
+"""
+# Estimate base_intensity from seed locations
+est_base_intensity {dataset_path} {seeds} > {work_dir}/output/est_base_intensity.txt
+""".format(dataset_path=dataset_path, work_dir=work_dir,
+           seeds='"' + '", "'.join([' '.join(l) for l in args.init_locations]) + '"')
 
         cmd_line += \
 """ 
@@ -328,7 +335,8 @@ metropolis {dataset_path} {work_dir}/output/init.tct \
 -prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 \
 -exp_num_length_sections `cat {work_dir}/num_samples.length.txt` \
 -exp_num_width_sections `cat {work_dir}/num_samples.width.txt` \
--exp_type {args.interp_type} {response_str} -exp_b0 `cat {b0_path}` \
+-exp_type {args.interp_type} {response_str} \
+-exp_base_intensity `cat {work_dir}/output/est_base_intensity.txt` \
 -diff_warn -walk_step_location \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 
