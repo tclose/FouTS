@@ -217,8 +217,8 @@ EXECUTE {
         
         Fibre::Strand::Set strands(input_location, strands_per_acs);
         
-        if (exp_b0)
-            strands.set_base_intensity(exp_image.get_base_intensity(exp_b0));
+        if (exp_base_intensity)
+            strands.set_base_intensity(exp_base_intensity);
         
         strands.save("/home/tclose/data/input_strands.str");
         

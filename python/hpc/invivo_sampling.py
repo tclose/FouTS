@@ -328,7 +328,7 @@ metropolis {dataset_path} {work_dir}/output/init.tct \
 -prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 \
 -exp_num_length_sections `cat {work_dir}/num_samples.length.txt` \
 -exp_num_width_sections `cat {work_dir}/num_samples.width.txt` \
--exp_type {args.interp_type} {response_str} -exp_b0 `cat {b0_path}` \
+-exp_type {args.interp_type} {response_str} -exp_base_intensity `cat {b0_path}` \
 -diff_warn -walk_step_location \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 

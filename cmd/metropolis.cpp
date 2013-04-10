@@ -261,12 +261,6 @@ EXECUTE {
                 diffusion_model, exp_num_length_sections, exp_num_width_sections, exp_interp_extent,
                 exp_enforce_bounds, exp_half_width);
         
-        //----------------------------------------------------------------//
-        // Auto-generate base acs initial value/b_intens_gauss_mean //
-        //----------------------------------------------------------------//
-        
-        double base_intensity = exp_image->get_base_intensity(exp_b0);
-        
         //-----------------------//
         // Initialize Likelihood //
         //-----------------------//
@@ -339,8 +333,8 @@ EXECUTE {
             
             Fibre::Strand::Set strands(initial_location);
             
-            if (base_intensity)
-                strands.set_base_intensity(base_intensity);
+            if (exp_base_intensity)
+                strands.set_base_intensity(exp_base_intensity);
             
             //---------------------//
             // Initialize Proposer //
@@ -389,8 +383,8 @@ EXECUTE {
             
             Fibre::Tractlet::Set tractlets(initial_location);
             
-            if (base_intensity)
-                tractlets.set_base_intensity(base_intensity);
+            if (exp_base_intensity)
+                tractlets.set_base_intensity(exp_base_intensity);
             
             //---------------------//
             // Initialize Proposer //
