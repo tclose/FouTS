@@ -28,7 +28,7 @@ namespace BTS {
     const size_t BTS_MAJOR_VERSION = 0;
     const size_t BTS_MINOR_VERSION = 0;
     const size_t BTS_MICRO_VERSION = 3;
-    const size_t BTS_NANO_VERSION = 23;
+    const size_t BTS_NANO_VERSION = 24;
     
     inline std::string version_number_string() {
         return str(BTS_MAJOR_VERSION) + "." + str(BTS_MINOR_VERSION) + "." + str(BTS_MICRO_VERSION)
