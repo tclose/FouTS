@@ -110,8 +110,8 @@ namespace BTS {
   Option ("exp_half_width", "'Variance' of the kernel that will be used to interpolate the signal from the tractlets when using the Gaussian type kernel.") \
    + Argument ("exp_half_width", "").type_float (SMALL_FLOAT, Image::Expected::Buffer::HALF_WIDTH_DEFAULT, LARGE_FLOAT), \
 \
-  Option ("exp_b0", "The reference b0 for a \"full\" voxel with unity density. This is used to set the base intensity of the strands. If set to zero (the default) the existing base_intensity of the strands will be used instead.") \
-   + Argument ("exp_b0", "").type_float (0.0, 0.0, LARGE_FLOAT), \
+  Option ("exp_base_intensity", "The reference b0 for a \"full\" voxel with unity density. This is used to set the base intensity of the strands. If set to zero (the default) the existing base_intensity of the strands will be used instead.") \
+   + Argument ("exp_base_intensity", "").type_float (0.0, 0.0, LARGE_FLOAT), \
 \
   Option ("exp_untie_width_intensity", "When not set, intensity will be coupled to the average cross-sectional area of the tract.")
 
@@ -124,7 +124,7 @@ namespace BTS {
   double        exp_interp_extent       = Image::Expected::Buffer::INTERP_EXTENT_DEFAULT; \
   bool          exp_enforce_bounds      = Image::Expected::Buffer::ENFORCE_BOUNDS_DEFAULT; \
   double        exp_half_width          = Image::Expected::Buffer::HALF_WIDTH_DEFAULT; \
-  double        exp_b0                  = 0.0; \
+  double        exp_base_intensity      = 0.0; \
 \
   Options exp_opt = get_options("exp_num_length_sections"); \
   if (exp_opt.size()) \
@@ -150,9 +150,9 @@ exp_opt = get_options("exp_num_width_sections"); \
   if (exp_opt.size()) \
     exp_half_width = exp_opt[0][0]; \
 \
-  exp_opt = get_options("exp_b0"); \
+  exp_opt = get_options("exp_base_intensity"); \
   if (exp_opt.size()) \
-    exp_b0 = exp_opt[0][0]; \
+    exp_base_intensity = exp_opt[0][0]; \
 \
 
 //Adds the parameters to the properties to be saved with the data.
@@ -162,7 +162,7 @@ exp_opt = get_options("exp_num_width_sections"); \
   properties["exp_interp_extent"]          = str(exp_interp_extent); \
   properties["exp_enforce_bounds"]         = str(exp_enforce_bounds); \
   properties["exp_type"]                   = exp_type; \
-  properties["exp_b0"]         = str(exp_b0); \
+  properties["exp_base_intensity"]         = str(exp_base_intensity); \
   if (exp_type == "gaussian") { \
     properties["exp_half_width"]       = exp_half_width; \
   } \

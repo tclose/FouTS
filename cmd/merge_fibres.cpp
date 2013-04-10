@@ -217,10 +217,10 @@ EXECUTE {
         
         Fibre::Strand::Set strands(input_location, strands_per_acs);
         
-        if (exp_b0)
-            strands.set_base_intensity(exp_image.get_base_intensity(exp_b0));
+        if (exp_base_intensity)
+            strands.set_base_intensity(exp_base_intensity);
         
-        strands.save("/home/tclose/data/input_strands.str");
+//        strands.save("/home/tclose/data/input_strands.str");
         
         if ((num_tractlets == 0) && strands.has_extend_prop(
                     Fibre::Strand::Set::ORIGINAL_NUM_TRACTLETS_PROP))
@@ -229,8 +229,8 @@ EXECUTE {
         
         exp_image.expected_image(strands);
         
-        obs_image.save("/home/tclose/data/orig_observed.mif");
-        exp_image.save("/home/tclose/data/orig_expected.mif");
+//        obs_image.save("/home/tclose/data/orig_observed.mif");
+//        exp_image.save("/home/tclose/data/orig_expected.mif");
         
         double orig_like = likelihood->log_prob(strands);
         
@@ -356,7 +356,7 @@ EXECUTE {
         double improvement = likelihood->log_prob(merged) + prior.log_prob(merged)
                 - likelihood->log_prob(strands) - prior.log_prob(strands);
         
-        merged.save("/home/tclose/data/merged.str");
+//        merged.save("/home/tclose/data/merged.str");
         
 //    if (improvement > 0) {
         merged.save(output_location, 0, num_tractlets);

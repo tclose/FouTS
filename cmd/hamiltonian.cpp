@@ -249,12 +249,6 @@ EXECUTE {
                 diffusion_model, exp_num_length_sections, exp_num_width_sections, exp_interp_extent,
                 exp_enforce_bounds, exp_half_width);
         
-        //----------------------------------------------------------------//
-        // Auto-generate base intensity initial value/b_intens_gauss_mean //
-        //----------------------------------------------------------------//
-        
-        double base_intensity = exp_image->get_base_intensity(exp_b0);
-        
         //-----------------------//
         // Initialize Likelihood //
         //-----------------------//
@@ -271,10 +265,6 @@ EXECUTE {
         
         MCMC::Proposal::Distribution* proposal_distribution = MCMC::Proposal::Distribution::factory(
                 prop_distr_type, rand_gen);
-        
-//  Proposal::Intensity* intensity_proposer = Proposal::Intensity::factory(prop_intens_type, proposal_distribution, prop_intens_scale);
-//
-//  Proposal::BaseIntensity* base_intensity_proposer = Proposal::BaseIntensity::factory(prop_base_intens_type, proposal_distribution, prop_base_intens_scale);
         
         //-------------------------//
         //  Set Output Properties  //
@@ -330,8 +320,8 @@ EXECUTE {
             
             Fibre::Strand::Set strands(initial_location);
             
-            if (base_intensity)
-                strands.set_base_intensity(base_intensity);
+            if (exp_base_intensity)
+                strands.set_base_intensity(exp_base_intensity);
             
             //---------------------//
             // Initialize Momentum //
@@ -378,8 +368,8 @@ EXECUTE {
             
             Fibre::Tractlet::Set tractlets(initial_location);
             
-            if (base_intensity)
-                tractlets.set_base_intensity(base_intensity);
+            if (exp_base_intensity)
+                tractlets.set_base_intensity(exp_base_intensity);
             
             //---------------------//
             // Initialize Proposer //
