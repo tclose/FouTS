@@ -31,13 +31,12 @@
 #include "phantom/shared/segment.h"
 
 typedef struct _segment_register {
-
-	Segment *segment;
-	struct _segment_register *next;
-	struct _segment_register *prev;
-
+        
+        Segment *segment;
+        struct _segment_register *next;
+        struct _segment_register *prev;
+        
 } Segment_register;
-
 
 Segment_register* segment_register_alloc(Segment *segment);
 

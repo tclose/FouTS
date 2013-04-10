@@ -29,15 +29,15 @@
 
 #include "phantom/shared/control_point.h"
 
-
 void set_control_point(Control_point *control_point, double *pos, double *grad) {
-	
-	control_point->pos = pos;
-	control_point->grad = grad;
-	
+    
+    control_point->pos = pos;
+    control_point->grad = grad;
+    
 }
 
-
 void print_control_point(Control_point *control_point, char indent[]) {
-	 printf("%sCoord [%g,%g,%g], Grad [%g,%g,%g]\n", indent, control_point->pos[0], control_point->pos[1], control_point->pos[2], control_point->grad[0], control_point->grad[1], control_point->grad[2]);
- }
+    printf("%sCoord [%g,%g,%g], Grad [%g,%g,%g]\n", indent, control_point->pos[0],
+            control_point->pos[1], control_point->pos[2], control_point->grad[0],
+            control_point->grad[1], control_point->grad[2]);
+}

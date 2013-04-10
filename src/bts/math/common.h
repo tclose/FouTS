@@ -32,64 +32,64 @@ extern "C" {
 #include "math/matrix.h"
 
 namespace BTS {
-
-  namespace Math {
-
-    inline int sign(double x) {
-      return (x > 0) - (x < 0);
+    
+    namespace Math {
+        
+        inline int sign(double x) {
+            return (x > 0) - (x < 0);
+        }
+        
+        template<typename T> MR::Math::Matrix<T> outer(const MR::Math::Vector<T>& v1,
+                                                       const MR::Math::Vector<T>& v2) {
+            
+            MR::Math::Matrix<T> answer(v1.size(), v2.size());
+            
+            for (size_t row_i = 0; row_i < v1.size(); row_i++)
+                for (size_t col_i = 0; col_i < v2.size(); col_i++)
+                    answer(row_i, col_i) = v1[row_i] * v2[col_i];
+            
+            return answer;
+            
+        }
+        
+        inline MR::Math::Matrix<double> operator*(const MR::Math::Matrix<double>& matrix,
+                                                  double scalar) {
+            
+            MR::Math::Matrix<double> answer(matrix);
+            
+            return answer *= scalar;
+            
+        }
+        
+        inline MR::Math::Matrix<double> operator*(double scalar,
+                                                  const MR::Math::Matrix<double>& matrix) {
+            
+            return matrix * scalar;
+            
+        }
+        
+        MR::Math::Matrix<double> random_rotation(gsl_rng* rand_gen, size_t ndims);
+        
+        std::vector<bool> binary_string(size_t size, size_t i);
+        
+        /*! Returns a single-line string representation of a MRtrix vector in a
+         *  format readable by the MATLAB software package.
+         *
+         */
+        std::string matlab_str(const MR::Math::Vector<double>& v);
+        
+        /*! Returns a single-line string representation of a MRtrix matrix in a
+         *  format readable by the MATLAB software package.
+         *
+         */
+        std::string matlab_str(const MR::Math::Matrix<double>& m);
+        
+        //! returns the trace of the matrix.
+        double trace(const MR::Math::Matrix<double>& m);
+        
+        double median(const std::vector<double>& vector);
+    
     }
-
-    template<typename T> MR::Math::Matrix<T> outer(
-        const MR::Math::Vector<T>& v1, const MR::Math::Vector<T>& v2) {
-
-      MR::Math::Matrix<T> answer(v1.size(), v2.size());
-
-      for (size_t row_i = 0; row_i < v1.size(); row_i++)
-        for (size_t col_i = 0; col_i < v2.size(); col_i++)
-          answer(row_i, col_i) = v1[row_i] * v2[col_i];
-
-      return answer;
-
-    }
-
-    inline MR::Math::Matrix<double> operator*(
-        const MR::Math::Matrix<double>& matrix, double scalar) {
-
-      MR::Math::Matrix<double> answer(matrix);
-
-      return answer *= scalar;
-
-    }
-
-    inline MR::Math::Matrix<double> operator*(double scalar,
-        const MR::Math::Matrix<double>& matrix) {
-
-      return matrix * scalar;
-
-    }
-
-    MR::Math::Matrix<double> random_rotation(gsl_rng* rand_gen, size_t ndims);
-
-    std::vector<bool> binary_string(size_t size, size_t i);
-
-    /*! Returns a single-line string representation of a MRtrix vector in a
-     *  format readable by the MATLAB software package.
-     *
-     */
-    std::string matlab_str(const MR::Math::Vector<double>& v);
-
-    /*! Returns a single-line string representation of a MRtrix matrix in a
-     *  format readable by the MATLAB software package.
-     *
-     */
-    std::string matlab_str(const MR::Math::Matrix<double>& m);
-
-    //! returns the trace of the matrix.
-    double trace(const MR::Math::Matrix<double>& m);
-
-    double median(const std::vector<double>& vector);
-
-  }
 
 }
 

@@ -20,7 +20,6 @@
 
  */
 
-
 #ifndef __bts_prob_testpeaks_peak__
 #define __bts_prob_testpeaks_peak__
 
@@ -28,75 +27,83 @@
 #include "bts/mcmc/state/tensor.h"
 
 namespace BTS {
-
-  namespace Prob {
-
-    namespace Test {
-
-      class Landscape::Peak {
-
-        public:
-
-          class Gaussian;
-          class Pyramid;
-          class Quartic;
-
-        public:
+    
+    namespace Prob {
         
-          const static size_t GAUSSIAN = 0;
-          const static size_t PYRAMID = 1;
+        namespace Test {
+            
+            class Landscape::Peak {
+                    
+                public:
+                    
+                    class Gaussian;
+                    class Pyramid;
+                    class Quartic;
 
-        public:
+                public:
+                    
+                    const static size_t GAUSSIAN = 0;
+                    const static size_t PYRAMID = 1;
 
-          class Reader;
-          class Writer;
+                public:
+                    
+                    class Reader;
+                    class Writer;
 
-        friend class Reader;
-        friend class Writer;
+                    friend class Reader;
+                    friend class Writer;
 
-        protected:
+                protected:
+                    
+                    size_t type;
+                    size_t ndims;
+                    double height;
+                    MCMC::State centre;
+                    MCMC::State::Tensor widths;
 
+                public:
+                    
+                    Peak() {
+                    }
+                    
+                    Peak(size_t ndims, const MCMC::State& centre, const MCMC::State::Tensor& widths,
+                         double height, size_t type = GAUSSIAN);
 
-          size_t type;
-          size_t ndims;
-          double height;
-          MCMC::State centre;
-          MCMC::State::Tensor widths;
+                    double log_prob(const MCMC::State& point, MCMC::State& gradient);
 
-        public:
+                    double log_prob(const MCMC::State& point, MCMC::State& gradient,
+                                    MCMC::State::Tensor& hessian);
+
+                    double log_prob(const MCMC::State& point, MCMC::State& gradient,
+                                    MCMC::State::Tensor& hessian,
+                                    std::vector<MCMC::State::Tensor>& rank3_hessian);
+
+                    double gaussian_log_prob(const MCMC::State& point, MCMC::State& gradient) {
+                        MCMC::State::Tensor dummy;
+                        return log_prob(point, gradient, dummy);
+                    }
+                    
+                    double gaussian_log_prob(const MCMC::State& point, MCMC::State& gradient,
+                                             MCMC::State::Tensor& hessian);
+
+                    double gaussian_log_prob(const MCMC::State& point, MCMC::State& gradient,
+                                             MCMC::State::Tensor& hessian,
+                                             std::vector<MCMC::State::Tensor>& rank3_hessian);
+
+                    double pyramid_log_prob(const MCMC::State& point, MCMC::State& gradient);
+
+                    size_t num_dims() const {
+                        return ndims;
+                    }
+                    
+                    friend std::ostream& operator<<(std::ostream& stream, const Peak& peak);
+                    
+            };
         
-          Peak() {}
-        
-          Peak(size_t ndims, const MCMC::State& centre, const MCMC::State::Tensor& widths, double height, size_t type = GAUSSIAN);
-        
-          double             log_prob(const MCMC::State& point, MCMC::State& gradient);
-
-          double             log_prob(const MCMC::State& point, MCMC::State& gradient, MCMC::State::Tensor& hessian);
-
-          double             log_prob(const MCMC::State& point, MCMC::State& gradient, MCMC::State::Tensor& hessian, std::vector<MCMC::State::Tensor>& rank3_hessian);
-
-          double             gaussian_log_prob(const MCMC::State& point, MCMC::State& gradient)
-            { MCMC::State::Tensor dummy; return log_prob(point, gradient, dummy); }
-
-          double             gaussian_log_prob(const MCMC::State& point, MCMC::State& gradient, MCMC::State::Tensor& hessian);
-
-          double             gaussian_log_prob(const MCMC::State& point, MCMC::State& gradient, MCMC::State::Tensor& hessian, std::vector<MCMC::State::Tensor>& rank3_hessian);
-
-          double             pyramid_log_prob(const MCMC::State& point, MCMC::State& gradient);
-
-          size_t               num_dims() const
-            { return ndims; }
-
-
-        friend std::ostream&                   operator<< (std::ostream& stream, const Peak& peak);
-
-      };
-
+        }
+    
     }
 
-  }
-
 }
-
 
 #endif

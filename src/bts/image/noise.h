@@ -1,24 +1,24 @@
 /*
-    Copyright 2008 Brain Research Institute, Melbourne, Australia
+ Copyright 2008 Brain Research Institute, Melbourne, Australia
 
-    Written by Thomas G Close, 14/07/2010.
+ Written by Thomas G Close, 14/07/2010.
 
-    This file is part of MRtrix.
+ This file is part of MRtrix.
 
-    MRtrix is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ MRtrix is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    MRtrix is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ MRtrix is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with MRtrix.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU General Public License
+ along with MRtrix.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
+ */
 
 #ifndef __bts_image_noise_h__
 #define __bts_image_noise_h__
@@ -62,8 +62,6 @@
   if (!isnan(noise_ref_signal)) \
     properties["noise_ref_signal"] = str(noise_ref_signal);
 
-
-
 extern "C" {
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
@@ -73,68 +71,65 @@ extern "C" {
 #include "bts/image/expected/buffer.h"
 
 namespace BTS {
+    
+    namespace Image {
+        
+        class Noise {
+                
+                //Public nested classes and typedefs
+            public:
+                
+                class Gaussian;
+                class Rician;
 
-	namespace Image {
+                //Public static constants
+            public:
+                
+                const static char* TYPE_DEFAULT;
+                const static double SNR_DEFAULT;
 
-		class Noise {
+                //Protected member variables
+            protected:
+                
+                gsl_rng* rand_gen;
+                double snr;
+                double ref_signal;
 
-      //Public nested classes and typedefs
-      public:
-
-	        class Gaussian;
-	        class Rician;
-
-			//Public static constants
-			public:
-
-	      const static char*       TYPE_DEFAULT;
-	      const static double      SNR_DEFAULT;
-
-			//Protected member variables
-			protected:
-
-		    gsl_rng* rand_gen;
-		    double snr;
-		    double ref_signal;
-
-      //Public static member functions
-      public:
-
-		    static Noise*         factory(gsl_rng* rand_gen,
-                                      const std::string& type,
-                                      double snr,
+                //Public static member functions
+            public:
+                
+                static Noise* factory(gsl_rng* rand_gen, const std::string& type, double snr,
                                       double ref_signal);
 
+                //Public member functions
+            public:
+                
+                Noise(gsl_rng* rand_gen, double snr, double ref_signal)
+                        : rand_gen(rand_gen), snr(snr), ref_signal(ref_signal) {
+                }
+                
+                virtual Image::Observed::Buffer& noisify(Image::Observed::Buffer& image) = 0;
 
-			//Public member functions
-			public:
+                virtual Image::Expected::Buffer& noisify(Image::Expected::Buffer& image) = 0;
 
-		    Noise(gsl_rng* rand_gen, double snr, double ref_signal)
-          : rand_gen(rand_gen), snr(snr), ref_signal(ref_signal) {}
-
-
-		    virtual Image::Observed::Buffer&            noisify(Image::Observed::Buffer& image) = 0;
-
-        virtual Image::Expected::Buffer&            noisify(Image::Expected::Buffer& image) = 0;
-
-			protected:
-
-        template <typename T> double                noise_magnitude(T& image) const {
-
-          double signal;
-
-          if (!isnan(ref_signal))
-            signal = ref_signal;
-          else
-            signal = image.max_b0();
-
-          return signal / snr;
-
-        }
-
-		};
-
-	}
+            protected:
+                
+                template<typename T> double noise_magnitude(T& image) const {
+                    
+                    double signal;
+                    
+                    if (!isnan(ref_signal))
+                        signal = ref_signal;
+                    else
+                        signal = image.max_b0();
+                    
+                    return signal / snr;
+                    
+                }
+                
+        };
+    
+    }
 
 }
 

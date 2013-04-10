@@ -20,18 +20,17 @@
  
  */
 
-
 #ifndef __bts_diffusion_response_h__
 #define __bts_diffusion_response_h__
 
 namespace BTS {
-
-  namespace Diffusion {
-  
-    class Response;
     
-  }
-  
+    namespace Diffusion {
+        
+        class Response;
+    
+    }
+
 }
 
 #include "bts/common.h"
@@ -40,19 +39,17 @@ namespace BTS {
 #include "bts/coord.h"
 #include "bts/diffusion/encoding.h"
 
-
 namespace BTS {
-
-  namespace Diffusion {
-  
-    class Response : public Encoding {
-
-      protected:
+    
+    namespace Diffusion {
         
-        MR::Math::Vector<double>   coeffs;
-        size_t index;
+        class Response: public Encoding {
+                
+            protected:
+                
+                MR::Math::Vector<double> coeffs;
+                size_t index;
 
-        
 #ifdef OPTIMISED
 //        // Used to store the weighting and the gradient of the weighting for the current Fibre::Strand::Section
 //        // to save it being recalculated at every voxel it affects.
@@ -61,51 +58,69 @@ namespace BTS {
 //        Triple<double> precalc_gradient;
 //        Coord::Tensor precalc_hessian;
 #endif
+                
+                //NB: b value is incorporated into the response coefficients.
+                
+            public:
+                
+                Response(const MR::Math::Vector<double>::View& encoding_row,
+                         MR::Math::Vector<double>& coeffs, size_t index)
+                        : Encoding(encoding_row), coeffs(coeffs), index(index) {
+                }
+                
+                Response(const Triple<double>& orientation, double b_value,
+                         MR::Math::Vector<double>& coeffs, size_t index)
+                        : Encoding(orientation, b_value), coeffs(coeffs), index(index) {
+                }
+                
+                Response(const Triple<double>& direction, MR::Math::Vector<double>& coeffs,
+                         size_t index)
+                        : Encoding(direction), coeffs(coeffs), index(index) {
+                }
+                
+                Response(const Response& r)
+                        : Encoding(r), coeffs(r.coeffs), index(r.index) {
+                }
+                
+                Response& operator=(const Response& r) {
+                    Encoding::operator=(r);
+                    coeffs = r.coeffs;
+                    index = r.index;
+                    return *this;
+                }
+                
+                double weighting(const Coord& tangent) const;
 
-        //NB: b value is incorporated into the response coefficients.
-        
-      public:
-        
-        Response (const MR::Math::Vector<double>::View& encoding_row, MR::Math::Vector<double>& coeffs, size_t index)
-          : Encoding(encoding_row), coeffs(coeffs), index(index) {}
+                double weighting(const Coord& tangent, Coord& tangent_gradient) const;
 
-        Response (const Triple<double>& orientation, double b_value, MR::Math::Vector<double>& coeffs, size_t index)
-          : Encoding(orientation, b_value), coeffs(coeffs), index(index) {}
-        
-        Response (const Triple<double>& direction, MR::Math::Vector<double>& coeffs, size_t index)
-          : Encoding(direction), coeffs(coeffs), index(index) {}
-
-        Response (const Response& r)
-          : Encoding(r), coeffs(r.coeffs), index(r.index) {}
-        
-        Response&   operator= (const Response& r)
-          { Encoding::operator= (r); coeffs = r.coeffs; index = r.index; return *this; }
-
-        
-        double       weighting (const Coord& tangent) const;
-
-        double       weighting (const Coord& tangent, Coord& tangent_gradient) const;
-
-        double       weighting (const Coord& tangent, Coord& tangent_gradient, Coord::Tensor& tangent_hessian) const;
+                double weighting(const Coord& tangent, Coord& tangent_gradient,
+                                 Coord::Tensor& tangent_hessian) const;
 
 //--------------------------------------------------------------------------------------------------//
 //These functions are only used to get the signature right for the GradientTester::Function classes.
 //--------------------------------------------------------------------------------------------------//
-
-        double       weighting (const Coord& tangent)
-          { const Response& const_this = *this; return const_this.weighting(tangent); }
-
-        double       weighting (const Coord& tangent, Coord& tangent_gradient)
-          { const Response& const_this = *this; return const_this.weighting(tangent, tangent_gradient); }
-
-        double       weighting (const Coord& tangent, Coord& tangent_gradient, Coord::Tensor& tangent_hessian)
-          { const Response& const_this = *this; return const_this.weighting(tangent, tangent_gradient, tangent_hessian); }
+                
+                double weighting(const Coord& tangent) {
+                    const Response& const_this = *this;
+                    return const_this.weighting(tangent);
+                }
+                
+                double weighting(const Coord& tangent, Coord& tangent_gradient) {
+                    const Response& const_this = *this;
+                    return const_this.weighting(tangent, tangent_gradient);
+                }
+                
+                double weighting(const Coord& tangent, Coord& tangent_gradient,
+                                 Coord::Tensor& tangent_hessian) {
+                    const Response& const_this = *this;
+                    return const_this.weighting(tangent, tangent_gradient, tangent_hessian);
+                }
 //--------------------------//
-
-
-        size_t         get_index() const
-          { return index; }
-
+                
+                size_t get_index() const {
+                    return index;
+                }
+                
 #ifdef OPTIMISED
 //        void        precalculate_weighting(const Triple<double>& tangent)
 //          { this->precalc_weighting = weighting(tangent); }
@@ -125,28 +140,23 @@ namespace BTS {
 //
 //        const Coord::Tensor& precalculated_hessian() const
 //          { return precalc_hessian; }
-
+                
 #endif
-
-        void        scale_coeffs(double scalar)
-          { this->coeffs *= scalar; }
-
-
-      
+                
+                void scale_coeffs(double scalar) {
+                    this->coeffs *= scalar;
+                }
+                
+                friend std::ostream& operator<<(std::ostream& stream,
+                                                const Diffusion::Response& response);
+                
+        };
         
-      friend std::ostream& operator<< (std::ostream& stream, const Diffusion::Response& response);
-
-    };
-    
-    
 //    inline
-    std::ostream& operator<< (std::ostream& stream, const Diffusion::Response& response);
+        std::ostream& operator<<(std::ostream& stream, const Diffusion::Response& response);
+    
+    }
 
-
-  }
-  
-  
 }
-
 
 #endif

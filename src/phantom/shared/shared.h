@@ -30,14 +30,12 @@
 
 #define VERSION_NUM "v1.11"
 
-
 #ifdef __MINGW32__
-	#define mkdir(a,b) mkdir(a)
-	#define MY_PERMS 0
+#define mkdir(a,b) mkdir(a)
+#define MY_PERMS 0
 #else
-     #define MY_PERMS (S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)
+#define MY_PERMS (S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)
 #endif
-
 
 #define DIR_SEP '/'
 #define DIR_SEP_S "/"
@@ -86,7 +84,7 @@ double vector_norm(double *v);
 void normalize(double *v);
 
 void cart_to_spher(double spher[3], double cart[3]);
- 
+
 void spher_to_cart(double cart[3], double spher[3]);
 
 int num_decimal_places(int number);
@@ -97,10 +95,11 @@ int copy_parameters(char *src_dirname, char *dest_dirname);
 
 int file_copy(char *src_path, char *dest_dir);
 
-void write_analyze_header(int num_voxels[3], double voxel_size[3], int analyze_data_type, int data_length, char *output_path);
+void write_analyze_header(int num_voxels[3], double voxel_size[3], int analyze_data_type,
+                          int data_length, char *output_path);
 
 void read_analyze_header(int num_voxels[3], double voxel_size[3], char *input_path);
 
-int compare_int (const void *a, const void *b);
+int compare_int(const void *a, const void *b);
 
 #endif

@@ -25,26 +25,24 @@ extern "C" {
 #include <gsl/gsl_randist.h>
 }
 
-
 #include "bts/mcmc/proposal/distribution/gaussian.h"
-
 
 #include "bts/mcmc/inline_functions.h"
 
 namespace BTS {
-
-  namespace MCMC {
-
-    namespace Proposal {
-
-      double         Distribution::Gaussian::sample(double current_state, double scale) {
-
-        return current_state + gsl_ran_gaussian(rand_gen, scale);
-
-      }
-
+    
+    namespace MCMC {
+        
+        namespace Proposal {
+            
+            double Distribution::Gaussian::sample(double current_state, double scale) {
+                
+                return current_state + gsl_ran_gaussian(rand_gen, scale);
+                
+            }
+        
+        }
+    
     }
 
-  }
-  
 }

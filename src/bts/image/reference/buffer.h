@@ -20,22 +20,20 @@
 
  */
 
-
 #ifndef __bts_image_reference_buffer_h__
 #define __bts_image_reference_buffer_h__
 
-
 namespace BTS {
-
-  namespace Image {
-
-    namespace Reference {
-
-      template <typename T> class Buffer;
-
+    
+    namespace Image {
+        
+        namespace Reference {
+            
+            template<typename T> class Buffer;
+        
+        }
+    
     }
-
-  }
 
 }
 
@@ -43,8 +41,6 @@ namespace BTS {
 #include "bts/fibre/tractlet/section.h"
 #include "bts/fibre/tractlet/tensor.h"
 #include "bts/fibre/strand/tensor.h"
-
-
 
 #define LOOP(op) \
 for (size_t z = 0; z < this->dim(Z); z++) { \
@@ -55,18 +51,17 @@ for (size_t z = 0; z < this->dim(Z); z++) { \
   } \
 }
 
-
 namespace BTS {
-
-  namespace Image {
-
-    namespace Reference {
-
-      template <typename T> class Buffer : public Image::Buffer_tpl< std::vector<T*> > {
-
-        public:
-
-          typedef std::map<size_t, Buffer<T> > Set;
+    
+    namespace Image {
+        
+        namespace Reference {
+            
+            template<typename T> class Buffer: public Image::Buffer_tpl<std::vector<T*> > {
+                    
+                public:
+                    
+                    typedef std::map<size_t, Buffer<T> > Set;
 
 //          class Set : public std::map<Index, Buffer<T> > {
 //
@@ -75,39 +70,42 @@ namespace BTS {
 //            ~Set() {};
 //
 //          };
-
-        public:
-
-          Buffer ()
-            : Image::Buffer_tpl< std::vector<T*> >(false) {}
-
-
-          Buffer (const Buffer& B)
-            : Image::Buffer_tpl< std::vector<T*> >(B) {}
-
-
-          ~Buffer () {}
-
-
-          Buffer*                           clone()
-            { return new Buffer(*this); }
-
-
-          Buffer&                           operator= (const Buffer& B)
-            { Image::Buffer_tpl< std::vector<T*> >::operator= (B); return *this; }
-
-
-          void                              clear_references()
-            { for (typename Image::Buffer_tpl< std::vector<T*> >::iterator vox_it = this->begin(); vox_it != this->end(); ++vox_it) vox_it->second.clear(); }
-
-      };
-
+                    
+                public:
+                    
+                    Buffer()
+                            : Image::Buffer_tpl<std::vector<T*> >(false) {
+                    }
+                    
+                    Buffer(const Buffer& B)
+                            : Image::Buffer_tpl<std::vector<T*> >(B) {
+                    }
+                    
+                    ~Buffer() {
+                    }
+                    
+                    Buffer* clone() {
+                        return new Buffer(*this);
+                    }
+                    
+                    Buffer& operator=(const Buffer& B) {
+                        Image::Buffer_tpl<std::vector<T*> >::operator=(B);
+                        return *this;
+                    }
+                    
+                    void clear_references() {
+                        for (typename Image::Buffer_tpl<std::vector<T*> >::iterator vox_it =
+                                this->begin(); vox_it != this->end(); ++vox_it)
+                            vox_it->second.clear();
+                    }
+                    
+            };
+        
+        }
+    
     }
 
-  }
-
 }
-
 
 #undef LOOP
 

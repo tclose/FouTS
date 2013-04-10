@@ -32,18 +32,16 @@
 #include "phantom/mri_sim/overlap_strands.h"
 #include "phantom/shared/isotropic_region.h"
 
-
 typedef struct _subvoxel {
+        
+        double *orientation;
+        double closest_fraction;
+        Segment *closest_segment;
+        Isotropic_region *closest_isotropic_region;
 
-	double *orientation;
-	double closest_fraction;
-	Segment *closest_segment;
-	Isotropic_region *closest_isotropic_region;
-	
-	Overlap_strand *overlap_strands;
-
+        Overlap_strand *overlap_strands;
+        
 } Subvoxel;
-
 
 void init_subvoxel(Subvoxel *subvoxel, double *orientation);
 

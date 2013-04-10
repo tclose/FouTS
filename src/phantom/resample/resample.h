@@ -24,21 +24,23 @@
  *  along with 'Numerical Fibre Generator'.  If not, see <http://www.gnu.org/licenses/>
  *
  */
- 
+
 #ifndef RESAMPLE_H
 #define RESAMPLE_H
 
 #include "phantom/shared/strand_collection.h"
 #include "phantom/shared/strand.h"
 
-
 #define RESAMPLE_LENGTH_DEFAULT 0.02
 #define DOUBLE_BACK_ANGLE_THRESHOLD_DEFAULT 150
 #define FORWARD_ANGLE_THRESHOLD_DEFAULT 80 
- 
-void resample_collection(Strand_collection *old_c, Strand_collection *resample_c, double resample_length, double double_back_angle_threshold, double forward_angle_threshold);
 
-void resample_strand(Strand *old_strand, Strand_collection *resample_c, double resample_length, double double_back_angle_threshold, double forward_angle_threshold); 
+void resample_collection(Strand_collection *old_c, Strand_collection *resample_c,
+                         double resample_length, double double_back_angle_threshold,
+                         double forward_angle_threshold);
+
+void resample_strand(Strand *old_strand, Strand_collection *resample_c, double resample_length,
+                     double double_back_angle_threshold, double forward_angle_threshold);
 
 #endif
 

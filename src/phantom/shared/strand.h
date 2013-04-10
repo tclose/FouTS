@@ -25,40 +25,30 @@
  *
  */
 
-
-
-
-
-
-
 #ifndef _STRAND_H
 #define _STRAND_H
 
-
 typedef struct _strand {
-	
-	int strand_i;
-	int bundle_i;
+        
+        int strand_i;
+        int bundle_i;
 
-	int num_control_points;
-	double radius;	
-	
-	double natural_seg_length;
-	
-	struct _segment *start_segment;
-	struct _segment *end_segment;
-	
-	struct _segment *pre_segment;
-	struct _segment *post_segment;
-	
-	struct _bundle *bundle;
-	
+        int num_control_points;
+        double radius;
+
+        double natural_seg_length;
+
+        struct _segment *start_segment;
+        struct _segment *end_segment;
+
+        struct _segment *pre_segment;
+        struct _segment *post_segment;
+
+        struct _bundle *bundle;
+        
 } Strand;
 
-
-
 #endif
-
 
 #ifndef STRAND_H
 #define STRAND_H
@@ -67,11 +57,13 @@ typedef struct _strand {
 #include "phantom/shared/control_point.h"
 #include "phantom/shared/shared.h"
 
+void init_strand(Strand *strand, int strand_i, int bundle_i, int num_control_points, double radius,
+                 double *start_point, double *end_point);
 
-void init_strand(Strand *strand, int strand_i, int bundle_i, int num_control_points, double radius, double *start_point, double *end_point);
-
-void construct_strand(Strand *strand, int strand_i, int bundle_i, double *control_point, double *start_point, double *end_point, double *pre_point, double *post_point, Segment segments[], int num_strand_control_points, double sample_acs, double strand_r);
-
+void construct_strand(Strand *strand, int strand_i, int bundle_i, double *control_point,
+                      double *start_point, double *end_point, double *pre_point, double *post_point,
+                      Segment segments[], int num_strand_control_points, double sample_acs,
+                      double strand_r);
 
 #endif
 

@@ -23,47 +23,52 @@
 #include "math/math.h"
 #include "bts/prob/prior_component/thinness.h"
 
-
 namespace BTS {
-
-  namespace Prob {
-
-    namespace PriorComponent {
-
-      const double            Thinness::SCALE_DEFAULT     = 0.0; //10
-      const size_t            Thinness::POWER_DEFAULT     = 2;
-      const std::string       Thinness::NAME              = "Thinness";
-
-      double          Thinness::log_prob(const Fibre::Tractlet tract) {
-        if (power != 2)
-          throw Exception("Power can only be 2 at this point");
-        return - scale * MR::Math::pow2(tract(0,1).norm() / tract.acs());
-      }
-
-
-      double          Thinness::log_prob(const Fibre::Tractlet tract, Fibre::Tractlet gradient) {
-        if (power != 2)
-          throw Exception("Power can only be 2 at this point");
-        // If gradient hasn't been initialised, initialise it to the size of the tractlet, otherwise check its degree.
-        if (!gradient.degree()) {
-          gradient = tract;
-          gradient.zero();
-        } else if (gradient.degree() != tract.degree())
-          throw Exception ("Tractlet degree (" + str(tract.degree()) + ") does not match that of the supplied gradient (" +
-                                                                                        str(gradient.degree()) + ").");
-
-        double lprob = -scale * MR::Math::pow2(tract[1].norm() / tract.acs());
-
-        gradient.set_acs(2.0 * scale * MR::Math::pow2(tract(0,1).norm()) / MR::Math::pow3(tract.acs()));
-        gradient(0,1)[X] = -2.0 * scale * tract(0,1)[X] * tract(0,1).norm() / MR::Math::pow2(tract.acs());
-        gradient(0,1)[Y] = -2.0 * scale * tract(0,1)[Y] * tract(0,1).norm() / MR::Math::pow2(tract.acs());
-        gradient(0,1)[Z] = -2.0 * scale * tract(0,1)[Z] * tract(0,1).norm() / MR::Math::pow2(tract.acs());
-
-        return lprob;
-      }
-
+    
+    namespace Prob {
+        
+        namespace PriorComponent {
+            
+            const double Thinness::SCALE_DEFAULT = 0.0;    //10
+            const size_t Thinness::POWER_DEFAULT = 2;
+            const std::string Thinness::NAME = "Thinness";
+            
+            double Thinness::log_prob(const Fibre::Tractlet tract) {
+                if (power != 2)
+                    throw Exception("Power can only be 2 at this point");
+                return -scale * MR::Math::pow2(tract(0, 1).norm() / tract.acs());
+            }
+            
+            double Thinness::log_prob(const Fibre::Tractlet tract, Fibre::Tractlet gradient) {
+                if (power != 2)
+                    throw Exception("Power can only be 2 at this point");
+                // If gradient hasn't been initialised, initialise it to the size of the tractlet, otherwise check its degree.
+                if (!gradient.degree()) {
+                    gradient = tract;
+                    gradient.zero();
+                } else if (gradient.degree() != tract.degree())
+                    throw Exception(
+                            "Tractlet degree (" + str(tract.degree())
+                            + ") does not match that of the supplied gradient ("
+                            + str(gradient.degree()) + ").");
+                
+                double lprob = -scale * MR::Math::pow2(tract[1].norm() / tract.acs());
+                
+                gradient.set_acs(
+                        2.0 * scale * MR::Math::pow2(tract(0, 1).norm()) / MR::Math::pow3(
+                                tract.acs()));
+                gradient(0, 1)[X] = -2.0 * scale * tract(0, 1)[X] * tract(0, 1).norm()
+                        / MR::Math::pow2(tract.acs());
+                gradient(0, 1)[Y] = -2.0 * scale * tract(0, 1)[Y] * tract(0, 1).norm()
+                        / MR::Math::pow2(tract.acs());
+                gradient(0, 1)[Z] = -2.0 * scale * tract(0, 1)[Z] * tract(0, 1).norm()
+                        / MR::Math::pow2(tract.acs());
+                
+                return lprob;
+            }
+        
+        }
+    
     }
-
-  }
 
 }

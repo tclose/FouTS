@@ -32,180 +32,182 @@
 #include "bts/fibre/track.h"
 #include "bts/fibre/track/set.h"
 
-
-
-
 #include "bts/inline_functions.h"
 
 //extern "C" {
 #include "phantom/shared/strand_collection.h"
 //}
 
-
-std::vector<BTS::Triple<double> >& generate_pre_points(BTS::Fibre::Track::Set& tracks, std::vector<BTS::Triple<double> >& pre_points) {
-
-
-  for (size_t tck_i = 0; tck_i < tracks.size(); ++tck_i) {
-
-    BTS::Fibre::Track tck = tracks[tck_i];
-
-    if (tck.size() > 1) {
-      BTS::Triple<double> pre_point = tck[0] - (tck[1] - tck[0]);
-      pre_points.push_back(pre_point);
-    } else {
-      std::cout << "Warning strand " << tck_i << " has been ommitted as it has less than two control points (" << tck.size() << ")" << std::endl;
-    }
-
-  }
-
-  return pre_points;
-
-}
-
-
-std::vector<BTS::Triple<double> >& generate_post_points(BTS::Fibre::Track::Set& tracks, std::vector<BTS::Triple<double> >& post_points) {
-
-  for (size_t tck_i = 0; tck_i < tracks.size(); ++tck_i) {
-
-    BTS::Fibre::Track tck = tracks[tck_i];
-
-    if (tck.size() > 1) {
-      BTS::Triple<double> post_point = tck[tck.size()-1] + (tck[tck.size() - 1] - tck[tck.size() - 2]);
-      post_points.push_back(post_point);
-    } else {
-      std::cout << "Warning strand " << tck_i << " has been ommitted as it has less than two control points (" << tck.size() << ")" << std::endl;
-    }
-
-  }
-
-  return post_points;
-}
-
-
-Strand_collection* convert_mr_to_nfg(Strand_collection* c, BTS::Fibre::Track::Set& tracks, std::vector<BTS::Triple<double> >& pre_points, std::vector<BTS::Triple<double> >& post_points) {
-
-  if (tracks.size() == 0)
-    throw BTS::Exception("Track set supplied to BTSTrix to NFG conversion function does not have any tracks in it.");
-
-  if (!tracks.has_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP))
-      tracks.add_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP, "0.03");
-
-  size_t total_num_control_points = 0;
-
-  for (size_t tck_i = 0; tck_i < tracks.size(); ++tck_i)
-    total_num_control_points += tracks[tck_i].size() - 2;
-
-
-  collection_alloc(c, tracks.size(), total_num_control_points, 0);
-
-  size_t control_point_count = 0;
-
-  for (size_t strand_i = 0; strand_i < tracks.size(); strand_i++) {
-
-    BTS::Fibre::Track tck = tracks[strand_i];
-
-    c->num_strand_control_points[strand_i] = tck.size()-2; //Start and end points are not included.
-
-    c->strand_r[strand_i] = atof(tracks.get_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP, strand_i).c_str());
-
-    size_t bundle_i;
-    if (tracks.has_extend_elem_prop(BTS::Fibre::Track::BUNDLE_INDEX_EPROP))
-      bundle_i = atoi(tracks.get_extend_elem_prop(BTS::Fibre::Track::BUNDLE_INDEX_EPROP, strand_i).c_str());
-    else
-      bundle_i = strand_i;
-
-    c->bundle_i_of_strand[strand_i] = bundle_i;
-
-    pre_points[strand_i].copy_to(&(c->pre_points[strand_i * 3]));
-    post_points[strand_i].copy_to(&(c->post_points[strand_i * 3]));
-
-    tck[0].copy_to(&(c->start_points[strand_i * 3]));
-
-
-    size_t point_i;
-
-    for (point_i = 1; point_i < (tck.size() - 1); point_i++)
-      tck[point_i].copy_to(&(c->control_points[(control_point_count + point_i - 1) * 3]));
-
-
-    tck[point_i].copy_to(&(c->end_points[strand_i * 3]));
-
-
-		construct_strand(&(c->strands[strand_i]), strand_i, bundle_i, &(c->control_points[control_point_count * 3]), &(c->start_points[strand_i * 3]), &(c->end_points[strand_i * 3]), &(c->pre_points[strand_i * 3]), &(c->post_points[strand_i * 3]), &(c->segments[control_point_count + 3 * strand_i]), c->num_strand_control_points[strand_i], 0.0, c->strand_r[strand_i]);
-
-
-    control_point_count += c->num_strand_control_points[strand_i];
-
-  }
-
-
-
-	c->num_bundles = construct_bundles(c->bundles, c->bundle_i_of_strand, c->num_strands, c->strands);
-
-
-
-  return c;
-}
-
-
-BTS::Fibre::Track::Set& convert_nfg_to_mr(BTS::Fibre::Track::Set& tracks, std::vector<BTS::Triple<double> >& pre_points, std::vector<BTS::Triple<double> >& post_points, Strand_collection* c) {
-
-
-  size_t total_num_control_points = 0;
-
-  tracks.clear();
-  pre_points.clear();
-  post_points.clear();
-
-  tracks.add_extend_elem_prop(BTS::Fibre::Track::BUNDLE_INDEX_EPROP, "NaN");
-  tracks.add_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP, "NaN");
-
-
-  for (int strand_i = 0; strand_i < c->num_strands; strand_i++) {
-
-    BTS::Fibre::Track tck;
-
-    pre_points.push_back  (BTS::Triple<double>((double)c->pre_points[strand_i * 3 + X],  (double)c->pre_points[strand_i * 3 + Y],   (double)c->pre_points[strand_i * 3 + Z]  ));
-    post_points.push_back (BTS::Triple<double>((double)c->post_points[strand_i * 3 + X], (double)c->post_points[strand_i * 3 + Y],  (double)c->post_points[strand_i * 3 + Z] ));
-
-    tck.push_back(BTS::Coord((double)c->start_points[strand_i * 3 + X], (double)c->start_points[strand_i * 3 + Y], (double)c->start_points[strand_i * 3 + Z]));
-
-    for (int point_i = 0; point_i < c->num_strand_control_points[strand_i]; point_i++) {
-
-      tck.push_back(BTS::Coord((double)c->control_points[total_num_control_points * 3 + X], (double)c->control_points[total_num_control_points * 3 + Y], (double)c->control_points[total_num_control_points * 3 + Z]));
-
-      total_num_control_points++;
-
-    }
-
-
-    tck.push_back(BTS::Coord((double)c->end_points[strand_i * 3 + X], (double)c->end_points[strand_i * 3 + Y], (double)c->end_points[strand_i * 3 + Z]));
-
-
-    std::map<std::string,std::string> properties_row;
-    properties_row[BTS::Fibre::Track::BUNDLE_INDEX_EPROP] = BTS::str(c->bundle_i_of_strand[strand_i]);
-    properties_row[BTS::Fibre::Track::RADIUS_PROP] =  BTS::str(c->strand_r[strand_i]);
+std::vector<BTS::Triple<double> >& generate_pre_points(
+        BTS::Fibre::Track::Set& tracks, std::vector<BTS::Triple<double> >& pre_points) {
     
-    tracks.push_back(tck, properties_row);
+    for (size_t tck_i = 0; tck_i < tracks.size(); ++tck_i) {
+        
+        BTS::Fibre::Track tck = tracks[tck_i];
+        
+        if (tck.size() > 1) {
+            BTS::Triple<double> pre_point = tck[0] - (tck[1] - tck[0]);
+            pre_points.push_back(pre_point);
+        } else {
+            std::cout << "Warning strand " << tck_i
+                      << " has been ommitted as it has less than two control points (" << tck.size()
+                      << ")" << std::endl;
+        }
+        
+    }
     
-
-  }
-
-
-  return tracks;
-
+    return pre_points;
+    
 }
 
+std::vector<BTS::Triple<double> >& generate_post_points(
+        BTS::Fibre::Track::Set& tracks, std::vector<BTS::Triple<double> >& post_points) {
+    
+    for (size_t tck_i = 0; tck_i < tracks.size(); ++tck_i) {
+        
+        BTS::Fibre::Track tck = tracks[tck_i];
+        
+        if (tck.size() > 1) {
+            BTS::Triple<double> post_point = tck[tck.size() - 1]
+                    + (tck[tck.size() - 1] - tck[tck.size() - 2]);
+            post_points.push_back(post_point);
+        } else {
+            std::cout << "Warning strand " << tck_i
+                      << " has been ommitted as it has less than two control points (" << tck.size()
+                      << ")" << std::endl;
+        }
+        
+    }
+    
+    return post_points;
+}
 
+Strand_collection* convert_mr_to_nfg(Strand_collection* c, BTS::Fibre::Track::Set& tracks,
+                                     std::vector<BTS::Triple<double> >& pre_points,
+                                     std::vector<BTS::Triple<double> >& post_points) {
+    
+    if (tracks.size() == 0)
+        throw BTS::Exception(
+                "Track set supplied to BTSTrix to NFG conversion function does not have any tracks in it.");
+    
+    if (!tracks.has_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP))
+        tracks.add_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP, "0.03");
+    
+    size_t total_num_control_points = 0;
+    
+    for (size_t tck_i = 0; tck_i < tracks.size(); ++tck_i)
+        total_num_control_points += tracks[tck_i].size() - 2;
+    
+    collection_alloc(c, tracks.size(), total_num_control_points, 0);
+    
+    size_t control_point_count = 0;
+    
+    for (size_t strand_i = 0; strand_i < tracks.size(); strand_i++) {
+        
+        BTS::Fibre::Track tck = tracks[strand_i];
+        
+        c->num_strand_control_points[strand_i] = tck.size() - 2;    //Start and end points are not included.
+                
+        c->strand_r[strand_i] = atof(
+                tracks.get_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP, strand_i).c_str());
+        
+        size_t bundle_i;
+        if (tracks.has_extend_elem_prop(BTS::Fibre::Track::BUNDLE_INDEX_EPROP))
+            bundle_i =
+                    atoi(
+                            tracks.get_extend_elem_prop(BTS::Fibre::Track::BUNDLE_INDEX_EPROP,
+                                    strand_i).c_str());
+        else
+            bundle_i = strand_i;
+        
+        c->bundle_i_of_strand[strand_i] = bundle_i;
+        
+        pre_points[strand_i].copy_to(&(c->pre_points[strand_i * 3]));
+        post_points[strand_i].copy_to(&(c->post_points[strand_i * 3]));
+        
+        tck[0].copy_to(&(c->start_points[strand_i * 3]));
+        
+        size_t point_i;
+        
+        for (point_i = 1; point_i < (tck.size() - 1); point_i++)
+            tck[point_i].copy_to(&(c->control_points[(control_point_count + point_i - 1) * 3]));
+        
+        tck[point_i].copy_to(&(c->end_points[strand_i * 3]));
+        
+        construct_strand(&(c->strands[strand_i]), strand_i, bundle_i,
+                &(c->control_points[control_point_count * 3]), &(c->start_points[strand_i * 3]),
+                &(c->end_points[strand_i * 3]), &(c->pre_points[strand_i * 3]),
+                &(c->post_points[strand_i * 3]), &(c->segments[control_point_count + 3 * strand_i]),
+                c->num_strand_control_points[strand_i], 0.0, c->strand_r[strand_i]);
+        
+        control_point_count += c->num_strand_control_points[strand_i];
+        
+    }
+    
+    c->num_bundles = construct_bundles(c->bundles, c->bundle_i_of_strand, c->num_strands,
+            c->strands);
+    
+    return c;
+}
 
-
-
-
-
-
-
-
-
-
-
+BTS::Fibre::Track::Set& convert_nfg_to_mr(BTS::Fibre::Track::Set& tracks,
+                                          std::vector<BTS::Triple<double> >& pre_points,
+                                          std::vector<BTS::Triple<double> >& post_points,
+                                          Strand_collection* c) {
+    
+    size_t total_num_control_points = 0;
+    
+    tracks.clear();
+    pre_points.clear();
+    post_points.clear();
+    
+    tracks.add_extend_elem_prop(BTS::Fibre::Track::BUNDLE_INDEX_EPROP, "NaN");
+    tracks.add_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP, "NaN");
+    
+    for (int strand_i = 0; strand_i < c->num_strands; strand_i++) {
+        
+        BTS::Fibre::Track tck;
+        
+        pre_points.push_back(
+                BTS::Triple<double>((double) c->pre_points[strand_i * 3 + X],
+                        (double) c->pre_points[strand_i * 3 + Y],
+                        (double) c->pre_points[strand_i * 3 + Z]));
+        post_points.push_back(
+                BTS::Triple<double>((double) c->post_points[strand_i * 3 + X],
+                        (double) c->post_points[strand_i * 3 + Y],
+                        (double) c->post_points[strand_i * 3 + Z]));
+        
+        tck.push_back(
+                BTS::Coord((double) c->start_points[strand_i * 3 + X],
+                        (double) c->start_points[strand_i * 3 + Y],
+                        (double) c->start_points[strand_i * 3 + Z]));
+        
+        for (int point_i = 0; point_i < c->num_strand_control_points[strand_i]; point_i++) {
+            
+            tck.push_back(
+                    BTS::Coord((double) c->control_points[total_num_control_points * 3 + X],
+                            (double) c->control_points[total_num_control_points * 3 + Y],
+                            (double) c->control_points[total_num_control_points * 3 + Z]));
+            
+            total_num_control_points++;
+            
+        }
+        
+        tck.push_back(
+                BTS::Coord((double) c->end_points[strand_i * 3 + X],
+                        (double) c->end_points[strand_i * 3 + Y],
+                        (double) c->end_points[strand_i * 3 + Z]));
+        
+        std::map<std::string, std::string> properties_row;
+        properties_row[BTS::Fibre::Track::BUNDLE_INDEX_EPROP] = BTS::str(
+                c->bundle_i_of_strand[strand_i]);
+        properties_row[BTS::Fibre::Track::RADIUS_PROP] = BTS::str(c->strand_r[strand_i]);
+        
+        tracks.push_back(tck, properties_row);
+        
+    }
+    
+    return tracks;
+    
+}
 

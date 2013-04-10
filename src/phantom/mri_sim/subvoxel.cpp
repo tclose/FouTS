@@ -25,76 +25,69 @@
  *
  */
 
-
 #include <stdlib.h>
 
 #include "phantom/mri_sim/subvoxel.h"
 #include "phantom/shared/shared.h"
 
 void init_subvoxel(Subvoxel *subvoxel, double *orientation) {
-		
-	subvoxel->orientation = orientation;
-	
-	subvoxel->orientation[X] = 0.0;
-	subvoxel->orientation[Y] = 0.0;
-	subvoxel->orientation[Z] = 0.0;
-	
-	subvoxel->closest_fraction = 1.0;
-	subvoxel->closest_segment = NULL;
-	subvoxel->closest_isotropic_region = NULL;
-	
-	subvoxel->overlap_strands = NULL;
-	
+    
+    subvoxel->orientation = orientation;
+    
+    subvoxel->orientation[X] = 0.0;
+    subvoxel->orientation[Y] = 0.0;
+    subvoxel->orientation[Z] = 0.0;
+    
+    subvoxel->closest_fraction = 1.0;
+    subvoxel->closest_segment = NULL;
+    subvoxel->closest_isotropic_region = NULL;
+    
+    subvoxel->overlap_strands = NULL;
+    
 }
-
-
 
 void subvoxel_free(Subvoxel *subvoxel) {
-		
-	Overlap_strand *current, *prev;
-
-	current = subvoxel->overlap_strands;
-	
-	while (current != NULL) {
-		prev = current;
-		current = current->next;
-		free(prev);
-	}
-	
+    
+    Overlap_strand *current, *prev;
+    
+    current = subvoxel->overlap_strands;
+    
+    while (current != NULL) {
+        prev = current;
+        current = current->next;
+        free(prev);
+    }
+    
 }
 
-
 void add_orientation(Subvoxel *subvoxel, double orientation[3], double fraction, Segment *segment) {
-	
-	
-	if (fraction <= subvoxel->closest_fraction) {
-	
-		subvoxel->orientation[X] = orientation[X];
-		subvoxel->orientation[Y] = orientation[Y];
-		subvoxel->orientation[Z] = orientation[Z];
-		
-		subvoxel->closest_fraction = fraction;
-		subvoxel->closest_segment = segment;
-		
-	}
-	
-	
-	add_fill_segment(&(subvoxel->overlap_strands), fraction, segment);
-	
+    
+    if (fraction <= subvoxel->closest_fraction) {
+        
+        subvoxel->orientation[X] = orientation[X];
+        subvoxel->orientation[Y] = orientation[Y];
+        subvoxel->orientation[Z] = orientation[Z];
+        
+        subvoxel->closest_fraction = fraction;
+        subvoxel->closest_segment = segment;
+        
+    }
+    
+    add_fill_segment(&(subvoxel->overlap_strands), fraction, segment);
+    
 }
 
 void add_isotropic_region(Subvoxel *subvoxel, double fraction, Isotropic_region *isotropic_region) {
-
-
-	if (fraction <= subvoxel->closest_fraction) {
-	
-		subvoxel->orientation[X] = -99;
-		subvoxel->orientation[Y] = -99;
-		subvoxel->orientation[Z] = -99;
-	
-		subvoxel->closest_fraction = fraction;
-		subvoxel->closest_isotropic_region = isotropic_region;
-	
-	}
-
+    
+    if (fraction <= subvoxel->closest_fraction) {
+        
+        subvoxel->orientation[X] = -99;
+        subvoxel->orientation[Y] = -99;
+        subvoxel->orientation[Z] = -99;
+        
+        subvoxel->closest_fraction = fraction;
+        subvoxel->closest_isotropic_region = isotropic_region;
+        
+    }
+    
 }

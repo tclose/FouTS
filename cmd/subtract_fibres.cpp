@@ -29,147 +29,133 @@
 #include "bts/fibre/tractlet/set.h"
 #include "bts/fibre/track/set.h"
 
-
 #include "bts/inline_functions.h"
 
-
 using namespace BTS;
-
-SET_VERSION_DEFAULT;
-SET_AUTHOR ("Thomas G. Close");
-SET_COPYRIGHT (NULL);
+SET_VERSION_DEFAULT
+;
+SET_AUTHOR("Thomas G. Close");
+SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Trims paths to a sphere of specified radius.",
-  "The sections of paths that lie outside the radius of the sphere are removed and sections that reenter are split into new paths.",
-  NULL
+    "Trims paths to a sphere of specified radius.",
+    "The sections of paths that lie outside the radius of the sphere are removed and sections that reenter are split into new paths.",
+    NULL
 };
 
-ARGUMENTS = {
-  Argument ("input", "The fibres to be subtracted from.").type_file (),
-  Argument ("subtract", "The fibres to subtract.").type_file (),
-  Argument ("output", "The resultant fibres.").optional().type_file(),
-  Argument()
+ARGUMENTS= {
+    Argument ("input", "The fibres to be subtracted from.").type_file (),
+    Argument ("subtract", "The fibres to subtract.").type_file (),
+    Argument ("output", "The resultant fibres.").optional().type_file(),
+    Argument()
 };
 
-
-OPTIONS = {
+OPTIONS= {
 
     Option ("no_acs", "Don't acs in the subtraction."),
 
-
-Option() };
-
-
+    Option()};
 
 EXECUTE {
-
-
-  std::string input_location = argument[0];
-  std::string subtract_location = argument[1];
-  std::string output_location;
-
-  if (argument.size() > 2)
-    output_location = argument[2].c_str();
-  else
-    output_location = input_location;
-
-  if (File::extension(input_location) != File::extension(subtract_location))
-    throw Exception ("Extensions of input files do not match ('" + File::extension(input_location) + "' and '" + File::extension(input_location) + "').");
-
-  
-
-  if (File::has_extension<Fibre::Strand>(input_location)) {
-
-    MR::ProgressBar progress_bar("Subtracting strands...");
-
-    BTS::Fibre::Strand::Set input(input_location);
-    BTS::Fibre::Strand::Set subtract(subtract_location);
-
-    if (input.size() != subtract.size())
-      throw Exception ("Number of points don't match.");
-
-    double base_intensity = input.base_intensity();
-
-    for (size_t tck_i = 0; tck_i < input.size(); tck_i++) {
-
-      if (input[tck_i].degree() != subtract[tck_i].degree())
-        throw Exception ("Degrees don't match.");
-
-      double acs = input[tck_i].acs();
-
-      input[tck_i] -= subtract[tck_i];
-
-      input[tck_i].set_acs(acs);
-
-
+    
+        std::string input_location = argument[0];
+        std::string subtract_location = argument[1];
+        std::string output_location;
+        
+        if (argument.size() > 2)
+            output_location = argument[2].c_str();
+        else
+            output_location = input_location;
+        
+        if (File::extension(input_location) != File::extension(subtract_location))
+            throw Exception(
+                    "Extensions of input files do not match ('" + File::extension(input_location)
+                    + "' and '" + File::extension(input_location) + "').");
+        
+        if (File::has_extension<Fibre::Strand>(input_location)) {
+            
+            MR::ProgressBar progress_bar("Subtracting strands...");
+            
+            BTS::Fibre::Strand::Set input(input_location);
+            BTS::Fibre::Strand::Set subtract(subtract_location);
+            
+            if (input.size() != subtract.size())
+                throw Exception("Number of points don't match.");
+            
+            double base_intensity = input.base_intensity();
+            
+            for (size_t tck_i = 0; tck_i < input.size(); tck_i++) {
+                
+                if (input[tck_i].degree() != subtract[tck_i].degree())
+                    throw Exception("Degrees don't match.");
+                
+                double acs = input[tck_i].acs();
+                
+                input[tck_i] -= subtract[tck_i];
+                
+                input[tck_i].set_acs(acs);
+                
+            }
+            
+            input.set_base_intensity(base_intensity);
+            
+            input.save(output_location);
+            
+        } else if (File::has_extension<Fibre::Tractlet>(input_location)) {
+            
+            MR::ProgressBar progress_bar("Subtracting tractlets...");
+            
+            BTS::Fibre::Tractlet::Set input(input_location);
+            BTS::Fibre::Tractlet::Set subtract(subtract_location);
+            
+            if (input.size() != subtract.size())
+                throw Exception("Number of points don't match.");
+            
+            double base_intensity = input.base_intensity();
+            
+            for (size_t tck_i = 0; tck_i < input.size(); tck_i++) {
+                
+                if (input[tck_i].degree() != subtract[tck_i].degree())
+                    throw Exception("Degrees don't match.");
+                
+                double acs = input[tck_i].acs();
+                
+                input[tck_i] -= subtract[tck_i];
+                
+                input[tck_i].set_acs(acs);
+                
+            }
+            
+            input.set_base_intensity(base_intensity);
+            
+            input.save(output_location);
+            
+        } else if (File::has_extension<Fibre::Track>(input_location)) {
+            
+            MR::ProgressBar progress_bar("Subtracting tracks...");
+            
+            BTS::Fibre::Track::Set input(input_location);
+            BTS::Fibre::Track::Set subtract(subtract_location);
+            
+            double base_intensity = input.base_intensity();
+            
+            if (input.size() != subtract.size())
+                throw Exception("Number of points don't match.");
+            
+            for (size_t tck_i = 0; tck_i < input.size(); tck_i++) {
+                
+                if (input[tck_i].num_points() != subtract[tck_i].num_points())
+                    throw Exception("Number of points don't match.");
+                
+                input[tck_i] -= subtract[tck_i];
+                
+            }
+            
+            input.set_base_intensity(base_intensity);
+            
+            input.save(output_location);
+            
+        } else
+            throw Exception("Unrecognised extension ('" + File::extension(input_location));
+        
     }
-
-    input.set_base_intensity(base_intensity);
-
-    input.save(output_location);
-
-  } else if (File::has_extension<Fibre::Tractlet>(input_location)) {
-
-    MR::ProgressBar progress_bar("Subtracting tractlets...");
-
-    BTS::Fibre::Tractlet::Set input(input_location);
-    BTS::Fibre::Tractlet::Set subtract(subtract_location);
-
-    if (input.size() != subtract.size())
-      throw Exception ("Number of points don't match.");
-
-    double base_intensity = input.base_intensity();
-
-
-    for (size_t tck_i = 0; tck_i < input.size(); tck_i++) {
-
-      if (input[tck_i].degree() != subtract[tck_i].degree())
-        throw Exception ("Degrees don't match.");
-
-      double acs = input[tck_i].acs();
-
-      input[tck_i] -= subtract[tck_i];
-
-      input[tck_i].set_acs(acs);
-
-    }
-
-    input.set_base_intensity(base_intensity);
-
-
-    input.save(output_location);
-
-  } else if (File::has_extension<Fibre::Track>(input_location)) {
-
-    MR::ProgressBar progress_bar("Subtracting tracks...");
-
-    BTS::Fibre::Track::Set input(input_location);
-    BTS::Fibre::Track::Set subtract(subtract_location);
-
-    double base_intensity = input.base_intensity();
-
-
-    if (input.size() != subtract.size())
-      throw Exception ("Number of points don't match.");
-
-    for (size_t tck_i = 0; tck_i < input.size(); tck_i++) {
-
-      if (input[tck_i].num_points() != subtract[tck_i].num_points())
-        throw Exception ("Number of points don't match.");
-
-      input[tck_i] -= subtract[tck_i];
-
-    }
-
-    input.set_base_intensity(base_intensity);
-
-
-    input.save(output_location);
-
-
-  } else
-      throw Exception ("Unrecognised extension ('" + File::extension(input_location));
-  
-
-}

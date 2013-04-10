@@ -27,12 +27,10 @@
 
 #include "phantom/mri_sim/segment_stats.h"
 
-
 void init_segment_stats(Segment_stats *stats, Segment *segment) {
-
-	stats->segment = segment;
-	stats->spatial_extent_gross = 0;
-	stats->spatial_extent_net = 0;
-
-
+    
+    stats->segment = segment;
+    stats->spatial_extent_gross = 0;
+    stats->spatial_extent_net = 0;
+    
 }

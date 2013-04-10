@@ -27,7 +27,6 @@
 
 #include "phantom/shared/strand_collection.h"
 
-
 #define NUM_VOXELS_DEFAULT 40
 #define VOXEL_SIZE_DEFAULT 0.05
 #define POINT_DEPTH_L_BOUND_DEFAULT 3
@@ -41,10 +40,18 @@
 #define NULL_MASK_L_BOUND_DEFAULT 0.94
 #define NULL_MASK_U_BOUND_DEFAULT 1.0
 
-int* draw_rois(Strand_collection *c, int num_voxels, double voxel_size, double extra_point_radius, int point_depth_l_bound, int point_depth_u_bound, double voxel_radial_l_bound, double voxel_radial_u_bound, double inclusion_radius, double null_mask_l_bound, double null_mask_u_bound, int subbundle_mask, int *cumulative_num_strands, int *bundle_is_excluded);
+int* draw_rois(Strand_collection *c, int num_voxels, double voxel_size, double extra_point_radius,
+               int point_depth_l_bound, int point_depth_u_bound, double voxel_radial_l_bound,
+               double voxel_radial_u_bound, double inclusion_radius, double null_mask_l_bound,
+               double null_mask_u_bound, int subbundle_mask, int *cumulative_num_strands,
+               int *bundle_is_excluded);
 
-void add_to_roi(int *masks, double *masks_closest, int num_voxels, double voxel_size, double voxel_radial_l_bound, double voxel_radial_u_bound,  Segment *segment, double extra_point_radius, int mask_value);
+void add_to_roi(int *masks, double *masks_closest, int num_voxels, double voxel_size,
+                double voxel_radial_l_bound, double voxel_radial_u_bound, Segment *segment,
+                double extra_point_radius, int mask_value);
 
-int get_start_roi_id(int bundle_id, int *cumulative_num_strands, int num_strands_in_bundle, int strand_i_in_bundle, int subbundle_mask);
+int get_start_roi_id(int bundle_id, int *cumulative_num_strands, int num_strands_in_bundle,
+                     int strand_i_in_bundle, int subbundle_mask);
 
-int get_end_roi_id(int bundle_id, int *cumulative_num_strands, int num_strands_in_bundle, int strand_i_in_bundle, int subbundle_mask);
+int get_end_roi_id(int bundle_id, int *cumulative_num_strands, int num_strands_in_bundle,
+                   int strand_i_in_bundle, int subbundle_mask);

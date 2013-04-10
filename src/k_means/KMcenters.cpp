@@ -19,27 +19,27 @@
 //----------------------------------------------------------------------
 
 #include "k_means/KMcenters.h"
-    					// standard constructor
+// standard constructor
 KMcenters::KMcenters(int k, KMdata& p)
-    : kCtrs(k), pts(&p) {
+        : kCtrs(k), pts(&p) {
     ctrs = kmAllocPts(kCtrs, p.getDim());
 }
-    					// copy constructor
+// copy constructor
 KMcenters::KMcenters(const KMcenters& s)
-    : kCtrs(s.kCtrs), pts(s.pts) {
+        : kCtrs(s.kCtrs), pts(s.pts) {
     ctrs = kmAllocCopyPts(kCtrs, s.getDim(), s.ctrs);
 }
-    					// assignment operator
+// assignment operator
 KMcenters& KMcenters::operator=(const KMcenters& s) {
     if (this != &s) {			// avoid self assignment (x=x)
-					// size change?
-	if (kCtrs != s.kCtrs || getDim() != s.getDim()) {
-	    kmDeallocPts(ctrs);		// reallocate points
-	    ctrs = kmAllocPts(s.kCtrs, s.getDim());
-	}
-	kCtrs = s.kCtrs;
-	pts = s.pts;
-	kmCopyPts(kCtrs, s.getDim(), s.ctrs, ctrs);
+        // size change?
+        if (kCtrs != s.kCtrs || getDim() != s.getDim()) {
+            kmDeallocPts(ctrs);		// reallocate points
+            ctrs = kmAllocPts(s.kCtrs, s.getDim());
+        }
+        kCtrs = s.kCtrs;
+        pts = s.pts;
+        kmCopyPts(kCtrs, s.getDim(), s.ctrs, ctrs);
     }
     return *this;
 }
@@ -49,13 +49,14 @@ KMcenters::~KMcenters() {		// destructor
 }
 
 void KMcenters::resize(int k) {		// resize array (if needed)
-    if (k == kCtrs) return;
+    if (k == kCtrs)
+        return;
     kCtrs = k;
     kmDeallocPts(ctrs);
     ctrs = kmAllocPts(kCtrs, pts->getDim());
 }
 
 void KMcenters::print(			// print centers
-    bool fancy) {
+        bool fancy) {
     kmPrintPts("Center_Points", ctrs, getK(), fancy);
 }

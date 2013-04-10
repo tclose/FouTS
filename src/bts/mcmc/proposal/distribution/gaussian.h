@@ -20,53 +20,46 @@
 
  */
 
-
 #ifndef __bts_mcmc_proposal_distribution_gaussian_h__
 #define __bts_mcmc_proposal_distribution_gaussian_h__
 
-
 #include "bts/mcmc/proposal/distribution.h"
 
-
 namespace BTS {
-
-  namespace MCMC {
-
-    namespace Proposal {
-
-      class Distribution::Gaussian : public Distribution {
-
-        public:
-
-          Gaussian (gsl_rng* rand_gen)
-           : Distribution(rand_gen) {}
-
-          Gaussian (const Gaussian& g)
-            : Distribution(g) {}
-
-          Gaussian&     operator=(const Gaussian& g)
-            { Distribution::operator=(g); return *this; }
-
-          Gaussian*     clone() const
-            { return new Gaussian(*this); }
-
-          double         sample(double current_state, double scale);
-
-
-      };
-
-    }
     
-  }
-  
+    namespace MCMC {
+        
+        namespace Proposal {
+            
+            class Distribution::Gaussian: public Distribution {
+                    
+                public:
+                    
+                    Gaussian(gsl_rng* rand_gen)
+                            : Distribution(rand_gen) {
+                    }
+                    
+                    Gaussian(const Gaussian& g)
+                            : Distribution(g) {
+                    }
+                    
+                    Gaussian& operator=(const Gaussian& g) {
+                        Distribution::operator=(g);
+                        return *this;
+                    }
+                    
+                    Gaussian* clone() const {
+                        return new Gaussian(*this);
+                    }
+                    
+                    double sample(double current_state, double scale);
+                    
+            };
+        
+        }
+    
+    }
+
 }
-
-
-
-
-
-
-
-
 
 #endif

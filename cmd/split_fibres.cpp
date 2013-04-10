@@ -65,82 +65,96 @@ SET_AUTHOR("Thomas G. Close");
 SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Split Fourier tracts into two to allow them to follow branching structure",
-  "",
-  NULL
+    "Split Fourier tracts into two to allow them to follow branching structure",
+    "",
+    NULL
 };
 
 ARGUMENTS= {
-  Argument ("input", "The strands to be selected from.").type_file (),
-  Argument ("output", "The selected strands.").type_file (),
-  Argument()
+    Argument ("input", "The strands to be selected from.").type_file (),
+    Argument ("output", "The selected strands.").type_file (),
+    Argument()
 };
 
 OPTIONS= {
 
-  Option ("orientation", "The orientation of the plane to split the Fourier tract into.")
-  + Argument ("offsets", "").type_text ("auto"),
+    Option ("orientation", "The orientation of the plane to split the Fourier tract into.")
+    + Argument ("offsets", "").type_text ("auto"),
 
-  Option ("num_strands", "The number of strands to split the tracts into")
-  + Argument ("num_strands", "").type_text ("auto"),
+    Option ("num_strands", "The number of strands to split the tracts into")
+    + Argument ("num_strands", "").type_text ("auto"),
 
-  Option ("include","The indices of the strands to include")
+    Option ("include","The indices of the strands to include")
     + Argument ("include","").type_text(),
 
-  Option()};
+    Option()};
 
 EXECUTE {
-
-    std::string input_location = argument[0];
-    std::string output_location = argument[1];
-
-    Triple<double> orient(1.0, 0.0, 0.0);
-    size_t num_strands = NUM_STRANDS_DEFAULT;
-    std::vector<size_t> include;
-
-    Options opt = get_options("orientation");
-    if (opt.size())
-      orient = parse_triple<double>(std::string(opt[0][0])).normalise();
-
-    opt = get_options("num_strands");
-    if (opt.size())
-      num_strands = opt[0][0];
-
-    opt = get_options("include");
-    if (opt.size())
-      include = parse_sequence<size_t> (opt[0][0]);
-
-    Fibre::Tractlet::Set tracts(input_location);
-    Fibre::Tractlet::Set output_tracts;
-
-    for (size_t tract_i = 0; tract_i < tracts.size(); ++tract_i) {
-
-      if (!include.size() ||
-          std::find(include.begin(), include.end(), tract_i) != include.end()) {
-
-        Fibre::Strand::Set strands = tracts[tract_i].to_strands(num_strands);
-        Fibre::Strand::Set pos, neg;
-
-        Triple<double> centre_midpoint = tracts[tract_i].backbone().midpoint();
-
-        for (size_t strand_i = 0; strand_i < strands.size(); ++strand_i) {
-
-          Triple<double> disp = strands[strand_i].midpoint();
-          disp -= centre_midpoint;
-
-          if (disp.dot(orient) >= 0)
-            pos.push_back(strands[strand_i]);
-          else
-            neg.push_back(strands[strand_i]);
-
+    
+        std::string input_location = argument[0];
+        std::string output_location = argument[1];
+        
+        Triple<double> orient(1.0, 0.0, 0.0);
+        size_t num_strands = NUM_STRANDS_DEFAULT;
+        std::vector<size_t> include;
+        
+        Options opt = get_options("orientation");
+        if (opt.size())
+            orient = parse_triple<double>(std::string(opt[0][0])).normalise();
+        
+        opt = get_options("num_strands");
+        if (opt.size())
+            num_strands = opt[0][0];
+        
+        opt = get_options("include");
+        if (opt.size())
+            include = parse_sequence<size_t>(opt[0][0]);
+        
+        Fibre::Tractlet::Set tracts(input_location);
+        Fibre::Tractlet::Set output_tracts(0, tracts.degree());
+        output_tracts.add_elem_prop(Fibre::Base::Object::ALPHA_PROP);
+        
+        for (size_t tract_i = 0; tract_i < tracts.size(); ++tract_i) {
+            
+            if (!include.size() || std::find(include.begin(), include.end(), tract_i)
+                    != include.end()) {
+                
+                const Fibre::Tractlet& tract = tracts[tract_i];
+                
+                Fibre::Strand::Set strands = tract.to_strands(num_strands);
+                strands.freeze_elem_degree();
+                Fibre::Strand::Set pos(0, strands.degree()), neg(0, strands.degree());
+                pos.add_elem_prop(Fibre::Base::Object::ALPHA_PROP);
+                neg.add_elem_prop(Fibre::Base::Object::ALPHA_PROP);
+                
+                Triple<double> centre_midpoint = tract.backbone().midpoint();
+                
+                for (size_t strand_i = 0; strand_i < strands.size(); ++strand_i) {
+                    
+                    Triple<double> disp = strands[strand_i].midpoint();
+                    disp -= centre_midpoint;
+                    
+                    if (disp.dot(orient) >= 0)
+                        pos.push_back(strands[strand_i]);
+                    else
+                        neg.push_back(strands[strand_i]);
+                    
+                }
+                
+                Fibre::Tractlet::Set pos_tract = pos.to_tractlets((size_t) 1);
+                Fibre::Tractlet::Set neg_tract = neg.to_tractlets((size_t) 1);
+                
+                double acs_value = tract.acs() / 2.0;
+                pos_tract[0].set_acs(acs_value);
+                neg_tract[0].set_acs(acs_value);
+                
+                output_tracts.push_back(pos_tract[0]);
+                output_tracts.push_back(neg_tract[0]);
+                
+            }
         }
-
-        output_tracts.push_back(pos.to_tractlets((size_t)1)[0]);
-        output_tracts.push_back(neg.to_tractlets((size_t)1)[0]);
-      }
+        
+        output_tracts.save(output_location);
+        
     }
-
-    output_tracts.save(output_location);
-
-  }
-
+    

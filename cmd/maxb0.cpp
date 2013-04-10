@@ -20,12 +20,10 @@
 
  */
 
-
 extern "C" {
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 }
-
 
 #include "bts/cmd.h"
 #include "progressbar.h"
@@ -37,45 +35,39 @@ extern "C" {
 #include "bts/image/noise.h"
 #include "bts/image/noise/gaussian.h"
 
-
-
 #include "bts/inline_functions.h"
 
 using namespace BTS;
-
-SET_VERSION_DEFAULT;
-SET_AUTHOR ("Thomas G. Close");
-SET_COPYRIGHT (NULL);
+SET_VERSION_DEFAULT
+;
+SET_AUTHOR("Thomas G. Close");
+SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Finds the maximum b0 intensity of an image",
-  "",
-  NULL
+    "Finds the maximum b0 intensity of an image",
+    "",
+    NULL
 };
 
-ARGUMENTS = {
-  Argument ("image", "The image.").type_file(),
+ARGUMENTS= {
+    Argument ("image", "The image.").type_file(),
 
-  Argument()
+    Argument()
 };
 
+OPTIONS= {
 
-OPTIONS = {
-
-Option()
+    Option()
 
 };
-
-
 
 EXECUTE {
-
-  std::string input_location = argument[0];
-
-  Image::Observed::Buffer image(input_location);
-
-  std::cout << image.max_b0();
-
-}
-
-
+    
+        std::string input_location = argument[0];
+        
+        Image::Observed::Buffer image(input_location);
+        
+        std::cout << image.max_b0();
+        
+    }
+    

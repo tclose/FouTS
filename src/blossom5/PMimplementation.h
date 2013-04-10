@@ -1,23 +1,23 @@
 /*
-    PMimplementation.h
+ PMimplementation.h
 
-    Copyright 2008 Vladimir Kolmogorov (vnk@adastral.ucl.ac.uk)
+ Copyright 2008 Vladimir Kolmogorov (vnk@adastral.ucl.ac.uk)
 
-    This software can be used for research purposes only. Commercial use is prohibited.
-    Public redistribution of the code or its derivatives is prohibited.
+ This software can be used for research purposes only. Commercial use is prohibited.
+ Public redistribution of the code or its derivatives is prohibited.
 
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-    A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-    OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 #ifndef ASKHAKJSNTJAKSNBBAVASRA
 #define ASKHAKJSNTJAKSNBBAVASRA
@@ -32,88 +32,77 @@
 #include "blossom5/PQ.h"
 #include "blossom5/LCA.h"
 
-
 #define LCA_REPAIRS
-
-
-
 
 #define IS_INT ( ((REAL)1 / 2) == 0 )
 #define COST_FACTOR 2
 
 #define PM_THRESHOLD ((REAL)1e-12)
 
-struct PerfectMatching::Node
-{
-	unsigned int	is_outer : 1; // 0 - the node is contained in another blossom, 1 - it's the outermost node
-	unsigned int	flag : 2; // 0 corresponds to +, 1 corresponds to -, 2 corresponds to a free node
-	unsigned int	is_tree_root : 1;
-	unsigned int	is_processed : 1;
-	unsigned int	is_blossom : 1;
-	unsigned int	is_marked : 1;
-	unsigned int	is_removed : 1;
+struct PerfectMatching::Node {
+        unsigned int is_outer :1;    // 0 - the node is contained in another blossom, 1 - it's the outermost node
+        unsigned int flag :2;    // 0 corresponds to +, 1 corresponds to -, 2 corresponds to a free node
+        unsigned int is_tree_root :1;
+        unsigned int is_processed :1;
+        unsigned int is_blossom :1;
+        unsigned int is_marked :1;
+        unsigned int is_removed :1;
 
-	Edge*		first[2];
-	union
-	{
-		Arc*	match; // used if not a tree root (is_tree_root = 0) or it's an inner node (is_outer == 0)
-		Node*	blossom_grandparent;
-	};
-	REAL		y;
+        Edge* first[2];
+        union {
+                Arc* match;    // used if not a tree root (is_tree_root = 0) or it's an inner node (is_outer == 0)
+                Node* blossom_grandparent;
+        };
+        REAL y;
 
-	union
-	{
-		struct // used when is_outer = 0
-		{
-			Arc*	blossom_sibling;
-			Node*	blossom_parent;
-			union
-			{
-				Edge*	blossom_selfloops;
-				Node*	blossom_ptr; // used in repairs
+        union {
+                struct    // used when is_outer = 0
+                {
+                        Arc* blossom_sibling;
+                        Node* blossom_parent;
+                        union {
+                                Edge* blossom_selfloops;
+                                Node* blossom_ptr;    // used in repairs
 #ifdef LCA_REPAIRS
-				int		lca_preorder; // used in repairs
+                                int lca_preorder;    // used in repairs
 #endif
-			};
-			REAL blossom_eps; // stores 'eps' of the tree at the moment when the node was shrunk into a blossom.
-			                  // (it is used for determining slacks of self-loops)
-		};
-		struct // used when is_outer = 1
-		{
-			union
-			{
-				struct // used for "+" nodes (flag = 0)
-				{
-					Node*	first_tree_child;
-					Node*	tree_sibling_prev; // circular list (with one exception: parent->first_tree_child->tree_sibling_prev->tree_sibling_next is NULL)
-					Node*	tree_sibling_next;
-				};
-				Arc*	tree_parent; // used for "-" nodes (flag = 1)
-			};
-			union
-			{
-				Tree*	tree;
-				Edge*	best_edge;  // used during InitGlobal() for non-tree nodes
+                        };
+                        REAL blossom_eps;    // stores 'eps' of the tree at the moment when the node was shrunk into a blossom.
+                                             // (it is used for determining slacks of self-loops)
+                };
+                struct    // used when is_outer = 1
+                {
+                        union {
+                                struct    // used for "+" nodes (flag = 0)
+                                {
+                                        Node* first_tree_child;
+                                        Node* tree_sibling_prev;    // circular list (with one exception: parent->first_tree_child->tree_sibling_prev->tree_sibling_next is NULL)
+                                        Node* tree_sibling_next;
+                                };
+                                Arc* tree_parent;    // used for "-" nodes (flag = 1)
+                        };
+                        union {
+                                Tree* tree;
+                                Edge* best_edge;    // used during InitGlobal() for non-tree nodes
 #ifdef LCA_REPAIRS
-				int		lca_size; // used in repairs
-				LCATreeX*	lca;  // used in repairs
+                                int lca_size;    // used in repairs
+                                LCATreeX* lca;    // used in repairs
 #endif
-			};
-		};
-	};
+                        };
+                };
+        };
 };
 
-struct PerfectMatching::Edge : PriorityQueue<REAL>::Item
-{
-	Node*	head[2];
-	Node*	head0[2];
-	Edge*	next[2];
-	Edge*	prev[2];
+struct PerfectMatching::Edge: PriorityQueue<REAL>::Item {
+        Node* head[2];
+        Node* head0[2];
+        Edge* next[2];
+        Edge* prev[2];
 };
 
 typedef unsigned long POINTER_TYPE;
 // if the declaration below fails, set POINTER_TYPE to be the appropriate integer type of the same length as (void*)
-extern char dummy_array[2*(sizeof(void*)==sizeof(POINTER_TYPE))-1];
+extern char dummy_array[2 * (sizeof(void*) == sizeof(POINTER_TYPE)) - 1];
 
 #define ARC_TO_EDGE_PTR(a)       ( (Edge*) ( ((POINTER_TYPE)(a)) & (~1)      ) )
 #define ARC_TO_EDGE_DIR(a)       ( (int)   ( ((POINTER_TYPE)(a)) & 1         ) )
@@ -126,52 +115,44 @@ extern char dummy_array[2*(sizeof(void*)==sizeof(POINTER_TYPE))-1];
 #define ARC_HEAD(a)  (ARC_TO_EDGE_PTR(a)->head [ARC_TO_EDGE_DIR(a)])
 #define ARC_HEAD0(a) (ARC_TO_EDGE_PTR(a)->head0[ARC_TO_EDGE_DIR(a)])
 
-struct PerfectMatching::PQPointers
-{
-	PriorityQueue<REAL> pq00; // plus-plus edges
-	union
-	{
-		PriorityQueue<REAL> pq01[2]; // plus-minus, minus-plus edges. Used for tree edges.
-		struct // used for trees.
-		{
-			PriorityQueue<REAL> pq0; // plus-free edges
-			PriorityQueue<REAL> pq_blossoms;
-		};
-	};
+struct PerfectMatching::PQPointers {
+        PriorityQueue<REAL> pq00;    // plus-plus edges
+        union {
+                PriorityQueue<REAL> pq01[2];    // plus-minus, minus-plus edges. Used for tree edges.
+                struct    // used for trees.
+                {
+                        PriorityQueue<REAL> pq0;    // plus-free edges
+                        PriorityQueue<REAL> pq_blossoms;
+                };
+        };
 };
 
-struct PerfectMatching::Tree : PQPointers
-{
-	REAL		eps;
-	TreeEdge*	first[2];
-	Node*		root;
+struct PerfectMatching::Tree: PQPointers {
+        REAL eps;
+        TreeEdge* first[2];
+        Node* root;
 
-	PQPointers*	pq_current;
-	int			dir_current;
+        PQPointers* pq_current;
+        int dir_current;
 
-	/////////////////////////////////////////
-	// used while computing dual updates
-	REAL		eps_delta;
-	Tree*		next;
-	union
-	{
-		int			id;
-		TreeEdge*	dfs_parent;
-	};
+        /////////////////////////////////////////
+        // used while computing dual updates
+        REAL eps_delta;
+        Tree* next;
+        union {
+                int id;
+                TreeEdge* dfs_parent;
+        };
 };
 
-struct PerfectMatching::TreeEdge : PQPointers
-{
-	Tree*		head[2];
-	TreeEdge*	next[2];
+struct PerfectMatching::TreeEdge: PQPointers {
+        Tree* head[2];
+        TreeEdge* next[2];
 };
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-
 
 #define GET_PENULTIMATE_BLOSSOM(j)\
 	{\
@@ -210,16 +191,13 @@ struct PerfectMatching::TreeEdge : PQPointers
 		}\
 	}
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-
-struct PerfectMatching::EdgeIterator
-{
-	Edge*	a_last;
-	int		start_flag;
+struct PerfectMatching::EdgeIterator {
+        Edge* a_last;
+        int start_flag;
 };
 
 #define FOR_ALL_EDGES(i, a, dir, I)\
@@ -285,9 +263,8 @@ struct PerfectMatching::EdgeIterator
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-struct PerfectMatching::TreeEdgeIterator
-{
-	TreeEdge**	e_ptr;
+struct PerfectMatching::TreeEdgeIterator {
+        TreeEdge** e_ptr;
 };
 
 #define FOR_ALL_TREE_EDGES(t, e, dir)\
@@ -334,7 +311,6 @@ struct PerfectMatching::TreeEdgeIterator
 		(i)->first_tree_child = j;\
 	}
 
-
 #define REMOVE_FROM_TREE(i)\
 	{\
 		if ((i)->tree_sibling_next) (i)->tree_sibling_next->tree_sibling_prev = (i)->tree_sibling_prev;\
@@ -350,7 +326,6 @@ struct PerfectMatching::TreeEdgeIterator
 			i_PARENT->first_tree_child = (i)->tree_sibling_next;\
 		}\
 	}
-
 
 #endif
 

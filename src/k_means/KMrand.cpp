@@ -19,16 +19,15 @@
 //----------------------------------------------------------------------
 
 #include "k_means/KMrand.h"			// random generator declarations
-
 #ifdef WIN32				// Visual C++ (no srandom/random)
-void srandom(unsigned int seed) { srand(seed); }
-long random(void) { return long(rand()); }
+void srandom(unsigned int seed) {srand(seed);}
+long random(void) {return long(rand());}
 #endif
 
 //----------------------------------------------------------------------
 //  Globals
 //----------------------------------------------------------------------
-int	kmIdum = 0;			// used for random number generation
+int kmIdum = 0;			// used for random number generation
 
 //------------------------------------------------------------------------
 //	kmRan0 - (safer) uniform random number generator
@@ -44,55 +43,54 @@ int	kmIdum = 0;			// used for random number generation
 //	to initialise or reinitialise the sequence.
 //------------------------------------------------------------------------
 
-static double kmRan0()
-{
+static double kmRan0() {
     int j;
-
-    static double y, maxran, v[98];	// The exact number 98 is unimportant
+    
+    static double y, maxran, v[98];    // The exact number 98 is unimportant
     static int iff = 0;
-
+    
     // As a precaution against misuse, we will always initialize on the first
     // call, even if "kmIdum" is not set negative. Determine "maxran", the
     // next integer after the largest representable value of type int. We
     // assume this is a factor of 2 smaller than the corresponding value of
     // type unsigned int. 
-
-    if (kmIdum < 0 || iff == 0) {	// initialize
-		/* compute maximum random number */
+    
+    if (kmIdum < 0 || iff == 0) {    // initialize
+    /* compute maximum random number */
 #ifdef WIN32				// Microsoft Visual C++
-	maxran = RAND_MAX;
+        maxran = RAND_MAX;
 #else
-	unsigned i, k;
-	i = 2;
-	do {
-	    k = i;
-	    i <<= 1;
-	} while (i);
-	maxran = (double) k;
+        unsigned i, k;
+        i = 2;
+        do {
+            k = i;
+            i <<= 1;
+        } while (i);
+        maxran = (double) k;
 #endif
- 	iff = 1;
-  
-	srandom(kmIdum);
-	kmIdum = 1;
-
-	for (j = 1; j <= 97; j++)	// exercise the system routine
-	    random();			// (value intentionally ignored)
-
-	for (j = 1; j <= 97; j++)	// Then save 97 values and a 98th
-	    v[j] = random();
-	y = random();
-     }
-
+        iff = 1;
+        
+        srandom(kmIdum);
+        kmIdum = 1;
+        
+        for (j = 1; j <= 97; j++)    // exercise the system routine
+            random();			// (value intentionally ignored)
+            
+        for (j = 1; j <= 97; j++)    // Then save 97 values and a 98th
+            v[j] = random();
+        y = random();
+    }
+    
     // This is where we start if not initializing. Use the previously saved
     // random number y to get an index j between 1 and 97. Then use the
     // corresponding v[j] for both the next j and as the output number. */
-
+    
     j = 1 + (int) (97.0 * (y / maxran));
     y = v[j];
     v[j] = random();			// Finally, refill the table entry
-					// with the next random number from
-					// "random()" 
-    return(y / maxran);
+    // with the next random number from
+    // "random()" 
+    return (y / maxran);
 }
 
 //------------------------------------------------------------------------
@@ -101,11 +99,10 @@ static double kmRan0()
 //	If n == 0, then -1 is returned.
 //------------------------------------------------------------------------
 
-int kmRanInt(
-    int                 n)
-{
-    int r = (int) (kmRan0()*n);
-    if (r == n) r--;			// (in case kmRan0() == 1 or n == 0)
+int kmRanInt(int n) {
+    int r = (int) (kmRan0() * n);
+    if (r == n)
+        r--;			// (in case kmRan0() == 1 or n == 0)
     return r;
 }
 
@@ -113,11 +110,8 @@ int kmRanInt(
 //  kmRanUnif - generate a random uniform in [lo,hi]
 //------------------------------------------------------------------------
 
-double kmRanUnif(
-    double		lo,
-    double		hi)
-{
-    return kmRan0()*(hi-lo) + lo;
+double kmRanUnif(double lo, double hi) {
+    return kmRan0() * (hi - lo) + lo;
 }
 
 //------------------------------------------------------------------------
@@ -126,36 +120,34 @@ double kmRanUnif(
 //	variance, using kmRan0() as the source of uniform deviates.
 //------------------------------------------------------------------------
 
-static double kmRanGauss()
-{
-    static int iset=0;
+static double kmRanGauss() {
+    static int iset = 0;
     static double gset;
-
+    
     if (iset == 0) {			// we don't have a deviate handy
-	double v1, v2;
-	double r = 2.0;
-	while (r >= 1.0) {
-	    //------------------------------------------------------------
-	    // Pick two uniform numbers in the square extending from -1 to
-	    // +1 in each direction, see if they are in the circle of radius
-	    // 1.  If not, try again 
-	    //------------------------------------------------------------
-	    v1 = kmRanUnif(-1, 1);
-	    v2 = kmRanUnif(-1, 1);
-	    r = v1 * v1 + v2 * v2;
-	}
+        double v1, v2;
+        double r = 2.0;
+        while (r >= 1.0) {
+            //------------------------------------------------------------
+            // Pick two uniform numbers in the square extending from -1 to
+            // +1 in each direction, see if they are in the circle of radius
+            // 1.  If not, try again 
+            //------------------------------------------------------------
+            v1 = kmRanUnif(-1, 1);
+            v2 = kmRanUnif(-1, 1);
+            r = v1 * v1 + v2 * v2;
+        }
         double fac = sqrt(-2.0 * log(r) / r);
-	//-----------------------------------------------------------------
-	// Now make the Box-Muller transformation to get two normal
-	// deviates.  Return one and save the other for next time.
-	//-----------------------------------------------------------------
-	gset = v1 * fac;
-	iset = 1;		    	// set flag
-	return v2 * fac;
-    }
-    else {				// we have an extra deviate handy
-	iset = 0;			// so unset the flag
-	return gset;			// and return it
+        //-----------------------------------------------------------------
+        // Now make the Box-Muller transformation to get two normal
+        // deviates.  Return one and save the other for next time.
+        //-----------------------------------------------------------------
+        gset = v1 * fac;
+        iset = 1;		    	// set flag
+        return v2 * fac;
+    } else {				// we have an extra deviate handy
+        iset = 0;			// so unset the flag
+        return gset;			// and return it
     }
 }
 
@@ -170,14 +162,14 @@ static double kmRanGauss()
 //	distribution [2/(b^2)] becomes 1. 
 //------------------------------------------------------------------------
 
-static double kmRanLaplace() 
-{
+static double kmRanLaplace() {
     const double b = 1.4142136;
-
+    
     double laprand = -log(kmRan0()) / b;
     double sign = kmRan0();
-    if (sign < 0.5) laprand = -laprand;
-    return(laprand);
+    if (sign < 0.5)
+        laprand = -laprand;
+    return (laprand);
 }
 
 //----------------------------------------------------------------------
@@ -186,14 +178,14 @@ static double kmRanLaplace()
 //----------------------------------------------------------------------
 
 void kmUniformPts(		// uniform distribution
-	KMpointArray	pa,		// point array (modified)
-	int		n,		// number of points
-	int		dim)		// dimension
-{
+        KMpointArray pa,		// point array (modified)
+        int n,		// number of points
+        int dim)		// dimension
+        {
     for (int i = 0; i < n; i++) {
-	for (int d = 0; d < dim; d++) {
-	    pa[i][d] = (KMcoord) (kmRanUnif(-1,1));
-	}
+        for (int d = 0; d < dim; d++) {
+            pa[i][d] = (KMcoord) (kmRanUnif(-1, 1));
+        }
     }
 }
 
@@ -204,15 +196,15 @@ void kmUniformPts(		// uniform distribution
 //----------------------------------------------------------------------
 
 void kmGaussPts(			// Gaussian distribution
-	KMpointArray	pa,		// point array (modified)
-	int		n,		// number of points
-	int		dim,		// dimension
-	double		std_dev)	// standard deviation
-{
+        KMpointArray pa,		// point array (modified)
+        int n,		// number of points
+        int dim,		// dimension
+        double std_dev)    // standard deviation
+        {
     for (int i = 0; i < n; i++) {
-	for (int d = 0; d < dim; d++) {
-	    pa[i][d] = (KMcoord) (kmRanGauss() * std_dev);
-	}
+        for (int d = 0; d < dim; d++) {
+            pa[i][d] = (KMcoord) (kmRanGauss() * std_dev);
+        }
     }
 }
 
@@ -222,14 +214,14 @@ void kmGaussPts(			// Gaussian distribution
 //----------------------------------------------------------------------
 
 void kmLaplacePts(		// Laplacian distribution
-	KMpointArray	pa,		// point array (modified)
-	int		n,		// number of points
-	int		dim)		// dimension
-{
+        KMpointArray pa,		// point array (modified)
+        int n,		// number of points
+        int dim)		// dimension
+        {
     for (int i = 0; i < n; i++) {
-	for (int d = 0; d < dim; d++) {
+        for (int d = 0; d < dim; d++) {
             pa[i][d] = (KMcoord) kmRanLaplace();
-	}
+        }
     }
 }
 
@@ -240,19 +232,19 @@ void kmLaplacePts(		// Laplacian distribution
 //----------------------------------------------------------------------
 
 void kmCoGaussPts(		// correlated-Gaussian distribution
-	KMpointArray	pa,		// point array (modified)
-	int		n,		// number of points
-	int		dim,		// dimension
-	double		correlation)	// correlation
-{
+        KMpointArray pa,		// point array (modified)
+        int n,		// number of points
+        int dim,		// dimension
+        double correlation)    // correlation
+        {
     double std_dev_w = sqrt(1.0 - correlation * correlation);
     for (int i = 0; i < n; i++) {
-	double previous = kmRanGauss();
-	pa[i][0] = (KMcoord) previous;
-	for (int d = 1; d < dim; d++) {
-	    previous = correlation*previous + std_dev_w*kmRanGauss();
-	    pa[i][d] = (KMcoord) previous;
-	} 
+        double previous = kmRanGauss();
+        pa[i][0] = (KMcoord) previous;
+        for (int d = 1; d < dim; d++) {
+            previous = correlation * previous + std_dev_w * kmRanGauss();
+            pa[i][d] = (KMcoord) previous;
+        }
     }
 }
 
@@ -263,26 +255,26 @@ void kmCoGaussPts(		// correlated-Gaussian distribution
 //----------------------------------------------------------------------
 
 void kmCoLaplacePts(		// correlated-Laplacian distribution
-	KMpointArray	pa,		// point array (modified)
-	int		n,		// number of points
-	int		dim,		// dimension
-	double		correlation)	// correlation
-{
+        KMpointArray pa,		// point array (modified)
+        int n,		// number of points
+        int dim,		// dimension
+        double correlation)    // correlation
+        {
     double wn;
     double corr_sq = correlation * correlation;
-
+    
     for (int i = 0; i < n; i++) {
-	double previous = kmRanLaplace();
-	pa[i][0] = (KMcoord) previous;
-	for (int d = 1; d < dim; d++) {
-	    double temp = kmRan0();
-	    if (temp < corr_sq)
-		wn = 0.0;
-	    else
-		wn = kmRanLaplace();
-	    previous = correlation * previous + wn;
-	    pa[i][d] = (KMcoord) previous;
-        } 
+        double previous = kmRanLaplace();
+        pa[i][0] = (KMcoord) previous;
+        for (int d = 1; d < dim; d++) {
+            double temp = kmRan0();
+            if (temp < corr_sq)
+                wn = 0.0;
+            else
+                wn = kmRanLaplace();
+            previous = correlation * previous + wn;
+            pa[i][d] = (KMcoord) previous;
+        }
     }
 }
 
@@ -309,49 +301,50 @@ void kmCoLaplacePts(		// correlated-Laplacian distribution
 //	matrix, which is equivalent to the std_dev for each coordinate
 //	times sqrt(d).
 //----------------------------------------------------------------------
-static KMpointArray cgClusters = NULL;	// cluster storage
+static KMpointArray cgClusters = NULL;    // cluster storage
 
 void kmClusGaussPts(		// clustered-Gaussian distribution
-	KMpointArray	pa,		// point array (modified)
-	int		n,		// number of points
-	int		dim,		// dimension
-	int		n_col,		// number of colors
-	bool		new_clust,	// generate new clusters.
-	double		std_dev,	// standard deviation withinness clusters
-	double*		clus_sep)	// cluster separation (returned)
-{
-    if (cgClusters == NULL || new_clust) {// need new cluster centers
-	if (cgClusters != NULL)		// clusters already exist
-	    kmDeallocPts(cgClusters);	// get rid of them
-	cgClusters = kmAllocPts(n_col, dim);
-					// generate cluster center coords
-	for (int i = 0; i < n_col; i++) {
-	    for (int d = 0; d < dim; d++) {
-		cgClusters[i][d] = (KMcoord) kmRanUnif(-1,1);
-	    }
-	}
+        KMpointArray pa,		// point array (modified)
+        int n,		// number of points
+        int dim,		// dimension
+        int n_col,		// number of colors
+        bool new_clust,    // generate new clusters.
+        double std_dev,    // standard deviation withinness clusters
+        double* clus_sep)    // cluster separation (returned)
+        {
+    if (cgClusters == NULL || new_clust) {    // need new cluster centers
+        if (cgClusters != NULL)		// clusters already exist
+            kmDeallocPts(cgClusters);    // get rid of them
+        cgClusters = kmAllocPts(n_col, dim);
+        // generate cluster center coords
+        for (int i = 0; i < n_col; i++) {
+            for (int d = 0; d < dim; d++) {
+                cgClusters[i][d] = (KMcoord) kmRanUnif(-1, 1);
+            }
+        }
     }
-
-    double minDist = double(dim);	// minimum inter-center sq'd distance
-    for (int i = 0; i < n_col; i++) {	// compute minimum separation
-	for (int j = i+1; j < n_col; j++) {
-	    double dist = kmDist(dim, cgClusters[i], cgClusters[j]);
-	    if (dist < minDist) minDist = dist;
-	}
+    
+    double minDist = double(dim);    // minimum inter-center sq'd distance
+    for (int i = 0; i < n_col; i++) {    // compute minimum separation
+        for (int j = i + 1; j < n_col; j++) {
+            double dist = kmDist(dim, cgClusters[i], cgClusters[j]);
+            if (dist < minDist)
+                minDist = dist;
+        }
     }
-					// cluster separation
+    // cluster separation
     if (clus_sep != NULL)
-	*clus_sep = sqrt(minDist)/(sqrt(double(dim))*std_dev);
-
+        *clus_sep = sqrt(minDist) / (sqrt(double(dim)) * std_dev);
+    
     for (int i = 0; i < n; i++) {
-	int c = kmRanInt(n_col);	// generate cluster index
-	for (int d = 0; d < dim; d++) {
-          pa[i][d] = (KMcoord) (std_dev*kmRanGauss() + cgClusters[c][d]);
-	}
+        int c = kmRanInt(n_col);	// generate cluster index
+        for (int d = 0; d < dim; d++) {
+            pa[i][d] = (KMcoord) (std_dev * kmRanGauss() + cgClusters[c][d]);
+        }
     }
 }
 
-KMpointArray kmGetCGclusters()	// get clustered gauss cluster centers
+KMpointArray kmGetCGclusters()    // get clustered gauss cluster centers
 {
     return cgClusters;
 }
@@ -399,52 +392,51 @@ KMpointArray kmGetCGclusters()	// get clustered gauss cluster centers
 //----------------------------------------------------------------------
 
 void kmClusOrthFlats(		// clustered along orthogonal flats
-	KMpointArray	pa,		// point array (modified)
-	int		n,		// number of points
-	int		dim,		// dimension
-	int		n_col,		// number of colors
-	bool		new_clust,	// generate new clusters.
-	double		std_dev,	// standard deviation withinness clusters
-	int		max_dim)	// maximum dimension of the flats
-{
+        KMpointArray pa,		// point array (modified)
+        int n,		// number of points
+        int dim,		// dimension
+        int n_col,		// number of colors
+        bool new_clust,    // generate new clusters.
+        double std_dev,    // standard deviation withinness clusters
+        int max_dim)	// maximum dimension of the flats
+        {
     const double CO_FLAG = 999;			// special flag value
-    static KMpointArray control = NULL;	// control vectors
-
+    static KMpointArray control = NULL;    // control vectors
+    
     if (control == NULL || new_clust) {		// need new cluster centers
-	if (control != NULL) {			// clusters already exist
-	    kmDeallocPts(control);		// get rid of them
-	}
-	control = kmAllocPts(n_col, dim);
-
-	for (int c = 0; c < n_col; c++) {	// generate clusters
-	    int n_dim = 1 + kmRanInt(max_dim);	// number of dimensions in flat
-	    for (int d = 0; d < dim; d++) {	// generate side locations
-						// prob. of picking next dim
-	    	double Prob = ((double) n_dim)/((double) (dim-d));
-		if (kmRan0() < Prob) {		// add this one to flat
-		    control[c][d] = CO_FLAG;	// flag this entry
-		    n_dim--;			// one fewer dim to fill
-		}
-		else {				// don't take this one
-		    control[c][d] = kmRanUnif(-1,1);// random value in [-1,1]
-		}
-	    }
-	}
+        if (control != NULL) {			// clusters already exist
+            kmDeallocPts(control);		// get rid of them
+        }
+        control = kmAllocPts(n_col, dim);
+        
+        for (int c = 0; c < n_col; c++) {    // generate clusters
+            int n_dim = 1 + kmRanInt(max_dim);    // number of dimensions in flat
+            for (int d = 0; d < dim; d++) {    // generate side locations
+                // prob. of picking next dim
+                double Prob = ((double) n_dim) / ((double) (dim - d));
+                if (kmRan0() < Prob) {		// add this one to flat
+                    control[c][d] = CO_FLAG;	// flag this entry
+                    n_dim--;			// one fewer dim to fill
+                } else {				// don't take this one
+                    control[c][d] = kmRanUnif(-1, 1);				// random value in [-1,1]
+                }
+            }
+        }
     }
-
+    
     int next = 0;				// next slot to fill
     for (int c = 0; c < n_col; c++) {		// generate clusters
-	int pick = (n+c)/n_col;			// number of points to pick
-	for (int i = 0; i < pick; i++) {
-	    for (int d = 0; d < dim; d++) {
-		if (control[c][d] == CO_FLAG)	// dimension on flat
-        	    pa[next][d] = (KMcoord) kmRanUnif(-1,1);
-		else				// dimension off flat
-        	    pa[next][d] =
-			(KMcoord) (std_dev*kmRanGauss() + control[c][d]);
-	    }
-	    next++;
-	}
+        int pick = (n + c) / n_col;			// number of points to pick
+        for (int i = 0; i < pick; i++) {
+            for (int d = 0; d < dim; d++) {
+                if (control[c][d] == CO_FLAG)    // dimension on flat
+                    pa[next][d] = (KMcoord) kmRanUnif(-1, 1);
+                else
+                    // dimension off flat
+                    pa[next][d] = (KMcoord) (std_dev * kmRanGauss() + control[c][d]);
+            }
+            next++;
+        }
     }
 }
 
@@ -483,60 +475,58 @@ void kmClusOrthFlats(		// clustered along orthogonal flats
 //----------------------------------------------------------------------
 
 void kmClusEllipsoids(		// clustered around ellipsoids
-	KMpointArray	pa,		// point array (modified)
-	int		n,		// number of points
-	int		dim,		// dimension
-	int		n_col,		// number of colors
-	bool		new_clust,	// generate new clusters.
-	double		std_dev_small,	// small standard deviation
-	double		std_dev_lo,	// low standard deviation for ellipses
-	double		std_dev_hi,	// high standard deviation for ellipses
-	int		max_dim)	// maximum dimension of the flats
-{
+        KMpointArray pa,		// point array (modified)
+        int n,		// number of points
+        int dim,		// dimension
+        int n_col,		// number of colors
+        bool new_clust,    // generate new clusters.
+        double std_dev_small,    // small standard deviation
+        double std_dev_lo,    // low standard deviation for ellipses
+        double std_dev_hi,    // high standard deviation for ellipses
+        int max_dim)	// maximum dimension of the flats
+        {
     static KMpointArray clusters = NULL;	// cluster centers
     static KMpointArray stdDev = NULL;		// standard deviations
-
+    
     if (clusters == NULL || new_clust) {	// need new cluster centers
-	if (clusters != NULL)			// clusters already exist
-	    kmDeallocPts(clusters);		// get rid of them
-	if (stdDev != NULL)			// std deviations already exist
-	    kmDeallocPts(stdDev);		// get rid of them
-
-	clusters = kmAllocPts(n_col, dim);	// alloc new clusters and devs
-	stdDev   = kmAllocPts(n_col, dim);
-
-	for (int i = 0; i < n_col; i++) {	// gen cluster center coords
-	    for (int d = 0; d < dim; d++) {
-		clusters[i][d] = (KMcoord) kmRanUnif(-1,1);
-	    }
-	}
-	for (int c = 0; c < n_col; c++) {	// generate cluster std dev
-	    int n_dim = 1 + kmRanInt(max_dim);	// number of dimensions in flat
-	    for (int d = 0; d < dim; d++) {	// generate std dev's
-						// prob. of picking next dim
-	    	double Prob = ((double) n_dim)/((double) (dim-d));
-		if (kmRan0() < Prob) {		// add this one to ellipse
-						// generate random std dev
-		    stdDev[c][d] = kmRanUnif(std_dev_lo, std_dev_hi);
-		    n_dim--;			// one fewer dim to fill
-		}
-		else {				// don't take this one
-		    stdDev[c][d] = std_dev_small;// use small std dev
-		}
-	    }
-	}
+        if (clusters != NULL)			// clusters already exist
+            kmDeallocPts(clusters);		// get rid of them
+        if (stdDev != NULL)			// std deviations already exist
+            kmDeallocPts(stdDev);		// get rid of them
+                    
+        clusters = kmAllocPts(n_col, dim);    // alloc new clusters and devs
+        stdDev = kmAllocPts(n_col, dim);
+        
+        for (int i = 0; i < n_col; i++) {    // gen cluster center coords
+            for (int d = 0; d < dim; d++) {
+                clusters[i][d] = (KMcoord) kmRanUnif(-1, 1);
+            }
+        }
+        for (int c = 0; c < n_col; c++) {    // generate cluster std dev
+            int n_dim = 1 + kmRanInt(max_dim);    // number of dimensions in flat
+            for (int d = 0; d < dim; d++) {    // generate std dev's
+                // prob. of picking next dim
+                double Prob = ((double) n_dim) / ((double) (dim - d));
+                if (kmRan0() < Prob) {		// add this one to ellipse
+                    // generate random std dev
+                    stdDev[c][d] = kmRanUnif(std_dev_lo, std_dev_hi);
+                    n_dim--;			// one fewer dim to fill
+                } else {				// don't take this one
+                    stdDev[c][d] = std_dev_small;				// use small std dev
+                }
+            }
+        }
     }
-
+    
     int next = 0;				// next slot to fill
     for (int c = 0; c < n_col; c++) {		// generate clusters
-	int pick = (n+c)/n_col;			// number of points to pick
-	for (int i = 0; i < pick; i++) {
-	    for (int d = 0; d < dim; d++) {
-        	pa[next][d] = (KMcoord)
-			(stdDev[c][d]*kmRanGauss() + clusters[c][d]);
-	    }
-	    next++;
-	}
+        int pick = (n + c) / n_col;			// number of points to pick
+        for (int i = 0; i < pick; i++) {
+            for (int d = 0; d < dim; d++) {
+                pa[next][d] = (KMcoord) (stdDev[c][d] * kmRanGauss() + clusters[c][d]);
+            }
+            next++;
+        }
     }
 }
 
@@ -569,41 +559,42 @@ void kmClusEllipsoids(		// clustered around ellipsoids
 //----------------------------------------------------------------------
 
 void kmMultiClus(		// multi-sized clusters
-	KMpointArray	pa,		// point array (modified)
-	int		n,		// number of points
-	int		dim,		// dimension
-	int		&k,		// number of clusters (returned)
-	double		base_dev)	// base standard deviation
-{
+        KMpointArray pa,		// point array (modified)
+        int n,		// number of points
+        int dim,		// dimension
+        int &k,		// number of clusters (returned)
+        double base_dev)    // base standard deviation
+        {
     int next = 0;			// next point in array
     int nSamp = 0;			// number of points sampled
     k = 0;				// number of clusters generated
-    KMpoint clusCenter = kmAllocPt(dim); // allocate center storage
+    KMpoint clusCenter = kmAllocPt(dim);    // allocate center storage
     while (nSamp < n) {			// until we have sampled enough
-	int remain = n - nSamp;		// number remaining to sample
-	int clusSize = 2;
-					// repeatedly double cluster size
-					// with prob 1/2
-	while ((clusSize < remain) && (kmRan0() < 0.5))
-	    clusSize *= 2;
-					// don't exceed upper limit
-	if (clusSize > remain) clusSize = remain;
-
-					// generate center uniformly
-	for (int d = 0; d < dim; d++) {
-	    clusCenter[d] = (KMcoord) kmRanUnif(-1,1);
-	}
-    					// desired std dev for cluster
-	double stdDev = base_dev*sqrt(1.0/clusSize);
-					// generate cluster points
-	for (int i = 0; i < clusSize; i++) {
-	    for (int d = 0; d < dim; d++) {
-		pa[next][d] = (KMcoord) (stdDev*kmRanGauss()+clusCenter[d]);
-	    }
-	    next++;
-	}
-	nSamp += clusSize;		// update number sampled
-	k++;				// one more cluster
+        int remain = n - nSamp;		// number remaining to sample
+        int clusSize = 2;
+        // repeatedly double cluster size
+        // with prob 1/2
+        while ((clusSize < remain) && (kmRan0() < 0.5))
+            clusSize *= 2;
+        // don't exceed upper limit
+        if (clusSize > remain)
+            clusSize = remain;
+        
+        // generate center uniformly
+        for (int d = 0; d < dim; d++) {
+            clusCenter[d] = (KMcoord) kmRanUnif(-1, 1);
+        }
+        // desired std dev for cluster
+        double stdDev = base_dev * sqrt(1.0 / clusSize);
+        // generate cluster points
+        for (int i = 0; i < clusSize; i++) {
+            for (int d = 0; d < dim; d++) {
+                pa[next][d] = (KMcoord) (stdDev * kmRanGauss() + clusCenter[d]);
+            }
+            next++;
+        }
+        nSamp += clusSize;		// update number sampled
+        k++;				// one more cluster
     }
     kmDeallocPt(clusCenter);
 }

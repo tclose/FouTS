@@ -25,22 +25,16 @@
  *
  */
 
-
-
-
 #ifndef CONTROL_POINT_H
 #define CONTROL_POINT_H 0
 
-
 typedef struct _control_point {
-	
-	double *pos;
-	
-	double *grad;
+        
+        double *pos;
 
-	
+        double *grad;
+        
 } Control_point;
-
 
 void set_control_point(Control_point *control_point, double *pos, double *grad);
 

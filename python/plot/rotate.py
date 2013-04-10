@@ -11,8 +11,8 @@ import os.path
 import math
 from matplotlib import pyplot as plt
 # Configuration parameters (set by generation script)
-WORK_DIR = '/home/tclose/Documents/BaFTrS/data/rotate/'
-FIGURE_DIR = '/home/tclose/Documents/BaFTrS/figures/'
+WORK_DIR = '/home/tclose/Documents/FouTS/data/rotate/'
+FIGURE_DIR = '/home/tclose/Documents/FouTS/figures/'
 SNR_RANGE = [2, 5, 10, 20]
 ALL_RUNS = range(1, 1001)
 PLOT_RUNS = range(1, 31)

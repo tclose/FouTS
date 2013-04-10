@@ -29,46 +29,41 @@
 #include "bts/image/inline_functions.h"
 #include "bts/diffusion/inline_functions.h"
 
-
-
 namespace BTS {
-
-  namespace Image {
-
-    namespace Expected {
-
-      namespace Gaussian {
-
-        const std::string Buffer::SHORT_NAME = "gaussian";
-
-
-        Buffer::Buffer( const Triple<size_t>& dimensions,
-                                            const Triple<double>& voxel_sizes,
-                                            const Diffusion::Model& diffusion_model,
-                                            size_t num_sections,
-                                            size_t num_strands,
-                                            double extent,
-                                            double half_width,
-                                            const Triple<double>& corner_offset,
-                                            bool enforce_bounds)
-
-          : Buffer_tpl<Voxel>(dimensions, voxel_sizes, diffusion_model, num_sections, num_strands, extent, corner_offset, enforce_bounds), variance(half_width / (SQRT_LOG_2 * SQRT_2))
-          { name_init(); }
-
-
-        Buffer::Buffer(const Buffer& buffer)
-          : Buffer_tpl<Voxel>(buffer), variance(buffer.variance)
-          { name_init(); }
-
-
-        std::ostream& operator<< (std::ostream& stream, const Buffer& buffer)
-          { return buffer.to_stream(stream); }
-
-      }
-
+    
+    namespace Image {
+        
+        namespace Expected {
+            
+            namespace Gaussian {
+                
+                const std::string Buffer::SHORT_NAME = "gaussian";
+                
+                Buffer::Buffer(const Triple<size_t>& dimensions, const Triple<double>& voxel_sizes,
+                               const Diffusion::Model& diffusion_model, size_t num_sections,
+                               size_t num_strands, double extent, double half_width,
+                               const Triple<double>& corner_offset, bool enforce_bounds)
+                        
+                        : Buffer_tpl<Voxel>(dimensions, voxel_sizes, diffusion_model, num_sections,
+                                  num_strands, extent, corner_offset, enforce_bounds), variance(
+                                  half_width / (SQRT_LOG_2 * SQRT_2)) {
+                    name_init();
+                }
+                
+                Buffer::Buffer(const Buffer& buffer)
+                        : Buffer_tpl<Voxel>(buffer), variance(buffer.variance) {
+                    name_init();
+                }
+                
+                std::ostream& operator<<(std::ostream& stream, const Buffer& buffer) {
+                    return buffer.to_stream(stream);
+                }
+            
+            }
+        
+        }
+    
     }
-
-  }
 
 }
 

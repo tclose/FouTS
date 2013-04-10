@@ -19,11 +19,9 @@
 //----------------------------------------------------------------------
 
 #include <iostream>			// C++ I/O
-
 #include "k_means/KMeans.h"			// kmeans includes
 #include "k_means/KCtree.h"			// kc tree 
 #include "k_means/KMrand.h"			// random number generators
-
 //------------------------------------------------------------------------
 //  Global data (shared by all files)
 //	The following variables are used by all the procedures and are
@@ -31,40 +29,43 @@
 //	needed to initialize thinnessgs before the first stage.
 //------------------------------------------------------------------------
 
-StatLev		kmStatLev	= SILENT;	// global stats output level
-ostream*	kmOut		= &std::cout;	// standard output stream
-ostream*	kmErr		= &std::cerr;	// output error stream
-istream*	kmIn		= &std::cin;	// input stream
+StatLev kmStatLev = SILENT;    // global stats output level
+ostream* kmOut = &std::cout;    // standard output stream
+ostream* kmErr = &std::cerr;    // output error stream
+istream* kmIn = &std::cin;    // input stream
 
 //----------------------------------------------------------------------
 //  Output utilities
 //----------------------------------------------------------------------
 
 void kmPrintPt(				// print a point
-    KMpoint		p,			// the point
-    int			dim,			// the dimension
-    bool		fancy)			// print plain or fancy?
-{
-    if (fancy) *kmOut << "[ ";
+        KMpoint p,			// the point
+        int dim,			// the dimension
+        bool fancy)			// print plain or fancy?
+        {
+    if (fancy)
+        *kmOut << "[ ";
     for (int i = 0; i < dim; i++) {
-	*kmOut << setw(8) << p[i];
-	if (i < dim-1) *kmOut << " ";
+        *kmOut << setw(8) << p[i];
+        if (i < dim - 1)
+            *kmOut << " ";
     }
-    if (fancy) *kmOut << " ]";
+    if (fancy)
+        *kmOut << " ]";
 }
 
 void kmPrintPts(			// print points
-    string		title,			// name of point set
-    KMpointArray	pa,			// the point array
-    int			n,			// number of points
-    int			dim,			// the dimension
-    bool		fancy)		        // print plain or fancy?
-{
+        string title,			// name of point set
+        KMpointArray pa,			// the point array
+        int n,			// number of points
+        int dim,			// the dimension
+        bool fancy)		        // print plain or fancy?
+        {
     *kmOut << "  (" << title << ":\n";
     for (int i = 0; i < n; i++) {
-	*kmOut << "    " << i << "\t";
-	kmPrintPt(pa[i], dim, fancy);
-	*kmOut << "\n";
+        *kmOut << "    " << i << "\t";
+        kmPrintPt(pa[i], dim, fancy);
+        *kmOut << "\n";
     }
     *kmOut << "  )" << endl;
 }
@@ -75,21 +76,16 @@ void kmPrintPts(			// print points
 //------------------------------------------------------------------------
 
 void kmError(				// error routine
-    const string	&msg,		// error message
-    KMerr		level)		// abort afterwards
-{
+        const string &msg,		// error message
+        KMerr level)		// abort afterwards
+        {
     if (level == KMabort) {
-	*kmErr << "kmlocal: ERROR------->" << msg << "<-------------ERROR"
-	       << endl;
-	*kmOut << "kmlocal: ERROR------->" << msg << "<-------------ERROR"
-	       << endl;
-	kmExit(1);
-    }
-    else {
-	*kmErr << "kmlocal: WARNING----->" << msg << "<-------------WARNING"
-	       << endl;
-	*kmOut << "kmlocal: WARNING----->" << msg << "<-------------WARNING"
-	       << endl;
+        *kmErr << "kmlocal: ERROR------->" << msg << "<-------------ERROR" << endl;
+        *kmOut << "kmlocal: ERROR------->" << msg << "<-------------ERROR" << endl;
+        kmExit(1);
+    } else {
+        *kmErr << "kmlocal: WARNING----->" << msg << "<-------------WARNING" << endl;
+        *kmOut << "kmlocal: WARNING----->" << msg << "<-------------WARNING" << endl;
     }
 }
 
@@ -100,15 +96,14 @@ void kmError(				// error routine
 //	This keeps until the user verifies termination.
 //------------------------------------------------------------------------
 
-
 void kmExit(int status)			// exit program
-{
-    #ifdef WAIT_FOR_CONFIRM
-	char ch;
-	if (kmIn == &cin) {			// input from std in
-	    cerr << "Hit return to continue..." << endl;
-	    kmIn->get(ch);
-	}
-    #endif
+        {
+#ifdef WAIT_FOR_CONFIRM
+    char ch;
+    if (kmIn == &cin) {			// input from std in
+        cerr << "Hit return to continue..." << endl;
+        kmIn->get(ch);
+    }
+#endif
     exit(status);
 }

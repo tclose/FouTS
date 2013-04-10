@@ -25,8 +25,6 @@
  *
  */
 
-
-
 #ifndef _SEGMENT_H
 #include "phantom/shared/segment.h"
 #endif
@@ -35,22 +33,17 @@
 #define SAMPLE_H 0
 
 typedef struct _sample {
-	
-	int sample_i;
-	
-	double sample_fract;
-	Segment *segment;
-	
-	double pos[3];
+        
+        int sample_i;
 
-	
-	struct _sample *last_accessed_sample;		
-	
+        double sample_fract;
+        Segment *segment;
+
+        double pos[3];
+
+        struct _sample *last_accessed_sample;
+        
 } Sample;
-
-
-
-
 
 void init_sample(Sample *sample, int sample_i, Segment *segment);
 

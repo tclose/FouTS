@@ -23,61 +23,58 @@
 #include "bts/image/expected/sinc/voxel.h"
 #include "bts/image/expected/sinc/buffer.h"
 
-
 #include "bts/fibre/strand/basic_section/tensor.h"
 #include "bts/fibre/tractlet/section/tensor.h"
 
 #include "bts/image/inline_functions.h"
 #include "bts/diffusion/inline_functions.h"
 
-
 namespace BTS {
-
-  namespace Image {
-
-    namespace Expected {
-
-      namespace Sinc {
-
-
-        Voxel::Voxel(Buffer& buffer, const Index& coord)
-          : Expected::Voxel(buffer, coord, buffer.diffusion_model), image(&buffer) {}
-
-
-        double         Voxel::interpolate(const Coord& pos) {
-
-          Coord disp = pos - centre();
-
-          Coord interpolate;
-
-          double interpolation;
-
-          //Truncate the sinc function at a consitent distance from the voxel centre.
-          if (disp.lower_bounded(-image->get_extent()) && disp.upper_bounded(image->get_extent())) {
-
-            for (size_t dim_i = 0; dim_i < 3; ++dim_i) {
-
-              if (disp[dim_i] == 0.0)
-                interpolate[dim_i] = 1.0;
-              else
-                interpolate[dim_i] = MR::Math::sin(M_PI * disp[dim_i]) / (M_PI * disp[dim_i]);
+    
+    namespace Image {
+        
+        namespace Expected {
+            
+            namespace Sinc {
+                
+                Voxel::Voxel(Buffer& buffer, const Index& coord)
+                        : Expected::Voxel(buffer, coord, buffer.diffusion_model), image(&buffer) {
+                }
+                
+                double Voxel::interpolate(const Coord& pos) {
+                    
+                    Coord disp = pos - centre();
+                    
+                    Coord interpolate;
+                    
+                    double interpolation;
+                    
+                    //Truncate the sinc function at a consitent distance from the voxel centre.
+                    if (disp.lower_bounded(-image->get_extent()) && disp.upper_bounded(
+                                image->get_extent())) {
+                        
+                        for (size_t dim_i = 0; dim_i < 3; ++dim_i) {
+                            
+                            if (disp[dim_i] == 0.0)
+                                interpolate[dim_i] = 1.0;
+                            else
+                                interpolate[dim_i] = MR::Math::sin(M_PI * disp[dim_i])
+                                        / (M_PI * disp[dim_i]);
+                        }
+                        
+                        interpolation = interpolate[X] * interpolate[Y] * interpolate[Z];
+                        
+                    } else
+                        interpolation = 0.0;
+                    
+                    return interpolation;
+                    
+                }
+            
             }
-
-            interpolation = interpolate[X] * interpolate[Y] * interpolate[Z];
-
-          } else
-            interpolation = 0.0;
-
-
-          return interpolation;
-
+        
         }
-
-
-      }
-
+    
     }
-
-  }
 
 }

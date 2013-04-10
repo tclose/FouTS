@@ -24,7 +24,7 @@
  *  along with 'Numerical Fibre Generator'.  If not, see <http://www.gnu.org/licenses/>
  *
  */
- 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
@@ -40,22 +40,17 @@
 #include "phantom/shared/shared.h"
 #include "phantom/noisify/noisify.h"
 
-
-
-
 void noisify(float *image, int image_size, double noise_level, gsl_rng *rand_gen) {
-
-	double noise[2];
-	int image_i;
-	
-	for (image_i = 0; image_i < image_size; image_i++) {
-		noise[X] = (double)image[image_i] + gsl_ran_gaussian(rand_gen, noise_level);
-		noise[Y] = gsl_ran_gaussian(rand_gen, noise_level);		
-
-		image[image_i] = (float)sqrt(noise[X] * noise[X] + noise[Y] * noise[Y]);
-		
-		
-	}
-	
- 
+    
+    double noise[2];
+    int image_i;
+    
+    for (image_i = 0; image_i < image_size; image_i++) {
+        noise[X] = (double) image[image_i] + gsl_ran_gaussian(rand_gen, noise_level);
+        noise[Y] = gsl_ran_gaussian(rand_gen, noise_level);
+        
+        image[image_i] = (float) sqrt(noise[X] * noise[X] + noise[Y] * noise[Y]);
+        
+    }
+    
 }

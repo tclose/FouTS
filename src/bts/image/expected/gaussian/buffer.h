@@ -25,71 +25,66 @@
 #ifndef __bts_image_expected_gaussian_buffer_h__
 #define __bts_image_expected_gaussian_buffer_h__
 
-
 #include "bts/image/expected/buffer.h"
 #include "bts/image/expected/buffer_tpl.h"
 
-
-
 namespace BTS {
-
-  namespace Image {
-
-    namespace Expected {
-
-      namespace Gaussian {
-
-        class Buffer : public Expected::Buffer, public Expected::Buffer_tpl<Gaussian::Voxel> {
-
-          //Public static constants
-          public:
-
-            const static std::string SHORT_NAME;
-
-          //Protected member variables
-          protected:
-
-            double variance;
-
-          public:
-
-            Buffer() : Buffer_tpl<Gaussian::Voxel>(this) {}
-
-            Buffer( const Triple<size_t>& dimensions,
-                    const Triple<double>& voxel_sizes,
-                    const Diffusion::Model& diffusion_model,
-                    size_t num_sections = Expected::Buffer::NUM_LENGTH_SECTIONS_DEFAULT,
-                    size_t num_strands = Expected::Buffer::NUM_WIDTH_SECTIONS_DEFAULT,
-                    double interp_extent = Expected::Buffer::INTERP_EXTENT_DEFAULT,
-                    double half_width = Expected::Buffer::HALF_WIDTH_DEFAULT,
-                    const Triple<double>& corner_offset = Triple<double>(),
-                    bool enforce_bounds = true
-                  );
-
-
-            Buffer(const Buffer& buffer);
-
-
-            ~Buffer() {}
-
-            double                        gauss_exp_var()
-              { return variance; }
-
-            EXPECTED_BUFFER_FUNCTIONS;
-
-        };
-
-
-        
-        std::ostream& operator<< (std::ostream& stream, const Buffer& buffer);
-
-      }
-
-    }
     
-  }
+    namespace Image {
+        
+        namespace Expected {
+            
+            namespace Gaussian {
+                
+                class Buffer: public Expected::Buffer, public Expected::Buffer_tpl<Gaussian::Voxel> {
+                        
+                        //Public static constants
+                    public:
+                        
+                        const static std::string SHORT_NAME;
+
+                        //Protected member variables
+                    protected:
+                        
+                        double variance;
+
+                    public:
+                        
+                        Buffer()
+                                : Buffer_tpl<Gaussian::Voxel>(this) {
+                        }
+                        
+                        Buffer(const Triple<size_t>& dimensions, const Triple<double>& voxel_sizes,
+                               const Diffusion::Model& diffusion_model, size_t num_sections =
+                                       Expected::Buffer::NUM_LENGTH_SECTIONS_DEFAULT,
+                               size_t num_strands = Expected::Buffer::NUM_WIDTH_SECTIONS_DEFAULT,
+                               double interp_extent = Expected::Buffer::INTERP_EXTENT_DEFAULT,
+                               double half_width = Expected::Buffer::HALF_WIDTH_DEFAULT,
+                               const Triple<double>& corner_offset = Triple<double>(),
+                               bool enforce_bounds = true);
+
+                        Buffer(const Buffer& buffer);
+
+                        ~Buffer() {
+                        }
+                        
+                        double gauss_exp_var() {
+                            return variance;
+                        }
+                        
+                        EXPECTED_BUFFER_FUNCTIONS
+                        ;
+                        
+                };
+                
+                std::ostream& operator<<(std::ostream& stream, const Buffer& buffer);
+            
+            }
+        
+        }
+    
+    }
 
 }
-
 
 #endif

@@ -31,18 +31,19 @@
 #include "phantom/shared/strand_collection.h"
 //}
 
+std::vector<BTS::Triple<double> >& generate_pre_points(
+        BTS::Fibre::Track::Set& strands, std::vector<BTS::Triple<double> >& pre_points);
 
-std::vector<BTS::Triple<double> >& generate_pre_points(BTS::Fibre::Track::Set& strands, std::vector<BTS::Triple<double> >& pre_points);
+std::vector<BTS::Triple<double> >& generate_post_points(
+        BTS::Fibre::Track::Set& strands, std::vector<BTS::Triple<double> >& post_points);
 
+BTS::Fibre::Track::Set& convert_nfg_to_mr(BTS::Fibre::Track::Set& strands,
+                                          std::vector<BTS::Triple<double> >& pre_points,
+                                          std::vector<BTS::Triple<double> >& post_points,
+                                          Strand_collection* c);
 
-std::vector<BTS::Triple<double> >& generate_post_points(BTS::Fibre::Track::Set& strands, std::vector<BTS::Triple<double> >& post_points);
-
-
-BTS::Fibre::Track::Set& convert_nfg_to_mr(BTS::Fibre::Track::Set& strands, std::vector<BTS::Triple<double> >& pre_points, std::vector<BTS::Triple<double> >& post_points, Strand_collection* c);
-
-
-Strand_collection* convert_mr_to_nfg(Strand_collection* c, BTS::Fibre::Track::Set& strands, std::vector<BTS::Triple<double> >& pre_points, std::vector<BTS::Triple<double> >& post_points);
-
-
+Strand_collection* convert_mr_to_nfg(Strand_collection* c, BTS::Fibre::Track::Set& strands,
+                                     std::vector<BTS::Triple<double> >& pre_points,
+                                     std::vector<BTS::Triple<double> >& post_points);
 
 #endif

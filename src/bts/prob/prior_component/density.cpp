@@ -20,47 +20,45 @@
 
  */
 
-
 #include "bts/fibre/track/set.h"
 #include "bts/prob/prior_component/density.h"
 #include "bts/prob/inline_functions.h"
 
 namespace BTS {
-
-  namespace Prob {
-
-    namespace PriorComponent {
-
-      const double            Density::HIGH_SCALE_DEFAULT  = 1.0;
-      const double            Density::LOW_SCALE_DEFAULT   = 1.0;
-      const std::string       Density::NAME                = "density";
-      const size_t            Density::NUM_POINTS_DEFAULT  = 100;
-
-      double             Density::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
-
-        double log_prob = 0.0;
-        gradient.invalidate();
-
-        std::vector<double> areas = tractlet.cross_sectional_areas(num_points);
-
-        for (size_t point_i = 0; point_i < num_points; ++point_i) {
-
-          // Divide the Apparrent Connection Strength (ACS) of the tractlet by the perpendicular component of the area.
-          double density = tractlet.acs() / areas[point_i];
-
-          // Arbitrary function that makes the probability of the density being either very large or very low improbable.
-          log_prob -= high_scale* MR::Math::pow2(1.0 - density);
-          log_prob -= low_scale * MR::Math::pow2(1.0 - 1.0 / density);
-
+    
+    namespace Prob {
+        
+        namespace PriorComponent {
+            
+            const double Density::HIGH_SCALE_DEFAULT = 1.0;
+            const double Density::LOW_SCALE_DEFAULT = 1.0;
+            const std::string Density::NAME = "density";
+            const size_t Density::NUM_POINTS_DEFAULT = 100;
+            
+            double Density::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
+                
+                double log_prob = 0.0;
+                gradient.invalidate();
+                
+                std::vector<double> areas = tractlet.cross_sectional_areas(num_points);
+                
+                for (size_t point_i = 0; point_i < num_points; ++point_i) {
+                    
+                    // Divide the Apparrent Connection Strength (ACS) of the tractlet by the perpendicular component of the area.
+                    double density = tractlet.acs() / areas[point_i];
+                    
+                    // Arbitrary function that makes the probability of the density being either very large or very low improbable.
+                    log_prob -= high_scale * MR::Math::pow2(1.0 - density);
+                    log_prob -= low_scale * MR::Math::pow2(1.0 - 1.0 / density);
+                    
+                }
+                
+                return log_prob / (double) num_points;
+                
+            }
+        
         }
-
-        return log_prob / (double)num_points;
-
-
-      }
-
+    
     }
-
-  }
 
 }

@@ -31,105 +31,93 @@
 #include "phantom/optimise/reference_block.h"
 #include "phantom/optimise/sample.h"
 
-
 //------------------------------------------------------------------------//
 // Initialize a newly allocated reference block.
 //------------------------------------------------------------------------//
 
-void reset_reference_block(Reference_block *reference_block) {  //For reuse of the memory allocated during previous iteration resets all the values to their initial values except the 'next_block' pointers to the next block in the chain.
-	if (reference_block->init_check != -7) {
-	
-		printf("Reference block was never initiated\n");
-		exit(0);
-	}
-
-
-	
-	reference_block->next_i = 0;
-	reference_block->reference_count = 0;
-	reference_block->next_block_open = 0;
-
-	
+void reset_reference_block(Reference_block *reference_block) {    //For reuse of the memory allocated during previous iteration resets all the values to their initial values except the 'next_block' pointers to the next block in the chain.
+    if (reference_block->init_check != -7) {
+        
+        printf("Reference block was never initiated\n");
+        exit(0);
+    }
+    
+    reference_block->next_i = 0;
+    reference_block->reference_count = 0;
+    reference_block->next_block_open = 0;
+    
 }
 
 void init_reference_block(Reference_block *reference_block) {
-
-	reference_block->next_i = 0;
-	reference_block->reference_count = 0;
-	reference_block->next_block_open = 0;
-	reference_block->next_block = NULL;
-	reference_block->init_check = -7;
-
+    
+    reference_block->next_i = 0;
+    reference_block->reference_count = 0;
+    reference_block->next_block_open = 0;
+    reference_block->next_block = NULL;
+    reference_block->init_check = -7;
+    
 }
-
-
-
-
 
 //------------------------------------------------------------------------//
 // Append a new reference to the end of the sample block
 //------------------------------------------------------------------------//
 
 void add_reference(Reference_block **reference_block, Sample *sample) {
-	
-	if ((*reference_block)->reference_count >= REFERENCE_BLOCK_SIZE) {
-	
-		(*reference_block)->next_block_open = 1;
-		
-		
-		if ((*reference_block)->next_block == NULL) {
-			(*reference_block)->next_block = (Reference_block*)malloc(sizeof(Reference_block));
-			*reference_block = (*reference_block)->next_block; 
-			init_reference_block(*reference_block);
-		} else {
-			*reference_block = (*reference_block)->next_block;
-			reset_reference_block(*reference_block);
-		}
-	}
-
-	(*reference_block)->references[(*reference_block)->reference_count++] = sample;
-	
+    
+    if ((*reference_block)->reference_count >= REFERENCE_BLOCK_SIZE) {
+        
+        (*reference_block)->next_block_open = 1;
+        
+        if ((*reference_block)->next_block == NULL) {
+            (*reference_block)->next_block = (Reference_block*) malloc(sizeof(Reference_block));
+            *reference_block = (*reference_block)->next_block;
+            init_reference_block(*reference_block);
+        } else {
+            *reference_block = (*reference_block)->next_block;
+            reset_reference_block(*reference_block);
+        }
+    }
+    
+    (*reference_block)->references[(*reference_block)->reference_count++] = sample;
+    
 }
 
 //------------------------------------------------------------------------//
 // Iterate through all the references in the chain of sample blocks
 //------------------------------------------------------------------------//
 
-Sample* next_reference(Reference_block **reference_block) { 
-	
-	Sample *reference;
-	
-	if ((*reference_block)->next_i >= REFERENCE_BLOCK_SIZE) {
-		
-		
-		if ((*reference_block)->next_block_open) {
-			*reference_block = (*reference_block)->next_block;
-			(*reference_block)->next_i=0;
-		
-		} else {
-			return NULL;
-		}
-		
-	} 
-	
-	
-	if ((*reference_block)->next_i >= (*reference_block)->reference_count ) {
-		reference = NULL;
-	} else {
-		reference = (*reference_block)->references[(*reference_block)->next_i++];
-	}		
-	
-	return reference;
+Sample* next_reference(Reference_block **reference_block) {
+    
+    Sample *reference;
+    
+    if ((*reference_block)->next_i >= REFERENCE_BLOCK_SIZE) {
+        
+        if ((*reference_block)->next_block_open) {
+            *reference_block = (*reference_block)->next_block;
+            (*reference_block)->next_i = 0;
+            
+        } else {
+            return NULL;
+        }
+        
+    }
+    
+    if ((*reference_block)->next_i >= (*reference_block)->reference_count) {
+        reference = NULL;
+    } else {
+        reference = (*reference_block)->references[(*reference_block)->next_i++];
+    }
+    
+    return reference;
 }
-
 
 //------------------------------------------------------------------------//
 // Get the first sample in the reference block chain.
 //------------------------------------------------------------------------//
 
 Sample* first_reference(Reference_block **reference_block) {
-	(*reference_block)->next_i=0;
-	return next_reference(reference_block);
+    (*reference_block)->next_i = 0;
+    return next_reference(reference_block);
 }
 
 //------------------------------------------------------------------------//
@@ -137,23 +125,23 @@ Sample* first_reference(Reference_block **reference_block) {
 //------------------------------------------------------------------------//
 
 void free_reference_blocks(Reference_block *start_block) {
-	
-	Reference_block *curr_block;
-	Reference_block *prev_block;
-	
-	if (start_block->next_block != NULL) {
-		curr_block = start_block->next_block;
-		
-		while (curr_block->next_block != NULL) {
-			prev_block = curr_block;
-			curr_block = curr_block->next_block;
-
-			free(prev_block);
-
-		}
-		
-		free(curr_block);
-		
-	}
+    
+    Reference_block *curr_block;
+    Reference_block *prev_block;
+    
+    if (start_block->next_block != NULL) {
+        curr_block = start_block->next_block;
+        
+        while (curr_block->next_block != NULL) {
+            prev_block = curr_block;
+            curr_block = curr_block->next_block;
+            
+            free(prev_block);
+            
+        }
+        
+        free(curr_block);
+        
+    }
 }
 

@@ -20,12 +20,10 @@
 
  */
 
-
 extern "C" {
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 }
-
 
 #include "bts/cmd.h"
 #include "progressbar.h"
@@ -37,70 +35,61 @@ extern "C" {
 #include "bts/image/noise.h"
 #include "bts/image/noise/gaussian.h"
 
-
-
 #include "bts/inline_functions.h"
 
 using namespace BTS;
-
-SET_VERSION_DEFAULT;
-SET_AUTHOR ("Thomas G. Close");
-SET_COPYRIGHT (NULL);
+SET_VERSION_DEFAULT
+;
+SET_AUTHOR("Thomas G. Close");
+SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Subtracts the isotropic components from the image.",
-  "",
-  NULL
+    "Subtracts the isotropic components from the image.",
+    "",
+    NULL
 };
 
-ARGUMENTS = {
-  Argument ("initial", "The initial image the second image will be subtracted from.").type_file(),
+ARGUMENTS= {
+    Argument ("initial", "The initial image the second image will be subtracted from.").type_file(),
 
-  Argument ("output_image", "The resulting image").optional().type_file (),
+    Argument ("output_image", "The resulting image").optional().type_file (),
 
-  Argument()
+    Argument()
 };
 
+OPTIONS= {
 
-OPTIONS = {
+    Option ("dims", "The number of voxels along each dimension")
+    + Argument ("dims", "").type_text ("[3,3,3]"),
 
-  Option ("dims", "The number of voxels along each dimension")
-   + Argument ("dims", "").type_text ("[3,3,3]"),
+    Option ("offsets", "The offset of the centre of the image from the origin (0,0,0).")
+    + Argument ("offsets", "").type_text ("auto"),
 
-  Option ("offsets", "The offset of the centre of the image from the origin (0,0,0).")
-   + Argument ("offsets", "").type_text ("auto"),
-
-
-Option()
+    Option()
 
 };
-
-
 
 EXECUTE {
-
-  std::string input_location    = argument[0];
-  std::string output_location   = input_location;
-
-  if (argument.size() > 1)
-    output_location   = argument[1].c_str();
-
-  Image::Observed::Buffer image(input_location);
-
-  MR::ProgressBar progress_bar ("Removing isotropic components from image...");
-
-  image.remove_isotropic();
-
-  image.properties()["istropic_removed"] = "1";
-
-
+    
+        std::string input_location = argument[0];
+        std::string output_location = input_location;
+        
+        if (argument.size() > 1)
+            output_location = argument[1].c_str();
+        
+        Image::Observed::Buffer image(input_location);
+        
+        MR::ProgressBar progress_bar("Removing isotropic components from image...");
+        
+        image.remove_isotropic();
+        
+        image.properties()["istropic_removed"] = "1";
+        
 //-------------//
 //  Save Image //
 //-------------//
-
-  image.save(output_location);
-
-
-}
-
-
+        
+        image.save(output_location);
+        
+    }
+    

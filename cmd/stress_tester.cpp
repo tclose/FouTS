@@ -1,5 +1,3 @@
-
-
 extern "C" {
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
@@ -15,212 +13,215 @@ extern "C" {
 #include "bts/fibre/base/set.h"
 #include "bts/fibre/track/set.h"
 
-
 using namespace BTS;
 
-
-std::vector< std::vector<Fibre::Base::Object> >  recreate_objects(const std::vector<const char*>& elem_props) {
-
-  std::vector< std::vector<Fibre::Base::Object> > objects(10);
-
-  for (size_t size_i = 0; size_i < 10; ++size_i) {
-    objects[size_i];
-    for (size_t value_i = 0; value_i < 10; ++value_i) {
-      objects[size_i].push_back(Fibre::Base::Object(size_i, 3, elem_props));
-      objects[size_i][value_i].set(value_i+1001);
+std::vector<std::vector<Fibre::Base::Object> > recreate_objects(
+        const std::vector<const char*>& elem_props) {
+    
+    std::vector<std::vector<Fibre::Base::Object> > objects(10);
+    
+    for (size_t size_i = 0; size_i < 10; ++size_i) {
+        objects[size_i];
+        for (size_t value_i = 0; value_i < 10; ++value_i) {
+            objects[size_i].push_back(Fibre::Base::Object(size_i, 3, elem_props));
+            objects[size_i][value_i].set(value_i + 1001);
+        }
     }
-  }
-
-  return objects;
-
+    
+    return objects;
+    
 }
 
-std::vector< std::map<const char*, double> >  recreate_prop_row_maps(const std::vector<const char*>& elem_props) {
-
-  std::vector< std::map<const char*, double> > prop_row_maps(10);
-
-  for (size_t value_i = 0; value_i < 10; ++value_i) {
-    for (size_t key_i = 0; key_i < elem_props.size(); ++key_i)
-      prop_row_maps[value_i][elem_props[key_i]] = (double)(value_i+1) * 0.01 + (double)(key_i+1) * 0.1 + 0.001;
-  }
-
-  return prop_row_maps;
-
+std::vector<std::map<const char*, double> > recreate_prop_row_maps(
+        const std::vector<const char*>& elem_props) {
+    
+    std::vector<std::map<const char*, double> > prop_row_maps(10);
+    
+    for (size_t value_i = 0; value_i < 10; ++value_i) {
+        for (size_t key_i = 0; key_i < elem_props.size(); ++key_i)
+            prop_row_maps[value_i][elem_props[key_i]] = (double) (value_i + 1) * 0.01
+                    + (double) (key_i + 1) * 0.1 + 0.001;
+    }
+    
+    return prop_row_maps;
+    
 }
 
-std::vector< std::vector<double> >  recreate_prop_rows(const std::vector<const char*>& elem_props) {
-
-  std::vector< std::vector<double> > prop_rows(10);
-
-  for (size_t value_i = 0; value_i < 10; ++value_i) {
-    for (size_t key_i = 0; key_i < elem_props.size(); ++key_i)
-      prop_rows[value_i].push_back((double)(value_i+1) * 0.01 + (double)(key_i+1) * 0.1 + 0.001);
-  }
-
-  return prop_rows;
-
+std::vector<std::vector<double> > recreate_prop_rows(const std::vector<const char*>& elem_props) {
+    
+    std::vector<std::vector<double> > prop_rows(10);
+    
+    for (size_t value_i = 0; value_i < 10; ++value_i) {
+        for (size_t key_i = 0; key_i < elem_props.size(); ++key_i)
+            prop_rows[value_i].push_back(
+                    (double) (value_i + 1) * 0.01 + (double) (key_i + 1) * 0.1 + 0.001);
+    }
+    
+    return prop_rows;
+    
 }
 
-
-std::vector< std::map<std::string,std::string> > create_ext_prop_row_maps() {
-
-  std::vector< std::map<std::string,std::string> > prop_rows(10);
-
-  for (size_t value_i = 0; value_i < 10; ++value_i) {
-    for (size_t key_i = 1; key_i < 11; ++key_i)
-      prop_rows[value_i]["EXT_ELEM_PROP_" +str(key_i)] = str((double)(value_i+1) * 0.01 + (double)key_i * 1.1 + 0.001);
-  }
-
-  return prop_rows;
-
+std::vector<std::map<std::string, std::string> > create_ext_prop_row_maps() {
+    
+    std::vector<std::map<std::string, std::string> > prop_rows(10);
+    
+    for (size_t value_i = 0; value_i < 10; ++value_i) {
+        for (size_t key_i = 1; key_i < 11; ++key_i)
+            prop_rows[value_i]["EXT_ELEM_PROP_" + str(key_i)] = str(
+                    (double) (value_i + 1) * 0.01 + (double) key_i * 1.1 + 0.001);
+    }
+    
+    return prop_rows;
+    
 }
 
-void recreate_elem_prop_objects(const std::vector<const char*>& elem_props, std::vector<std::vector<Fibre::Base::Object> >& objects, std::vector< std::map<const char*, double> >& prop_row_maps, std::vector< std::vector<double> >& prop_rows) {
-
-  objects = recreate_objects(elem_props);
-  prop_row_maps = recreate_prop_row_maps(elem_props);
-  prop_rows = recreate_prop_rows(elem_props);
-
+void recreate_elem_prop_objects(const std::vector<const char*>& elem_props,
+                                std::vector<std::vector<Fibre::Base::Object> >& objects,
+                                std::vector<std::map<const char*, double> >& prop_row_maps,
+                                std::vector<std::vector<double> >& prop_rows) {
+    
+    objects = recreate_objects(elem_props);
+    prop_row_maps = recreate_prop_row_maps(elem_props);
+    prop_rows = recreate_prop_rows(elem_props);
+    
 }
-
-SET_VERSION_DEFAULT;
-SET_AUTHOR ("Thomas G. Close");
-SET_COPYRIGHT (NULL);
+SET_VERSION_DEFAULT
+;
+SET_AUTHOR("Thomas G. Close");
+SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Tests a random sequence of Fibre::Base::Set operations against those performed on a Python version.",
-  "",
-  NULL
+    "Tests a random sequence of Fibre::Base::Set operations against those performed on a Python version.",
+    "",
+    NULL
 };
 
-ARGUMENTS = {
+ARGUMENTS= {
 
-
-  Argument()
+    Argument()
 };
 
+OPTIONS= {
 
-OPTIONS = {
-
-Option() };
-
+    Option()};
 
 EXECUTE {
-
-  size_t SET_SIZE = 5;
-  size_t OBJECT_SIZE = 5;
-
-  const char* PROP_1 = "PROP_1";
-  const char* PROP_2 = "PROP_2";
-  const char* PROP_3 = "PROP_3";
-  const char* PROP_4 = "PROP_4";
-  const char* PROP_5 = "PROP_5";
-  const char* PROP_6 = "PROP_6";
-  const char* PROP_7 = "PROP_7";
-  const char* PROP_8 = "PROP_8";
-  const char* PROP_9 = "PROP_9";
-  const char* PROP_10 = "PROP_10";
-
-  const char* ELEM_PROP_1 = "ELEM_PROP_1";
-  const char* ELEM_PROP_2 = "ELEM_PROP_2";
-  const char* ELEM_PROP_3 = "ELEM_PROP_3";
-  const char* ELEM_PROP_4 = "ELEM_PROP_4";
-  const char* ELEM_PROP_5 = "ELEM_PROP_5";
-  const char* ELEM_PROP_6 = "ELEM_PROP_6";
-  const char* ELEM_PROP_7 = "ELEM_PROP_7";
-  const char* ELEM_PROP_8 = "ELEM_PROP_8";
-  const char* ELEM_PROP_9 = "ELEM_PROP_9";
-  const char* ELEM_PROP_10 = "ELEM_PROP_10";
-
-  std::string EXT_ELEM_PROP_1 = "EXT_ELEM_PROP_1";
-  std::string EXT_ELEM_PROP_2 = "EXT_ELEM_PROP_2";
-  std::string EXT_ELEM_PROP_3 = "EXT_ELEM_PROP_3";
-  std::string EXT_ELEM_PROP_4 = "EXT_ELEM_PROP_4";
-  std::string EXT_ELEM_PROP_5 = "EXT_ELEM_PROP_5";
-  std::string EXT_ELEM_PROP_6 = "EXT_ELEM_PROP_6";
-  std::string EXT_ELEM_PROP_7 = "EXT_ELEM_PROP_7";
-  std::string EXT_ELEM_PROP_8 = "EXT_ELEM_PROP_8";
-  std::string EXT_ELEM_PROP_9 = "EXT_ELEM_PROP_9";
-  std::string EXT_ELEM_PROP_10 = "EXT_ELEM_PROP_10";
-
-  std::vector<const char*> props;
-
-  props.push_back(PROP_1);
-  props.push_back(PROP_2);
-  props.push_back(PROP_3);
-  props.push_back(PROP_4);
-  props.push_back(PROP_5);
-
-  std::vector<const char*> elem_props;
-
-  elem_props.push_back(ELEM_PROP_1);
-  elem_props.push_back(ELEM_PROP_2);
-  elem_props.push_back(ELEM_PROP_3);
-  elem_props.push_back(ELEM_PROP_4);
-  elem_props.push_back(ELEM_PROP_5);
-
-
-  std::vector< std::vector<Fibre::Base::Object> > objects = recreate_objects(elem_props);
-  std::vector<std::vector<double> > prop_rows = recreate_prop_rows(elem_props);
-  std::vector< std::map<const char*, double> > prop_row_maps = recreate_prop_row_maps(elem_props);
-
-  std::vector< std::map<std::string,std::string> > ext_prop_row_maps = create_ext_prop_row_maps();
-
-
-  //Iniate set
-  Fibre::Base::Set<Fibre::Base::Object> set(SET_SIZE, OBJECT_SIZE, 3, props, elem_props);
-
-  for (size_t elem_i = 0; elem_i < SET_SIZE; ++elem_i) {
-    Fibre::Base::Object ob = set[elem_i];
-    for (size_t elem_elem_i = 0; elem_elem_i < OBJECT_SIZE; ++elem_elem_i) {
-      Coord t = ob[elem_elem_i];
-      for (size_t elem_elem_elem_i = 0; elem_elem_elem_i < 3; ++elem_elem_elem_i)
-        t[elem_elem_elem_i] = elem_i * 100 + elem_elem_i * 10 + elem_elem_elem_i +1;
-    }
-
-    for (size_t prop_i = 0; prop_i < 5; ++prop_i)
-      ob.prop(prop_i) = (double)elem_i * 100.0 + (double)(prop_i+1) * .1 + 0.001;
-  }
-
-  for (size_t prop_i = 0; prop_i < 5; ++prop_i)
-    set.prop(prop_i) = (double)(prop_i+1) * 1.1 + 0.001;
-
-  for (size_t eprop_i = 1; eprop_i < 6; ++eprop_i) {
-    set.add_extend_elem_prop("EXT_ELEM_PROP_" + str(eprop_i),"NaN");
-    for (size_t row_i = 0; row_i < set.size(); ++row_i)
-      set.set_extend_elem_prop("EXT_ELEM_PROP_" + str(eprop_i), "Ooogle " + str(eprop_i) + "-" + str(row_i), row_i);
-  }
-
-
-  //Iniate set
-  Fibre::Base::Set<Fibre::Base::Object> set2(SET_SIZE, OBJECT_SIZE, 3, props, elem_props);
-
-  for (size_t elem_i = 0; elem_i < SET_SIZE; ++elem_i) {
-    Fibre::Base::Object ob = set2[elem_i];
-    for (size_t elem_elem_i = 0; elem_elem_i < OBJECT_SIZE; ++elem_elem_i) {
-      Coord t = ob[elem_elem_i];
-      for (size_t elem_elem_elem_i = 0; elem_elem_elem_i < 3; ++elem_elem_elem_i)
-        t[elem_elem_elem_i] = -(double)(elem_i * 100 + elem_elem_i * 10 + elem_elem_elem_i + 1);
-    }
-
-    for (size_t prop_i = 0; prop_i < 5; ++prop_i)
-      ob.prop(prop_i) = -(double)elem_i * 100.0 - (double)(prop_i+1) * .1 - 0.001;
-  }
-
-  for (size_t prop_i = 0; prop_i < 5; ++prop_i)
-    set2.prop(prop_i) = -(double)(prop_i+1) * 1.1 - 0.001;
-
-  for (size_t eprop_i = 6; eprop_i < 11; ++eprop_i) {
-    set2.add_extend_elem_prop("EXT_ELEM_PROP_" + str(eprop_i),"NaN");
-    for (size_t row_i = 0; row_i < set2.size(); ++row_i)
-      set2.set_extend_elem_prop("EXT_ELEM_PROP_" + str(eprop_i), "Boogle " + str(eprop_i) + "-" + str(row_i), row_i);
-  }
-
-  std::ofstream out;
-
-  out.open("/home/tclose/Code/Tractography/python/fibre/base/test/output/cpp_output.txt");
-
-
+    
+        size_t SET_SIZE = 5;
+        size_t OBJECT_SIZE = 5;
+        
+        const char* PROP_1 = "PROP_1";
+        const char* PROP_2 = "PROP_2";
+        const char* PROP_3 = "PROP_3";
+        const char* PROP_4 = "PROP_4";
+        const char* PROP_5 = "PROP_5";
+        const char* PROP_6 = "PROP_6";
+        const char* PROP_7 = "PROP_7";
+        const char* PROP_8 = "PROP_8";
+        const char* PROP_9 = "PROP_9";
+        const char* PROP_10 = "PROP_10";
+        
+        const char* ELEM_PROP_1 = "ELEM_PROP_1";
+        const char* ELEM_PROP_2 = "ELEM_PROP_2";
+        const char* ELEM_PROP_3 = "ELEM_PROP_3";
+        const char* ELEM_PROP_4 = "ELEM_PROP_4";
+        const char* ELEM_PROP_5 = "ELEM_PROP_5";
+        const char* ELEM_PROP_6 = "ELEM_PROP_6";
+        const char* ELEM_PROP_7 = "ELEM_PROP_7";
+        const char* ELEM_PROP_8 = "ELEM_PROP_8";
+        const char* ELEM_PROP_9 = "ELEM_PROP_9";
+        const char* ELEM_PROP_10 = "ELEM_PROP_10";
+        
+        std::string EXT_ELEM_PROP_1 = "EXT_ELEM_PROP_1";
+        std::string EXT_ELEM_PROP_2 = "EXT_ELEM_PROP_2";
+        std::string EXT_ELEM_PROP_3 = "EXT_ELEM_PROP_3";
+        std::string EXT_ELEM_PROP_4 = "EXT_ELEM_PROP_4";
+        std::string EXT_ELEM_PROP_5 = "EXT_ELEM_PROP_5";
+        std::string EXT_ELEM_PROP_6 = "EXT_ELEM_PROP_6";
+        std::string EXT_ELEM_PROP_7 = "EXT_ELEM_PROP_7";
+        std::string EXT_ELEM_PROP_8 = "EXT_ELEM_PROP_8";
+        std::string EXT_ELEM_PROP_9 = "EXT_ELEM_PROP_9";
+        std::string EXT_ELEM_PROP_10 = "EXT_ELEM_PROP_10";
+        
+        std::vector<const char*> props;
+        
+        props.push_back(PROP_1);
+        props.push_back(PROP_2);
+        props.push_back(PROP_3);
+        props.push_back(PROP_4);
+        props.push_back(PROP_5);
+        
+        std::vector<const char*> elem_props;
+        
+        elem_props.push_back(ELEM_PROP_1);
+        elem_props.push_back(ELEM_PROP_2);
+        elem_props.push_back(ELEM_PROP_3);
+        elem_props.push_back(ELEM_PROP_4);
+        elem_props.push_back(ELEM_PROP_5);
+        
+        std::vector<std::vector<Fibre::Base::Object> > objects = recreate_objects(elem_props);
+        std::vector<std::vector<double> > prop_rows = recreate_prop_rows(elem_props);
+        std::vector<std::map<const char*, double> > prop_row_maps = recreate_prop_row_maps(
+                elem_props);
+        
+        std::vector<std::map<std::string, std::string> > ext_prop_row_maps =
+                create_ext_prop_row_maps();
+        
+        //Iniate set
+        Fibre::Base::Set<Fibre::Base::Object> set(SET_SIZE, OBJECT_SIZE, 3, props, elem_props);
+        
+        for (size_t elem_i = 0; elem_i < SET_SIZE; ++elem_i) {
+            Fibre::Base::Object ob = set[elem_i];
+            for (size_t elem_elem_i = 0; elem_elem_i < OBJECT_SIZE; ++elem_elem_i) {
+                Coord t = ob[elem_elem_i];
+                for (size_t elem_elem_elem_i = 0; elem_elem_elem_i < 3; ++elem_elem_elem_i)
+                    t[elem_elem_elem_i] = elem_i * 100 + elem_elem_i * 10 + elem_elem_elem_i + 1;
+            }
+            
+            for (size_t prop_i = 0; prop_i < 5; ++prop_i)
+                ob.prop(prop_i) = (double) elem_i * 100.0 + (double) (prop_i + 1) * .1 + 0.001;
+        }
+        
+        for (size_t prop_i = 0; prop_i < 5; ++prop_i)
+            set.prop(prop_i) = (double) (prop_i + 1) * 1.1 + 0.001;
+        
+        for (size_t eprop_i = 1; eprop_i < 6; ++eprop_i) {
+            set.add_extend_elem_prop("EXT_ELEM_PROP_" + str(eprop_i), "NaN");
+            for (size_t row_i = 0; row_i < set.size(); ++row_i)
+                set.set_extend_elem_prop("EXT_ELEM_PROP_" + str(eprop_i),
+                        "Ooogle " + str(eprop_i) + "-" + str(row_i), row_i);
+        }
+        
+        //Iniate set
+        Fibre::Base::Set<Fibre::Base::Object> set2(SET_SIZE, OBJECT_SIZE, 3, props, elem_props);
+        
+        for (size_t elem_i = 0; elem_i < SET_SIZE; ++elem_i) {
+            Fibre::Base::Object ob = set2[elem_i];
+            for (size_t elem_elem_i = 0; elem_elem_i < OBJECT_SIZE; ++elem_elem_i) {
+                Coord t = ob[elem_elem_i];
+                for (size_t elem_elem_elem_i = 0; elem_elem_elem_i < 3; ++elem_elem_elem_i)
+                    t[elem_elem_elem_i] = -(double) (elem_i * 100 + elem_elem_i * 10
+                                                     + elem_elem_elem_i + 1);
+            }
+            
+            for (size_t prop_i = 0; prop_i < 5; ++prop_i)
+                ob.prop(prop_i) = -(double) elem_i * 100.0 - (double) (prop_i + 1) * .1 - 0.001;
+        }
+        
+        for (size_t prop_i = 0; prop_i < 5; ++prop_i)
+            set2.prop(prop_i) = -(double) (prop_i + 1) * 1.1 - 0.001;
+        
+        for (size_t eprop_i = 6; eprop_i < 11; ++eprop_i) {
+            set2.add_extend_elem_prop("EXT_ELEM_PROP_" + str(eprop_i), "NaN");
+            for (size_t row_i = 0; row_i < set2.size(); ++row_i)
+                set2.set_extend_elem_prop("EXT_ELEM_PROP_" + str(eprop_i),
+                        "Boogle " + str(eprop_i) + "-" + str(row_i), row_i);
+        }
+        
+        std::ofstream out;
+        
+        out.open("/home/tclose/Code/Tractography/python/fibre/base/test/output/cpp_output.txt");
+        
 //
 //  //====================================================================================================================
 //  // Test functions start here
@@ -703,15 +704,13 @@ EXECUTE {
 //  out << "set.bsize(): " << set.bsize() << std::endl;
 //  out << "set.bsize(): " << set.bsize() << std::endl;
 //  set.get_extend_elem_prop_row(1);
-
-
-  out << std::endl << std::endl << "-------------------------------------" << std::endl;
-  out << "             FINAL PRINT             " << std::endl;
-  out << "-------------------------------------\n" << std::endl;
-
-  out << set << std::endl;
-
-  std::cout << "Ran cpp test successfully" << std::endl;
-
-
-}
+        
+        out << std::endl << std::endl << "-------------------------------------" << std::endl;
+        out << "             FINAL PRINT             " << std::endl;
+        out << "-------------------------------------\n" << std::endl;
+        
+        out << set << std::endl;
+        
+        std::cout << "Ran cpp test successfully" << std::endl;
+        
+    }

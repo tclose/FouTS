@@ -22,7 +22,6 @@
 #define KM_FILTER_CENTERS_H
 
 #include "k_means/KMcenters.h"			// provides KMcenters
-
 //----------------------------------------------------------------------
 //  KMfilterCenters
 //	This extends the KMcenters class, by providing a more efficient
@@ -102,84 +101,97 @@
 // 	should be split or merged.
 //----------------------------------------------------------------------
 
-class KMfilterCenters : public KMcenters{
-protected:			// intermediates
-    KMpointArray	sums;		// vector sum of points
-    double*		sumSqs;		// sum of squares
-    int*		weights;	// the weight of each center
-protected:			// distortion data
-    double*		dists;		// individual distortions
-    double		currDist;	// current total distortion
-    bool		valid;		// are sums/distortions valid?
-    double		dampFactor;	// dampening factor [0,1]
-protected:			// local utilities
-    void computeDistortion();		// compute distortions
-    void moveToCentroid();		// move centers to cluster centroids
-    					// swap one center
-    void swapOneCenter(bool allowDuplicate = true);
-    void validate()			// make valid
-      { valid = true; }
-    void invalidate() {			// make invalid
-      if (kmStatLev >= CENTERS) print();// print centers
-      valid = false;
-    }
-public:
-    					// standard constructor
-    KMfilterCenters(int k, KMdata& p, double df = 1);
-					// copy constructor
-    KMfilterCenters(const KMfilterCenters& s);
-					// assignment operator
-    KMfilterCenters& operator=(const KMfilterCenters& s);
+class KMfilterCenters: public KMcenters {
+    protected:
+        // intermediates
+        KMpointArray sums;		// vector sum of points
+        double* sumSqs;		// sum of squares
+        int* weights;    // the weight of each center
+    protected:
+        // distortion data
+        double* dists;		// individual distortions
+        double currDist;    // current total distortion
+        bool valid;		// are sums/distortions valid?
+        double dampFactor;    // dampening factor [0,1]
+    protected:
+        // local utilities
+        void computeDistortion();		// compute distortions
+        void moveToCentroid();		// move centers to cluster centroids
+        // swap one center
+        void swapOneCenter(bool allowDuplicate = true);
+        void validate()			// make valid
+        {
+            valid = true;
+        }
+        void invalidate() {			// make invalid
+            if (kmStatLev >= CENTERS)
+                print();			// print centers
+            valid = false;
+        }
+    public:
+        // standard constructor
+        KMfilterCenters(int k, KMdata& p, double df = 1);
+        // copy constructor
+        KMfilterCenters(const KMfilterCenters& s);
+        // assignment operator
+        KMfilterCenters& operator=(const KMfilterCenters& s);
 
-    virtual ~KMfilterCenters();		// virtual destructor
-
-public:					// public accessors
-    					// returns sums
-    KMpointArray getSums(bool autoUpdate = true) {
-	if (autoUpdate && !valid) computeDistortion();
-	return sums;
-    }
-    					// returns sums of squares
-    double* getSumSqs(bool autoUpdate = true) {
-	if (autoUpdate && !valid) computeDistortion();
-	return sumSqs;
-    }
-    					// returns weights
-    int* getWeights(bool autoUpdate = true) {
-	if (autoUpdate && !valid) computeDistortion();
-	return weights;
-    }
-					// returns total distortion
-    double getDist(bool autoUpdate = true)	{
-	if (autoUpdate && !valid) computeDistortion();
-	return currDist;
-    }
-					// returns average distortion
-    double getAvgDist(bool autoUpdate = true)	{
-	if (autoUpdate && !valid) computeDistortion();
-	return currDist/double(getNPts());
-    }
-					// returns individual distortions
-    double* getDists(bool autoUpdate = true) {
-	if (autoUpdate && !valid) computeDistortion();
-	return dists;
-    }
-
-    void getAssignments(		// get point assignments
-	KMctrIdxArray	closeCtr,		// closest center per point
-	double*		sqDist);		// sq'd dist to center
-
-    void genRandom() {			// generate random centers
-	pts->sampleCtrs(ctrs, kCtrs, false);
-	invalidate();
-    }
-    void lloyd1Stage() {		// one stage of LLoyd's algorithm
-	moveToCentroid();
-    }
-    void swap1Stage() {			// one stage of swap heuristic
-	swapOneCenter();
-    }
-    virtual void print(			// print centers
-        bool fancy = true);
+        virtual ~KMfilterCenters();		// virtual destructor
+        
+    public:
+        // public accessors
+        // returns sums
+        KMpointArray getSums(bool autoUpdate = true) {
+            if (autoUpdate && !valid)
+                computeDistortion();
+            return sums;
+        }
+        // returns sums of squares
+        double* getSumSqs(bool autoUpdate = true) {
+            if (autoUpdate && !valid)
+                computeDistortion();
+            return sumSqs;
+        }
+        // returns weights
+        int* getWeights(bool autoUpdate = true) {
+            if (autoUpdate && !valid)
+                computeDistortion();
+            return weights;
+        }
+        // returns total distortion
+        double getDist(bool autoUpdate = true) {
+            if (autoUpdate && !valid)
+                computeDistortion();
+            return currDist;
+        }
+        // returns average distortion
+        double getAvgDist(bool autoUpdate = true) {
+            if (autoUpdate && !valid)
+                computeDistortion();
+            return currDist / double(getNPts());
+        }
+        // returns individual distortions
+        double* getDists(bool autoUpdate = true) {
+            if (autoUpdate && !valid)
+                computeDistortion();
+            return dists;
+        }
+        
+        void getAssignments(		// get point assignments
+                KMctrIdxArray closeCtr,		// closest center per point
+                double* sqDist);		// sq'd dist to center
+                
+        void genRandom() {			// generate random centers
+            pts->sampleCtrs(ctrs, kCtrs, false);
+            invalidate();
+        }
+        void lloyd1Stage() {		// one stage of LLoyd's algorithm
+            moveToCentroid();
+        }
+        void swap1Stage() {			// one stage of swap heuristic
+            swapOneCenter();
+        }
+        virtual void print(			// print centers
+                bool fancy = true);
 };
 #endif

@@ -23,7 +23,6 @@
 
 #include "k_means/KMeans.h"			// kmeans includes
 #include "k_means/KCtree.h"			// kc-tree includes
-
 //----------------------------------------------------------------------
 //  KMdata - data point set
 //  	This object represents a set of data points in d-space.  The
@@ -47,60 +46,67 @@
 //----------------------------------------------------------------------
 
 class KMdata {
-private:
-    int			dim;		// dimension
-    int			maxPts;		// max number of points
-    int			nPts;		// number of data points
-    KMdataArray		pts;		// the data points
-    KCtree*		kcTree;		// kc-tree for the points
-private:				// copy functions (not implemented)
-    KMdata(const KMdata& p)		// copy constructor
-      { assert(false); }
-    KMdata& operator=(const KMdata& p)	// assignment operator
-      { assert(false);  return *this; }
-public:
-    KMdata(int d, int n);		// standard constructor
-
-    int getDim() const {		// get dimension
-	return dim;
-    }
-    int getNPts() const {		// get number of points
-	return nPts;
-    }
-    KMdataArray getPts() const {	// get the points
-	return pts;
-    }
-    KCtree* getKcTree() const {		// get kc-tree
-	return kcTree;
-    }
-    KMdataPoint& operator[](int i) {	// index
-	return pts[i];
-    }
-    const KMdataPoint& operator[](int i) const {
-	return pts[i];
-    }
-    void setNPts(int n) {		// set number of points
-	assert(n <= maxPts);		// can't be more than array size
-	nPts = n;
-    }
-    void buildKcTree();			// build the kc-tree for points
-
-    virtual void sampleCtr(		// sample a center point
-	KMpoint		sample);		// where to store sample
-
-    virtual void sampleCtrs(		// sample center points
-	KMpointArray	sample,			// where to store sample
-	int		k,			// number of points to sample
-	bool		allowDuplicate);	// allowing duplicates?
-
-    void resize(int d, int n);		// resize array
-
-    void print(				// print data points
-    	bool		fancy = true) {		// nicely formatted?
-	kmPrintPts("Data_Points", pts, nPts, dim, fancy);
-    }
-
-    virtual ~KMdata();			// destructor
+    private:
+        int dim;		// dimension
+        int maxPts;		// max number of points
+        int nPts;		// number of data points
+        KMdataArray pts;		// the data points
+        KCtree* kcTree;		// kc-tree for the points
+    private:
+        // copy functions (not implemented)
+        KMdata(const KMdata& p)		// copy constructor
+        {
+            assert(false);
+        }
+        KMdata& operator=(const KMdata& p)    // assignment operator
+                {
+            assert(false);
+            return *this;
+        }
+    public:
+        KMdata(int d, int n);		// standard constructor
+               
+        int getDim() const {		// get dimension
+            return dim;
+        }
+        int getNPts() const {		// get number of points
+            return nPts;
+        }
+        KMdataArray getPts() const {	// get the points
+            return pts;
+        }
+        KCtree* getKcTree() const {		// get kc-tree
+            return kcTree;
+        }
+        KMdataPoint& operator[](int i) {	// index
+            return pts[i];
+        }
+        const KMdataPoint& operator[](int i) const {
+            return pts[i];
+        }
+        void setNPts(int n) {		// set number of points
+            assert(n <= maxPts);
+            // can't be more than array size
+            nPts = n;
+        }
+        void buildKcTree();			// build the kc-tree for points
+        
+        virtual void sampleCtr(		// sample a center point
+                KMpoint sample);		// where to store sample
+                
+        virtual void sampleCtrs(		// sample center points
+                KMpointArray sample,			// where to store sample
+                int k,			// number of points to sample
+                bool allowDuplicate);    // allowing duplicates?
+                
+        void resize(int d, int n);		// resize array
+                    
+        void print(				// print data points
+                bool fancy = true) {		// nicely formatted?
+            kmPrintPts("Data_Points", pts, nPts, dim, fancy);
+        }
+        
+        virtual ~KMdata();			// destructor
 };
 
 typedef KMdata* KMdataPtr;		// pointer to KMdata

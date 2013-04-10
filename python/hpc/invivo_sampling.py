@@ -113,12 +113,13 @@ parser.add_argument('--combo', action='store_true',
 parser.add_argument('--estimate_response', action='store_true',
                     help="Uses an estimated diffusion response function instead"
                          " of the default tensor one")
-parser.add_argument('--dataset',  type=str,
+parser.add_argument('--dataset', type=str,
                     default=os.path.join('donald', 'corpus_callosum.mif'),
                     help="The dataset to use (default: %(default)s).")
 parser.add_argument('--init_locations', nargs='+', type=float, default=None,
-                    help="The initial locations of the tracts (default: "
-                         "%(default)s).")
+                    help="The initial locations of the tracts.")
+parser.add_argument('--reference_locations', nargs='+', type=float, default=None,
+                    help="The locations used to sample the base intensity")
                     #default=[(3.94, 55.8, 6.51), (-0.68, 10.65, 8.99)],
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter 
@@ -128,21 +129,27 @@ args = parser.parse_args()
 # through all combinations of the provided parameters. 
 if not args.init_locations:
     if args.dataset == os.path.join('donald', 'corpus_callosum.mif'):
-        args.init_locations=[(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0), 
+        args.init_locations = [(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0),
                              (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
     elif args.dataset == os.path.join('heath', 'corpus_callosum.mif'):
-        args.init_locations=[(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0), 
+        args.init_locations = [(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0),
                              (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
     elif args.dataset == os.path.join('lisa', 'corpus_callosum.mif'):
+#<<<<<<< HEAD
         args.init_locations=[(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5), 
                              (0.0, 27.0, -16.5), (0.0, 14.0, -19.5), (0.0, 1.5, -28.5)]
+#=======
+#        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
+#                             (0.0, 20.0, -16.5), (0.0, 9.0, -21.5), (0.0, 0.0, -30.5)]
+#>>>>>>> 41e3547cf7ab1e56865b56d709ee1f46a41ddc57
     elif args.dataset == os.path.join('donald', 'fornix.mif'):
-        args.init_locations=[(0.0, 32.0, 0.0)]
+        args.init_locations = [(0.0, 32.0, 0.0)]
     elif args.dataset == os.path.join('heath', 'fornix.mif'):
-        args.init_locations=[(0.0, 35.0, 20.0)]
+        args.init_locations = [(0.0, 35.0, 20.0)]
     elif args.dataset == os.path.join('lisa', 'fornix.mif'):
-        args.init_locations=[(0.0, 35.0, -27.0)]
+        args.init_locations = [(0.0, 35.0, -27.0)]
     elif args.dataset == os.path.join('donald', 'corpus_callosum.60.mif'):
+#<<<<<<< HEAD
         args.init_locations=[(0.0, 69.0, -5.0), (0.0, 56.0, 7.0), (0.0, 35.0, 10.0), 
                              (0.0, 25.0, 9.5), (0.0, 15.0, 5.0), (0.0, 6.0, -5.0)]
     elif args.dataset == os.path.join('heath', 'corpus_callosum.60.mif'):
@@ -162,8 +169,55 @@ if not args.init_locations:
                              (0.0, 28.0, 7.5), (0.0, 17.5, 5.5), (0.0, 3.5, -5.5)]
     elif args.dataset == os.path.join('donald', 'fornix.20.mif'):
         args.init_locations=[(3.0, 38.0, -6.5)]
+#=======
+#        args.init_locations = [(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0),
+#                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
+#    elif args.dataset == os.path.join('heath', 'corpus_callosum.60.mif'):
+#        args.init_locations = [(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0),
+#                             (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
+#    elif args.dataset == os.path.join('lisa', 'corpus_callosum.60.mif'):
+#        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
+#                             (0.0, 20.0, -16.5), (0.0, 9.0, -21.5), (0.0, 0.0, -30.5)]
+#    elif args.dataset == os.path.join('donald', 'fornix.60.mif'):
+#        args.init_locations = [(0.0, 32.0, 0.0)]
+#    elif args.dataset == os.path.join('heath', 'fornix.60.mif'):
+#        args.init_locations = [(0.0, 35.0, 20.0)]
+#    elif args.dataset == os.path.join('lisa', 'fornix.60.mif'):
+#        args.init_locations = [(0.0, 35.0, -27.0)]
+#    elif args.dataset == os.path.join('donald', 'corpus_callosum.20.mif'):
+#        args.init_locations = [(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0),
+#                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
+#    elif args.dataset == os.path.join('donald', 'fornix.20.mif'):
+#        args.init_locations = [(0.0, 32.0, 0.0)]
+#>>>>>>> 41e3547cf7ab1e56865b56d709ee1f46a41ddc57
     else:
         raise Exception("dataset '{}' wasn't one with preconfigured initial "
+                        "locations, therefore they need to be provided"
+                        .format(args.dataset))
+if not args.reference_locations:
+    if args.dataset == os.path.join('donald', 'corpus_callosum.mif') or \
+            args.dataset == os.path.join('donald', 'fornix.mif'):
+        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
+    elif args.dataset == os.path.join('heath', 'corpus_callosum.mif') or \
+            args.dataset == os.path.join('heath', 'fornix.mif'):
+        args.init_locations = [(0.0, 58.0, 18.0), (0.0, -2.5, 14.5)]
+    elif args.dataset == os.path.join('lisa', 'corpus_callosum.mif') or \
+            args.dataset == os.path.join('lisa', 'fornix.mif'):
+        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 0.0, -30.5)]
+    elif args.dataset == os.path.join('donald', 'corpus_callosum.60.mif') or \
+            args.dataset == os.path.join('donald', 'fornix.60.mif'):
+        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
+    elif args.dataset == os.path.join('heath', 'corpus_callosum.60.mif') or \
+            args.dataset == os.path.join('heath', 'fornix.60.mif'):
+        args.init_locations = [(0.0, 58.0, 18.0), (0.0, -2.5, 14.5)]
+    elif args.dataset == os.path.join('lisa', 'corpus_callosum.60.mif') or \
+            args.dataset == os.path.join('lisa', 'fornix.60.mif'):
+        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 0.0, -30.5)]
+    elif args.dataset == os.path.join('donald', 'corpus_callosum.20.mif') or \
+            args.dataset == os.path.join('donald', 'fornix.20.mif'):
+        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
+    else:
+        raise Exception("dataset '{}' wasn't one with preconfigured reference "
                         "locations, therefore they need to be provided"
                         .format(args.dataset))
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
@@ -233,8 +287,8 @@ init_fibres {work_dir}/init_location_{i}.tct -degree {args.degree} \
 # Add new tract to initial set
 combine_fibres {work_dir}/output/init_0.tct {work_dir}/init_location_{i}.tct \
 {work_dir}/tmp.tct
-mv {work_dir}/tmp.tct {work_dir}/output/init_0.tct
-mv {work_dir}/tmp.tctx {work_dir}/output/init_0.tctx
+mv {work_dir}/tmp.tct {work_dir}/output/init.tct
+mv {work_dir}/tmp.tctx {work_dir}/output/init.tctx
 
 """.format(work_dir=work_dir, i=i, init_location=init_location, args=args,
                     seed=seed)
@@ -244,28 +298,27 @@ mv {work_dir}/tmp.tctx {work_dir}/output/init_0.tctx
         cmd_line += \
 """
 # Normalise the density of the initial tracts
-normalise_density {work_dir}/output/init_0.tct
+normalise_density {work_dir}/output/init.tct
 
 """.format(work_dir=work_dir, args=args)
 
-        for norm_count in range(args.num_norms):
-            cmd_line += \
+        cmd_line += \
 """ 
 # Calculate appropriate number of length and width samples                
 calculate_num_samples --samples_per_acs {args.samples_per_acs} \
 --samples_per_length {args.samples_per_length} --strategy max \
 --min_length_samples {args.min_length_samples} \
 --min_width_samples {args.min_width_samples} \
-{work_dir}/output/init_{norm_count}.tct {work_dir}/num_samples 
+{work_dir}/output/init.tct {work_dir}/num_samples 
 
 # Set required properties for the initial tracts
-set_properties {work_dir}/output/init_{norm_count}.tct \
+set_properties {work_dir}/output/init.tct \
 -set length_epsilon {args.length_epsilon} \
 -set width_epsilon {args.width_epsilon} -set base_intensity 1.0
                 
 # Run metropolis
-metropolis {dataset_path} {work_dir}/output/init_{norm_count}.tct \
-{work_dir}/output/samples_{norm_count}.tst -like_snr {like_snr} \
+metropolis {dataset_path} {work_dir}/output/init.tct \
+{work_dir}/output/samples.tst -like_snr {like_snr} \
 -exp_interp_extent {args.assumed_interp_extent} \
 -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -seed {seed} \
@@ -280,8 +333,8 @@ metropolis {dataset_path} {work_dir}/output/init_{norm_count}.tct \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 
 # Get last sample
-select_fibres {work_dir}/output/samples_{norm_count}.tst \
-{work_dir}/output/init_{next_norm_count}.tct --include {last_sample}
+select_fibres {work_dir}/output/samples.tst \
+{work_dir}/output/last.tct --include {last_sample}
 
 """.format(work_dir=work_dir, dataset_path=dataset_path, args=args,
                      seed=seed, init_seed=seed + 1, prior_freq=prior_freq,
@@ -291,16 +344,7 @@ select_fibres {work_dir}/output/samples_{norm_count}.tst \
                      prior_hook=prior_hook,
                      prior_thin=prior_thin, like_snr=like_snr,
                      response_str=response_str, b0_path=response_b0_path,
-                     norm_count=norm_count, next_norm_count=norm_count + 1,
                      last_sample=(args.num_iterations // args.sample_period) - 1)
-                     # Increment the seed used for the random initialisation
-            seed += 1
-        cmd_line += \
-"""
-# Rename the final init_??.tct to last.tct
-mv {work_dir}/output/init_{num_norms}.tct {work_dir}/output/last.tct
-mv {work_dir}/output/init_{num_norms}.tctx {work_dir}/output/last.tctx
-""".format(work_dir=work_dir, num_norms=args.num_norms)
             # Submit job to que
         hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
                        que_name=args.que_name, dry_run=args.dry_run,

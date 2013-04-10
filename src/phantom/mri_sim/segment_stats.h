@@ -31,19 +31,17 @@
 #include "phantom/shared/segment.h"
 
 typedef struct _segment_stats {
-
-	Segment *segment;
-	double length;
-	double angle;
-	double radius_curv;
-	int spatial_extent_gross;		/* The number of grid elements that would have been plotted if there were no other strands. */
-	int spatial_extent_net;			/* The number of grid elements that were actually plotted. */
-
+        
+        Segment *segment;
+        double length;
+        double angle;
+        double radius_curv;
+        int spatial_extent_gross; /* The number of grid elements that would have been plotted if there were no other strands. */
+        int spatial_extent_net; /* The number of grid elements that were actually plotted. */
+        
 } Segment_stats;
-
 
 void init_segment_stats(Segment_stats *stats, Segment *segment);
 
 #endif
-
 

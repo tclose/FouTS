@@ -31,13 +31,12 @@
 #include "phantom/shared/isotropic_region.h"
 
 typedef struct _isotropic_region_register {
-
-	Isotropic_region *isotropic_region;
-	struct _isotropic_region_register *next;
-	struct _isotropic_region_register *prev;
-
+        
+        Isotropic_region *isotropic_region;
+        struct _isotropic_region_register *next;
+        struct _isotropic_region_register *prev;
+        
 } Isotropic_region_register;
-
 
 Isotropic_region_register* isotropic_region_register_alloc(Isotropic_region *isotropic_region);
 

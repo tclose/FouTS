@@ -20,12 +20,10 @@
 
  */
 
-
 extern "C" {
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 }
-
 
 #include "bts/cmd.h"
 #include "progressbar.h"
@@ -37,52 +35,44 @@ extern "C" {
 #include "bts/image/noise.h"
 #include "bts/image/noise/gaussian.h"
 
-
-
 #include "bts/inline_functions.h"
 
 using namespace BTS;
-
-SET_VERSION_DEFAULT;
-SET_AUTHOR ("Thomas G. Close");
-SET_COPYRIGHT (NULL);
+SET_VERSION_DEFAULT
+;
+SET_AUTHOR("Thomas G. Close");
+SET_COPYRIGHT(NULL);
 
 DESCRIPTION = {
-  "Adds encoding to an image.",
-  "",
-  NULL
+    "Adds encoding to an image.",
+    "",
+    NULL
 };
 
-ARGUMENTS = {
-  Argument ("image", "The image.").type_file(),
+ARGUMENTS= {
+    Argument ("image", "The image.").type_file(),
 
-  Argument ("encodings", "The gradient encodings to be added to the image").type_file (),
+    Argument ("encodings", "The gradient encodings to be added to the image").type_file (),
 
-  Argument()
+    Argument()
 };
 
+OPTIONS= {
 
-OPTIONS = {
-
-Option()
+    Option()
 
 };
-
-
 
 EXECUTE {
-
-
-  std::string image_location    = argument[0];
-  std::string encodings_location   = argument[1];
-
-  Image::Observed::Buffer image(image_location, Diffusion::Encoding::Set(encodings_location));
-
-  MR::ProgressBar progress_bar ("Adding gradient encodings to image file...");
-
-  image.save(image_location);
-
-
-}
-
-
+    
+        std::string image_location = argument[0];
+        std::string encodings_location = argument[1];
+        
+        Image::Observed::Buffer image(image_location, Diffusion::Encoding::Set(encodings_location));
+        
+        MR::ProgressBar progress_bar("Adding gradient encodings to image file...");
+        
+        image.save(image_location);
+        
+    }
+    

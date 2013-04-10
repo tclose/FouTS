@@ -28,24 +28,20 @@
 #include "phantom/shared/segment.h"
 #include "phantom/shared/strand.h"
 
-
-
 typedef struct _strand_section {
+        
+        double entry_point[3], exit_point[3], *pre_point, *post_point;
 
-	double entry_point[3], exit_point[3], *pre_point, *post_point;
-	
-	struct _strand_section *next_section, *prev_section;
-	
-	int in_roi, length_accepted, num_control_points, is_first_section;
-	
-	
-	Segment *start_segment;
-	Strand *strand;
+        struct _strand_section *next_section, *prev_section;
 
+        int in_roi, length_accepted, num_control_points, is_first_section;
+
+        Segment *start_segment;
+        Strand *strand;
+        
 } Strand_section;
 
-
-int  is_in_roi(double* pos, double trim_dist, int trim_to_cube);
+int is_in_roi(double* pos, double trim_dist, int trim_to_cube);
 
 void roi_intersect(double *intersect, double *p, double *v, double trim_dist, int trim_to_cube);
 
@@ -55,7 +51,8 @@ void strand_section_init(Strand_section *section, Strand *strand, int is_first_s
 
 void strand_section_free(Strand_section *section);
 
-void set_section_entry(Strand_section *section, Segment *segment, double sphere_r, int trim_to_cube);
+void set_section_entry(Strand_section *section, Segment *segment, double sphere_r,
+                       int trim_to_cube);
 
 void set_section_exit(Strand_section *section, Segment *segment, double sphere_r, int trim_to_cube);
 

@@ -1,24 +1,24 @@
 /*
-    Copyright 2008 Brain Research Institute, Melbourne, Australia
+ Copyright 2008 Brain Research Institute, Melbourne, Australia
 
-    Written by Tractlet::Sectionhomas G Close, 07/08/2010.
+ Written by Tractlet::Sectionhomas G Close, 07/08/2010.
 
-    Tractlet::Sectionhis file is part of MRtrix.
+ Tractlet::Sectionhis file is part of MRtrix.
 
-    MRtrix is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ MRtrix is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    MRtrix is distributed in the hope that it will be useful,
-    but WITractlet::SectionHOUTractlet::Section ANY WARRANTractlet::SectionY; without even the implied warranty of
-    MERCHANTractlet::SectionABILITractlet::SectionY or FITractlet::SectionNESS FOR A PARTractlet::SectionICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ MRtrix is distributed in the hope that it will be useful,
+ but WITractlet::SectionHOUTractlet::Section ANY WARRANTractlet::SectionY; without even the implied warranty of
+ MERCHANTractlet::SectionABILITractlet::SectionY or FITractlet::SectionNESS FOR A PARTractlet::SectionICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with MRtrix.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU General Public License
+ along with MRtrix.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
+ */
 
 //#ifndef __bts_fibre_tractlet_section_tensor_h__
 //#define __bts_fibre_tractlet_section_tensor_h__

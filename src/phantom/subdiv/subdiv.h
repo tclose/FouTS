@@ -24,22 +24,22 @@
  *  along with 'Numerical Fibre Generator'.  If not, see <http://www.gnu.org/licenses/>
  *
  */
- 
+
 #ifndef SUBDIVIDE_H
 #define SUBDIVIDE_H
 
-
 #include "phantom/shared/strand_collection.h"
 #include "phantom/shared/strand.h"
- 
+
 #define STARTING_ANGLE_THRESHOLD 0.001
 #define LINEAR_DEPEND_THRESHOLD 0.95
 
 #define STRAND_R_FINAL_DEFAULT 0.02
- 
-void subdivide_collection(Strand_collection *children, Strand_collection *parents, double strand_r_final);
 
-void subdivide_strand(Strand *parent, Strand_collection *children, double strand_r_final); 
+void subdivide_collection(Strand_collection *children, Strand_collection *parents,
+                          double strand_r_final);
+
+void subdivide_strand(Strand *parent, Strand_collection *children, double strand_r_final);
 
 #endif
 

@@ -1,0 +1,39 @@
+************************************************
+Image:               "x.mif"
+************************************************
+  Format:            MRtrix
+  Dimensions:        3 x 3 x 3 x 61
+  Voxel size:        0.15 x 0.15 x 0.15 x ?
+  Dimension labels:  0. undefined (?)
+                     1. undefined (?)
+                     2. undefined (?)
+                     3. undefined (?)
+  Data type:         32 bit float (little endian)
+  Data strides:      [ 1 2 3 4 ]
+  Data scaling:      offset = 0, multiplier = 1
+  Comments:          (none)
+  Properties:
+    datetime: Tue Mar 12 21:47:31 2013
+    diff_adc: 0.0005
+    diff_encodings_location: /home/tclose/git/FouTS/params/diffusion/encoding_60.b
+    diff_fa: 0.8
+    diff_isotropic: 1
+    diff_warn_b_mismatch: 0
+    exp_b0: 0
+    exp_enforce_bounds: 1
+    exp_interp_extent: 1
+    exp_num_length_sections: 15
+    exp_num_width_sections: 4
+    exp_type: sinc
+    img_dims: [ 3, 3, 3 ]
+    img_offsets: [ -0.225, -0.225, -0.225 ]
+    img_vox_lengths: [ 0.15, 0.15, 0.15 ]
+    method: generate_image
+    software version: 0.0.3.23
+    state_location: x.tct
+    type: synthetic
+  Transform:                    1           0           0       -0.15
+                                0           1           0       -0.15
+                                0           0           1       -0.15
+                                0           0           0           1
+  DW scheme:         61 x 4

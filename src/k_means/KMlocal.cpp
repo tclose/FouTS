@@ -19,7 +19,6 @@
 //----------------------------------------------------------------------
 
 #include "k_means/KMlocal.h"				// KMlocal includes
-
 //----------------------------------------------------------------------
 //  execute - execute the clustering algorithm
 //  	This function executes the clustering algorithm.  See the file
@@ -28,30 +27,30 @@
 
 KMfilterCenters KMlocal::execute()		// execute the algorithm
 {
-   reset();					// resets everythinnessg
-   while (!isDone()) {				// while not done
-	beginRun();				// start a new run
-	do {					// do while run is not done
-	    beginStage();			// start of stage processing
-	    KMalg method = selectMethod();	// select a method
-	    switch(method) {			// apply one stage
-	    case LLOYD:				// Lloyd's algorithm
-		curr.lloyd1Stage();
-		break;
-	    case SWAP:				// swap heuristic
-		curr.swap1Stage();
-		break;
-	    case RANDOM:			// get random centers
-		curr.genRandom();
-		break;
-	    default:				// shouldn't come here
-		assert(false);
-		break;
-	    }
-	    endStage();				// end of stage processing
-	} while (!isRunDone());			// while run is not done
-	endRun();				// end of run processing
-	tryAcceptance();			// accept if appropriate
+    reset();					// resets everythinnessg
+    while (!isDone()) {				// while not done
+        beginRun();				// start a new run
+        do {					// do while run is not done
+            beginStage();			// start of stage processing
+            KMalg method = selectMethod();    // select a method
+            switch (method) {			// apply one stage
+                case LLOYD:				// Lloyd's algorithm
+                    curr.lloyd1Stage();
+                    break;
+                case SWAP:				// swap heuristic
+                    curr.swap1Stage();
+                    break;
+                case RANDOM:			// get random centers
+                    curr.genRandom();
+                    break;
+                default:				// shouldn't come here
+                    assert(false);
+                    break;
+            }
+            endStage();				// end of stage processing
+        } while (!isRunDone());			// while run is not done
+        endRun();				// end of run processing
+        tryAcceptance();			// accept if appropriate
     }
     return best;				// return best solution
 }

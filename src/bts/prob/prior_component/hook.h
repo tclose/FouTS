@@ -20,7 +20,6 @@
 
  */
 
-
 #ifndef __bts_prob_prior_strand_hook_h__
 #define __bts_prob_prior_strand_hook_h__
 
@@ -29,63 +28,73 @@
 #include "bts/fibre/strand/set.h"
 
 namespace BTS {
+    
+    namespace Prob {
+        
+        namespace PriorComponent {
+            
+            class Hook {
+                    
+                public:
+                    
+                    const static double SCALE_DEFAULT;
+                    const static std::string NAME;
+                    const static bool ACTIVE_DEFAULT;
+                    const static size_t NUM_POINTS_DEFAULT;
+                    const static size_t NUM_WIDTH_SECTIONS_DEFAULT;
 
-  namespace Prob {
+                    //Protected member variables.
+                protected:
+                    
+                    double scale;
+                    size_t num_points;
+                    size_t num_width_sections;
 
-    namespace PriorComponent {
+                public:
+                    
+                    Hook(double scale, size_t num_points, size_t num_width_sections)
+                            : scale(scale), num_points(num_points), num_width_sections(
+                                      num_width_sections) {
+                    }
+                    
+                    Hook(const Hook& h)
+                            : scale(h.scale), num_points(h.num_points), num_width_sections(
+                                      h.num_width_sections) {
+                    }
+                    
+                    Hook& operator=(const Hook& h) {
+                        scale = h.scale;
+                        num_points = h.num_points;
+                        num_width_sections = h.num_width_sections;
+                        return *this;
+                    }
+                    
+                    ~Hook() {
+                    }
+                    
+                    Hook* clone() const {
+                        return new Hook(*this);
+                    }
+                    
+                    double log_prob(const Fibre::Strand strand, Fibre::Strand gradient);
 
-      class Hook {
+                    double log_prob(const Fibre::Strand& strand, Fibre::Strand& gradient,
+                                    Fibre::Strand::Tensor& hessian);
 
-        public:
+                    double log_prob(const Fibre::Tractlet strand, Fibre::Tractlet gradient);
 
-          const static double             SCALE_DEFAULT;
-          const static std::string        NAME;
-          const static bool    ACTIVE_DEFAULT;
-          const static size_t NUM_POINTS_DEFAULT;
-          const static size_t NUM_WIDTH_SECTIONS_DEFAULT;
+                    double log_prob(const Fibre::Tractlet& strand, Fibre::Tractlet& gradient,
+                                    Fibre::Tractlet::Tensor& hessian);
 
-
-        //Protected member variables.
-        protected:
-
-          double scale;
-          size_t num_points;
-          size_t num_width_sections;
-
-        public:
-
-          Hook (double scale, size_t num_points, size_t num_width_sections)
-          : scale(scale), num_points(num_points), num_width_sections(num_width_sections) {}
-
-          Hook(const Hook& h)
-            : scale(h.scale), num_points(h.num_points), num_width_sections(h.num_width_sections) {}
-
-          Hook&  operator=(const Hook& h)
-            { scale = h.scale; num_points = h.num_points; num_width_sections = h.num_width_sections; return *this; }
-
-          ~Hook() {}
-
-          Hook*       clone() const
-            { return new Hook(*this); }
-
-          double          log_prob(const Fibre::Strand strand, Fibre::Strand gradient);
-
-          double          log_prob(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& hessian);
-
-          double          log_prob(const Fibre::Tractlet strand, Fibre::Tractlet gradient);
-
-          double          log_prob(const Fibre::Tractlet& strand, Fibre::Tractlet& gradient, Fibre::Tractlet::Tensor& hessian);
-
-          const std::string&  get_name()
-            { return NAME; }
-      };
-
+                    const std::string& get_name() {
+                        return NAME;
+                    }
+            };
+        
+        }
+    
     }
 
-  }
-
 }
-
-
 
 #endif

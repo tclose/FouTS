@@ -36,50 +36,45 @@
 #include "phantom/shared/bundle.h"
 
 typedef struct _strand_collection {
-	
-	int num_strands;
-	int num_control_points;
-	int *num_strand_control_points;
-	double *strand_r;
-	
-	double *control_points;
-	double *control_points_grad;
-	
-	double *start_points;
-	double *end_points;
-	
-	double *pre_points;	
-	double *post_points;
 
-	double sphere_r;
-	double fov;
-	
-	Strand *strands;
-	Segment *segments;
-	Isotropic_region *isotropic_regions;
-	
-	int num_isotropic_regions;
+    int num_strands;
+    int num_control_points;
+    int *num_strand_control_points;
+    double *strand_r;
 
+    double *control_points;
+    double *control_points_grad;
 
-	
-	int num_bundles;
-	Bundle *bundles;
+    double *start_points;
+    double *end_points;
 
-	int *bundle_i_of_strand;
+    double *pre_points;
+    double *post_points;
 
-	/* Note that not all bundle indices will make it to the final collection as they may have been trimmed */
-	//int *bundles_in_collection;
-	
-} Strand_collection;
+    double sphere_r;
+    double fov;
 
+    Strand *strands;
+    Segment *segments;
+    Isotropic_region *isotropic_regions;
 
+    int num_isotropic_regions;
+
+    int num_bundles;
+    Bundle *bundles;
+
+    int *bundle_i_of_strand;
+
+    /* Note that not all bundle indices will make it to the final collection as they may have been trimmed */
+    //int *bundles_in_collection;
+}Strand_collection;
 
 void collection_alloc(Strand_collection *c, int num_strands, int num_control_points, int num_isotropic_regions);
 
 void collection_free(Strand_collection *c);
 
 int save_collection(Strand_collection *c, char *dir_path, int save_start_index);
-			
+
 int load_collection(Strand_collection *c, char *dir_path);
 
 int count_isotropic_regions(char *path);

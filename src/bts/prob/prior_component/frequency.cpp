@@ -25,49 +25,51 @@
 #include "bts/prob/inline_functions.h"
 
 namespace BTS {
-
-  namespace Prob {
-
-    namespace PriorComponent {
-
-      const double            Frequency::SCALE_DEFAULT   = 5.0;
-      const double            Frequency::AUX_SCALE_DEFAULT = 10.0;
-      const std::string       Frequency::NAME            = "frequency";
-
-      double Frequency::log_prob(const Fibre::Strand strand, Fibre::Strand gradient) {
-
-        double lprob = 0.0;
-        gradient.zero();
-
-        const Triple<double>& v1 = strand[1];
-
-        double v1_norm2 = v1.norm2();
-
-        for (size_t degree_i = 2; degree_i < strand.degree(); degree_i++) {
-
-          const Triple<double>& vm = strand[degree_i];
-          double vm_norm2 = vm.norm2();
-
-          if (v1_norm2) {
-
-            lprob -= scale * MR::Math::pow2(degree_i) * vm_norm2 / v1_norm2;
-
+    
+    namespace Prob {
+        
+        namespace PriorComponent {
+            
+            const double Frequency::SCALE_DEFAULT = 5.0;
+            const double Frequency::AUX_SCALE_DEFAULT = 10.0;
+            const std::string Frequency::NAME = "frequency";
+            
+            double Frequency::log_prob(const Fibre::Strand strand, Fibre::Strand gradient) {
+                
+                double lprob = 0.0;
+                gradient.zero();
+                
+                const Triple<double>& v1 = strand[1];
+                
+                double v1_norm2 = v1.norm2();
+                
+                for (size_t degree_i = 2; degree_i < strand.degree(); degree_i++) {
+                    
+                    const Triple<double>& vm = strand[degree_i];
+                    double vm_norm2 = vm.norm2();
+                    
+                    if (v1_norm2) {
+                        
+                        lprob -= scale * MR::Math::pow2(degree_i) * vm_norm2 / v1_norm2;
+                        
 #ifndef GRADIENT_NOT_REQUIRED
-            //The gradient of the curve magnitude w.r.t. Vm.
-            gradient[degree_i] -= vm * 2.0 * MR::Math::pow2(degree_i) * scale / v1_norm2;
-
-            //The gradient of the curve magnitude w.r.t. V1.
-            gradient[1] +=  v1 * 2.0 * MR::Math::pow2(degree_i) * scale * vm_norm2/(v1_norm2 * v1_norm2);
+                        //The gradient of the curve magnitude w.r.t. Vm.
+                        gradient[degree_i] -= vm * 2.0 * MR::Math::pow2(degree_i) * scale
+                                / v1_norm2;
+                        
+                        //The gradient of the curve magnitude w.r.t. V1.
+                        gradient[1] += v1 * 2.0 * MR::Math::pow2(degree_i) * scale * vm_norm2
+                                / (v1_norm2 * v1_norm2);
 #endif
-
-          } else if (vm_norm2) // If v1 is zero and vm is non zero set the probability to be very low
-            lprob = -LARGE_FLOAT;
-        }
-
-        return lprob;
-
-      }
-
+                        
+                    } else if (vm_norm2)    // If v1 is zero and vm is non zero set the probability to be very low
+                        lprob = -LARGE_FLOAT;
+                }
+                
+                return lprob;
+                
+            }
+            
 //      double Frequency::log_prob(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& hessian) {
 //
 //        double lprob = 0.0;
@@ -122,45 +124,45 @@ namespace BTS {
 //        return lprob;
 //
 //      }
-
-
-      double Frequency::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
-
-        gradient.zero();
-        double lprob = log_prob(tractlet[0], gradient[0]);
-
-        const Coord v1 = tractlet(0,1);
-
-        double v1_norm2 = v1.norm2();
-
-        for (size_t ax_i = 1; ax_i < 3; ++ax_i) {
-          for (size_t degree_i = 1; degree_i < tractlet.degree(); degree_i++) {
-
-           const Coord vm = tractlet(ax_i,degree_i);
-           double vm_norm2 = vm.norm2();
-
-           if (v1_norm2) {
-
-             lprob -= scale * MR::Math::pow2(degree_i) * vm_norm2 / v1_norm2;
-
-  #ifndef GRADIENT_NOT_REQUIRED
-             //The gradient of the curve magnitude w.r.t. Vm.
-             gradient(ax_i, degree_i) -= vm * 2.0 * MR::Math::pow2(degree_i) * scale / v1_norm2;
-
-             //The gradient of the curve magnitude w.r.t. V1.
-             gradient(0,1) +=  v1 * 2.0 * MR::Math::pow2(degree_i) * scale * vm_norm2/(v1_norm2 * v1_norm2);
-  #endif
-
-           } else if (vm_norm2) // If v1 is zero and vm is non zero set the probability to be very low
-             lprob = -LARGE_FLOAT;
-          }
-        }
-
-        return lprob;
-
-      }
-
-
+            
+            double Frequency::log_prob(const Fibre::Tractlet tractlet, Fibre::Tractlet gradient) {
+                
+                gradient.zero();
+                double lprob = log_prob(tractlet[0], gradient[0]);
+                
+                const Coord v1 = tractlet(0, 1);
+                
+                double v1_norm2 = v1.norm2();
+                
+                for (size_t ax_i = 1; ax_i < 3; ++ax_i) {
+                    for (size_t degree_i = 1; degree_i < tractlet.degree(); degree_i++) {
+                        
+                        const Coord vm = tractlet(ax_i, degree_i);
+                        double vm_norm2 = vm.norm2();
+                        
+                        if (v1_norm2) {
+                            
+                            lprob -= scale * MR::Math::pow2(degree_i) * vm_norm2 / v1_norm2;
+                            
+#ifndef GRADIENT_NOT_REQUIRED
+                            //The gradient of the curve magnitude w.r.t. Vm.
+                            gradient(ax_i, degree_i) -= vm * 2.0 * MR::Math::pow2(degree_i) * scale
+                                    / v1_norm2;
+                            
+                            //The gradient of the curve magnitude w.r.t. V1.
+                            gradient(0, 1) += v1 * 2.0 * MR::Math::pow2(degree_i) * scale * vm_norm2
+                                    / (v1_norm2 * v1_norm2);
+#endif
+                            
+                        } else if (vm_norm2)    // If v1 is zero and vm is non zero set the probability to be very low
+                            lprob = -LARGE_FLOAT;
+                    }
+                }
+                
+                return lprob;
+                
+            }
+        
 //
 //      double Frequency::log_prob_and_fisher(const Fibre::Strand& strand, Fibre::Strand& gradient, Fibre::Strand::Tensor& fisher) {
 //
@@ -251,9 +253,9 @@ namespace BTS {
 //        return lprob;
 //
 //      }
-
+        
+        }
+    
     }
-
-  }
 
 }

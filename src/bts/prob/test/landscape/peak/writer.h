@@ -20,57 +20,60 @@
 
  */
 
-
 #ifndef __bts_prob_testpeaks_peak_writer__
 #define __bts_prob_testpeaks_peak_writer__
-    
+
 namespace BTS {
-
-  namespace Prob {
-       
-
-    class Test::Landscape::Peak::Writer {
     
+    namespace Prob {
         
-      protected:
-        
-        std::ofstream fout;
-        
-      public:
-      
-        Writer() {}
-        
-        Writer(const std::string& location)
-          { this->create(location); }
-        
-        ~Writer() { if (fout.is_open()) this->close(); }
-        
-        void  create(const std::string& location) 
-          { fout.open(location.c_str()); }
+        class Test::Landscape::Peak::Writer {
+                
+            protected:
+                
+                std::ofstream fout;
+
+            public:
+                
+                Writer() {
+                }
+                
+                Writer(const std::string& location) {
+                    this->create(location);
+                }
+                
+                ~Writer() {
+                    if (fout.is_open())
+                        this->close();
+                }
+                
+                void create(const std::string& location) {
+                    fout.open(location.c_str());
+                }
+                
+                void close() {
+                    fout.close();
+                }
+                
+                void append(const Peak& peak) {
+                    
+                    fout << peak.type << " " << peak.ndims << " " << peak.height;
+                    
+                    for (size_t dim_i = 0; dim_i < peak.ndims; ++dim_i)
+                        fout << " " << peak.centre[dim_i];
+                    
+                    for (size_t dim_i1 = 0; dim_i1 < peak.ndims; ++dim_i1)
+                        for (size_t dim_i2 = 0; dim_i2 < peak.ndims; ++dim_i2)
+                            fout << " " << peak.widths(dim_i1, dim_i2);
+                    
+                    fout << std::endl;
+                    
+                }
+                
+        };
     
-        void  close()
-          { fout.close(); }
-          
-        void append(const Peak& peak) {
+    }
 
-          fout << peak.type << " " << peak.ndims << " " << peak.height;
-
-          for (size_t dim_i = 0; dim_i < peak.ndims; ++dim_i)
-            fout << " " << peak.centre[dim_i];
-
-          for (size_t dim_i1 = 0; dim_i1 < peak.ndims; ++dim_i1)
-            for (size_t dim_i2 = 0; dim_i2 < peak.ndims; ++dim_i2)
-              fout << " " << peak.widths(dim_i1,dim_i2);
-
-          fout << std::endl;
-
-        }
-    
-    
-    };
-    
-  }
-  
 }
 
 #endif    

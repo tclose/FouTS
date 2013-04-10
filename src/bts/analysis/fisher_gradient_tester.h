@@ -20,103 +20,98 @@
  
  */
 
-
 #ifndef __bts_analysis_fishergradienttester_h__
 #define __bts_analysis_fishergradienttester_h__
-
 
 #include "bts/mcmc/state/tensor.h"
 #include "bts/triple.h"
 
-
-
 namespace BTS {
-
-  namespace Analysis {
-
-
-    template <typename Object, typename State> class FisherGradientTester {
     
-    
-      public:
+    namespace Analysis {
         
-        //typedef the pointer to the function to test as 'Function'.
-        typedef double (Object::*Function)(const State&, State&, typename State::Tensor&, std::vector<typename State::Tensor>&);
-      
-      protected:
-      
-        Object                  *object;
-        
-      public:
+        template<typename Object, typename State> class FisherGradientTester {
+                
+            public:
+                
+                //typedef the pointer to the function to test as 'Function'.
+                typedef double (Object::*Function)(const State&, State&, typename State::Tensor&,
+                                                   std::vector<typename State::Tensor>&);
 
-        FisherGradientTester(Object& object)
-          : object(&object) {}
+            protected:
+                
+                Object *object;
 
-          
-        ~FisherGradientTester() {}
-        
-        void                          test(Function function, State& state, double step_size, std::vector<typename State::Tensor>& analytic_fisher_gradient, std::vector<typename State::Tensor>& numeric_fisher_gradient);
-
-    };
+            public:
+                
+                FisherGradientTester(Object& object)
+                        : object(&object) {
+                }
+                
+                ~FisherGradientTester() {
+                }
+                
+                void test(Function function, State& state, double step_size,
+                          std::vector<typename State::Tensor>& analytic_fisher_gradient,
+                          std::vector<typename State::Tensor>& numeric_fisher_gradient);
+                
+        };
     
-    
-  }
+    }
 
 }
-
-
 
 #include "progressbar.h"
 #include "math/vector.h"
 #include "math/matrix.h"
 
-
 namespace BTS {
-
-  namespace Analysis {
-
-    template <typename Object, typename State> void     FisherGradientTester<Object, State>::test(Function function, State& state, double step_size, std::vector<typename State::Tensor>& analytic_fisher_gradient, std::vector<typename State::Tensor>& numeric_fisher_gradient) {
-
-      State perturbed_state(state), dummy_gradient(state);
-      typename State::Tensor fisher(state), perturbed_fisher(state);
-      std::vector<typename State::Tensor> dummy_fisher_gradient;
-
-      fisher.invalidate();
-      perturbed_fisher.invalidate();
-
-      numeric_fisher_gradient.clear();
-
-      (*object.*function)(state, dummy_gradient, fisher, analytic_fisher_gradient);
-
-      MR::Math::Vector<double>& state_vector = state;
-
-      MR::ProgressBar progress_bar ("Testing fisher_gradient calculations...", state_vector.size());
-
-      for (size_t elem_i = 0; elem_i < state_vector.size(); ++elem_i) {
-
-        perturbed_fisher.invalidate();
-
-        state_vector[elem_i] += step_size;
-
-        (*object.*function)(state, dummy_gradient, perturbed_fisher, dummy_fisher_gradient);
-
-        state_vector[elem_i] -= step_size;
-
-        numeric_fisher_gradient.push_back(perturbed_fisher);
-        numeric_fisher_gradient.back() -= fisher;
-        numeric_fisher_gradient.back() /= step_size;
-
-        ++progress_bar;
-
-      }
-
+    
+    namespace Analysis {
+        
+        template<typename Object, typename State> void FisherGradientTester<Object, State>::test(
+                Function function, State& state, double step_size,
+                std::vector<typename State::Tensor>& analytic_fisher_gradient,
+                std::vector<typename State::Tensor>& numeric_fisher_gradient) {
+            
+            State perturbed_state(state), dummy_gradient(state);
+            typename State::Tensor fisher(state), perturbed_fisher(state);
+            std::vector<typename State::Tensor> dummy_fisher_gradient;
+            
+            fisher.invalidate();
+            perturbed_fisher.invalidate();
+            
+            numeric_fisher_gradient.clear();
+            
+            (*object.*function)(state, dummy_gradient, fisher, analytic_fisher_gradient);
+            
+            MR::Math::Vector<double>& state_vector = state;
+            
+            MR::ProgressBar progress_bar("Testing fisher_gradient calculations...",
+                    state_vector.size());
+            
+            for (size_t elem_i = 0; elem_i < state_vector.size(); ++elem_i) {
+                
+                perturbed_fisher.invalidate();
+                
+                state_vector[elem_i] += step_size;
+                
+                (*object.*function)(state, dummy_gradient, perturbed_fisher, dummy_fisher_gradient);
+                
+                state_vector[elem_i] -= step_size;
+                
+                numeric_fisher_gradient.push_back(perturbed_fisher);
+                numeric_fisher_gradient.back() -= fisher;
+                numeric_fisher_gradient.back() /= step_size;
+                
+                ++progress_bar;
+                
+            }
+            
+        }
+    
     }
 
-
-  }
-
 }
-
-
 
 #endif

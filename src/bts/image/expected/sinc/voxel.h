@@ -20,10 +20,8 @@
 
  */
 
-
 #ifndef __bts_image_expected_sinc_voxel_h__
 #define __bts_image_expected_sinc_voxel_h__
-
 
 #include "bts/common.h"
 
@@ -36,65 +34,71 @@
 
 #include "bts/diffusion/model.h"
 
-
 namespace BTS {
-
-  namespace Image {
-
-    namespace Expected {
-      
-      namespace Sinc {
-
-        class Voxel : public Expected::Voxel {
-
-          public:
-
-            typedef Sinc::Buffer Buffer;
-
-          protected:
-
-            Buffer* image;
-
-          public:
-
-            Voxel() {}
-
-
-            Voxel(Buffer& buffer, const Index& coord);
-
-            //! doesn't copy across the parent image.
-            Voxel(const Voxel& v)
-              : Expected::Voxel(v), image(v.image) {}
     
-            //! doesn't copy across the parent image.
-            Voxel&            operator= (const Voxel& v)
-              { Expected::Voxel::operator=(v); image = v.image; return *this; }
+    namespace Image {
         
-            ~Voxel() {}
+        namespace Expected {
+            
+            namespace Sinc {
+                
+                class Voxel: public Expected::Voxel {
+                        
+                    public:
+                        
+                        typedef Sinc::Buffer Buffer;
 
-            void              set_image(Buffer* image)
-              { this->image = image; }
+                    protected:
+                        
+                        Buffer* image;
 
+                    public:
+                        
+                        Voxel() {
+                        }
+                        
+                        Voxel(Buffer& buffer, const Index& coord);
 
+                        //! doesn't copy across the parent image.
+                        Voxel(const Voxel& v)
+                                : Expected::Voxel(v), image(v.image) {
+                        }
+                        
+                        //! doesn't copy across the parent image.
+                        Voxel& operator=(const Voxel& v) {
+                            Expected::Voxel::operator=(v);
+                            image = v.image;
+                            return *this;
+                        }
+                        
+                        ~Voxel() {
+                        }
+                        
+                        void set_image(Buffer* image) {
+                            this->image = image;
+                        }
+                        
 //          protected:
+                        
+                        double interpolate(const Coord& pos);
 
-            double             interpolate(const Coord& pos);
-
-            double             interpolate(const Coord& pos, Coord& gradient)
-              {  throw Exception ("Not implemented yet."); }
-
-            double             interpolate(const Coord& triple, Coord& gradient, Coord::Tensor& hessian)
-              {  throw Exception ("Not implemented yet."); }
-
-        };
-
-      }
-      
-    }
+                        double interpolate(const Coord& pos, Coord& gradient) {
+                            throw Exception("Not implemented yet.");
+                        }
+                        
+                        double interpolate(const Coord& triple, Coord& gradient,
+                                           Coord::Tensor& hessian) {
+                            throw Exception("Not implemented yet.");
+                        }
+                        
+                };
+            
+            }
         
-  }
+        }
+    
+    }
 
 }
-
 
 #endif

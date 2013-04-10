@@ -20,32 +20,30 @@
  *
  */
 
-
 #include "bts/fibre/strand.h"
 #include "bts/fibre/strand/basic_section.h"
 
-
-
 namespace BTS {
-
-  namespace Fibre {
-
-
-    const char* Strand::BasicSection::INTENSITY_PROP = "intensity";
-    const char* Strand::BasicSection::PROPS_LIST[] = { Strand::BasicSection::INTENSITY_PROP, PROPS_LIST_END};
-    const std::vector<const char*>  Strand::BasicSection::PROPS (&(PROPS_LIST[0]), &(PROPS_LIST[1]));
-
-    std::ostream&         operator<< (std::ostream& stream , const BTS::Fibre::Strand::BasicSection& seg) {
-
-      stream << "position:      " << seg.position() << std::endl;
-      stream << "tangent:       " << seg.tangent() << std::endl;
-      stream << "intensity:     " << seg.intensity() << std::endl;
-
-
-      return (stream);
-
+    
+    namespace Fibre {
+        
+        const char* Strand::BasicSection::INTENSITY_PROP = "intensity";
+        const char* Strand::BasicSection::PROPS_LIST[] = { Strand::BasicSection::INTENSITY_PROP,
+                                                           PROPS_LIST_END };
+        const std::vector<const char*> Strand::BasicSection::PROPS(&(PROPS_LIST[0]),
+                &(PROPS_LIST[1]));
+        
+        std::ostream& operator<<(std::ostream& stream,
+                                 const BTS::Fibre::Strand::BasicSection& seg) {
+            
+            stream << "position:      " << seg.position() << std::endl;
+            stream << "tangent:       " << seg.tangent() << std::endl;
+            stream << "intensity:     " << seg.intensity() << std::endl;
+            
+            return (stream);
+            
+        }
+    
     }
 
-  }
-      
 }

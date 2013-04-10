@@ -25,7 +25,6 @@
  *
  */
 
-
 #ifndef OVERLAP_STRANDS_H
 #define OVERLAP_STRANDS_H
 
@@ -33,13 +32,13 @@
 #include "phantom/shared/strand.h"
 
 typedef struct _fill_strand {
-	
-	Strand *strand;
-	Segment *closest_segment;
-	double closest_fraction;
-	
-	struct _fill_strand *next;
-	
+        
+        Strand *strand;
+        Segment *closest_segment;
+        double closest_fraction;
+
+        struct _fill_strand *next;
+        
 } Overlap_strand;
 void fill_strand_alloc(Overlap_strand **fill_strand, Strand *strand);
 

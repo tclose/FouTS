@@ -25,30 +25,26 @@
  *
  */
 
-
-
 #ifndef _SEGMENT_H
 #define _SEGMENT_H
-
 
 #include "phantom/shared/control_point.h"
 
 typedef struct _segment {
-	
-	int segment_i;
-	struct _strand *strand;
-	Control_point start_point, end_point;
-		
-	int num_samples;
-	double length;
-	double sample_length;
-	double disp[3];
-	double sample_length_grad[3];
-	
-	struct _segment *prev_segment, *next_segment;
-	
-} Segment;
+        
+        int segment_i;
+        struct _strand *strand;
+        Control_point start_point, end_point;
 
+        int num_samples;
+        double length;
+        double sample_length;
+        double disp[3];
+        double sample_length_grad[3];
+
+        struct _segment *prev_segment, *next_segment;
+        
+} Segment;
 
 #ifndef _STRAND_H
 #include "phantom/shared/strand.h"
@@ -56,13 +52,12 @@ typedef struct _segment {
 
 #endif
 
-
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
 #include "phantom/shared/strand.h"
 
-void init_segment(Segment *segment, int segment_i, Segment *prev_segment, Control_point point, Control_point next_point, Strand *strand, double sample_acs); 
+void init_segment(Segment *segment, int segment_i, Segment *prev_segment, Control_point point, Control_point next_point, Strand *strand, double sample_acs);
 
 void print_segment(Segment *segment, char indent[]);
 

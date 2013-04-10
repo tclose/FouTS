@@ -30,50 +30,49 @@
 #include "phantom/mri_sim/overlap_strands.h"
 
 void fill_strand_alloc(Overlap_strand **f, Strand *strand) {
-
-	Overlap_strand *fill_strand;
-
-	*f = (Overlap_strand*)malloc(sizeof(Overlap_strand));
-	
-	fill_strand = *f;
-
-	fill_strand->strand = strand;
-	fill_strand->closest_fraction = 1.0;
-	fill_strand->next = NULL;
-
+    
+    Overlap_strand *fill_strand;
+    
+    *f = (Overlap_strand*) malloc(sizeof(Overlap_strand));
+    
+    fill_strand = *f;
+    
+    fill_strand->strand = strand;
+    fill_strand->closest_fraction = 1.0;
+    fill_strand->next = NULL;
+    
 }
 
 void add_fill_segment(Overlap_strand **overlap_strands, double fraction, Segment *segment) {
-
-		Overlap_strand *current;
-
-		if (*overlap_strands == NULL) {
-		
-			fill_strand_alloc(overlap_strands, segment->strand);
-			current = *overlap_strands;
-		
-		} else {
-						
-			current = *overlap_strands;
-										
-			while (current->strand != segment->strand) {
-			
-				if (current->next == NULL) {
-					fill_strand_alloc(&(current->next), segment->strand);				
-				}
-			
-				current = current->next;
-				
-			}
-		}
-		
-		if (fraction <= current->closest_fraction) {
-		
-			current->closest_segment = segment;
-			current->closest_fraction = fraction;
-			
-		}
-		
-		
+    
+    Overlap_strand *current;
+    
+    if (*overlap_strands == NULL) {
+        
+        fill_strand_alloc(overlap_strands, segment->strand);
+        current = *overlap_strands;
+        
+    } else {
+        
+        current = *overlap_strands;
+        
+        while (current->strand != segment->strand) {
+            
+            if (current->next == NULL) {
+                fill_strand_alloc(&(current->next), segment->strand);
+            }
+            
+            current = current->next;
+            
+        }
+    }
+    
+    if (fraction <= current->closest_fraction) {
+        
+        current->closest_segment = segment;
+        current->closest_fraction = fraction;
+        
+    }
+    
 }
 
