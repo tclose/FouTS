@@ -253,7 +253,6 @@ EXECUTE {
             // to calculate the required base intensity value to match that of the reference.
             tcts.normalise_densities();
             tcts.set_base_intensity(1.0);
-            tcts.save("/home/tclose/Desktop/ref.tct");
             exp_image->expected_image(tcts);
             // The estimated base intensity is then the average scaling required to get the expected
             // intensity to match the observed intensity.
