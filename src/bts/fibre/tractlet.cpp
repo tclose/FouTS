@@ -353,7 +353,7 @@ namespace BTS {
             double length_fraction = 1.0 / (double)num_length_sections;
             double width_fraction = 1.0 / (double)num_width_sections;
 
-            double intensity_scale = 1.0 / (double)(MR::Math::pow2(num_width_sections));
+            double intensity_scale = 1.0 / (double)(width_fractions.rows());
 
             const MR::Math::Matrix<double>& position_matrix = Strand::position_matrix(
                     num_length_sections, this->degree());
