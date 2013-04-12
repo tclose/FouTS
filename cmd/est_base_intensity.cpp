@@ -61,13 +61,23 @@ DESCRIPTION = {
 
 ARGUMENTS= {
     Argument("dwi", "the input diffusion-weighted image.").type_image_in(),
-    Argument("indices", "the voxel indices in the image where the base intensity "
-            "is calculated from. Should be in regions with known "
-            "single fibre populations.").type_text().allow_multiple(),
     Argument()
 };
 
 OPTIONS= {
+    Option("index", "the voxel indices in the image where the base intensity "
+            "is calculated from. Should be in regions with known "
+            "single fibre populations.").allow_multiple()
+    + Argument("X", "The index along the x dimension").type_integer()
+    + Argument("Y", "The index along the y dimension").type_integer()
+    + Argument("Z", "The index along the z dimension").type_integer(),
+
+    Option("seed", "the voxel indices in the image where the base intensity "
+            "is calculated from. Should be in regions with known "
+            "single fibre populations.").allow_multiple()
+    + Argument("X", "The x coordinate").type_float()
+    + Argument("Y", "The y coordinate").type_float()
+    + Argument("Z", "The z coordinate").type_float(),
 
     Option ("grad", "specify the diffusion-weighted gradient scheme used in the acquisition. "
             "The program will normally attempt to use the encoding stored in the image "
@@ -91,16 +101,14 @@ OPTIONS= {
 };
 
 EXECUTE {
-        if (argument.size() < 2)
-            throw Exception(
-                    "Found less than two arguments (" + str(argument.size()) + "). The reference"
-                    " image and at least one " "single fibre" " index needs to be provided");
+
         MR::Image::Header dwi(argument[0]);
         if (dwi.ndim() != 4)
             throw Exception("dwi image should contain 4 dimensions");
         // Set the script defaults
         MR::Math::Matrix<float> grad;
         double fa_threshold = FA_THRESHOLD_DEFAULT;
+        std::vector<Triple<size_t> > indices;
         // Loads parameters to construct Diffusion::Model ('diff_' prefix)
         SET_DIFFUSION_PARAMETERS;
         // Loads extra parameters to construct Image::Expected::*::Buffer ('exp_' prefix)
@@ -131,6 +139,27 @@ EXECUTE {
         MR::DWI::guess_DW_directions(dwis, bzeros, grad);
         if (!bzeros.size())
             throw Exception("No b=0 encodings found in gradient encoding scheme");
+        // Load the reference indices from the supplied '-index' and '-seed' options
+        opt = get_options("index");
+        for (size_t i = 0; i < opt.size(); ++i) {
+            size_t x_ind = opt[i][X];
+            size_t y_ind = opt[i][Y];
+            size_t z_ind = opt[i][Z];
+            indices.push_back(Triple<size_t>(x_ind, y_ind, z_ind));
+        }
+        opt = get_options("seed");
+        for (size_t i = 0; i < opt.size(); ++i) {
+            double x = opt[i][X];
+            double y = opt[i][Y];
+            double z = opt[i][Z];
+            size_t x_ind = (size_t)((x - dwi.transform()(X, 3)) / dwi.vox(X));
+            size_t y_ind = (size_t)((y - dwi.transform()(Y, 3)) / dwi.vox(Y));
+            size_t z_ind = (size_t)((z - dwi.transform()(Z, 3)) / dwi.vox(Z));
+            indices.push_back(Triple<size_t>(x_ind, y_ind, z_ind));
+        }
+        if (!indices.size())
+            throw Exception("At least one reference voxel needs to be specified, using either the "
+                            "'-index' or '-seed' options");
         // Get the matrix of non b=0 encoding directions
         Triple<double> vox_lengths(dwi.vox(X), dwi.vox(Y), dwi.vox(Z));
         Triple<size_t> dims(1.0, 1.0, 1.0);

@@ -136,7 +136,7 @@ if not args.init_locations:
                              (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
     elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.mif'):
 #<<<<<<< HEAD
-        args.init_locations=[(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5), 
+        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
                              (0.0, 27.0, -16.5), (0.0, 14.0, -19.5), (0.0, 1.5, -28.5)]
 #=======
 #        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
@@ -150,25 +150,25 @@ if not args.init_locations:
         args.init_locations = [(0.0, 35.0, -27.0)]
     elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.60.mif'):
 #<<<<<<< HEAD
-        args.init_locations=[(0.0, 69.0, -5.0), (0.0, 56.0, 7.0), (0.0, 35.0, 10.0), 
+        args.init_locations = [(0.0, 69.0, -5.0), (0.0, 56.0, 7.0), (0.0, 35.0, 10.0),
                              (0.0, 25.0, 9.5), (0.0, 15.0, 5.0), (0.0, 6.0, -5.0)]
     elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.60.mif'):
-        args.init_locations=[(0.0, 66.0, 10.0), (0.0, 57.0, 20.0), (0.0, 42.0, 23.0), 
+        args.init_locations = [(0.0, 66.0, 10.0), (0.0, 57.0, 20.0), (0.0, 42.0, 23.0),
                              (0.0, 27.5, 22.5), (0.0, 16.5, 18.5), (0.0, 7.5, 11.5)]
     elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.60.mif'):
-        args.init_locations=[(0.0, 56.0, 23.5), (0.0, 44.0, 33.0), (0.0, 28.0, 36.0), 
+        args.init_locations = [(0.0, 56.0, 23.5), (0.0, 44.0, 33.0), (0.0, 28.0, 36.0),
                              (0.0, 16.0, 35.5), (0.0, 6.0, 31.5), (0.0, -5.5, 20.5)]
     elif args.dataset == os.path.join('donald', 'images', 'fornix.60.mif'):
-        args.init_locations=[(0.0, 41.5, -3.0)]
+        args.init_locations = [(0.0, 41.5, -3.0)]
     elif args.dataset == os.path.join('heath', 'images', 'fornix.60.mif'):
-        args.init_locations=[(0.0, 42.0, 14.0)]
+        args.init_locations = [(0.0, 42.0, 14.0)]
     elif args.dataset == os.path.join('lisa', 'images', 'fornix.60.mif'):
-        args.init_locations=[(0.0, 31.0, 24.0)]
+        args.init_locations = [(0.0, 31.0, 24.0)]
     elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.20.mif'):
-        args.init_locations=[(0.0, 65.0, -7.5), (0.0, 54.0, 4.5), (0.0, 41.5, 7.5), 
+        args.init_locations = [(0.0, 65.0, -7.5), (0.0, 54.0, 4.5), (0.0, 41.5, 7.5),
                              (0.0, 28.0, 7.5), (0.0, 17.5, 5.5), (0.0, 3.5, -5.5)]
     elif args.dataset == os.path.join('donald', 'images', 'fornix.20.mif'):
-        args.init_locations=[(3.0, 38.0, -6.5)]
+        args.init_locations = [(3.0, 38.0, -6.5)]
 #=======
 #        args.init_locations = [(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0),
 #                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
@@ -195,31 +195,33 @@ if not args.init_locations:
                         "locations, therefore they need to be provided"
                         .format(args.dataset))
 if not args.reference_locations:
-    if args.dataset == os.path.join('donald', 'images', 'corpus_callosum.mif') or \
-            args.dataset == os.path.join('donald', 'images', 'fornix.mif'):
-        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
-    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.mif') or \
-            args.dataset == os.path.join('heath', 'images', 'fornix.mif'):
-        args.init_locations = [(0.0, 58.0, 18.0), (0.0, -2.5, 14.5)]
-    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.mif') or \
-            args.dataset == os.path.join('lisa', 'images', 'fornix.mif'):
-        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 0.0, -30.5)]
-    elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.60.mif') or \
-            args.dataset == os.path.join('donald', 'images', 'fornix.60.mif'):
-        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
-    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.60.mif') or \
-            args.dataset == os.path.join('heath', 'images', 'fornix.60.mif'):
-        args.init_locations = [(0.0, 58.0, 18.0), (0.0, -2.5, 14.5)]
-    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.60.mif') or \
-            args.dataset == os.path.join('lisa', 'images', 'fornix.60.mif'):
-        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 0.0, -30.5)]
-    elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.20.mif') or \
-            args.dataset == os.path.join('donald', 'images', 'fornix.20.mif'):
-        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
-    else:
-        raise Exception("dataset '{}' wasn't one with preconfigured reference "
-                        "locations, therefore they need to be provided"
-                        .format(args.dataset))
+    args.reference_locations = args.init_locations
+
+#    if args.dataset == os.path.join('donald', 'images', 'corpus_callosum.mif') or \
+#            args.dataset == os.path.join('donald', 'images', 'fornix.mif'):
+#        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
+#    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.mif') or \
+#            args.dataset == os.path.join('heath', 'images', 'fornix.mif'):
+#        args.init_locations = [(0.0, 58.0, 18.0), (0.0, -2.5, 14.5)]
+#    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.mif') or \
+#            args.dataset == os.path.join('lisa', 'images', 'fornix.mif'):
+#        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 0.0, -30.5)]
+#    elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.60.mif') or \
+#            args.dataset == os.path.join('donald', 'images', 'fornix.60.mif'):
+#        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
+#    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.60.mif') or \
+#            args.dataset == os.path.join('heath', 'images', 'fornix.60.mif'):
+#        args.init_locations = [(0.0, 58.0, 18.0), (0.0, -2.5, 14.5)]
+#    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.60.mif') or \
+#            args.dataset == os.path.join('lisa', 'images', 'fornix.60.mif'):
+#        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 0.0, -30.5)]
+#    elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.20.mif') or \
+#            args.dataset == os.path.join('donald', 'images', 'fornix.20.mif'):
+#        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
+#    else:
+#        raise Exception("dataset '{}' wasn't one with preconfigured reference "
+#                        "locations, therefore they need to be provided"
+#                        .format(args.dataset))
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
                        'prior_density_high', 'prior_hook', 'prior_thin',
                        'like_snr']
@@ -268,12 +270,12 @@ for i in xrange(args.num_runs):
         cmd_line = \
 """
 # Initialise empty set to hold the initial locations of the tractlets
-new_fibres -set_size 0 -acs 1.0 {work_dir}/output/init_0.tct
+new_fibres -set_size 0 -acs 1.0 {work_dir}/output/init.tct
             
 """.format(work_dir=work_dir)
         if not len(args.init_locations):
             raise Exception("Initial locations list was empty")
-        for i, init_location in enumerate(args.init_locations):
+        for i, init_location in enumerate(args.reference_locations):
             cmd_line += \
 """             
 # Create initial_fibres of appropriate degree
@@ -285,7 +287,7 @@ init_fibres {work_dir}/init_location_{i}.tct -degree {args.degree} \
 -img_offset "{init_location[0]} {init_location[1]} {init_location[2]}"
 
 # Add new tract to initial set
-combine_fibres {work_dir}/output/init_0.tct {work_dir}/init_location_{i}.tct \
+combine_fibres {work_dir}/output/init.tct {work_dir}/init_location_{i}.tct \
 {work_dir}/tmp.tct
 mv {work_dir}/tmp.tct {work_dir}/output/init.tct
 mv {work_dir}/tmp.tctx {work_dir}/output/init.tctx
@@ -301,13 +303,13 @@ mv {work_dir}/tmp.tctx {work_dir}/output/init.tctx
 normalise_density {work_dir}/output/init.tct
 
 """.format(work_dir=work_dir, args=args)
-        
+
         cmd_line += \
 """
 # Estimate base_intensity from seed locations
 est_base_intensity {dataset_path} {seeds} > {work_dir}/output/est_base_intensity.txt
 """.format(dataset_path=dataset_path, work_dir=work_dir,
-           seeds='"' + '", "'.join([' '.join(l) for l in args.init_locations]) + '"')
+           seeds='"' + '" "'.join([' '.join([str(f) for f in l]) for l in args.init_locations]) + '"')
 
         cmd_line += \
 """ 
