@@ -43,7 +43,7 @@ parser.add_argument('--min_length_samples', type=float, default=25,
                     help="The number of strands to use per ACS when "
                          "renormalising the tractlets at the start of each "
                          "major iteration (default: %(default)s)")
-parser.add_argument('--min_width_samples', type=float, default=6,
+parser.add_argument('--min_width_samples', type=float, default=4,
                     help="The number of length samples to use per ACS when "
                          "renormalising the tractlets at the start of each "
                          "major iteration (default: %(default)s)")
@@ -309,15 +309,15 @@ normalise_density {work_dir}/output/init.tct
 # Estimate base_intensity from seed locations
 est_base_intensity {dataset_path} {seeds} > {work_dir}/output/est_base_intensity.txt
 """.format(dataset_path=dataset_path, work_dir=work_dir,
-           seeds='"' + '" "'.join([' '.join([str(f) for f in l]) for l in args.init_locations]) + '"')
+           seeds='-seed ' + ' -seed '.join([' '.join([str(f) for f in l]) for l in args.init_locations]))
 
         cmd_line += \
 """ 
 # Calculate appropriate number of length and width samples                
 calculate_num_samples --samples_per_acs {args.samples_per_acs} \
 --samples_per_length {args.samples_per_length} --strategy max \
---min_length_samples {args.min_length_samples} \
---min_width_samples {args.min_width_samples} \
+--min_length_sections {args.min_length_samples} \
+--min_width_sections {args.min_width_samples} \
 {work_dir}/output/init.tct {work_dir}/num_samples 
 
 # Set required properties for the initial tracts

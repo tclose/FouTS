@@ -198,15 +198,13 @@ EXECUTE {
                 exp_interp_extent, offsets, exp_enforce_bounds, exp_half_width);
         double est_base_intensity = 0.0;
         // Loop through all the provided single fibre indices and calculate the optimum b0
-        size_t num_samples = argument.size() - 1;
-        for (size_t sample_i = 0; sample_i < num_samples; ++sample_i) {
+        for (std::vector<Triple<size_t> >::iterator index_it = indices.begin(); index_it != indices.end(); ++index_it) {
             // The following is quite a clunky way to get an observed buffer consisting of a single
             // voxel from the index given as a triple. NB the first argument to this script is the
             // image location hence the offset by one.
             MR::Math::Vector<double> observed(num_nonb0_encodings);
-            Triple<size_t> ref_index = parse_triple<size_t>(std::string(argument[sample_i + 1]));
             size_t index[4] = {0, 0, 0, 0};
-            ref_index.copy_to(index);
+            (*index_it).copy_to(index);
             MR::Image::Voxel<float> vox(dwi);
             size_t loop_dims[4] = {1, 1, 1, all_encodings.rows()};
             MR::DataSet::Subset<MR::Image::Voxel<float> > vox_subset(vox, index, loop_dims);
@@ -231,7 +229,7 @@ EXECUTE {
             }
             b0 /= bzeros.size();
             if (max_value == 0.0)
-                throw Exception("Selected voxel '" + str(ref_index) + "' contains no signal.");
+                throw Exception("Selected voxel '" + str(*index_it) + "' contains no signal.");
             // Calculate the diffusion tensor from the observed intensities
             MR::Math::Vector<double> observed_log_ratio(num_nonb0_encodings), tensor_vec(6);
             for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i)
@@ -259,38 +257,34 @@ EXECUTE {
                                     + MR::Math::pow2(eval[2] - trace))
                             / (MR::Math::pow2(eval[0]) + MR::Math::pow2(eval[1])
                                + MR::Math::pow2(eval[2])));
-            if (fa < fa_threshold)
-                throw Exception(
-                        "Sample index '" + str(ref_index) + "' has a FA of less than "
-                        + str(fa_threshold) + " (" + str(fa) + "). It will be omitted from the "
-                        "estimation.");
-            // Create a tract that spans the space that voxel will draw signal from and is aligned
-            // with the principle eigenvector of the estimated diffusion tensor.
-            Coord tract_extent = exp_interp_extent * vox_lengths * 2.0;
-            Fibre::Tractlet::Set tcts(1, 2);
-            tcts.zero();
-            // Centre the tract in the middle of the voxel
-            tcts[0](0, 0) = vox_lengths / 2.0;
-            // Set the orientation of the tract to be in the direction of the principal eigenvector
-            tcts[0](0, 1) = evec.column(0);
-            tcts[0](0, 1) *= tract_extent;
-            tcts[0](1, 0) = evec.column(1);
-            tcts[0](1, 0) *= tract_extent;
-            tcts[0](2, 0) = evec.column(2);
-            tcts[0](2, 0) *= tract_extent;
-            // Normalize the density of the tract and set the base_intensity of the set to 1.0,
-            // to calculate the required base intensity value to match that of the reference.
-            tcts.normalise_densities();
-            tcts.set_base_intensity(1.0);
-            exp_image->expected_image(tcts);
-            // The estimated base intensity is then the average scaling required to get the expected
-            // intensity to match the observed intensity.
-            for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i) {
-                est_base_intensity += observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i];
+            if (fa > fa_threshold) {
+                // Create a tract that spans the space that voxel will draw signal from and is aligned
+                // with the principle eigenvector of the estimated diffusion tensor.
+                Coord tract_extent = exp_interp_extent * vox_lengths * 2.0;
+                Fibre::Tractlet::Set tcts(1, 2);
+                tcts.zero();
+                // Centre the tract in the middle of the voxel
+                tcts[0](0, 0) = vox_lengths / 2.0;
+                // Set the orientation of the tract to be in the direction of the principal eigenvector
+                tcts[0](0, 1) = evec.column(0);
+                tcts[0](0, 1) *= tract_extent;
+                tcts[0](1, 0) = evec.column(1);
+                tcts[0](1, 0) *= tract_extent;
+                tcts[0](2, 0) = evec.column(2);
+                tcts[0](2, 0) *= tract_extent;
+                // Normalize the density of the tract and set the base_intensity of the set to 1.0,
+                // to calculate the required base intensity value to match that of the reference.
+                tcts.normalise_densities();
+                tcts.set_base_intensity(1.0);
+                exp_image->expected_image(tcts);
+                // The estimated base intensity is then the average scaling required to get the expected
+                // intensity to match the observed intensity.
+                for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i)
+                    est_base_intensity += observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i];
             }
         }
         // Divide the sum of the scaling factor required to scale each
-        est_base_intensity /= (double)(num_nonb0_encodings * (argument.size() - 1));
+        est_base_intensity /= (double)(num_nonb0_encodings * indices.size());
         // Print the estimated intensity for use with other commands
         std::cout << est_base_intensity;
     }
