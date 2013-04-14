@@ -24,47 +24,6 @@ import matplotlib.pyplot as plt
 
 NumberOfSamples = collections.namedtuple("NumberOfSamples", "long radial")
 
-class Image(object):
-
-    def __init__(self, size, resolution, encodings):
-        if len(size) != 3 or len(resolution) != 3:
-            raise Exception("Image must be three-dimensional (provided: size={}, resolution={})."
-                            .format(size, resolution))
-        if encodings.shape[1] != 4:
-            raise Exception("The second dimension of the encodings matrix must have length 4 (found"
-                            " {}) corresponding to [x y z b_value] ".format(encodings.shape[1]))
-        self._size = size
-        self._resolution = resolution
-        self._encodings = encodings
-        self._data = np.zeros((np.prod(size), encodings.shape[0]))
-
-    # These are provided as read only versions of the 
-    @property
-    def size(self):
-        return self._size
-
-    @property
-    def resolution(self):
-        return self._resolution
-
-    @property
-    def encodings(self):
-        return self._encodings
-
-    def generate(self, tract, N_long, N_radial, response_coeffs):
-        samples_matrix = Tract.position_matrix(len(tract), N_long, N_radial)
-        tangents_matrix = Tract.tangent_matrix(len(tract), N_long, N_radial)
-        positions = samples_matrix.dot(tract)
-        tangents = tangents_matrix.dot(tract)
-        lengths = np.sqrt(tangents[:, 0] ** 2 + tangents[:, 1] ** 2 + tangents[:, 2] ** 2)
-
-        indices = np.floor(positions)
-        remain = positions - indices
-        disps = ([], [], [])
-        for d in xrange(3):
-            for i in xrange((1 - INTERP_LENGTH), INTERP_LENGTH):
-                disps[d].append(remain[:, d] - i)
-
 
 class Tract(object):
 
@@ -73,6 +32,27 @@ class Tract(object):
     _radial_matrices = {}
     _pos_matrices = {}
     _tang_matrices = {}
+
+    def __init__(self, degree):
+        self._degree = degree
+        self._data = np.zeros((degree * 3, 3))
+
+    def __getitem__(self, *indices):
+        if len(indices) == 1:
+            item = self._data[indices[0]]
+        elif len(indices) == 2:
+            item = self._data[indices[0] * self.degree + indices[1]]
+        elif len(indices) == 3:
+            item = self._data[self._degree * indices[0] + indices[1], indices[2]]
+        return item
+
+    def positions(self, N_long, N_radial):
+        matrix = Tract.position_matrix(self.degree, N_long, N_radial)
+        return matrix.dot(self._data)
+
+    def tangents(self, N_long, N_radial):
+        matrix = Tract.tangent_matrix(self.degree, N_long, N_radial)
+        return matrix.dot(self._data)
 
     @classmethod
     def position_matrix(cls, degree, N_long, N_radial):
@@ -166,6 +146,57 @@ class Tract(object):
             samples[row_start:row_end, (degree * 2):(degree * 3)] = long_matrix * k2
         return samples
 
+
+class Image(object):
+
+    def __init__(self, size, resolution, encodings):
+        if len(size) != 3 or len(resolution) != 3:
+            raise Exception("Image must be three-dimensional (provided: size={}, resolution={})."
+                            .format(size, resolution))
+        if encodings.shape[1] != 4:
+            raise Exception("The second dimension of the encodings matrix must have length 4 (found"
+                            " {}) corresponding to [x y z b_value] ".format(encodings.shape[1]))
+        self._size = size
+        self._resolution = resolution
+        self._encodings = encodings
+        self._data = np.zeros((np.prod(size), encodings.shape[0]))
+
+    # These are provided as read only versions of the 
+    @property
+    def size(self):
+        return self._size
+
+    @property
+    def resolution(self):
+        return self._resolution
+
+    @property
+    def encodings(self):
+        return self._encodings
+
+    def generate(self, tract, N_long, N_radial, response_coeffs, interpolator):
+        positions = tract.positions(N_long, N_radial)
+        N = positions.shape[0]
+        indices = np.floor(positions)
+        remain = positions - indices
+        indices = np.array(indices, dtype=np.int)
+        X = np.zeros((N, interpolator.dim[0] * 2))
+        Y = np.zeros((N, interpolator.dim[1] * 2))
+        Z = np.zeros((N, interpolator.dim[2] * 2))
+        for dim_i, D in enumerate((X, Y, Z)):
+            for step_i, step in enumerate(xrange((1 - interpolator.dim[dim_i]),
+                                                 interpolator.dim[dim_i])):
+                D[:, step_i] = remain - step
+            interpolator.interpolate(dim_i, D)
+        orients = tract.tangents(N_long, N_radial)
+        lengths = np.sqrt(orients[:, 0] ** 2 + orients[:, 1] ** 2 + orients[:, 2] ** 2)
+        # Normalise orientations
+        for dim_i in xrange(3):
+            orients[:, dim_i] /= lengths
+        R = orients.dot(self._encodings[:, 1:3])
+
+
+
 if __name__ == '__main__':
 
     DEGREE = 4
@@ -173,11 +204,11 @@ if __name__ == '__main__':
     NUM_RADIAL = 4
     INTERP_LENGTH = (1, 1, 1)
 
-    tract = np.zeros((DEGREE * 3, 3))
-    tract[1, 0] = 1
-    tract[2, 1] = 0.1
-    tract[DEGREE, 1] = 0.25
-    tract[DEGREE * 2, 2] = 0.25
+    tract = Tract(DEGREE)
+    tract[0, 1, 0] = 1
+    tract[0, 2, 1] = 0.1
+    tract[1, 0, 1] = 0.25
+    tract[2, 0, 2] = 0.25
 
     samples_matrix = Tract.position_matrix(DEGREE, NUM_LENGTH_SAMPLES, NUM_RADIAL)
     tangents_matrix = Tract.tangent_matrix(DEGREE, NUM_LENGTH_SAMPLES, NUM_RADIAL)
