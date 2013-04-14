@@ -22,7 +22,7 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
-NumberOfSamples = collections.namedtuple("NumberOfSamples", "longitudinal radial")
+NumberOfSamples = collections.namedtuple("NumberOfSamples", "long radial")
 
 class Image(object):
 
@@ -51,9 +51,9 @@ class Image(object):
     def encodings(self):
         return self._encodings
 
-    def generate(self, tract, N_longitudinal, N_radial, response_coeffs):
-        samples_matrix = Tract.position_matrix(len(tract), N_longitudinal, N_radial)
-        tangents_matrix = Tract.tangent_matrix(len(tract), N_longitudinal, N_radial)
+    def generate(self, tract, N_long, N_radial, response_coeffs):
+        samples_matrix = Tract.position_matrix(len(tract), N_long, N_radial)
+        tangents_matrix = Tract.tangent_matrix(len(tract), N_long, N_radial)
         positions = samples_matrix.dot(tract)
         tangents = tangents_matrix.dot(tract)
         lengths = np.sqrt(tangents[:, 0] ** 2 + tangents[:, 1] ** 2 + tangents[:, 2] ** 2)
@@ -68,23 +68,23 @@ class Image(object):
 
 class Tract(object):
 
-    _longitudinal_position_matrices = {}
-    _longitudinal_tangent_matrices = {}
+    _long_pos_matrices = {}
+    _long_tang_matrices = {}
     _radial_matrices = {}
-    _position_matrices = {}
-    _tangent_matrices = {}
+    _pos_matrices = {}
+    _tang_matrices = {}
 
     @classmethod
-    def position_matrix(cls, degree, N_longitudinal, N_radial):
-        N = NumberOfSamples(N_longitudinal, N_radial)
+    def position_matrix(cls, degree, N_long, N_radial):
+        N = NumberOfSamples(N_long, N_radial)
         try:
-            matrix = cls._position_matrices[(degree, N)]
+            matrix = cls._pos_matrices[(degree, N)]
         except KeyError:
             try:
-                long_matrix = cls._longitudinal_position_matrices[(degree, N.longitudinal)]
+                long_matrix = cls._long_pos_matrices[(degree, N.long)]
             except KeyError:
-                long_matrix = cls._make_longitudinal_matrix(degree, N)
-                cls._longitudinal_position_matrices[(degree, N.longitudinal)] = long_matrix
+                long_matrix = cls._make_long_matrix(degree, N)
+                cls._long_pos_matrices[(degree, N.long)] = long_matrix
             try:
                 radial_matrix = cls._radial_matrices[(degree, N.radial)]
             except KeyError:
@@ -94,16 +94,16 @@ class Tract(object):
         return matrix
 
     @classmethod
-    def tangent_matrix(cls, degree, N_longitudinal, N_radial):
-        N = NumberOfSamples(N_longitudinal, N_radial)
+    def tangent_matrix(cls, degree, N_long, N_radial):
+        N = NumberOfSamples(N_long, N_radial)
         try:
-            matrix = cls._tangent_matrices[(degree, N)]
+            matrix = cls._tang_matrices[(degree, N)]
         except KeyError:
             try:
-                long_matrix = cls._longitudinal_tangent_matrices[(degree, N.longitudinal)]
+                long_matrix = cls._long_tang_matrices[(degree, N.long)]
             except KeyError:
                 long_matrix = cls._make_tangent_matrix(degree, N)
-                cls._longitudinal_tangent_matrices[(degree, N.longitudinal)] = long_matrix
+                cls._long_tang_matrices[(degree, N.long)] = long_matrix
             try:
                 radial_matrix = cls._radial_matrices[(degree, N.radial)]
             except KeyError:
@@ -113,7 +113,7 @@ class Tract(object):
         return matrix
 
     @classmethod
-    def _make_longitudinal_matrix(cls, degree, N, include_endpoints=False):
+    def _make_long_matrix(cls, degree, N, include_endpoints=False):
         # Get time increments minus endpoints
         t = np.linspace(0, 1, N + 2)
         if not include_endpoints:
@@ -154,16 +154,16 @@ class Tract(object):
         return samples
 
     @classmethod
-    def _combine_sample__matrices(cls, longitudinal_matrix, radial_matrix):
-        length = longitudinal_matrix.shape[0]
-        degree = longitudinal_matrix.shape[1]
+    def _combine_sample__matrices(cls, long_matrix, radial_matrix):
+        length = long_matrix.shape[0]
+        degree = long_matrix.shape[1]
         samples = np.zeros((length * len(radial_matrix), degree * 3))
         for i, (k1, k2) in enumerate(radial_matrix):
             row_start = i * length
             row_end = row_start + length
-            samples[row_start:row_end, :degree] = longitudinal_matrix
-            samples[row_start:row_end, degree:(degree * 2)] = longitudinal_matrix * k1
-            samples[row_start:row_end, (degree * 2):(degree * 3)] = longitudinal_matrix * k2
+            samples[row_start:row_end, :degree] = long_matrix
+            samples[row_start:row_end, degree:(degree * 2)] = long_matrix * k1
+            samples[row_start:row_end, (degree * 2):(degree * 3)] = long_matrix * k2
         return samples
 
 if __name__ == '__main__':
