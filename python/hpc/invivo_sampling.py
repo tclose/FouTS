@@ -173,7 +173,7 @@ args = parser.parse_args()
 if not args.init_locations:
     args.init_locations = get_init_locations(args.dataset)
 if not args.reference_locations:
-    args.init_locations = get_init_locations(args.dataset.replace('fornix', 'corpus_callosum'))
+    args.reference_locations = get_init_locations(args.dataset.replace('fornix', 'corpus_callosum'))
 
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
                        'prior_density_high', 'prior_hook', 'prior_thin',
