@@ -28,10 +28,15 @@ NumberOfSamples = collections.namedtuple("NumberOfSamples", "long radial")
 
 class Tract(object):
 
-    def __init__(self, degree, acs=1.0):
+    def __init__(self, degree, acs=1.0, N_long=25, N_radial=4):
         self._degree = degree
         self._data = np.zeros(degree * 9 + 1)
         self.acs = acs
+        self.N = NumberOfSamples(N_long, N_radial)
+
+    @property
+    def degree(self):
+        return self._degree
 
     @property
     def matrix(self):
@@ -49,22 +54,66 @@ class Tract(object):
     def acs(self, acs):
         self._data[-1] = np.sqrt(acs)
 
-    def __getitem__(self, *indices):
+    def __getitem__(self, indices):
         if len(indices) == 1:
             item = self._data[indices[0]]
         elif len(indices) == 2:
-            item = self._data[indices[0] * self.degree + indices[1]]
+            offset = (self._degree * indices[0] + indices[1]) * 3
+            item = self._data[offset:(offset + 3)]
         elif len(indices) == 3:
-            item = self._data[self._degree * indices[0] + indices[1], indices[2]]
+            item = self._data[(self._degree * indices[0] + indices[1]) * 3 + indices[2]]
         return item
 
-    def positions(self, N_long, N_radial):
-        pos_matrix = Tract.position_matrix(self.degree, N_long, N_radial)
+    def __setitem__(self, indices, value):
+        if len(indices) == 1:
+            self._data[indices[0]] = value
+        elif len(indices) == 2:
+            offset = (self._degree * indices[0] + indices[1]) * 3
+            self._data[offset:(offset + 3)] = value
+        elif len(indices) == 3:
+            self._data[(self._degree * indices[0] + indices[1]) * 3 + indices[2]] = value
+
+    def positions(self):
+        pos_matrix = Tract.position_matrix(self.degree, self.N)
         return pos_matrix.dot(self.matrix)
 
-    def tangents(self, N_long, N_radial):
-        tang_matrix = Tract.tangent_matrix(self.degree, N_long, N_radial)
+    def tangents(self):
+        tang_matrix = Tract.tangent_matrix(self.degree, self.N)
         return tang_matrix.dot(self.matrix)
+
+    def segments(self, scale=(1, 1, 1), offset=(0, 0, 0)):
+        # Get segment positions, scaling the tract if required
+        if not all(scale) or any(offset):
+            norm_matrix = copy(self.matrix)
+            norm_matrix[0, 0, :] += offset
+            norm_matrix *= scale
+        else:
+            norm_matrix = self.matrix
+        positions = Tract.position_matrix(self.degree, self.N).dot(norm_matrix)
+        # Get segment orientations
+        tangents = self.tangents()
+        lengths = np.sqrt(tangents[:, 0] ** 2 + tangents[:, 1] ** 2 + tangents[:, 2] ** 2) # lengths
+        # Normalise orientations
+        orientations = tangents # rename for readability
+        for dim_i in xrange(3):
+            orientations[:, dim_i] /= lengths
+        # Scale the segment sizes by the ACS and divide by the number of samples over the cross section
+        sizes = lengths # rename for readability
+        sizes *= (tract.acs / tract.num_strands())
+        return (positions, orientations, sizes)
+
+    def num_strands(self):
+        return len(self._radial_matrix(self.N.radial))
+
+    @classmethod
+    def num_samples_per_cross_section(cls, N_radial):
+        try:
+            num = len(cls._radial_matrices[N_radial])
+        except KeyError:
+            cls._radial_matrices[N_radial] = cls._make_radial_matrix(N_radial)
+            num = len(cls._radial_matrices[N_radial])
+        return num
+
 
     # Class Methods ------------------------------------------------------------------------------
 
@@ -86,7 +135,7 @@ class Tract(object):
         return psi
 
     @classmethod
-    def _make_tangents_matrix(cls, degree, N):
+    def _make_tang_matrix(cls, degree, N):
         # Get time increments minus endpoints
         t = np.linspace(0, 1, N + 2)[1:-1] # Remove endpoints which are always [0,0,0]
         dpsi_dt = np.zeros((N, degree))
@@ -116,7 +165,7 @@ class Tract(object):
         return samples
 
     @classmethod
-    def _combine_sample__matrices(cls, long_matrix, radial_matrix):
+    def _combine_sample_matrices(cls, long_matrix, radial_matrix):
         length = long_matrix.shape[0]
         degree = long_matrix.shape[1]
         samples = np.zeros((length * len(radial_matrix), degree * 3))
@@ -129,68 +178,99 @@ class Tract(object):
         return samples
 
     @classmethod
-    def position_matrix(cls, degree, N_long, N_radial):
-        N = NumberOfSamples(N_long, N_radial)
+    def _radial_matrix(cls, N_radial):
+        try:
+            radial_matrix = cls._radial_matrices[N_radial]
+        except KeyError:
+            radial_matrix = cls._make_radial_matrix(N_radial)
+            cls._radial_matrices[N_radial] = radial_matrix
+        return radial_matrix
+
+    @classmethod
+    def _long_matrix(cls, degree, N_long):
+        try:
+            long_matrix = cls._long_pos_matrices[(degree, N_long)]
+        except KeyError:
+            long_matrix = cls._make_long_matrix(degree, N_long)
+            cls._long_pos_matrices[(degree, N_long)] = long_matrix
+        return long_matrix
+
+    @classmethod
+    def _tang_matrix(cls, degree, N_long):
+        try:
+            tang_matrix = cls._tang_matrices[(degree, N_long)]
+        except KeyError:
+            tang_matrix = cls._make_tang_matrix(degree, N_long)
+            cls._tang_matrices[(degree, N_long)] = tang_matrix
+        return tang_matrix
+
+    @classmethod
+    def position_matrix(cls, degree, N):
         try:
             matrix = cls._pos_matrices[(degree, N)]
         except KeyError:
-            try:
-                long_matrix = cls._long_pos_matrices[(degree, N.long)]
-            except KeyError:
-                long_matrix = cls._make_long_matrix(degree, N.long)
-                cls._long_pos_matrices[(degree, N.long)] = long_matrix
-            try:
-                radial_matrix = cls._radial_matrices[N.radial]
-            except KeyError:
-                radial_matrix = cls._make_radial_matrix(N.radial)
-                cls._radial_matrices[N.raial] = radial_matrix
-            matrix = cls._combine_sample_matrices(long_matrix, radial_matrix)
+            matrix = cls._combine_sample_matrices(cls._long_matrix(degree, N.long),
+                                                                   cls._radial_matrix(N.radial))
         return matrix
 
     @classmethod
-    def tangent_matrix(cls, degree, N_long, N_radial):
-        N = NumberOfSamples(N_long, N_radial)
+    def tangent_matrix(cls, degree, N):
         try:
             matrix = cls._tang_matrices[(degree, N)]
         except KeyError:
-            try:
-                long_matrix = cls._long_tang_matrices[(degree, N.long)]
-            except KeyError:
-                long_matrix = cls._make_tangent_matrix(degree, N.long)
-                cls._long_tang_matrices[(degree, N.long)] = long_matrix
-            try:
-                radial_matrix = cls._radial_matrices[N.radial]
-            except KeyError:
-                radial_matrix = cls._make_radial_matrix(N.radial)
-                cls._radial_matrices[N.radial] = radial_matrix
-            matrix = cls._combine_sample_matrices(long_matrix, radial_matrix)
+            matrix = cls._combine_sample_matrices(cls._tang_matrix(degree, N.long),
+                                                                   cls._radial_matrix(N.radial))
         return matrix
 
-    @classmethod
-    def num_samples_per_cross_section(cls, N_radial):
-        try:
-            num = len(cls._radial_matrices[N_radial])
-        except KeyError:
-            cls._radial_matrices[N_radial] = cls._make_radial_matrix(N_radial)
-            num = len(cls._radial_matrices[N_radial])
-        return num
+class Interpolator(object):
+
+    def __init__(self, extent):
+        self.extent = extent
+
+    def range(self, dim_index):
+        return np.arange(1 - self.extent[dim_index], self.extent[dim_index] + 1)
+
+    def interpolate(self, X, Y, Z, indices=None):
+        raise NotImplementedError("Classes deriving the 'Interpolator' class must implement the "
+                                  "'interpolate' method")
+
+
+class SincInterpolator(Interpolator):
+
+    def interpolate(self, X, Y, Z, indices=None): #@UnusedVariable indices -> uniform interpolation
+        self._interp(X, self.extent[0])
+        self._interp(Y, self.extent[1])
+        self._interp(Z, self.extent[2])
+
+    def _interp(self, D, extent):
+        # To stop the interpolation kernel blowing up at 0
+        zero_mask = (D == 0.0)
+        # Truncate outside of the kernel extent
+        trunc_mask = (D > extent) * (D < extent)
+        # Get a mask of the remaining displacements
+        mask = np.invert(zero_mask + trunc_mask)
+        # Change the values of the displacement matrix in-place to the interpolated values
+        D[mask] = np.sin(D[mask]) / D[mask]
+        D[zero_mask] = 1.0
+        D[trunc_mask] = 0.0
 
 
 class Image(object):
 
-    def __init__(self, size, resolution, encodings):
+    def __init__(self, size, resolution, offset, directions):
         if len(size) != 3 or len(resolution) != 3:
             raise Exception("Image must be three-dimensional (provided: size={}, resolution={})."
                             .format(size, resolution))
-        if encodings.shape[1] != 4:
-            raise Exception("The second dimension of the encodings matrix must have length 4 (found"
-                            " {}) corresponding to [x y z b_value] ".format(encodings.shape[1]))
-        self._size = size
-        self._resolution = resolution
-        self._encodings = encodings
-        self._data = np.zeros((np.prod(size), encodings.shape[0]))
+        if directions.shape[1] != 3:
+            raise Exception("The second dimension of the encodings matrix must have length 3 (found"
+                            " {}) corresponding to [x y z b_value] ".format(directions.shape[1]))
+        self._size = np.asarray(size, dtype=int)
+        self._resolution = np.asarray(resolution)
+        self._offset = np.asarray(offset)
+        self._directions = np.asarray(directions)
+        self._data = np.zeros(size + directions.shape[0:1])
 
-    # These are provided as read only versions of the 
+    # These are provided as read-only versions of the member variables
     @property
     def size(self):
         return self._size
@@ -200,42 +280,73 @@ class Image(object):
         return self._resolution
 
     @property
-    def encodings(self):
-        return self._encodings
+    def offset(self):
+        return self._offset
 
-    def generate(self, tract, N_long, N_radial, response_coeffs, interpolator):
-        positions = tract.positions(N_long, N_radial)
-        N = positions.shape[0]
-        indices = np.floor(positions)
-        remain = positions - indices
-        indices = np.array(indices, dtype=np.int)
-        X = np.zeros((N, interpolator.dim[0] * 2))
-        Y = np.zeros((N, interpolator.dim[1] * 2))
-        Z = np.zeros((N, interpolator.dim[2] * 2))
-        for dim_i, P in enumerate((X, Y, Z)):
-            for step_i, step in enumerate(xrange((1 - interpolator.dim[dim_i]),
-                                                 interpolator.dim[dim_i])):
-                P[:, step_i] = remain - step
-            interpolator.interpolate(dim_i, P)
-        orients = tract.tangents(N_long, N_radial)
-        lengths = np.sqrt(orients[:, 0] ** 2 + orients[:, 1] ** 2 + orients[:, 2] ** 2)
-        # Normalise orientations
-        for dim_i in xrange(3):
-            orients[:, dim_i] /= lengths
-        Q = orients.dot(self._encodings[:, 1:3])
+    @property
+    def directions(self):
+        return self._directions
+
+    def generate(self, tract, dw_response=(1.0, 0.5, 0.2), interpolator=SincInterpolator((1, 1, 1)),
+                 base_intensity=1.0):
+        (positions, orientations, segment_sizes) = tract.segments(scale=(1.0 / self.resolution),
+                                                                  offset= -self.offset)
+        # Calculate the diffusion weighting from the segment orientations in each DW direction
+        Q = orientations.dot(self.directions.T)
         Q2 = Q ** 2
         QY = np.ones(Q.shape)
         R = np.zeros(Q.shape)
-        for coeff in response_coeffs:
+        for coeff in dw_response[:-1]:
+            R += QY * coeff
             QY *= Q2
-            R += coeff * QY
-        # Scale the lengths by the ACS
-        scalars = tract.num_samples_per_cross_section(N_radial) * tract.acs * lengths
-        for x_i in xrange(interpolator.dim[0]):
-            for y_i in xrange(interpolator.dim[1]):
-                for z_i in xrange(interpolator.dim[2]):
-                    self._data[indices] = X[:, x_i] * Y[:, y_i] * Z[:, z_i] * R
-
+        R += QY * coeff # This is performed outside the loop to avoid the last multiplication of QY
+        # Transpose the DW responses for broadcasting with interpolation vectors
+        R = R.transpose()
+        # Scale the diffusion weightings by the segment sizes (the amount of the tract the signal arises from)
+        R *= segment_sizes
+        # Calculate the interpolation from the segment positions to their neighbouring voxels
+        # along each of the dimensions
+        floor = np.floor(positions)
+        # Get the voxel indices that are affected by each segment
+        base_indices = np.array(floor, dtype=np.int)
+        X_ind = base_indices[:, 0:1] + interpolator.range(0)
+        Y_ind = base_indices[:, 1:2] + interpolator.range(1)
+        Z_ind = base_indices[:, 2:3] + interpolator.range(2)
+        # Get image indices corresponding to segment->voxel contributions 
+        indices = (X_ind.T[interpolator.extent[0], None, None, :] +
+                   Y_ind.T[None, interpolator.extent[1], None, :] * self.size[1] +
+                   Z_ind.T[None, None, interpolator.extent[2], :] * np.prod(self.size[0:2])).ravel()
+        # Get the displacement to surrounding voxels
+        disp = positions - floor # Since the segment positions are already normalised to the image
+        X = disp[:, 0:1] - interpolator.range(0)
+        Y = disp[:, 1:2] - interpolator.range(1)
+        Z = disp[:, 2:3] - interpolator.range(2)
+        interpolator.interpolate(X, Y, Z, indices=(X_ind, Y_ind, Z_ind))
+        H = (X.T[interpolator.extent[0], None, None, :] *
+             Y.T[None, interpolator.extent[1], None, :] *
+             Z.T[None, None, interpolator.extent[2], :])
+        S = (H * R).ravel()
+        # Combine interpolation and responses to get the generated signal intensities
+        self._data[:] = 0.0
+        for z_i, z_offset in enumerate(interpolator.range(2)):
+            z_ind = indices[:, 2] + z_offset
+            # Map indices that are out of range onto the last index (therefore it is 
+            # important to ensure this is an empty voxel outside the true image bounds
+            z_ind[(z_ind < 0) * (z_ind > self.size[2])] = -1
+            for y_i, y_offset in enumerate(interpolator.range(1)):
+                YZ = Y[:, y_i] * Z[:, z_i]
+                y_ind = indices[:, 1] + y_offset
+                # Map indices that are out of range onto the last index (therefore it is 
+                # important to ensure this is an empty voxel outside the true image bounds
+                y_ind[(y_ind < 0) * (y_ind > self.size[2])] = -1
+                for x_i, x_offset in enumerate(interpolator.range(0)):
+                    XYZ = X[:, x_i] * YZ
+                    x_ind = indices[:, 0] + x_offset
+                    # Map indices that are out of range onto the last index (therefore it is 
+                    # important to ensure this is an empty voxel outside the true image bounds 
+                    x_ind[(x_ind < 0) * (x_ind > self.size[2])] = -1
+                    self._data[x_ind, y_ind, z_ind, :] += (R * XYZ).transpose()
+        self._data *= base_intensity
 
 
 
@@ -252,12 +363,15 @@ if __name__ == '__main__':
     tract[1, 0, 1] = 0.25
     tract[2, 0, 2] = 0.25
 
-    samples_matrix = Tract.position_matrix(DEGREE, NUM_LENGTH_SAMPLES, NUM_RADIAL)
-    tangents_matrix = Tract.tangent_matrix(DEGREE, NUM_LENGTH_SAMPLES, NUM_RADIAL)
+    directions = np.random.rand(10, 3)
+    length = directions[:, 0] ** 2 + directions[:, 1] ** 2 + directions[:, 2] ** 2
+    directions[:] = (directions.T / length).T
 
-    positions = samples_matrix.dot(tract)
+    image = Image((10, 10, 10), (0.1, 0.1, 0.1), (0.0, 0.0, 0.0), directions)
+    image.generate(tract)
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(positions[:, 0], positions[:, 1], positions[:, 2])
+    for i in range(10):
+        fig = plt.figure()
+        plt.imshow(image._data[:, :, i, 5])
+#    ax.scatter(positions[:, 0], positions[:, 1], positions[:, 2])
     plt.show()
