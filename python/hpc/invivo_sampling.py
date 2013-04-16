@@ -114,7 +114,7 @@ parser.add_argument('--estimate_response', action='store_true',
                     help="Uses an estimated diffusion response function instead"
                          " of the default tensor one")
 parser.add_argument('--dataset', type=str,
-                    default=os.path.join('donald', 'images', 'corpus_callosum.mif'),
+                    default=os.path.join('donald', 'images', 'corpus_callosum.150.mif'),
                     help="The dataset to use (default: %(default)s).")
 parser.add_argument('--init_locations', nargs='+', type=float, default=None,
                     help="The initial locations of the tracts.")
@@ -128,13 +128,13 @@ args = parser.parse_args()
 # parameters in the set. Otherwise if the '--combo' option is provided then loop
 # through all combinations of the provided parameters. 
 if not args.init_locations:
-    if args.dataset == os.path.join('donald', 'images', 'corpus_callosum.mif'):
+    if args.dataset == os.path.join('donald', 'images', 'corpus_callosum.150.mif'):
         args.init_locations = [(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0),
                              (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
-    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.mif'):
+    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.150.mif'):
         args.init_locations = [(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0),
                              (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
-    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.mif'):
+    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.150.mif'):
 #<<<<<<< HEAD
         args.init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
                              (0.0, 27.0, -16.5), (0.0, 14.0, -19.5), (0.0, 1.5, -28.5)]
@@ -142,11 +142,11 @@ if not args.init_locations:
 #        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
 #                             (0.0, 20.0, -16.5), (0.0, 9.0, -21.5), (0.0, 0.0, -30.5)]
 #>>>>>>> 41e3547cf7ab1e56865b56d709ee1f46a41ddc57
-    elif args.dataset == os.path.join('donald', 'images', 'fornix.mif'):
+    elif args.dataset == os.path.join('donald', 'images', 'fornix.150.mif'):
         args.init_locations = [(0.0, 32.0, 0.0)]
-    elif args.dataset == os.path.join('heath', 'images', 'fornix.mif'):
+    elif args.dataset == os.path.join('heath', 'images', 'fornix.150.mif'):
         args.init_locations = [(0.0, 35.0, 20.0)]
-    elif args.dataset == os.path.join('lisa', 'images', 'fornix.mif'):
+    elif args.dataset == os.path.join('lisa', 'images', 'fornix.150.mif'):
         args.init_locations = [(0.0, 35.0, -27.0)]
     elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.60.mif'):
 #<<<<<<< HEAD
@@ -197,14 +197,14 @@ if not args.init_locations:
 if not args.reference_locations:
     args.reference_locations = args.init_locations
 
-#    if args.dataset == os.path.join('donald', 'images', 'corpus_callosum.mif') or \
-#            args.dataset == os.path.join('donald', 'images', 'fornix.mif'):
+#    if args.dataset == os.path.join('donald', 'images', 'corpus_callosum.150.mif') or \
+#            args.dataset == os.path.join('donald', 'images', 'fornix.150.mif'):
 #        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
-#    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.mif') or \
-#            args.dataset == os.path.join('heath', 'images', 'fornix.mif'):
+#    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.150.mif') or \
+#            args.dataset == os.path.join('heath', 'images', 'fornix.150.mif'):
 #        args.init_locations = [(0.0, 58.0, 18.0), (0.0, -2.5, 14.5)]
-#    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.mif') or \
-#            args.dataset == os.path.join('lisa', 'images', 'fornix.mif'):
+#    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.150.mif') or \
+#            args.dataset == os.path.join('lisa', 'images', 'fornix.150.mif'):
 #        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 0.0, -30.5)]
 #    elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.60.mif') or \
 #            args.dataset == os.path.join('donald', 'images', 'fornix.60.mif'):
