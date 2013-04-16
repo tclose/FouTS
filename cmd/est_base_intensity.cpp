@@ -51,7 +51,8 @@ SET_VERSION_DEFAULT
 SET_AUTHOR("Thomas G. Close");
 SET_COPYRIGHT(NULL);
 
-const double FA_THRESHOLD_DEFAULT = 0.5;
+const double INCLUDE_FRACTION_DEFAULT = 0.05;
+const double CURVATURE_DEFAULT = 0.2;
 
 DESCRIPTION = {
     "Finds the maximum b0 intensity of an image",
@@ -65,19 +66,13 @@ ARGUMENTS= {
 };
 
 OPTIONS= {
-    Option("index", "the voxel indices in the image where the base intensity "
-            "is calculated from. Should be in regions with known "
-            "single fibre populations.").allow_multiple()
-    + Argument("X", "The index along the x dimension").type_integer()
-    + Argument("Y", "The index along the y dimension").type_integer()
-    + Argument("Z", "The index along the z dimension").type_integer(),
 
-    Option("seed", "the voxel indices in the image where the base intensity "
-            "is calculated from. Should be in regions with known "
-            "single fibre populations.").allow_multiple()
-    + Argument("X", "The x coordinate").type_float()
-    + Argument("Y", "The y coordinate").type_float()
-    + Argument("Z", "The z coordinate").type_float(),
+    Option("include_fraction", "the fraction of voxels which should be included in the estimation "
+            "taken in order of highest FA")
+    + Argument("include_fraction").type_float()
+
+    Option("curvature", "The relative curvature that is applied to the reference tract")
+    + Argument("curvature").type_float()
 
     Option ("grad", "specify the diffusion-weighted gradient scheme used in the acquisition. "
             "The program will normally attempt to use the encoding stored in the image "
@@ -85,10 +80,6 @@ OPTIONS= {
             "the format [ X Y Z b ], where [ X Y Z ] describe the direction of the "
             "applied gradient, and b gives the b-value in units (1000 s/mm^2).")
     + Argument ("encoding").type_file(),
-
-    Option ("fa_threshold", "The minimum threshold for the calculated Fractional Anisotropy (FA) "
-            "below which the provided will be omitted (with warning).")
-    + Argument ().type_float(SMALL_FLOAT, FA_THRESHOLD_DEFAULT, LARGE_FLOAT),
 
     DIFFUSION_PARAMETERS,
 
@@ -107,15 +98,8 @@ EXECUTE {
             throw Exception("dwi image should contain 4 dimensions");
         // Set the script defaults
         MR::Math::Matrix<float> grad;
-        double fa_threshold = FA_THRESHOLD_DEFAULT;
-        std::vector<Triple<size_t> > indices;
-        // Loads parameters to construct Diffusion::Model ('diff_' prefix)
-        SET_DIFFUSION_PARAMETERS;
-        // Loads extra parameters to construct Image::Expected::*::Buffer ('exp_' prefix)
-        SET_EXPECTED_IMAGE_PARAMETERS
-        // Set the diffusion model to isotropic (overiding the default) because diffusion tensors
-        // only work with isotropic images
-        diff_isotropic = true;
+        double include_fraction = INCLUDE_FRACTION_DEFAULT;
+        double curvature = CURVATURE_DEFAULT;
         // Supply the DW gradient scheme if required
         Options opt = get_options("grad");
         if (opt.size())
@@ -129,37 +113,24 @@ EXECUTE {
             throw Exception("unexpected diffusion encoding matrix dimensions");
         if (dwi.dim(3) != (int)grad.rows())
             throw Exception("number of studies in base image does not match that in encoding file");
-        // Set the FA anisotropy threshold
-        opt = get_options("fa_threshold");
+        opt = get_options("include_fraction");
         if (opt.size())
-            fa_threshold = opt[0][0];
-        // Get the indices of the b=0 encoding directions
+            include_fraction = opt[0][0];
+        opt = get_options("curvature");
+        if (opt.size())
+            curvature = opt[0][0];
+        // Loads parameters to construct Diffusion::Model ('diff_' prefix)
+        SET_DIFFUSION_PARAMETERS;
+        // Loads extra parameters to construct Image::Expected::*::Buffer ('exp_' prefix)
+        SET_EXPECTED_IMAGE_PARAMETERS
+        // Set the diffusion model to isotropic (overiding the default) because diffusion tensors
+        // only work with isotropic images
+        diff_isotropic = true;
         MR::DWI::normalise_grad(grad);
         std::vector<int> bzeros, dwis;
         MR::DWI::guess_DW_directions(dwis, bzeros, grad);
         if (!bzeros.size())
             throw Exception("No b=0 encodings found in gradient encoding scheme");
-        // Load the reference indices from the supplied '-index' and '-seed' options
-        opt = get_options("index");
-        for (size_t i = 0; i < opt.size(); ++i) {
-            size_t x_ind = opt[i][X];
-            size_t y_ind = opt[i][Y];
-            size_t z_ind = opt[i][Z];
-            indices.push_back(Triple<size_t>(x_ind, y_ind, z_ind));
-        }
-        opt = get_options("seed");
-        for (size_t i = 0; i < opt.size(); ++i) {
-            double x = opt[i][X];
-            double y = opt[i][Y];
-            double z = opt[i][Z];
-            size_t x_ind = (size_t)((x - dwi.transform()(X, 3)) / dwi.vox(X));
-            size_t y_ind = (size_t)((y - dwi.transform()(Y, 3)) / dwi.vox(Y));
-            size_t z_ind = (size_t)((z - dwi.transform()(Z, 3)) / dwi.vox(Z));
-            indices.push_back(Triple<size_t>(x_ind, y_ind, z_ind));
-        }
-        if (!indices.size())
-            throw Exception("At least one reference voxel needs to be specified, using either the "
-                            "'-index' or '-seed' options");
         // Get the matrix of non b=0 encoding directions
         Triple<double> vox_lengths(dwi.vox(X), dwi.vox(Y), dwi.vox(Z));
         Triple<size_t> dims(1.0, 1.0, 1.0);
@@ -199,7 +170,8 @@ EXECUTE {
         double est_base_intensity = 0.0;
         size_t over_fa_threshold_count = 0;
         // Loop through all the provided single fibre indices and calculate the optimum b0
-        for (std::vector<Triple<size_t> >::iterator index_it = indices.begin(); index_it != indices.end(); ++index_it) {
+        for (std::vector<Triple<size_t> >::iterator index_it = indices.begin();
+                index_it != indices.end(); ++index_it) {
             // The following is quite a clunky way to get an observed buffer consisting of a single
             // voxel from the index given as a triple. NB the first argument to this script is the
             // image location hence the offset by one.
@@ -258,7 +230,7 @@ EXECUTE {
                                     + MR::Math::pow2(eval[2] - trace))
                             / (MR::Math::pow2(eval[0]) + MR::Math::pow2(eval[1])
                                + MR::Math::pow2(eval[2])));
-            if (fa > fa_threshold) {
+            if (fa > include_fraction) {
                 // Create a tract that spans the space that voxel will draw signal from and is aligned
                 // with the principle eigenvector of the estimated diffusion tensor.
                 Coord tract_extent = exp_interp_extent * vox_lengths * 2.0;
