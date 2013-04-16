@@ -289,6 +289,7 @@ class Image(object):
 
     def generate(self, tract, dw_response=(1.0, 0.5, 0.2), interpolator=SincInterpolator((1, 1, 1)),
                  base_intensity=1.0):
+        self._data[:] = 0.0
         (positions, orientations, segment_sizes) = tract.segments(scale=(1.0 / self.resolution),
                                                                   offset= -self.offset)
         # Calculate the diffusion weighting from the segment orientations in each DW direction
@@ -309,39 +310,50 @@ class Image(object):
         floor = np.floor(positions)
         # Get the voxel indices that are affected by each segment
         base_indices = np.array(floor, dtype=np.int)
-        X_ind = base_indices[:, 0:1] + interpolator.range(0)
-        Y_ind = base_indices[:, 1:2] + interpolator.range(1)
-        Z_ind = base_indices[:, 2:3] + interpolator.range(2)
-        # Get image indices corresponding to segment->voxel contributions 
-        indices = (X_ind.T[interpolator.extent[0], None, None, :] +
-                   Y_ind.T[None, interpolator.extent[1], None, :] * self.size[1] +
-                   Z_ind.T[None, None, interpolator.extent[2], :] * np.prod(self.size[0:2])).ravel()
+#        X_ind = base_indices[:, 0:1] + interpolator.range(0)
+#        Y_ind = base_indices[:, 1:2] + interpolator.range(1)
+#        Z_ind = base_indices[:, 2:3] + interpolator.range(2)
+#        # Get image indices corresponding to segment->voxel contributions 
+#        indices = (X_ind.T[interpolator.extent[0], None, None, :] +
+#                   Y_ind.T[None, interpolator.extent[1], None, :] * self.size[1] +
+#                   Z_ind.T[None, None, interpolator.extent[2], :] * np.prod(self.size[0:2])).ravel()
         # Get the displacement to surrounding voxels
         disp = positions - floor # Since the segment positions are already normalised to the image
         X = disp[:, 0:1] - interpolator.range(0)
         Y = disp[:, 1:2] - interpolator.range(1)
         Z = disp[:, 2:3] - interpolator.range(2)
-        interpolator.interpolate(X, Y, Z, indices=(X_ind, Y_ind, Z_ind))
-        H = (X.T[interpolator.extent[0], None, None, :] *
-             Y.T[None, interpolator.extent[1], None, :] *
-             Z.T[None, None, interpolator.extent[2], :])
-        S = (H * R).ravel()
-        # Combine interpolation and responses to get the generated signal intensities
-        self._data[:] = 0.0
+        interpolator.interpolate(X, Y, Z)
+#        # Experimental way of doing this that might be quicker but should definitely be paralleizable
+#        H = (X.T[interpolator.extent[0], None, None, :] *
+#             Y.T[None, interpolator.extent[1], None, :] *
+#             Z.T[None, None, interpolator.extent[2], :])
+#        # Multiply responses by interpolations to get the contributions to voxels from segments
+#        S = np.ravel(R * H)
+#        # Assign the contributions to the relevant voxels (this sorting could be done in a separate 
+#        # thread while the other calculations are going on)
+#        unique_indices = np.unique(indices)
+#        index_indices = np.argsort(indices) # indices of indices
+#        sorted_indices = indices[index_indices]
+#        left = np.searchsorted(sorted_indices, unique_indices, 'left')
+#        right = np.searchsorted(sorted_indices, unique_indices, 'right')
+#        for ind, l, r in zip(unique_indices, left, right):
+#            self._data[ind, :] = np.sum(S[index_indices[l:r], :], axis=0)
+        # Combine interpolation and responses to get the generated signal intensities the old way,
+        # which might be a little easier to understand
         for z_i, z_offset in enumerate(interpolator.range(2)):
-            z_ind = indices[:, 2] + z_offset
+            z_ind = base_indices[:, 2] + z_offset
             # Map indices that are out of range onto the last index (therefore it is 
             # important to ensure this is an empty voxel outside the true image bounds
             z_ind[(z_ind < 0) * (z_ind > self.size[2])] = -1
             for y_i, y_offset in enumerate(interpolator.range(1)):
                 YZ = Y[:, y_i] * Z[:, z_i]
-                y_ind = indices[:, 1] + y_offset
+                y_ind = base_indices[:, 1] + y_offset
                 # Map indices that are out of range onto the last index (therefore it is 
                 # important to ensure this is an empty voxel outside the true image bounds
                 y_ind[(y_ind < 0) * (y_ind > self.size[2])] = -1
                 for x_i, x_offset in enumerate(interpolator.range(0)):
                     XYZ = X[:, x_i] * YZ
-                    x_ind = indices[:, 0] + x_offset
+                    x_ind = base_indices[:, 0] + x_offset
                     # Map indices that are out of range onto the last index (therefore it is 
                     # important to ensure this is an empty voxel outside the true image bounds 
                     x_ind[(x_ind < 0) * (x_ind > self.size[2])] = -1

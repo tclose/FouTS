@@ -51,7 +51,7 @@ SET_VERSION_DEFAULT
 SET_AUTHOR("Thomas G. Close");
 SET_COPYRIGHT(NULL);
 
-const double FA_THRESHOLD_DEFAULT = 0.6;
+const double FA_THRESHOLD_DEFAULT = 0.5;
 
 DESCRIPTION = {
     "Finds the maximum b0 intensity of an image",
@@ -197,6 +197,7 @@ EXECUTE {
                 vox_lengths, diffusion_model, exp_num_length_sections, exp_num_width_sections,
                 exp_interp_extent, offsets, exp_enforce_bounds, exp_half_width);
         double est_base_intensity = 0.0;
+        size_t over_fa_threshold_count = 0;
         // Loop through all the provided single fibre indices and calculate the optimum b0
         for (std::vector<Triple<size_t> >::iterator index_it = indices.begin(); index_it != indices.end(); ++index_it) {
             // The following is quite a clunky way to get an observed buffer consisting of a single
@@ -281,8 +282,11 @@ EXECUTE {
                 // intensity to match the observed intensity.
                 for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i)
                     est_base_intensity += observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i];
+                over_fa_threshold_count++;
             }
         }
+        if (!over_fa_threshold_count)
+            throw Exception("None of the provided seeds are above the FA threshold");
         // Divide the sum of the scaling factor required to scale each
         est_base_intensity /= (double)(num_nonb0_encodings * indices.size());
         // Print the estimated intensity for use with other commands

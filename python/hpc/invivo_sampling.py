@@ -11,6 +11,49 @@ import hpc
 import argparse
 import os.path
 import time
+
+def get_init_locations(dataset):
+    if dataset == os.path.join('donald', 'images', 'corpus_callosum.mif'):
+        init_locations = [(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0),
+                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
+    elif dataset == os.path.join('heath', 'images', 'corpus_callosum.mif'):
+        init_locations = [(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0),
+                             (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
+    elif dataset == os.path.join('lisa', 'images', 'corpus_callosum.mif'):
+        init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
+                             (0.0, 27.0, -16.5), (0.0, 14.0, -19.5), (0.0, 1.5, -28.5)]
+    elif dataset == os.path.join('donald', 'images', 'fornix.mif'):
+        init_locations = [(0.0, 32.0, 0.0)]
+    elif dataset == os.path.join('heath', 'images', 'fornix.mif'):
+        init_locations = [(0.0, 35.0, 20.0)]
+    elif dataset == os.path.join('lisa', 'images', 'fornix.mif'):
+        init_locations = [(0.0, 35.0, -27.0)]
+    elif dataset == os.path.join('donald', 'images', 'corpus_callosum.60.mif'):
+        init_locations = [(0.0, 69.0, -5.0), (0.0, 56.0, 7.0), (0.0, 35.0, 10.0),
+                             (0.0, 25.0, 9.5), (0.0, 15.0, 5.0), (0.0, 6.0, -5.0)]
+    elif dataset == os.path.join('heath', 'images', 'corpus_callosum.60.mif'):
+        init_locations = [(0.0, 66.0, 10.0), (0.0, 57.0, 20.0), (0.0, 42.0, 23.0),
+                             (0.0, 27.5, 22.5), (0.0, 16.5, 18.5), (0.0, 7.5, 11.5)]
+    elif dataset == os.path.join('lisa', 'images', 'corpus_callosum.60.mif'):
+        init_locations = [(0.0, 56.0, 23.5), (0.0, 44.0, 33.0), (0.0, 28.0, 36.0),
+                             (0.0, 16.0, 35.5), (0.0, 6.0, 31.5), (0.0, -5.5, 20.5)]
+    elif dataset == os.path.join('donald', 'images', 'fornix.60.mif'):
+        init_locations = [(0.0, 41.5, -3.0)]
+    elif dataset == os.path.join('heath', 'images', 'fornix.60.mif'):
+        init_locations = [(0.0, 42.0, 14.0)]
+    elif dataset == os.path.join('lisa', 'images', 'fornix.60.mif'):
+        init_locations = [(0.0, 31.0, 24.0)]
+    elif dataset == os.path.join('donald', 'images', 'corpus_callosum.20.mif'):
+        init_locations = [(0.0, 65.0, -7.5), (0.0, 54.0, 4.5), (0.0, 41.5, 7.5),
+                             (0.0, 28.0, 7.5), (0.0, 17.5, 5.5), (0.0, 3.5, -5.5)]
+    elif dataset == os.path.join('donald', 'images', 'fornix.20.mif'):
+        init_locations = [(3.0, 38.0, -6.5)]
+    else:
+        raise Exception("dataset '{}' wasn't one with preconfigured initial "
+                        "locations, therefore they need to be provided"
+                        .format(dataset))
+    return init_locations
+
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'invivo_sampling'
 # Required dirs for the script to run
@@ -128,101 +171,11 @@ args = parser.parse_args()
 # parameters in the set. Otherwise if the '--combo' option is provided then loop
 # through all combinations of the provided parameters. 
 if not args.init_locations:
-    if args.dataset == os.path.join('donald', 'images', 'corpus_callosum.150.mif'):
-        args.init_locations = [(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0),
-                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
-    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.150.mif'):
-        args.init_locations = [(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0),
-                             (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
-    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.150.mif'):
-#<<<<<<< HEAD
-        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
-                             (0.0, 27.0, -16.5), (0.0, 14.0, -19.5), (0.0, 1.5, -28.5)]
-#=======
-#        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
-#                             (0.0, 20.0, -16.5), (0.0, 9.0, -21.5), (0.0, 0.0, -30.5)]
-#>>>>>>> 41e3547cf7ab1e56865b56d709ee1f46a41ddc57
-    elif args.dataset == os.path.join('donald', 'images', 'fornix.150.mif'):
-        args.init_locations = [(0.0, 32.0, 0.0)]
-    elif args.dataset == os.path.join('heath', 'images', 'fornix.150.mif'):
-        args.init_locations = [(0.0, 35.0, 20.0)]
-    elif args.dataset == os.path.join('lisa', 'images', 'fornix.150.mif'):
-        args.init_locations = [(0.0, 35.0, -27.0)]
-    elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.60.mif'):
-#<<<<<<< HEAD
-        args.init_locations = [(0.0, 69.0, -5.0), (0.0, 56.0, 7.0), (0.0, 35.0, 10.0),
-                             (0.0, 25.0, 9.5), (0.0, 15.0, 5.0), (0.0, 6.0, -5.0)]
-    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.60.mif'):
-        args.init_locations = [(0.0, 66.0, 10.0), (0.0, 57.0, 20.0), (0.0, 42.0, 23.0),
-                             (0.0, 27.5, 22.5), (0.0, 16.5, 18.5), (0.0, 7.5, 11.5)]
-    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.60.mif'):
-        args.init_locations = [(0.0, 56.0, 23.5), (0.0, 44.0, 33.0), (0.0, 28.0, 36.0),
-                             (0.0, 16.0, 35.5), (0.0, 6.0, 31.5), (0.0, -5.5, 20.5)]
-    elif args.dataset == os.path.join('donald', 'images', 'fornix.60.mif'):
-        args.init_locations = [(0.0, 41.5, -3.0)]
-    elif args.dataset == os.path.join('heath', 'images', 'fornix.60.mif'):
-        args.init_locations = [(0.0, 42.0, 14.0)]
-    elif args.dataset == os.path.join('lisa', 'images', 'fornix.60.mif'):
-        args.init_locations = [(0.0, 31.0, 24.0)]
-    elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.20.mif'):
-        args.init_locations = [(0.0, 65.0, -7.5), (0.0, 54.0, 4.5), (0.0, 41.5, 7.5),
-                             (0.0, 28.0, 7.5), (0.0, 17.5, 5.5), (0.0, 3.5, -5.5)]
-    elif args.dataset == os.path.join('donald', 'images', 'fornix.20.mif'):
-        args.init_locations = [(3.0, 38.0, -6.5)]
-#=======
-#        args.init_locations = [(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0),
-#                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
-#    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.60.mif'):
-#        args.init_locations = [(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0),
-#                             (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
-#    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.60.mif'):
-#        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
-#                             (0.0, 20.0, -16.5), (0.0, 9.0, -21.5), (0.0, 0.0, -30.5)]
-#    elif args.dataset == os.path.join('donald', 'images', 'fornix.60.mif'):
-#        args.init_locations = [(0.0, 32.0, 0.0)]
-#    elif args.dataset == os.path.join('heath', 'images', 'fornix.60.mif'):
-#        args.init_locations = [(0.0, 35.0, 20.0)]
-#    elif args.dataset == os.path.join('lisa', 'images', 'fornix.60.mif'):
-#        args.init_locations = [(0.0, 35.0, -27.0)]
-#    elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.20.mif'):
-#        args.init_locations = [(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0),
-#                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
-#    elif args.dataset == os.path.join('donald', 'images', 'fornix.20.mif'):
-#        args.init_locations = [(0.0, 32.0, 0.0)]
-#>>>>>>> 41e3547cf7ab1e56865b56d709ee1f46a41ddc57
-    else:
-        raise Exception("dataset '{}' wasn't one with preconfigured initial "
-                        "locations, therefore they need to be provided"
-                        .format(args.dataset))
+   args.init_locations = get_init_locations(args.dataset)
 if not args.reference_locations:
-    args.reference_locations = args.init_locations
+    args.reference_locations = get_init_locations(args.dataset.replace('fornix', 'corpus_callosum'))
 
-#    if args.dataset == os.path.join('donald', 'images', 'corpus_callosum.150.mif') or \
-#            args.dataset == os.path.join('donald', 'images', 'fornix.150.mif'):
-#        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
-#    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.150.mif') or \
-#            args.dataset == os.path.join('heath', 'images', 'fornix.150.mif'):
-#        args.init_locations = [(0.0, 58.0, 18.0), (0.0, -2.5, 14.5)]
-#    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.150.mif') or \
-#            args.dataset == os.path.join('lisa', 'images', 'fornix.150.mif'):
-#        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 0.0, -30.5)]
-#    elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.60.mif') or \
-#            args.dataset == os.path.join('donald', 'images', 'fornix.60.mif'):
-#        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
-#    elif args.dataset == os.path.join('heath', 'images', 'corpus_callosum.60.mif') or \
-#            args.dataset == os.path.join('heath', 'images', 'fornix.60.mif'):
-#        args.init_locations = [(0.0, 58.0, 18.0), (0.0, -2.5, 14.5)]
-#    elif args.dataset == os.path.join('lisa', 'images', 'corpus_callosum.60.mif') or \
-#            args.dataset == os.path.join('lisa', 'images', 'fornix.60.mif'):
-#        args.init_locations = [(0.0, 61.0, -30.0), (0.0, 0.0, -30.5)]
-#    elif args.dataset == os.path.join('donald', 'images', 'corpus_callosum.20.mif') or \
-#            args.dataset == os.path.join('donald', 'images', 'fornix.20.mif'):
-#        args.init_locations = [(0.0, 59.0, 0.0), (0.0, -2.5, 0.5)]
-#    else:
-#        raise Exception("dataset '{}' wasn't one with preconfigured reference "
-#                        "locations, therefore they need to be provided"
-#                        .format(args.dataset))
-ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
+anging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
                        'prior_density_high', 'prior_hook', 'prior_thin',
                        'like_snr']
 ranging_params = hpc.combo_params(args, ranging_param_names, args.combo)
