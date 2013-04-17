@@ -51,9 +51,11 @@ SET_VERSION_DEFAULT
 SET_AUTHOR("Thomas G. Close");
 SET_COPYRIGHT(NULL);
 
-const double TOP_DEFAULT = 0.05;
+const double TOP_DEFAULT = 1.0;
 const double CURVATURE_DEFAULT = 0.0;
-const double FA_THRESHOLD_DEFAULT = 0.5;
+const double FA_THRESHOLD_DEFAULT = 0.6;
+const size_t NUM_LENGTH_SECTIONS_DEFAULT = 10;
+const size_t NUM_WIDTH_SECTIONS_DEFAULT = 2;
 
 DESCRIPTION = {
     "Finds the maximum b0 intensity of an image",
@@ -161,6 +163,14 @@ EXECUTE {
         SET_DIFFUSION_PARAMETERS;
         // Loads extra parameters to construct Image::Expected::*::Buffer ('exp_' prefix)
         SET_EXPECTED_IMAGE_PARAMETERS
+        // Overide the default number of width and length sections if they haven't been explicitly
+        // provided
+        opt = get_options("exp_num_length_sections");
+        if (!opt.size())
+            exp_num_width_sections = NUM_LENGTH_SECTIONS_DEFAULT;
+        opt = get_options("exp_num_width_sections");
+        if (!opt.size())
+            exp_num_width_sections = NUM_WIDTH_SECTIONS_DEFAULT;
         // Set the diffusion model to isotropic (overiding the default)
         diff_isotropic = true;
 
@@ -288,7 +298,7 @@ EXECUTE {
                     // with a ratio betwen the m=1 and m=2 coefficient vectors of the primary
                     // axis provided by the '--curvature' option.
                     Coord tract_extent = exp_interp_extent * vox_lengths * 2.0;
-                    Fibre::Tractlet::Set tcts(1, 2);
+                    Fibre::Tractlet::Set tcts(1, 3);
                     tcts.zero();
                     // Centre the tract in the middle of the voxel
                     tcts[0](0, 0) = vox_lengths / 2.0;
@@ -330,10 +340,10 @@ EXECUTE {
         std::sort(intensities.begin(), intensities.end());
         size_t top_count = (size_t)MR::Math::ceil(intensities.size() * top);
         double est_intensity = 0.0;
-        for (size_t intens_i = intensities.size() - top; intens_i < intensities.size(); ++intens_i)
+        for (size_t intens_i = intensities.size() - top_count; intens_i < intensities.size(); ++intens_i)
             est_intensity += intensities[intens_i];
         est_intensity /= (double)top_count;
 
         // Print the estimated intensity to the terminal for use with other commands
-        std::cout << est_intensity;
+        std::cout << est_intensity << std::endl;
     }
