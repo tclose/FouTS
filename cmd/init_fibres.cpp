@@ -111,8 +111,15 @@ OPTIONS= {
     Option("length_epsilon", "The length epsilon of the generated fibres.")
     + Argument("length_epsilon", "").type_float(0.0, Fibre::Tractlet::Set::LENGTH_EPSILON_DEFAULT, LARGE_FLOAT),
 
-    Option ("seed", "Seed for the random generation")
-    + Argument ("seed", ""),
+    Option("seed_positions", "The path to a file containing the seed positions of the fibres")
+    + Argument("seed_positions").type_file(),
+
+    Option("centre_stddev", "Standard deviation of the distribution around the seed positions "
+            "(only used if '--seed_positions' is provided)")
+    + Argument("centre_stddev").type_float(0.0, 0.0, LARGE_FLOAT),
+
+    Option ("random_seed", "Seed for the random generation")
+    + Argument ("random_seed", ""),
 
     Option ("centre_radius", "Radius from origin that the fibre centres will be initiated on.")
     + Argument("centre_radius","").type_float(SMALL_FLOAT, -1.0,LARGE_FLOAT),
@@ -147,9 +154,11 @@ EXECUTE {
         double edge_buffer = EDGE_BUFFER_DEFAULT;
         double centre_radius = -1.0;
         double curve_stddev = 0;
+        double centre_stddev = 0;
+        MR::Math::Matrix<double> positions;
         double width_epsilon = Fibre::Tractlet::Set::WIDTH_EPSILON_DEFAULT;
         double length_epsilon = Fibre::Tractlet::Set::LENGTH_EPSILON_DEFAULT;
-        size_t seed = time(NULL);
+        size_t random_seed = time(NULL);
         
         Options opt;
         
@@ -204,13 +213,21 @@ EXECUTE {
         opt = get_options("length_epsilon");
         if (opt.size())
             length_epsilon = opt[0][0];
+
+        opt = get_options("centre_stddev");
+        if (opt.size())
+            centre_stddev = opt[0][0];
         
-        opt = get_options("seed");
+        opt = get_options("positions");
+        if (opt.size())
+            positions.load(opt[0][0]);
+
+        opt = get_options("random_seed");
         if (opt.size()) {
-            std::string seed_string = opt[0][0];
-            seed = to<size_t>(seed_string);
+            std::string random_seed_string = opt[0][0];
+            random_seed = to<size_t>(random_seed_string);
         } else
-            std::cout << "No random seed provided, using: " << seed << std::endl;
+            std::cout << "No random random_seed provided, using: " << random_seed << std::endl;
         
         SET_IMAGE_PARAMETERS;
         
@@ -239,11 +256,11 @@ EXECUTE {
             properties["reject_radius"] = str(reject_radius);
         
         properties["edge_buffer"] = str(edge_buffer);
-        properties["seed"] = str(seed);
+        properties["random_seed"] = str(random_seed);
         
         //Initialise random number generator.
         gsl_rng* rand_gen = gsl_rng_alloc(gsl_rng_taus);
-        gsl_rng_set(rand_gen, seed);
+        gsl_rng_set(rand_gen, random_seed);
         
         std::vector<const char*> props;
         if (base_intensity)
@@ -253,24 +270,38 @@ EXECUTE {
         if (acs >= 0.0)
             elem_props.push_back(Fibre::Base::Object::ALPHA_PROP);
         
-        if (File::has_or_txt_extension<Fibre::Strand>(output_location)) {
-            
-            MR::ProgressBar progress_bar("Initialising strands...");
-            
-            Fibre::Strand::Set strands(num_fibres, degree, props, elem_props);
-            strands.zero();
-            strands.set_extend_props(properties);
-            if (base_intensity)
-                strands.set_base_intensity(base_intensity);
-            
-            std::vector<Triple<double> > centres;
+        std::vector<Triple<double> > centres;
+
+        if (positions.rows()) {
+            for (size_t row_i = 0; row_i < positions.rows(); ++row_i) {
+                Triple<double> centre (positions(row_i, 0), positions(row_i, 1),
+                        positions(row_i, 2));
+                for (size_t dim_i = 0; dim_i < 3; ++dim_i)
+                    centre += rand_triple(centre_stddev, rand_gen);
+                centres.push_back(centre);
+            }
+            num_fibres = centres.size();
+        } else {
             // Select between initialising the strands on a shell of "centre_radius" or uniformly distributed with an roi
             if (centre_radius > 0)
                 centres = distant_centres(num_fibres, centre_radius, rand_gen);
             else
                 centres = distributed_centres(img_offsets, roi_extent, num_fibres, rand_gen,
                         reject_radius);
+        }
+
+        if (File::has_or_txt_extension<Fibre::Strand>(output_location)) {
             
+            MR::ProgressBar progress_bar("Initialising strands...");
+
+            Fibre::Strand::Set strands(num_fibres, degree, props, elem_props);
+            strands.zero();
+            strands.set_extend_props(properties);
+            if (base_intensity)
+                strands.set_base_intensity(base_intensity);
+
+
+
             std::vector<Triple<double> > orients = orientations(num_fibres, rand_gen,
                     length_stddev);
             
@@ -302,13 +333,6 @@ EXECUTE {
             tractlets.set_extend_props(properties);
             if (base_intensity)
                 tractlets.set_base_intensity(base_intensity);
-            
-            std::vector<Triple<double> > centres;
-            if (centre_radius > 0)
-                centres = distant_centres(num_fibres, centre_radius, rand_gen);
-            else
-                centres = distributed_centres(img_offsets, roi_extent, num_fibres, rand_gen,
-                        reject_radius);
             
             std::vector<Triple<double> > orients = orientations(num_fibres, rand_gen,
                     length_stddev);
