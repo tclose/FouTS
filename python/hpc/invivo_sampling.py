@@ -206,7 +206,7 @@ metropolis {dataset_path} {work_dir}/output/init.tct \
 -exp_num_length_sections `cat {work_dir}/num_samples.length.txt` \
 -exp_num_width_sections `cat {work_dir}/num_samples.width.txt` \
 -exp_type {args.interp_type} \
--exp_base_intensity `cat {work_dir}/params/images/reference/{args.intensity_estimate}` \
+-exp_base_intensity `cat {work_dir}/params/image/reference/{args.intensity_estimate}` \
 -diff_warn -walk_step_location \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 
