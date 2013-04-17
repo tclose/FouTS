@@ -53,7 +53,7 @@ SET_COPYRIGHT(NULL);
 
 const double MIDDLE_DEFAULT = 0.5;
 const double CURVATURE_DEFAULT = 0.0;
-const double FA_THRESHOLD_DEFAULT = 0.6;
+const double FA_THRESHOLD_DEFAULT = 0.7;
 const size_t NUM_LENGTH_SECTIONS_DEFAULT = 10;
 const size_t NUM_WIDTH_SECTIONS_DEFAULT = 2;
 
@@ -334,19 +334,11 @@ EXECUTE {
         }
 
         //------------------------------------------------------------------------------------------
-        // Get the '--middle' fraction of the intensites and calculate their average
+        // Get the median intensity and print it to the command line.
         if (!intensities.size())
             throw Exception("No voxels were above the FA threshold (" + str(fa_threshold) + ")");
         std::sort(intensities.begin(), intensities.end());
-        size_t middle_start = (size_t)MR::Math::floor((double)intensities.size() *
-                                                        (1.0 - middle) / 2.0);
-        size_t middle_end = intensities.size() - middle_start;
-        double est_intensity = 0.0;
-        for (size_t intens_i = middle_start; intens_i < middle_end; ++intens_i)
-            est_intensity += intensities[intens_i];
-        est_intensity /= (double)(middle_end - middle_start);
-
-        //------------------------------------------------------------------------------------------
+        double median_intensity = intensities[intensities.size() / 2];
         // Print the estimated intensity to the terminal for use with other commands
-        std::cout << est_intensity << std::endl;
+        std::cout << median_intensity << std::endl;
     }
