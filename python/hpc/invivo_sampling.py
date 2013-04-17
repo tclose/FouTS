@@ -12,48 +12,6 @@ import argparse
 import os.path
 import time
 
-def get_init_locations(dataset):
-    if dataset == os.path.join('donald', 'images', 'corpus_callosum.mif'):
-        init_locations = [(0.0, 59.0, 0.0), (0.0, 53.0, 7.0), (0.0, 39.0, 12.0),
-                             (0.0, 22.0, 12.5), (0.0, 8.5, 7.5), (0.0, -2.5, 0.5)]
-    elif dataset == os.path.join('heath', 'images', 'corpus_callosum.mif'):
-        init_locations = [(0.0, 58.0, 18.0), (0.0, 53.0, 25.0), (0.0, 35.0, 30.0),
-                             (0.0, 21.0, 29.5), (0.0, 10.0, 25.0), (0.0, -2.5, 14.5)]
-    elif dataset == os.path.join('lisa', 'images', 'corpus_callosum.mif'):
-        init_locations = [(0.0, 61.0, -30.0), (0.0, 52.0, -21.0), (0.0, 38.0, -16.5),
-                             (0.0, 27.0, -16.5), (0.0, 14.0, -19.5), (0.0, 1.5, -28.5)]
-    elif dataset == os.path.join('donald', 'images', 'fornix.mif'):
-        init_locations = [(0.0, 32.0, 0.0)]
-    elif dataset == os.path.join('heath', 'images', 'fornix.mif'):
-        init_locations = [(0.0, 35.0, 20.0)]
-    elif dataset == os.path.join('lisa', 'images', 'fornix.mif'):
-        init_locations = [(0.0, 35.0, -27.0)]
-    elif dataset == os.path.join('donald', 'images', 'corpus_callosum.60.mif'):
-        init_locations = [(0.0, 69.0, -5.0), (0.0, 56.0, 7.0), (0.0, 35.0, 10.0),
-                             (0.0, 25.0, 9.5), (0.0, 15.0, 5.0), (0.0, 6.0, -5.0)]
-    elif dataset == os.path.join('heath', 'images', 'corpus_callosum.60.mif'):
-        init_locations = [(0.0, 66.0, 10.0), (0.0, 57.0, 20.0), (0.0, 42.0, 23.0),
-                             (0.0, 27.5, 22.5), (0.0, 16.5, 18.5), (0.0, 7.5, 11.5)]
-    elif dataset == os.path.join('lisa', 'images', 'corpus_callosum.60.mif'):
-        init_locations = [(0.0, 56.0, 23.5), (0.0, 44.0, 33.0), (0.0, 28.0, 36.0),
-                             (0.0, 16.0, 35.5), (0.0, 6.0, 31.5), (0.0, -5.5, 20.5)]
-    elif dataset == os.path.join('donald', 'images', 'fornix.60.mif'):
-        init_locations = [(0.0, 41.5, -3.0)]
-    elif dataset == os.path.join('heath', 'images', 'fornix.60.mif'):
-        init_locations = [(0.0, 42.0, 14.0)]
-    elif dataset == os.path.join('lisa', 'images', 'fornix.60.mif'):
-        init_locations = [(0.0, 31.0, 24.0)]
-    elif dataset == os.path.join('donald', 'images', 'corpus_callosum.20.mif'):
-        init_locations = [(0.0, 65.0, -7.5), (0.0, 54.0, 4.5), (0.0, 41.5, 7.5),
-                             (0.0, 28.0, 7.5), (0.0, 17.5, 5.5), (0.0, 3.5, -5.5)]
-    elif dataset == os.path.join('donald', 'images', 'fornix.20.mif'):
-        init_locations = [(3.0, 38.0, -6.5)]
-    else:
-        raise Exception("dataset '{}' wasn't one with preconfigured initial "
-                        "locations, therefore they need to be provided"
-                        .format(dataset))
-    return init_locations
-
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'invivo_sampling'
 # Required dirs for the script to run
@@ -134,7 +92,7 @@ parser.add_argument('--like_snr', default=[20.0], type=float, nargs='+',
 parser.add_argument('--init_extent', default=(1, 1, 1), nargs=3, type=int,
                     help="The extent (in number of voxels) of the ROI in which "
                          "the inital tracts are generated")
-parser.add_argument('--seed', type=int, help="The random seed for the whole "
+parser.add_argument('--random_seed', type=int, help="The random seed for the whole "
                                              "run")
 parser.add_argument('--output_dir', default=None, type=str,
                     help="The parent directory in which the output directory "
@@ -153,38 +111,37 @@ parser.add_argument('--combo', action='store_true',
                     help="Instead of treating each ranging parameter sequence "
                          " as the 1..N values for that parameter, all "
                          "combinations of the provided parameters are tested.")
-parser.add_argument('--estimate_response', action='store_true',
-                    help="Uses an estimated diffusion response function instead"
-                         " of the default tensor one")
+#parser.add_argument('--estimate_response', action='store_true',
+#                    help="Uses an estimated diffusion response function instead"
+#                         " of the default tensor one")
 parser.add_argument('--dataset', type=str,
                     default=os.path.join('donald', 'images', 'corpus_callosum.150.mif'),
                     help="The dataset to use (default: %(default)s).")
-parser.add_argument('--init_locations', nargs='+', type=float, default=None,
-                    help="The initial locations of the tracts.")
-parser.add_argument('--reference_locations', nargs='+', type=float, default=None,
-                    help="The locations used to sample the base intensity")
-                    #default=[(3.94, 55.8, 6.51), (-0.68, 10.65, 8.99)],
+parser.add_argument('--seed_positions', type=str,
+                    default=os.path.join('donald', 'corpus_callosum.150.seed.txt'),
+                    help="The seed locations of the tracts.")
+parser.add_argument('--seed_pos_stddev', type=float, default=2.0,
+                    help="The standard deviation about the seed positions")
+parser.add_argument('--intensity_estimate', type=str,
+                    default=os.path.join('donald', 'intensity.150.txt'),
+                    help="The estimated base intensity of the image.")
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter 
 # values match, or if they are a singleton list it is assumed to be constant 
 # and that value that value is replicated to match the number of other of other 
 # parameters in the set. Otherwise if the '--combo' option is provided then loop
 # through all combinations of the provided parameters. 
-if not args.init_locations:
-   args.init_locations = get_init_locations(args.dataset)
-if not args.reference_locations:
-    args.reference_locations = get_init_locations(args.dataset.replace('fornix', 'corpus_callosum'))
 
-anging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
+ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
                        'prior_density_high', 'prior_hook', 'prior_thin',
                        'like_snr']
 ranging_params = hpc.combo_params(args, ranging_param_names, args.combo)
 # Generate a random seed to seed the random number generators of the cmds
-if not args.seed:
-    seed = int(time.time() * 100)
-    print "Using seed {}".format(seed)
+if not args.random_seed:
+    random_seed = int(time.time() * 100)
+    print "Using random_seed {}".format(random_seed)
 else:
-    seed = args.seed
+    random_seed = args.random_seed
 for i in xrange(args.num_runs):
     for (prior_freq, prior_aux_freq, prior_density_low, prior_density_high,
                 prior_hook, prior_thin, like_snr) in zip(*ranging_params):
@@ -210,62 +167,20 @@ for i in xrange(args.num_runs):
         dataset_path = os.path.join(work_dir, 'params', 'image',
                                     'reference', args.dataset)
         dataset_dir = os.path.dirname(args.dataset)
-        if args.estimate_response:
-            response_path = os.path.join(work_dir, 'params', 'image',
-                                         'reference', dataset_dir,
-                                         'response.txt')
-            response_str = "-diff_response {}".format(response_path)
-        else:
-            response_str = ""
         response_b0_path = os.path.join(work_dir, 'params', 'image',
                                         'reference', dataset_dir,
                                         'response.b0.txt')
         cmd_line = \
-"""
-# Initialise empty set to hold the initial locations of the tractlets
-new_fibres -set_size 0 -acs 1.0 {work_dir}/output/init.tct
-            
-""".format(work_dir=work_dir)
-        if not len(args.init_locations):
-            raise Exception("Initial locations list was empty")
-        for i, init_location in enumerate(args.reference_locations):
-            cmd_line += \
-"""             
-# Create initial_fibres of appropriate degree
-init_fibres {work_dir}/init_location_{i}.tct -degree {args.degree} \
--num_fibres 1 -width_epsilon {args.width_epsilon} \
--length_epsilon {args.length_epsilon} -edge_buffer 0.0 -seed {seed} \
--base_intensity 1.0 \
--img_dims "{args.init_extent[0]} {args.init_extent[1]} {args.init_extent[2]}" \
--img_offset "{init_location[0]} {init_location[1]} {init_location[2]}"
+""" 
+init_fibres  {work_dir}/output/init.tct -degree {args.degree} \
+-width_epsilon {args.width_epsilon} \
+-length_epsilon {args.length_epsilon} -random_seed {init_seed} \
+-seed_positions {work_dir}/params/image/reference/{args.seed_positions} \
+-centre_stddev {args.seed_pos_stddev} -base_intensity 1.0
 
-# Add new tract to initial set
-combine_fibres {work_dir}/output/init.tct {work_dir}/init_location_{i}.tct \
-{work_dir}/tmp.tct
-mv {work_dir}/tmp.tct {work_dir}/output/init.tct
-mv {work_dir}/tmp.tctx {work_dir}/output/init.tctx
-
-""".format(work_dir=work_dir, i=i, init_location=init_location, args=args,
-                    seed=seed)
-            seed += 1
-        # Normalise the density of the initial 
-        # tracts
-        cmd_line += \
-"""
 # Normalise the density of the initial tracts
 normalise_density {work_dir}/output/init.tct
 
-""".format(work_dir=work_dir, args=args)
-
-        cmd_line += \
-"""
-# Estimate base_intensity from seed locations
-est_base_intensity {dataset_path} {seeds} > {work_dir}/output/est_base_intensity.txt
-""".format(dataset_path=dataset_path, work_dir=work_dir,
-           seeds='-seed ' + ' -seed '.join([' '.join([str(f) for f in l]) for l in args.init_locations]))
-
-        cmd_line += \
-""" 
 # Calculate appropriate number of length and width samples                
 calculate_num_samples --samples_per_acs {args.samples_per_acs} \
 --samples_per_length {args.samples_per_length} --strategy max \
@@ -283,15 +198,15 @@ metropolis {dataset_path} {work_dir}/output/init.tct \
 {work_dir}/output/samples.tst -like_snr {like_snr} \
 -exp_interp_extent {args.assumed_interp_extent} \
 -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
--sample_period {args.sample_period} -seed {seed} \
+-sample_period {args.sample_period} -seed {metrop_seed} \
 -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -prior_freq {prior_freq} {prior_aux_freq} \
 -prior_density {prior_density_high} {prior_density_low} 100 \
 -prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 \
 -exp_num_length_sections `cat {work_dir}/num_samples.length.txt` \
 -exp_num_width_sections `cat {work_dir}/num_samples.width.txt` \
--exp_type {args.interp_type} {response_str} \
--exp_base_intensity `cat {work_dir}/output/est_base_intensity.txt` \
+-exp_type {args.interp_type} \
+-exp_base_intensity `cat {work_dir}/params/images/reference/{args.intensity_estimate}` \
 -diff_warn -walk_step_location \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 
@@ -300,13 +215,13 @@ select_fibres {work_dir}/output/samples.tst \
 {work_dir}/output/last.tct --include {last_sample}
 
 """.format(work_dir=work_dir, dataset_path=dataset_path, args=args,
-                     seed=seed, init_seed=seed + 1, prior_freq=prior_freq,
+                     init_seed=random_seed, metrop_seed=random_seed + 1, prior_freq=prior_freq,
                      prior_aux_freq=prior_aux_freq,
                      prior_density_low=prior_density_low,
                      prior_density_high=prior_density_high,
                      prior_hook=prior_hook,
                      prior_thin=prior_thin, like_snr=like_snr,
-                     response_str=response_str, b0_path=response_b0_path,
+                     b0_path=response_b0_path,
                      last_sample=(args.num_iterations // args.sample_period) - 1)
             # Submit job to que
         hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
