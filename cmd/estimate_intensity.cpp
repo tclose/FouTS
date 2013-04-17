@@ -51,7 +51,7 @@ SET_VERSION_DEFAULT
 SET_AUTHOR("Thomas G. Close");
 SET_COPYRIGHT(NULL);
 
-const double TOP_DEFAULT = 1.0;
+const double MIDDLE_DEFAULT = 0.5;
 const double CURVATURE_DEFAULT = 0.0;
 const double FA_THRESHOLD_DEFAULT = 0.6;
 const size_t NUM_LENGTH_SECTIONS_DEFAULT = 10;
@@ -71,9 +71,9 @@ ARGUMENTS= {
 
 OPTIONS= {
 
-    Option("top", "the fraction of voxels which should be included in the estimation "
-            "taken in order of highest FA")
-    + Argument("top").type_float(SMALL_FLOAT, TOP_DEFAULT, LARGE_FLOAT),
+    Option("middle", "the fraction of voxels which should be included in the estimation "
+            "taken from the centre of the range of estimated intensities above the FA threshold")
+    + Argument("middle").type_float(SMALL_FLOAT, MIDDLE_DEFAULT, LARGE_FLOAT),
 
     Option("curvature", "The relative curvature that is applied to the reference tract")
     + Argument("curvature").type_float(SMALL_FLOAT, CURVATURE_DEFAULT, LARGE_FLOAT),
@@ -134,15 +134,14 @@ EXECUTE {
             throw Exception("number of studies in base image does not match that in encoding file");
 
         //------------------------------------------------------------------------------------------
-        // Set the fraction of voxels to include in the final estimate (the top fraction of voxels
-        // with the highest estimated intensities are used).
-        double top = TOP_DEFAULT;
-        opt = get_options("top");
+        // Set the fraction of voxels to include in the final estimate (the middle '--fraction' is used)
+        double middle = MIDDLE_DEFAULT;
+        opt = get_options("middle");
         if (opt.size())
-            top = opt[0][0];
-        if ((top <= 0.0) || (top > 1.0))
-            throw Exception("'--top' must be within (0-1] as it is the fraction of voxels to include "
-                    "in the estimation (found " + str(top) + ")");
+            middle = opt[0][0];
+        if ((middle <= 0.0) || (middle > 1.0))
+            throw Exception("'--middle' must be within (0-1] as it is the fraction of voxels to include "
+                    "in the estimation (found " + str(middle) + ")");
 
         //------------------------------------------------------------------------------------------
         // The relative curvature of the reference tract used to calculate the base intensity from
@@ -334,16 +333,20 @@ EXECUTE {
             intens_vox.value() = intensity;
         }
 
-        // Get the top '--top' of the intensites and calculate their average
+        //------------------------------------------------------------------------------------------
+        // Get the '--middle' fraction of the intensites and calculate their average
         if (!intensities.size())
             throw Exception("No voxels were above the FA threshold (" + str(fa_threshold) + ")");
         std::sort(intensities.begin(), intensities.end());
-        size_t top_count = (size_t)MR::Math::ceil(intensities.size() * top);
+        size_t middle_start = (size_t)MR::Math::floor((double)intensities.size() *
+                                                        (1.0 - middle) / 2.0);
+        size_t middle_end = intensities.size() - middle_start;
         double est_intensity = 0.0;
-        for (size_t intens_i = intensities.size() - top_count; intens_i < intensities.size(); ++intens_i)
+        for (size_t intens_i = middle_start; intens_i < middle_end; ++intens_i)
             est_intensity += intensities[intens_i];
-        est_intensity /= (double)top_count;
+        est_intensity /= (double)(middle_end - middle_start);
 
+        //------------------------------------------------------------------------------------------
         // Print the estimated intensity to the terminal for use with other commands
         std::cout << est_intensity << std::endl;
     }
