@@ -111,9 +111,6 @@ parser.add_argument('--combo', action='store_true',
                     help="Instead of treating each ranging parameter sequence "
                          " as the 1..N values for that parameter, all "
                          "combinations of the provided parameters are tested.")
-#parser.add_argument('--estimate_response', action='store_true',
-#                    help="Uses an estimated diffusion response function instead"
-#                         " of the default tensor one")
 parser.add_argument('--dataset', type=str,
                     default=os.path.join('donald', 'images', 'corpus_callosum.150.mif'),
                     help="The dataset to use (default: %(default)s).")
@@ -227,4 +224,7 @@ select_fibres {work_dir}/output/samples.tst \
         hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
                        que_name=args.que_name, dry_run=args.dry_run,
                        copy_to_output=['summary.txt'])
+        # Increment the random seed by two (one for the init and another for the metropolis) so the
+        # next run is run with a different random seed
+        random_seed += 2
 
