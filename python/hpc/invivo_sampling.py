@@ -120,7 +120,7 @@ parser.add_argument('--dataset', type=str,
 parser.add_argument('--seed_positions', type=str,
                     default=os.path.join('donald', 'corpus_callosum.150.seed.txt'),
                     help="The seed locations of the tracts.")
-parser.add_argument('--seed_pos_stddev', type=float, default=2.0,
+parser.add_argument('--seed_pos_stddev', type=float, default=0.5,
                     help="The standard deviation about the seed positions")
 parser.add_argument('--intensity_estimate', type=str,
                     default=os.path.join('donald', 'intensity.150.txt'),

@@ -155,7 +155,7 @@ EXECUTE {
         double centre_radius = -1.0;
         double curve_stddev = 0;
         double centre_stddev = 0;
-        MR::Math::Matrix<double> positions;
+        MR::Math::Matrix<double> seed_positions;
         double width_epsilon = Fibre::Tractlet::Set::WIDTH_EPSILON_DEFAULT;
         double length_epsilon = Fibre::Tractlet::Set::LENGTH_EPSILON_DEFAULT;
         size_t random_seed = time(NULL);
@@ -218,9 +218,9 @@ EXECUTE {
         if (opt.size())
             centre_stddev = opt[0][0];
         
-        opt = get_options("positions");
+        opt = get_options("seed_positions");
         if (opt.size())
-            positions.load(opt[0][0]);
+            seed_positions.load(opt[0][0]);
 
         opt = get_options("random_seed");
         if (opt.size()) {
@@ -263,8 +263,13 @@ EXECUTE {
         gsl_rng_set(rand_gen, random_seed);
         
         std::vector<const char*> props;
-        if (base_intensity)
-            props.push_back(Fibre::Strand::Set::BASE_INTENSITY_PROP);
+        if (base_intensity) {
+            if (File::has_or_txt_extension<Fibre::Tractlet>(output_location))
+                props.push_back(Fibre::Tractlet::Set::BASE_INTENSITY_PROP);
+            else
+                props.push_back(Fibre::Strand::Set::BASE_INTENSITY_PROP);
+        }
+
         
         std::vector<const char*> elem_props;
         if (acs >= 0.0)
@@ -272,10 +277,10 @@ EXECUTE {
         
         std::vector<Triple<double> > centres;
 
-        if (positions.rows()) {
-            for (size_t row_i = 0; row_i < positions.rows(); ++row_i) {
-                Triple<double> centre (positions(row_i, 0), positions(row_i, 1),
-                        positions(row_i, 2));
+        if (seed_positions.rows()) {
+            for (size_t row_i = 0; row_i < seed_positions.rows(); ++row_i) {
+                Triple<double> centre (seed_positions(row_i, 0), seed_positions(row_i, 1),
+                        seed_positions(row_i, 2));
                 for (size_t dim_i = 0; dim_i < 3; ++dim_i)
                     centre += rand_triple(centre_stddev, rand_gen);
                 centres.push_back(centre);
