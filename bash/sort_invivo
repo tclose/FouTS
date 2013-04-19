@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Sorts generated into directories based on dataset name
+
+if [ $# -lt 1 ]; then
+    echo "The directory to sort must be provided as an argument"
+    exit 1
+elif [ $# -lt 2 ]; then
+    destination=$1
+else
+    destination=$2
+fi
+
+if [ ! -d $destination ]; then
+    mkdir -p $destination
+fi
+
+for d in $1/*; do
+    dataset=`cat $d/dataset_name.txt`
+    subject=${dataset%%/*}
+    image_name=`basename $dataset`
+    structure=${image_name%%.*}
+    num_encodings=${image_name#*.}
+    num_encodings=${num_encodings%.*}
+    parent_dir=$destination/$structure/$subject/$num_encodings
+    mkdir -p $parent_dir
+    count=1
+    while [ -d $parent_dir/$count ]; do
+        count=$(( $count + 1 ))
+    done
+    mv $d $parent_dir/$count
+done
