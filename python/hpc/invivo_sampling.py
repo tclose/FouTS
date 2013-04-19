@@ -12,6 +12,57 @@ import argparse
 import os.path
 import time
 
+def run_sampling(args, work_dir, dataset_path, init_name, random_seed, prior_freq,
+                 prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin,
+                 like_snr):
+    cmd = \
+"""
+# Normalise the density of the initial tracts
+normalise_density {work_dir}/output/{init_name}.tct
+
+# Calculate appropriate number of length and width samples                
+calculate_num_samples --samples_per_acs {args.samples_per_acs} \
+--samples_per_length {args.samples_per_length} --strategy max \
+--min_length_sections {args.min_length_samples} \
+--min_width_sections {args.min_width_samples} \
+{work_dir}/output/{init_name}.tct {work_dir}/num_samples 
+
+# Set required properties for the initial tracts
+set_properties {work_dir}/output/{init_name}.tct \
+-set length_epsilon {args.length_epsilon} \
+-set width_epsilon {args.width_epsilon} -set base_intensity 1.0
+                
+# Run metropolis
+metropolis {dataset_path} {work_dir}/output/{init_name}.tct \
+{work_dir}/output/samples.tst -like_snr {like_snr} \
+-exp_interp_extent {args.assumed_interp_extent} \
+-walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
+-sample_period {args.sample_period} -seed {random_seed} \
+-diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
+-prior_freq {prior_freq} {prior_aux_freq} \
+-prior_density {prior_density_high} {prior_density_low} 100 \
+-prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 \
+-exp_num_length_sections `cat {work_dir}/num_samples.length.txt` \
+-exp_num_width_sections `cat {work_dir}/num_samples.width.txt` \
+-exp_type {args.interp_type} \
+-exp_base_intensity `cat {work_dir}/params/image/reference/{args.intensity_estimate}` \
+-diff_warn -walk_step_location \
+{work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
+
+# Get last sample
+select_fibres {work_dir}/output/samples.tst \
+{work_dir}/output/last.tct --include {last_sample}
+
+""".format(work_dir=work_dir, dataset_path=dataset_path, args=args, init_name=init_name,
+                     random_seed=random_seed + 1, prior_freq=prior_freq,
+                     prior_aux_freq=prior_aux_freq,
+                     prior_density_low=prior_density_low,
+                     prior_density_high=prior_density_high,
+                     prior_hook=prior_hook,
+                     prior_thin=prior_thin, like_snr=like_snr,
+                     last_sample=(args.num_iterations // args.sample_period) - 1)
+
+
 #Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'invivo_sampling'
 # Required dirs for the script to run
@@ -122,6 +173,8 @@ parser.add_argument('--seed_pos_stddev', type=float, default=0.5,
 parser.add_argument('--intensity_estimate', type=str,
                     default=os.path.join('donald', 'intensity.150.txt'),
                     help="The estimated base intensity of the image.")
+parser.add_argument('--split', action='store_true',
+                    help='Split the tracts in two and repeat the sampling')
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter 
 # values match, or if they are a singleton list it is assumed to be constant 
@@ -164,9 +217,7 @@ for i in xrange(args.num_runs):
         dataset_path = os.path.join(work_dir, 'params', 'image',
                                     'reference', args.dataset)
         dataset_dir = os.path.dirname(args.dataset)
-        response_b0_path = os.path.join(work_dir, 'params', 'image',
-                                        'reference', dataset_dir,
-                                        'response.b0.txt')
+
         cmd_line = \
 """ 
 init_fibres  {work_dir}/output/init.tct -degree {args.degree} \
@@ -175,51 +226,15 @@ init_fibres  {work_dir}/output/init.tct -degree {args.degree} \
 -seed_positions {work_dir}/params/image/reference/{args.seed_positions} \
 -centre_stddev {args.seed_pos_stddev} -base_intensity 1.0
 
-# Normalise the density of the initial tracts
-normalise_density {work_dir}/output/init.tct
+""".format(args=args, work_dir=work_dir, random_seed=random_seed)
 
-# Calculate appropriate number of length and width samples                
-calculate_num_samples --samples_per_acs {args.samples_per_acs} \
---samples_per_length {args.samples_per_length} --strategy max \
---min_length_sections {args.min_length_samples} \
---min_width_sections {args.min_width_samples} \
-{work_dir}/output/init.tct {work_dir}/num_samples 
+        cmd_line += run_sampling(args=args, work_dir=work_dir, dataset_path=dataset_path,
+                                 random_seed=random_seed + 1, prior_freq=prior_freq,
+                                 prior_aux_freq=prior_aux_freq,
+                                 prior_density_low=prior_density_low,
+                                 prior_density_high=prior_density_high,
+                                 prior_hook=prior_hook, prior_thin=prior_thin, like_snr=like_snr)
 
-# Set required properties for the initial tracts
-set_properties {work_dir}/output/init.tct \
--set length_epsilon {args.length_epsilon} \
--set width_epsilon {args.width_epsilon} -set base_intensity 1.0
-                
-# Run metropolis
-metropolis {dataset_path} {work_dir}/output/init.tct \
-{work_dir}/output/samples.tst -like_snr {like_snr} \
--exp_interp_extent {args.assumed_interp_extent} \
--walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
--sample_period {args.sample_period} -seed {metrop_seed} \
--diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
--prior_freq {prior_freq} {prior_aux_freq} \
--prior_density {prior_density_high} {prior_density_low} 100 \
--prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 \
--exp_num_length_sections `cat {work_dir}/num_samples.length.txt` \
--exp_num_width_sections `cat {work_dir}/num_samples.width.txt` \
--exp_type {args.interp_type} \
--exp_base_intensity `cat {work_dir}/params/image/reference/{args.intensity_estimate}` \
--diff_warn -walk_step_location \
-{work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
-
-# Get last sample
-select_fibres {work_dir}/output/samples.tst \
-{work_dir}/output/last.tct --include {last_sample}
-
-""".format(work_dir=work_dir, dataset_path=dataset_path, args=args,
-                     init_seed=random_seed, metrop_seed=random_seed + 1, prior_freq=prior_freq,
-                     prior_aux_freq=prior_aux_freq,
-                     prior_density_low=prior_density_low,
-                     prior_density_high=prior_density_high,
-                     prior_hook=prior_hook,
-                     prior_thin=prior_thin, like_snr=like_snr,
-                     b0_path=response_b0_path,
-                     last_sample=(args.num_iterations // args.sample_period) - 1)
             # Submit job to que
         hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
                        que_name=args.que_name, dry_run=args.dry_run,
