@@ -33,7 +33,7 @@ set_properties {work_dir}/output/{init_name}.tct \
 -set width_epsilon {args.width_epsilon} -set base_intensity 1.0
                 
 # Run metropolis
-metropolis {dataset_path} {work_dir}/output/{init_name}.tct \
+time metropolis {dataset_path} {work_dir}/output/{init_name}.tct \
 {work_dir}/output/{samples_name}.tst -like_snr {like_snr} \
 -exp_interp_extent {args.assumed_interp_extent} \
 -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
