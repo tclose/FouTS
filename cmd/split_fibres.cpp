@@ -82,7 +82,7 @@ OPTIONS= {
     + Argument ("offsets", "").type_text ("auto"),
 
     Option ("num_strands", "The number of strands to split the tracts into")
-    + Argument ("num_strands", "").type_text ("auto"),
+    + Argument ("num_strands", "").type_integer (1, NUM_STRANDS_DEFAULT, LARGE_INT),
 
     Option ("include","The indices of the strands to include")
     + Argument ("include","").type_text(),

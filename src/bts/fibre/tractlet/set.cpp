@@ -169,7 +169,7 @@ namespace BTS {
                     Coord ax2_basewidth = centroid[1].cross(ax1[1]).normalise()
                             * Tractlet::REASONABLE_WIDTH;
                     
-                    tractlet[1] = ax1;
+                    tractlet[1] = ax1.base();
                     tractlet[2][0] = ax2_basewidth;
                     
                 } else {

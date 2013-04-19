@@ -105,10 +105,10 @@ namespace BTS {
                 } else {
                     
                     // Might consider making these Exceptions instead of assertions, but this function probably should be as fast as possible.
-                    assert(vsize() == b.vsize());
-                    // Sizes need to match when fibre object is not owner of data.
-                    assert(props_match(b));
                     // Properties need to match exactly when fibre object is not owner of data.
+                    assert(props_match(b));
+                    // Sizes need to match when fibre object is not owner of data.
+                    assert(vsize() == b.vsize());
                     
                     const MR::Math::Vector<double>& bvec = b;
                     
