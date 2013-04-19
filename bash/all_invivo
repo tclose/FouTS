@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 invivo_sampling.py --dataset donald/images/corpus_callosum.150.mif --seed_positions donald/corpus_callosum.150.seed.txt --intensity_estimate donald/intensity.150.txt --num_runs 5
-invivo_sampling.py --dataset donald/images/fornix.150.mif          --seed_positions donald/fornix.150.seed.txt          --intensity_estimate donald/intensity.150.txt --num_runs 5
 invivo_sampling.py --dataset heath/images/corpus_callosum.150.mif  --seed_positions heath/corpus_callosum.150.seed.txt  --intensity_estimate heath/intensity.150.txt --num_runs 5
-invivo_sampling.py --dataset heath/images/fornix.150.mif           --seed_positions heath/fornix.150.seed.txt           --intensity_estimate heath/intensity.150.txt --num_runs 5
 invivo_sampling.py --dataset lisa/images/corpus_callosum.150.mif   --seed_positions lisa/corpus_callosum.150.seed.txt   --intensity_estimate lisa/intensity.150.txt --num_runs 5
-invivo_sampling.py --dataset lisa/images/fornix.150.mif            --seed_positions lisa/fornix.150.seed.txt            --intensity_estimate lisa/intensity.150.txt --num_runs 5
 invivo_sampling.py --dataset donald/images/corpus_callosum.60.mif  --seed_positions donald/corpus_callosum.60.seed.txt  --intensity_estimate donald/intensity.60.txt --num_runs 5
-invivo_sampling.py --dataset donald/images/fornix.60.mif           --seed_positions donald/fornix.60.seed.txt           --intensity_estimate donald/intensity.60.txt --num_runs 5 --seed_pos_stddev 0.1
 invivo_sampling.py --dataset heath/images/corpus_callosum.60.mif   --seed_positions heath/corpus_callosum.60.seed.txt   --intensity_estimate heath/intensity.60.txt --num_runs 5
-invivo_sampling.py --dataset heath/images/fornix.60.mif            --seed_positions heath/fornix.60.seed.txt            --intensity_estimate heath/intensity.60.txt --num_runs 5 --seed_pos_stddev 0.1
 invivo_sampling.py --dataset lisa/images/corpus_callosum.60.mif    --seed_positions lisa/corpus_callosum.60.seed.txt    --intensity_estimate lisa/intensity.60.txt --num_runs 5
-invivo_sampling.py --dataset lisa/images/fornix.60.mif             --seed_positions lisa/fornix.60.seed.txt             --intensity_estimate lisa/intensity.60.txt --num_runs 5 --seed_pos_stddev 0.1
 invivo_sampling.py --dataset donald/images/corpus_callosum.20.mif  --seed_positions donald/corpus_callosum.20.seed.txt  --intensity_estimate donald/intensity.20.txt --num_runs 5
-invivo_sampling.py --dataset donald/images/fornix.20.mif           --seed_positions donald/fornix.20.seed.txt           --intensity_estimate donald/intensity.20.txt --num_runs 5 --seed_pos_stddev 0.1
+
+invivo_sampling.py --dataset donald/images/fornix.150.mif --seed_positions donald/fornix.150.seed.txt --intensity_estimate donald/intensity.150.txt --num_runs 5 --seed_pos_stddev 0.1 --num_iterations 25000 --sample_period 1000 --split
+invivo_sampling.py --dataset heath/images/fornix.150.mif  --seed_positions heath/fornix.150.seed.txt  --intensity_estimate heath/intensity.150.txt --num_runs 5 --seed_pos_stddev 0.1 --num_iterations 25000 --sample_period 1000 --split
+invivo_sampling.py --dataset lisa/images/fornix.150.mif   --seed_positions lisa/fornix.150.seed.txt   --intensity_estimate lisa/intensity.150.txt --num_runs 5 --seed_pos_stddev 0.1 --num_iterations 25000 --sample_period 1000 --split
+invivo_sampling.py --dataset donald/images/fornix.60.mif  --seed_positions donald/fornix.60.seed.txt  --intensity_estimate donald/intensity.60.txt --num_runs 5 --seed_pos_stddev 0.1 --num_iterations 25000 --sample_period 1000 --split
+invivo_sampling.py --dataset heath/images/fornix.60.mif   --seed_positions heath/fornix.60.seed.txt   --intensity_estimate heath/intensity.60.txt --num_runs 5 --seed_pos_stddev 0.1 --num_iterations 25000 --sample_period 1000 --split
+invivo_sampling.py --dataset lisa/images/fornix.60.mif    --seed_positions lisa/fornix.60.seed.txt    --intensity_estimate lisa/intensity.60.txt --num_runs 5 --seed_pos_stddev 0.1 --num_iterations 25000 --sample_period 1000 --split
+invivo_sampling.py --dataset donald/images/fornix.20.mif  --seed_positions donald/fornix.20.seed.txt  --intensity_estimate donald/intensity.20.txt --num_runs 5 --seed_pos_stddev 0.1 --num_iterations 25000 --sample_period 1000 --split

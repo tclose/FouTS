@@ -12,9 +12,9 @@ import argparse
 import os.path
 import time
 
-def run_sampling(args, work_dir, dataset_path, init_name, random_seed, prior_freq,
+def sampling_cmd(args, work_dir, dataset_path, random_seed, prior_freq,
                  prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin,
-                 like_snr):
+                 like_snr, init_name, samples_name, last_name):
     cmd = \
 """
 # Normalise the density of the initial tracts
@@ -34,7 +34,7 @@ set_properties {work_dir}/output/{init_name}.tct \
                 
 # Run metropolis
 metropolis {dataset_path} {work_dir}/output/{init_name}.tct \
-{work_dir}/output/samples.tst -like_snr {like_snr} \
+{work_dir}/output/{samples_name}.tst -like_snr {like_snr} \
 -exp_interp_extent {args.assumed_interp_extent} \
 -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -seed {random_seed} \
@@ -50,17 +50,15 @@ metropolis {dataset_path} {work_dir}/output/{init_name}.tct \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{args.degree}.tct
 
 # Get last sample
-select_fibres {work_dir}/output/samples.tst \
-{work_dir}/output/last.tct --include {last_sample}
+select_fibres {work_dir}/output/{samples_name}.tst \
+{work_dir}/output/{last_name}.tct --include {last_sample}
 
 """.format(work_dir=work_dir, dataset_path=dataset_path, args=args, init_name=init_name,
-                     random_seed=random_seed + 1, prior_freq=prior_freq,
-                     prior_aux_freq=prior_aux_freq,
-                     prior_density_low=prior_density_low,
-                     prior_density_high=prior_density_high,
-                     prior_hook=prior_hook,
-                     prior_thin=prior_thin, like_snr=like_snr,
-                     last_sample=(args.num_iterations // args.sample_period) - 1)
+           samples_name=samples_name, last_name=last_name, random_seed=random_seed + 1,
+           prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,
+           prior_density_high=prior_density_high, prior_hook=prior_hook, prior_thin=prior_thin,
+           like_snr=like_snr, last_sample=(args.num_iterations // args.sample_period) - 1)
+    return cmd
 
 
 #Name of the script for the output directory and submitted mpi job
@@ -220,20 +218,42 @@ for i in xrange(args.num_runs):
 
         cmd_line = \
 """ 
+# Initialise fibres
 init_fibres  {work_dir}/output/init.tct -degree {args.degree} \
 -width_epsilon {args.width_epsilon} \
--length_epsilon {args.length_epsilon} -random_seed {init_seed} \
+-length_epsilon {args.length_epsilon} -random_seed {random_seed} \
 -seed_positions {work_dir}/params/image/reference/{args.seed_positions} \
 -centre_stddev {args.seed_pos_stddev} -base_intensity 1.0
 
 """.format(args=args, work_dir=work_dir, random_seed=random_seed)
 
-        cmd_line += run_sampling(args=args, work_dir=work_dir, dataset_path=dataset_path,
+        cmd_line += sampling_cmd(args=args, work_dir=work_dir, dataset_path=dataset_path,
                                  random_seed=random_seed + 1, prior_freq=prior_freq,
                                  prior_aux_freq=prior_aux_freq,
                                  prior_density_low=prior_density_low,
-                                 prior_density_high=prior_density_high,
-                                 prior_hook=prior_hook, prior_thin=prior_thin, like_snr=like_snr)
+                                 prior_density_high=prior_density_high, prior_hook=prior_hook,
+                                 prior_thin=prior_thin, like_snr=like_snr,
+                                 init_name='init',
+                                 samples_name='samples_first' if args.split else 'samples',
+                                 last_name='end_first' if args.split else 'last')
+
+        if args.split:
+
+            cmd_line += \
+"""
+# Split final fibres of first run into two 
+split_fibres  {work_dir}/output/end_first.tct {work_dir}/output/init_second.tct 
+
+""".format(args=args, work_dir=work_dir, random_seed=random_seed)
+
+            cmd_line += sampling_cmd(args=args, work_dir=work_dir, dataset_path=dataset_path,
+                                     random_seed=random_seed + 2, prior_freq=prior_freq,
+                                     prior_aux_freq=prior_aux_freq,
+                                     prior_density_low=prior_density_low,
+                                     prior_density_high=prior_density_high, prior_hook=prior_hook,
+                                     prior_thin=prior_thin, like_snr=like_snr,
+                                     init_name='init_second', samples_name='samples',
+                                     last_name='last')
 
             # Submit job to que
         hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
