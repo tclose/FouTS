@@ -17,9 +17,6 @@ def sampling_cmd(args, work_dir, dataset_path, random_seed, prior_freq,
                  like_snr, init_name, samples_name, last_name):
     cmd = \
 """
-# Normalise the density of the initial tracts
-normalise_density {work_dir}/output/{init_name}.tct
-
 # Calculate appropriate number of length and width samples                
 calculate_num_samples --samples_per_acs {args.samples_per_acs} \
 --samples_per_length {args.samples_per_length} --strategy max \
@@ -225,6 +222,9 @@ init_fibres  {work_dir}/output/init.tct -degree {args.degree} \
 -seed_positions {work_dir}/params/image/reference/{args.seed_positions} \
 -centre_stddev {args.seed_pos_stddev} -base_intensity 1.0
 
+# Normalise the density of the initial tracts
+normalise_density {work_dir}/output/init.tct
+
 """.format(args=args, work_dir=work_dir, random_seed=random_seed)
 
         cmd_line += sampling_cmd(args=args, work_dir=work_dir, dataset_path=dataset_path,
@@ -232,8 +232,7 @@ init_fibres  {work_dir}/output/init.tct -degree {args.degree} \
                                  prior_aux_freq=prior_aux_freq,
                                  prior_density_low=prior_density_low,
                                  prior_density_high=prior_density_high, prior_hook=prior_hook,
-                                 prior_thin=prior_thin, like_snr=like_snr,
-                                 init_name='init',
+                                 prior_thin=prior_thin, like_snr=like_snr, init_name='init',
                                  samples_name='samples_first' if args.split else 'samples',
                                  last_name='end_first' if args.split else 'last')
 
