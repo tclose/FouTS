@@ -83,7 +83,6 @@ namespace BTS {
             header.push_back("log_px");
             header.push_back("likelihood_px");
             header.push_back("prior_px");
-            header.push_back("acs_px");
             
             std::vector<std::string> components_list = prior.list_components();
             

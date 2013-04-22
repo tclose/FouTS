@@ -117,7 +117,8 @@ function fig = plot_image(varargin)
             'plot_directions',        auto_plot_directions,...
                                       'string', 'The direction encoding used for the plotting.';...
             'lmax           ',         8,        'natural', 'The lmax of the gradient encodings used.';...
-            'no_vox_lines   ',         0,        'bool', 'Whether to use vox lines to plot.'};
+            'no_vox_lines   ',         0,        'bool', 'Whether to use vox lines to plot.'
+            'maxes_only'     ,         0,        'bool', 'Don''t attempt to plot the image and only print the max values'};
                                      
   
   parse_arguments      
@@ -128,7 +129,13 @@ function fig = plot_image(varargin)
   if any((dim + index_offset) > img_struct.dim(1:3))
     error(['Dims (' num2str(dim) ') plus offset (' num2str(index_offset) ') exceeds image dimensions (' num2str(img_struct.dim) ').'])
   end
-    
+  
+  if maxes_only
+      fprintf([image_filename ':\n    Max: ' num2str(max_intensity) '\n    b=0: '...
+          num2str(max_b0) '\n'])
+      return
+  end
+  
   plot_directions_mat = load(plot_directions);
   
   gradient_scheme = gen_scheme(img_struct.DW_scheme(:,1:3), lmax);

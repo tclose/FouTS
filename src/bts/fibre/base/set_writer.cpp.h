@@ -88,11 +88,9 @@ namespace BTS {
                     const T& set, std::map<std::string, std::string>& properties) {
                 
                 T new_set(set);
-                
-                std::map<std::string, std::string> extend_props = new_set.get_extend_props();
-                
-                for (std::map<std::string, std::string>::iterator prop_it = extend_props.begin();
-                        prop_it != extend_props.end(); ++prop_it)
+
+                for (std::map<std::string, std::string>::iterator prop_it = properties.begin();
+                        prop_it != properties.end(); ++prop_it)
                     new_set.set_extend_prop(prop_it->first, prop_it->second);
                 
                 append(new_set);
