@@ -39,12 +39,14 @@ namespace BTS {
         template<typename T> void scan(Prob::Likelihood& likelihood, Prob::Prior& prior,
                                        const T& origin, const T& axis, size_t num_steps,
                                        const std::string& output_location,
-                                       std::map<std::string, std::string>& run_properties);
+                                       std::map<std::string, std::string>& run_properties,
+                                       bool save_gradient, size_t output_precision);
         
         template<typename T> void scan(Prob::Likelihood& likelihood, Prob::Prior& prior,
                                        const Fibre::Base::Set<T>& sequence,
                                        const std::string& output_location,
-                                       std::map<std::string, std::string>& run_properties);
+                                       std::map<std::string, std::string>& run_properties,
+                                       size_t output_precision);
         
         template<typename T> void scan(Prob::Likelihood& likelihood, Prob::Prior& prior,
                                        const T& origin, const T& axis1, const T& axis2,
@@ -70,7 +72,7 @@ namespace BTS {
                                        const T& origin, const T& axis, size_t num_steps,
                                        const std::string& output_location,
                                        std::map<std::string, std::string>& run_properties,
-                                       bool save_gradient) {
+                                       bool save_gradient, size_t output_precision) {
             
             if (origin.size() != axis.size())
                 throw Exception(
@@ -124,15 +126,15 @@ namespace BTS {
                 
                 std::map<std::string, std::string> properties;
                 
-                properties["log_px"] = str(lprob);
-                properties["likelihood_px"] = str(likelihood_px);
-                properties["prior_px"] = str(prior_px);
+                properties["log_px"] = str(lprob, output_precision);
+                properties["likelihood_px"] = str(likelihood_px, output_precision);
+                properties["prior_px"] = str(prior_px, output_precision);
                 
                 std::map<std::string, double> component_values = prior.get_component_values(state);
                 
                 for (std::map<std::string, double>::iterator comp_it = component_values.begin();
                         comp_it != component_values.end(); ++comp_it)
-                    properties[comp_it->first] = str(comp_it->second);
+                    properties[comp_it->first] = str(comp_it->second, output_precision);
                 
                 writer.append(state, properties);
                 
@@ -145,7 +147,8 @@ namespace BTS {
         template<typename T> void scan(Prob::Likelihood& likelihood, Prob::Prior& prior,
                                        const Fibre::Base::Set<T>& sequence,
                                        const std::string& output_location,
-                                       std::map<std::string, std::string>& run_properties) {
+                                       std::map<std::string, std::string>& run_properties,
+                                       size_t output_precision) {
             
             std::string gradient_location = File::strip_extension(output_location) + ".gradient."
                                             + File::extension(output_location);
@@ -178,9 +181,9 @@ namespace BTS {
                 double log_prob = prior_px + likelihood_px;
                 
                 std::map<std::string, std::string> properties_row;
-                properties_row["log_px"] = str(log_prob);
-                properties_row["likelihood_px"] = str(likelihood_px);
-                properties_row["prior_px"] = str(prior_px);
+                properties_row["log_px"] = str(log_prob, output_precision);
+                properties_row["likelihood_px"] = str(likelihood_px, output_precision);
+                properties_row["prior_px"] = str(prior_px, output_precision);
                 
                 writer.append(state, properties_row);
                 gradient_writer.append(gradient, std::map<std::string, std::string>());

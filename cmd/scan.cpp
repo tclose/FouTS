@@ -63,6 +63,7 @@ extern "C" {
 using namespace BTS;
 
 double NUM_STEPS_DEFAULT = 30;
+const size_t PRECISION_DEFAULT = 10;
 
 double AXIS_SCALE_DEFAULT = 1.0;
 SET_VERSION_DEFAULT
@@ -115,6 +116,10 @@ OPTIONS= {
 
     Option ("only_prob", "Only use the following probability (sets the rest to Prob::Uniform).")
     + Argument("only_prob", "").type_text(),
+
+    Option ("precision", "The decimal precision used to convert the scan values into string "
+                "representations.")
+        + Argument ("precision", "").type_integer (2, PRECISION_DEFAULT, 17),
 
     Option ("no_prob", "Don't caculate probability, used to create a range of states."),
 
@@ -228,6 +233,7 @@ EXECUTE {
         double axis1_scale = AXIS_SCALE_DEFAULT;
         double axis2_scale;
         double axis3_scale;
+        size_t precision = PRECISION_DEFAULT;
         std::string only_prob = "";
         bool no_prob = false;
         bool save_gradient = false;
@@ -272,6 +278,10 @@ EXECUTE {
         else
             axis3_scale = axis1_scale;
         
+        opt = get_options("precision");
+        if (opt.size())
+            precision = opt[0][0];
+
         opt = get_options("only_prob");
         if (opt.size())
             only_prob = opt[0][0].c_str();
@@ -499,7 +509,7 @@ EXECUTE {
                     axis1 *= axis1_scale;
                     
                     Analysis::scan<Fibre::Strand>(*likelihood, prior, origin, axis1, num_steps,
-                            output_location, properties, save_gradient);
+                            output_location, properties, save_gradient, precision);
                     
                 } else if (num_axes == 2) {
                     
@@ -576,7 +586,7 @@ EXECUTE {
                     axis1 *= axis1_scale;
                     
                     Analysis::scan<Fibre::Tractlet>(*likelihood, prior, origin, axis1, num_steps,
-                            output_location, properties, save_gradient);
+                            output_location, properties, save_gradient, precision);
                     
                 } else if (num_axes == 2) {
                     
@@ -691,7 +701,7 @@ EXECUTE {
                     axis1 *= axis1_scale;
                     
                     Analysis::scan<Fibre::Strand::Set>(*likelihood, prior, origin, axis1, num_steps,
-                            output_location, properties, save_gradient);
+                            output_location, properties, save_gradient, precision);
                     
                 } else if (num_axes == 2) {
                     
@@ -790,7 +800,7 @@ EXECUTE {
                     axis1 *= axis1_scale;
                     
                     Analysis::scan<Fibre::Tractlet::Set>(*likelihood, prior, origin, axis1,
-                            num_steps, output_location, properties, save_gradient);
+                            num_steps, output_location, properties, save_gradient, precision);
                     
                 } else if (num_axes == 2) {
                     

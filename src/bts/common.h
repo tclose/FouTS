@@ -221,12 +221,22 @@ namespace BTS {
         return ss.str();
     }
     
+    inline std::string str(double value, size_t precision) {
+        std::stringstream ss;
+        ss << std::setprecision(precision) << value;
+        return ss.str();
+    }
+
     inline std::string str(int number, size_t dec_places) {
         std::stringstream ss;
         ss << std::setfill('0') << std::setw(dec_places + (number < 0)) << number;
         return ss.str();
     }
     
+    inline std::string str(size_t number, size_t dec_places) {
+        return str((int)number, dec_places);
+    }
+
     inline std::string str(double number, size_t dec_places, size_t precision) {
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision) << std::setfill('0')

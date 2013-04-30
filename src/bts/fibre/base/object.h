@@ -141,6 +141,8 @@ namespace BTS {
                     //! Used to signify the end of a props array.
                     const static char* PROPS_LIST_END;
 
+                    const static size_t PROP_PRECISION = 10;
+
                     /*! Passed to the operator[]() when constructing a fibre object view without the properties.
                      * Would like to make it const but the properties member variable of an object needs to be non const
                      * for the cases when it owns the properties. */
@@ -576,7 +578,8 @@ namespace BTS {
                      * @return A reference to the passed map
                      */
                     std::map<std::string, std::string>& insert_props(
-                            std::map<std::string, std::string>& props) const;
+                            std::map<std::string, std::string>& props,
+                            size_t precision = PROP_PRECISION) const;
 
                     /*! Inserts property keys present in the current object into the combined property keys vector provided
                      *
@@ -765,10 +768,10 @@ namespace BTS {
             }
             
             inline std::map<std::string, std::string>& Object::insert_props(
-                    std::map<std::string, std::string>& properties) const {
+                    std::map<std::string, std::string>& properties, size_t precision) const {
                 
                 for (uint prop_i = 0; prop_i < num_props(); ++prop_i)
-                    properties[prop_key(prop_i)] = str(prop(prop_i));
+                    properties[prop_key(prop_i)] = str(prop(prop_i), precision);
                 
                 return properties;
                 
