@@ -1,52 +1,57 @@
-function add_vox_lines_to_plot(vox_size, num_voxels, colourize, offset)
-% function plot_vox_lines(vox_size)
+function add_vox_lines_to_plot(vox_lengths, num_voxels, colourize, offset, transparency)
+% function add_vox_lines_to_plot(vox_size)
+% Adds voxel markers to plot
 
-  if ~exist('colourize')
+  if length(vox_lengths) == 1
+      vox_lengths = [vox_lengths, vox_lengths, vox_lengths];
+  end
+
+  if ~exist('colourize', 'var')
     colourize = true;
   end
   
-  if ~exist('offset')
-    offset = [0 0 0];
+  if ~exist('offset', 'var')
+    offset = -half_vox_lengths.*num_voxels;
   end
 
+  if ~exist('transparency', 'var')
+    transparency = 1;
+  end
+  
   label_contrast = 0.8;
-
-  half_vox_size = vox_size/2;
-
-  hold on;
-  
-  start_edge = -half_vox_size*num_voxels;
-  end_edge   = half_vox_size*num_voxels;
-  
   base_colour = [.75,.75,.75];
   
-  for row_pos = start_edge:vox_size:end_edge
-    for col_pos = start_edge:vox_size:end_edge
-      
-      line_mat = [row_pos, col_pos, start_edge; row_pos, col_pos, end_edge];
-      line_mat(:,1) = line_mat(:,1);
-      line_mat(:,2) = line_mat(:,2);     
-      
-      for dim_i = 0:2
-
-        colour = base_colour;        
-        
-        if colourize && (row_pos == start_edge) && (col_pos == start_edge)
-          colour = [0.5,0.5,0.5];
-          colour(dim_i+1) = label_contrast;
-        end
-        
-        X = line_mat(:,mod(0+dim_i,3)+1) + offset(1);
-        Y = line_mat(:,mod(1+dim_i,3)+1) + offset(2);
-        Z = line_mat(:,mod(2+dim_i,3)+1) + offset(3);
-          
-        plot3(X, Y, Z, 'Color', colour);
-        
+  image_extent = vox_lengths .* num_voxels + offset;
   
+  hold on;
+  
+  for dim_i = 1:3
+      row_dim = mod(dim_i, 3) + 1;
+      col_dim = mod(dim_i + 1, 3) + 1;
+      for row_pos = offset(row_dim):vox_lengths(row_dim):image_extent(row_dim)
+          for col_pos = offset(col_dim):vox_lengths(col_dim):image_extent(col_dim)
+              
+              if colourize && (row_pos == 0) && (col_pos == 0)
+                  colour = [0.5,0.5,0.5];
+                  colour(dim_i) = label_contrast;
+              else
+                  colour = base_colour;
+              end
+
+              line = [offset; image_extent];
+              line(:, row_dim) = row_pos;
+              line(:, col_dim) = col_pos;
+
+              if transparency == 1
+                  plot3(line(:, 1), line(:, 2), line(:, 3), 'Color', colour);
+              else
+                  patchline(line(:, 1), line(:, 2), line(:, 3), ...
+                      'edgecolor', colour, 'edgealpha', transparency);
+              end
+              
+          end
       end
-        
-    end
-  end  
+  end
 
   hold off;   
   
