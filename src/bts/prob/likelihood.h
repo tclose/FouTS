@@ -50,7 +50,12 @@ namespace BTS {
    + Argument ("like_ref_b0", "").type_text(Prob::Likelihood::REF_B0_DEFAULT), \
 \
   Option ("like_ref_signal", "Manually speicify b0 signal for the calculation of the noise variance from the SNR.") \
-   + Argument ("like_ref_signal", "").type_float(SMALL_FLOAT, NAN, LARGE_FLOAT) \
+   + Argument ("like_ref_signal", "").type_float(SMALL_FLOAT, NAN, LARGE_FLOAT), \
+\
+ Option ("like_noise_map", "An image containing an explicit map of the estimate noise at each voxel.") \
+  + Argument ("like_noise", "").type_image_in() \
+
+
 \
 //Loads the 'prior' parameters into variables
 #define SET_LIKELIHOOD_PARAMETERS \
@@ -60,6 +65,8 @@ namespace BTS {
   double like_outside_scale   = Prob::Likelihood::OUTSIDE_SCALE_DEFAULT; \
   std::string like_ref_b0     = Prob::Likelihood::REF_B0_DEFAULT; \
   double like_ref_signal      = NAN; \
+  std::string like_noise_map_name = ""; \
+  Image::Double::Buffer like_noise_map; \
 \
   Options like_opt = get_options("like_snr"); \
   if (like_opt.size()) \
@@ -84,7 +91,12 @@ namespace BTS {
   like_opt = get_options("like_ref_signal"); \
   if (like_opt.size()) \
     like_ref_signal = like_opt[0][0]; \
-
+\
+  like_opt = get_options("like_noise_map"); \
+  if (like_opt.size()) { \
+    like_noise_map_name = like_opt[0][0].c_str(); \
+    like_noise_map.load(like_noise_map_name); \
+  }
 
 //Adds the 'prior' parameters to the properties to be saved with the data.
 #define ADD_LIKELIHOOD_PROPERTIES(properties) \
@@ -97,6 +109,8 @@ namespace BTS {
       properties["like_ref_signal"]   = str(like_ref_signal); \
     else \
       properties["like_ref_b0"]       = like_ref_b0; \
+    if (!like_noise_map) \
+        properties["like_noise_map"] = like_noise_map_name; \
   } \
 
 #include "bts/image/expected/buffer.h"
@@ -140,7 +154,8 @@ namespace BTS {
                                            const Image::Observed::Buffer& obs_image,
                                            Image::Expected::Buffer* exp_image, double assumed_snr,
                                            const std::string& b0_include, double outside_scale,
-                                           const std::string& ref_b0, double ref_signal);
+                                           const std::string& ref_b0, double ref_signal,
+                                           const Image::Double::Buffer& noise_map);
 
             protected:
                 

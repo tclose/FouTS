@@ -23,6 +23,9 @@
 #ifndef __image_buffer_tpl_cpp_h__
 #define __image_buffer_tpl_cpp_h__
 
+#include "image/header.h"
+#include "dataset/loop.h"
+
 #define LOOP(op) \
 for (int z = 0; z < dims[Z]; z++) { \
   for (int y = 0; y < dims[Y]; y++) { \
@@ -352,6 +355,29 @@ namespace BTS {
             
         }
     
+        template<typename T> void Buffer_tpl<T>::load(const std::string& location) {
+
+            MR::Image::Header header(location);
+
+            if (header.ndim() != 3)
+               throw Exception( "Image should contain 3 dimensions, found " + str(header.ndim()) + ".");
+
+            //Get image dimensions and voxel lengths.
+            Triple<size_t> dimensions(header.dim(X), header.dim(Y), header.dim(Z));
+            Triple<double> voxel_lengths(header.vox(X), header.vox(Y), header.vox(Z));
+
+            //Resize buffer to fit image.
+            reset(dimensions, true);
+
+            //Copy data from image to buffer.
+            MR::Image::Voxel<double> voxel(header);
+            MR::DataSet::Loop loop(0, 3);
+
+            for (loop.start(voxel); loop.ok(); loop.next(voxel))
+               operator()(voxel[X], voxel[Y], voxel[Z]) = voxel.value();
+
+        }
+
     }
 
 }

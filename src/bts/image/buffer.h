@@ -105,6 +105,9 @@ namespace BTS {
 
                 inline const T& operator()(const Index& c) const;
 
+                inline bool operator!() const
+                { return dimensions == Triple<size_t>::Zeros; }
+
                 bool is_empty(size_t x, size_t y, size_t z) const {
                     return is_empty(Index(x, y, z));
                 }
@@ -238,6 +241,8 @@ namespace BTS {
                     return coord.non_negative() && coord.bounded_by(dims());
                 }
                 
+                void load(const std::string& location);
+
             protected:
                 
                 virtual T new_voxel(const Index& c) {

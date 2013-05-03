@@ -383,7 +383,7 @@ EXECUTE {
             like_snr = 0.0;
         
         Prob::Likelihood* likelihood = Prob::Likelihood::factory(like_type, obs_image, exp_image,
-                like_snr, like_b0_include, like_outside_scale, like_ref_b0, like_ref_signal);
+                like_snr, like_b0_include, like_outside_scale, like_ref_b0, like_ref_signal, like_noise_map);
         
 //------------------//
 // Initialize Prior //

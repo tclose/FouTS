@@ -53,7 +53,8 @@ namespace BTS {
                                         const Image::Observed::Buffer& obs_image,
                                         Image::Expected::Buffer* exp_image, double assumed_snr,
                                         const std::string& b0_include, double outside_scale,
-                                        const std::string& ref_b0, double ref_signal) {
+                                        const std::string& ref_b0, double ref_signal,
+                                        const Image::Double::Buffer& noise_map) {
             
             //FIXME: Not sure why this happens, but before exp_image is cloned it must be cleared to produce consistent results.
             //Investigate and resolve.
