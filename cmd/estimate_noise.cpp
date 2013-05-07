@@ -141,13 +141,13 @@ EXECUTE {
 
             average /= (float)values.size();
 
-            float variance = 0.0;
+            float noise_estimate = 0.0;
             for (std::vector<float>::iterator val_it = values.begin(); val_it != values.end(); ++val_it)
-                variance += MR::Math::pow2(*val_it - average);
+                noise_estimate += MR::Math::pow2(*val_it - average);
 
-            variance /= (float)values.size();
+            noise_estimate /= (float)values.size();
 
-            noise_vox.value() = sqrt(variance);
+            noise_vox.value() = sqrt(noise_estimate);
 
         }
 
