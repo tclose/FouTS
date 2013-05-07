@@ -160,6 +160,7 @@ namespace BTS {
             protected:
                 
                 double sigma2;
+                Image::Double::Buffer sigma2_map;
 
                 Image::Observed::Buffer obs_image;
                 Image::Expected::Buffer* exp_image;
@@ -178,7 +179,8 @@ namespace BTS {
                 Likelihood(const Image::Observed::Buffer& observed_image,
                            Image::Expected::Buffer* const expected_image, double assumed_snr,
                            const std::string& b0_include, double outside_scale,
-                           const std::string& ref_b0, double ref_signal);
+                           const std::string& ref_b0, double ref_signal,
+                           const Image::Double::Buffer& noise_map);
 
                 Likelihood(const Likelihood& l);
 

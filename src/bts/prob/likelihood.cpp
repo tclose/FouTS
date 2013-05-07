@@ -65,12 +65,12 @@ namespace BTS {
             if (type == "gaussian")
                 
                 likelihood = new Gaussian(obs_image, exp_image, assumed_snr, b0_include,
-                        outside_scale, ref_b0, ref_signal);
+                        outside_scale, ref_b0, ref_signal, noise_map);
             
             else if (type == "one_sided_gaussian")
                 
                 likelihood = new OneSidedGaussian(obs_image, exp_image, assumed_snr, b0_include,
-                        outside_scale, ref_b0, ref_signal);
+                        outside_scale, ref_b0, ref_signal, noise_map);
             
             else if (type == "rician") {
                 
@@ -85,7 +85,7 @@ namespace BTS {
                             "Enforce bounds must be set with Rician noise model to avoid -inf values.");
                 
                 likelihood = new Rician(obs_image, exp_image, assumed_snr, b0_include,
-                        outside_scale, ref_b0, ref_signal);
+                        outside_scale, ref_b0, ref_signal, noise_map);
                 
             } else
                 throw Exception(
@@ -99,24 +99,30 @@ namespace BTS {
         Likelihood::Likelihood(const Image::Observed::Buffer& observed_image,
                                Image::Expected::Buffer* const expected_image, double assumed_snr,
                                const std::string& b0_include, double outside_scale,
-                               const std::string& ref_b0, double ref_signal)
+                               const std::string& ref_b0, double ref_signal,
+                               const Image::Double::Buffer& noise_map)
                 : obs_image(observed_image), exp_image(expected_image->clone()), b0_include(
-                          b0_include) {
+                          b0_include), sigma2_map(noise_map) {
             
             if (!expected_image->dims_match(obs_image))
                 throw Exception(
                         "Expected image dimensions (" + str(expected_image->dims())
                         + ") do not match and observed image (" + str(obs_image.dims()) + ").");
             
-            set_assumed_snr(assumed_snr, ref_b0, ref_signal);
+            if (sigma2_map) {
+                sigma2_map *= noise_map; // Convert the noise map into a variance map
+                sigma2 = NAN;
+            } else
+                set_assumed_snr(assumed_snr, ref_b0, ref_signal);
             
             this->exp_image->zero();
             
         }
         
         Likelihood::Likelihood(const Likelihood& l)
-                : sigma2(l.sigma2), obs_image(l.obs_image), exp_image(l.exp_image->clone()), b0_include(
-                          l.b0_include) {
+                : sigma2(l.sigma2), sigma2_map(l.sigma2_map), obs_image(l.obs_image),
+                  exp_image(l.exp_image->clone()), b0_include(l.b0_include),
+                  difference_mode(l.difference_mode) {
         }
         
         Likelihood& Likelihood::operator=(const Likelihood& l) {
@@ -124,9 +130,11 @@ namespace BTS {
             delete this->exp_image;
             
             sigma2 = l.sigma2;
+            sigma2_map = l.sigma2_map;
             obs_image = l.obs_image;
             exp_image = l.exp_image->clone();
             b0_include = l.b0_include;
+            difference_mode = l.difference_mode;
             
             return *this;
             
@@ -135,8 +143,11 @@ namespace BTS {
         void Likelihood::set_assumed_snr(double assumed_snr, const std::string& ref_b0,
                                          double reference_signal) {
             
+            if (sigma2_map)
+                throw Exception("SNR cannot be set explicitly if noise map is already provided.");
+
             double ref_signal;
-            
+
             if (!isnan(reference_signal))
                 ref_signal = reference_signal;
             else if (obs_image.properties().count("noise_ref_signal"))
@@ -149,10 +160,10 @@ namespace BTS {
                 throw Exception(
                         "Unrecognised value for '-like_ref_b0' ('" + ref_b0
                         + "'), can be either 'average', or 'max'.");
-            
+
             if (!ref_signal)
                 throw Exception("The " + ref_b0 + " b0 of observed image is 0.");
-            
+
             sigma2 = MR::Math::pow2(ref_signal / assumed_snr);
             
         }

@@ -41,11 +41,12 @@ namespace BTS {
                                Likelihood::SNR_DEFAULT,
                        const std::string& b0_include = Likelihood::B0_INCLUDE_DEFAULT,
                        double outside_scale = Likelihood::OUTSIDE_SCALE_DEFAULT,
-                       const std::string& ref_b0 = Likelihood::REF_B0_DEFAULT, double ref_signal =
-                               NAN)
+                       const std::string& ref_b0 = Likelihood::REF_B0_DEFAULT,
+                       double ref_signal = NAN,
+                       const Image::Double::Buffer& noise_map = Image::Double::Buffer())
                         
                         : Likelihood(obs_image, exp_image, assumed_snr, b0_include, outside_scale,
-                                ref_b0, ref_signal) {
+                                ref_b0, ref_signal, noise_map) {
                 }
                 
                 Rician(const Rician& s)
