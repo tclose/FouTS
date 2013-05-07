@@ -104,17 +104,23 @@ namespace BTS {
                     throw Exception("Not implemented yet.");
                 }
                 
-                double log_prob(double expected, double observed) {
+                double log_prob(double expected, double observed, const Image::Index& index) {
                     
                     assert(expected > 0.0 && observed > 0.0);
                     
+                    double sig2;
+                    if (!sigma2_map)
+                        sig2 = sigma2_map(index);
+                    else
+                        sig2 = sigma2;
+
                     double bessel_x = expected * observed / this->sigma2;
                     
                     double lprob = MR::Math::log(
                                            observed / this->sigma2 * MR::Math::exp(
                                                    -(MR::Math::pow2(observed) + MR::Math::pow2(
                                                              expected))
-                                                   / (2.0 * this->sigma2))
+                                                   / (2.0 * sig2))
                                            * MR::Math::Bessel::I0_scaled(bessel_x))
                                    + bessel_x;
                     
@@ -147,14 +153,14 @@ namespace BTS {
                     
                 }
                 
-                double log_prob(double expected, double observed, double& d_lprob) {
+                double log_prob(double expected, double observed, double& d_lprob, const Image::Index& index) {
                     
                     throw Exception("Not implemented yet.");
                     
                 }
                 
                 double log_prob(double expected, double observed, double& d_lprob,
-                                double& d2_lprob2) {
+                                double& d2_lprob2, const Image::Index& index) {
                     
                     throw Exception("Not implemented yet.");
                 }

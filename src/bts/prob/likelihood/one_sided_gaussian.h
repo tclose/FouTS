@@ -62,14 +62,20 @@ namespace BTS {
                 
                 using Likelihood::log_prob;
 
-                double log_prob(double expected, double observed) {
+                double log_prob(double expected, double observed, const Image::Index& index) {
                     
+                    double sig2;
+                    if (!sigma2_map)
+                        sig2 = sigma2_map(index);
+                    else
+                        sig2 = sigma2;
+
                     double diff = expected - observed;
                     
                     double lprob;
                     
                     if (diff > 0)
-                        lprob = -MR::Math::pow2(diff) / (2.0 * this->sigma2);    // - MR::Math::log(MR::Math::sqrt(2.0 * M_PI * this->sigma2));
+                        lprob = -MR::Math::pow2(diff) / (2.0 * sig2);    // - MR::Math::log(MR::Math::sqrt(2.0 * M_PI * this->sigma2));
                     else
                         lprob = 0.0;
                     
@@ -97,7 +103,7 @@ namespace BTS {
                     
                 }
                 
-                double log_prob(double expected, double observed, double& d_lprob) {
+                double log_prob(double expected, double observed, double& d_lprob, const Image::Index& index) {
                     
                     double diff = expected - observed;
                     
@@ -106,12 +112,12 @@ namespace BTS {
                     else
                         d_lprob = 0.0;
                     
-                    return log_prob(expected, observed);
+                    return log_prob(expected, observed, index);
                     
                 }
                 
                 double log_prob(double expected, double observed, double& d_lprob,
-                                double& d2_lprob2) {
+                                double& d2_lprob2, const Image::Index& index) {
                     
                     double diff = expected - observed;
                     
@@ -120,7 +126,7 @@ namespace BTS {
                     else
                         d2_lprob2 = 0.0;
                     
-                    return log_prob(expected, observed, d_lprob);
+                    return log_prob(expected, observed, d_lprob, index);
                     
                 }
                 

@@ -57,10 +57,10 @@ namespace BTS {
             
             std::set<Image::Index> coords = exp_image->non_empty_or_inbounds();
             
-            for (std::set<Image::Index>::iterator coord_it = coords.begin();
-                    coord_it != coords.end(); ++coord_it) {
+            for (std::set<Image::Index>::iterator index_it = coords.begin();
+                    index_it != coords.end(); ++index_it) {
                 
-                Image::Expected::Voxel& voxel = exp_image->operator()(*coord_it);
+                Image::Expected::Voxel& voxel = exp_image->operator()(*index_it);
                 
                 std::vector<double> d_lprob(exp_image->num_encodings());
                 
@@ -70,13 +70,13 @@ namespace BTS {
                         
                         double observed;
                         
-                        if (obs_image.in_bounds(*coord_it))
-                            observed = obs_image(*coord_it)[encode_i];
+                        if (obs_image.in_bounds(*index_it))
+                            observed = obs_image(*index_it)[encode_i];
                         else
                             observed = 0;
                         
-                        lprob += log_prob(exp_image->operator()(*coord_it)[encode_i], observed,
-                                d_lprob[encode_i]);
+                        lprob += log_prob(exp_image->operator()(*index_it)[encode_i], observed,
+                                d_lprob[encode_i], *index_it);
                         
                     }
                     
@@ -84,10 +84,10 @@ namespace BTS {
                 
                 for (size_t fibre_i = 0; fibre_i < fibres.size(); fibre_i++) {
                     
-                    if (!section_references[fibre_i].is_empty(*coord_it)) {
+                    if (!section_references[fibre_i].is_empty(*index_it)) {
                         
                         std::vector<typename T::Section*>& voxel_section_references =
-                                section_references[fibre_i](*coord_it);
+                                section_references[fibre_i](*index_it);
                         
                         for (typename std::vector<typename T::Section*>::iterator section_it =
                                 voxel_section_references.begin();
@@ -173,8 +173,8 @@ namespace BTS {
                     for (size_t z = 0; z < exp_image->dim(Z); ++z)
                         coords.insert(Image::Index(x, y, z));
             
-            for (std::set<Image::Index>::iterator coord_it = coords.begin();
-                    coord_it != coords.end(); ++coord_it) {
+            for (std::set<Image::Index>::iterator index_it = coords.begin();
+                    index_it != coords.end(); ++index_it) {
                 
                 for (size_t encode_i = 0; encode_i < exp_image->num_encodings(); encode_i++) {
                     
@@ -182,15 +182,15 @@ namespace BTS {
                         
                         double observed;
                         
-                        if (obs_image.in_bounds(*coord_it))
-                            observed = obs_image(*coord_it)[encode_i];
+                        if (obs_image.in_bounds(*index_it))
+                            observed = obs_image(*index_it)[encode_i];
                         else
                             observed = 0;
                         
                         double d_lprob, d2_lprob2;
                         
-                        lprob += log_prob(exp_image->operator()(*coord_it)[encode_i], observed,
-                                d_lprob, d2_lprob2);
+                        lprob += log_prob(exp_image->operator()(*index_it)[encode_i], observed,
+                                d_lprob, d2_lprob2, *index_it);
                         
                         typename T::Set direction_gradient(fibres);
                         direction_gradient.zero();
@@ -200,10 +200,10 @@ namespace BTS {
                         
                         for (size_t fibre_i = 0; fibre_i < fibres.size(); fibre_i++) {
                             
-                            if (!buffer_gradients[fibre_i].is_empty(*coord_it)) {
+                            if (!buffer_gradients[fibre_i].is_empty(*index_it)) {
                                 
                                 direction_gradient[fibre_i] =
-                                        buffer_gradients[fibre_i](*coord_it)[encode_i];
+                                        buffer_gradients[fibre_i](*index_it)[encode_i];
                                 
                                 MR::Math::Matrix<double> hessian_fibre_block_view =
                                         hessian_fibre_blocks.sub(fibre_block_start[fibre_i],
@@ -212,7 +212,7 @@ namespace BTS {
                                                 fibre_block_end[fibre_i]);
                                 
                                 MR::Math::Matrix<double> hessian_fibre_block =
-                                        buffer_hessians[fibre_i](*coord_it)[encode_i];
+                                        buffer_hessians[fibre_i](*index_it)[encode_i];
                                 
                                 hessian_fibre_block *= d_lprob;
                                 

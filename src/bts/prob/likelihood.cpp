@@ -101,19 +101,21 @@ namespace BTS {
                                const std::string& b0_include, double outside_scale,
                                const std::string& ref_b0, double ref_signal,
                                const Image::Double::Buffer& noise_map)
-                : obs_image(observed_image), exp_image(expected_image->clone()), b0_include(
-                          b0_include), sigma2_map(noise_map) {
+                : obs_image(observed_image), exp_image(expected_image->clone()),
+                  sigma2_map(noise_map), b0_include(b0_include) {
             
             if (!expected_image->dims_match(obs_image))
                 throw Exception(
                         "Expected image dimensions (" + str(expected_image->dims())
                         + ") do not match and observed image (" + str(obs_image.dims()) + ").");
             
-            if (sigma2_map) {
+            if (!sigma2_map)
+                set_assumed_snr(assumed_snr, ref_b0, ref_signal);
+            else {
                 sigma2_map *= noise_map; // Convert the noise map into a variance map
                 sigma2 = NAN;
-            } else
-                set_assumed_snr(assumed_snr, ref_b0, ref_signal);
+            }
+
             
             this->exp_image->zero();
             
@@ -121,8 +123,9 @@ namespace BTS {
         
         Likelihood::Likelihood(const Likelihood& l)
                 : sigma2(l.sigma2), sigma2_map(l.sigma2_map), obs_image(l.obs_image),
-                  exp_image(l.exp_image->clone()), b0_include(l.b0_include),
-                  difference_mode(l.difference_mode) {
+                  exp_image(l.exp_image->clone()), difference_mode(l.difference_mode),
+                  b0_include(l.b0_include)
+                   {
         }
         
         Likelihood& Likelihood::operator=(const Likelihood& l) {
@@ -143,7 +146,7 @@ namespace BTS {
         void Likelihood::set_assumed_snr(double assumed_snr, const std::string& ref_b0,
                                          double reference_signal) {
             
-            if (sigma2_map)
+            if (!!sigma2_map)
                 throw Exception("SNR cannot be set explicitly if noise map is already provided.");
 
             double ref_signal;
@@ -189,22 +192,22 @@ namespace BTS {
                     for (size_t z = 0; z < image.dim(Z); ++z)
                         coords.insert(Image::Index(x, y, z));
             
-            for (std::set<Image::Index>::iterator coord_it = coords.begin();
-                    coord_it != coords.end(); ++coord_it) {
+            for (std::set<Image::Index>::iterator index_it = coords.begin();
+                    index_it != coords.end(); ++index_it) {
                 
-                const Image::Expected::Voxel& exp_voxel = image.operator()(*coord_it);
+                const Image::Expected::Voxel& exp_voxel = image.operator()(*index_it);
                 
                 for (size_t encode_i = 0; encode_i < image.num_encodings(); encode_i++) {
                     
                     double observed;
                     
-                    if (obs_image.in_bounds(*coord_it))
-                        observed = obs_image(*coord_it)[encode_i];
+                    if (obs_image.in_bounds(*index_it))
+                        observed = obs_image(*index_it)[encode_i];
                     else
                         observed = 0.0;
                     
                     if (image.encoding(encode_i).b_value())
-                        lprob += log_prob(exp_voxel[encode_i], observed);
+                        lprob += log_prob(exp_voxel[encode_i], observed, *index_it);
                     else
                         lprob += b0_log_prob(exp_voxel[encode_i], observed);
                     

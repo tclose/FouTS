@@ -78,10 +78,10 @@ namespace BTS {
             
             //Testing
             
-            for (std::set<Image::Index>::iterator coord_it = coords.begin();
-                    coord_it != coords.end(); ++coord_it) {
+            for (std::set<Image::Index>::iterator index_it = coords.begin();
+                    index_it != coords.end(); ++index_it) {
                 
-                Image::Expected::Voxel& voxel = exp_image->operator()(*coord_it);
+                Image::Expected::Voxel& voxel = exp_image->operator()(*index_it);
                 
                 std::vector<double> d_lprob(exp_image->num_encodings());
                 std::vector<double> d2_lprob2(exp_image->num_encodings());
@@ -95,13 +95,13 @@ namespace BTS {
                         
                         double observed;
                         
-                        if (obs_image.in_bounds(*coord_it))
-                            observed = obs_image(*coord_it)[encode_i];
+                        if (obs_image.in_bounds(*index_it))
+                            observed = obs_image(*index_it)[encode_i];
                         else
                             observed = 0;
                         
-                        lprob += log_prob(exp_image->operator()(*coord_it)[encode_i], observed,
-                                d_lprob[encode_i], d2_lprob2[encode_i]);
+                        lprob += log_prob(exp_image->operator()(*index_it)[encode_i], observed,
+                                d_lprob[encode_i], d2_lprob2[encode_i], *index_it);
                         
                     }
                     
@@ -114,11 +114,11 @@ namespace BTS {
                 std::vector<size_t> nonzero_fibres;
                 
                 for (size_t fibre_i = 0; fibre_i < fibres.size(); fibre_i++)
-                    if (!section_references[fibre_i].is_empty(*coord_it)) {
+                    if (!section_references[fibre_i].is_empty(*index_it)) {
                         
                         for (typename std::vector<typename T::Section*>::iterator section_it =
-                                section_references[fibre_i](*coord_it).begin();
-                                section_it != section_references[fibre_i](*coord_it).end();
+                                section_references[fibre_i](*index_it).begin();
+                                section_it != section_references[fibre_i](*index_it).end();
                                 ++section_it)
                             voxel.precalculate_interpolation_gradient_and_hessian(**section_it);
                         
@@ -151,7 +151,7 @@ namespace BTS {
                             direction_hessian.zero();
                             
                             std::vector<typename T::Section*>& fibre_section_references =
-                                    section_references[*fibre_i_it](*coord_it);
+                                    section_references[*fibre_i_it](*index_it);
                             
                             for (typename std::vector<typename T::Section*>::iterator section_it =
                                     fibre_section_references.begin();
@@ -281,10 +281,10 @@ namespace BTS {
             
             std::set<Image::Index> coords = exp_image->non_empty_or_inbounds();
             
-            for (std::set<Image::Index>::iterator coord_it = coords.begin();
-                    coord_it != coords.end(); ++coord_it) {
+            for (std::set<Image::Index>::iterator index_it = coords.begin();
+                    index_it != coords.end(); ++index_it) {
                 
-                Image::Expected::Voxel& voxel = exp_image->operator()(*coord_it);
+                Image::Expected::Voxel& voxel = exp_image->operator()(*index_it);
                 
                 std::vector<double> d_lprob(exp_image->num_encodings());
                 std::vector<double> d2_lprob2(exp_image->num_encodings());
@@ -298,13 +298,13 @@ namespace BTS {
                         
                         double observed;
                         
-                        if (obs_image.in_bounds(*coord_it))
-                            observed = obs_image(*coord_it)[encode_i];
+                        if (obs_image.in_bounds(*index_it))
+                            observed = obs_image(*index_it)[encode_i];
                         else
                             observed = 0;
                         
-                        lprob += log_prob(exp_image->operator()(*coord_it)[encode_i], observed,
-                                d_lprob[encode_i], d2_lprob2[encode_i]);
+                        lprob += log_prob(exp_image->operator()(*index_it)[encode_i], observed,
+                                d_lprob[encode_i], d2_lprob2[encode_i], *index_it);
                         
                     }
                     
@@ -314,10 +314,10 @@ namespace BTS {
                 //  Precalculate interpolation gradients between sections and current voxel //
                 //--------------------------------------------------------------------------//
                 for (size_t fibre_i = 0; fibre_i < fibres.size(); fibre_i++)
-                    if (!section_references[fibre_i].is_empty(*coord_it))
+                    if (!section_references[fibre_i].is_empty(*index_it))
                         for (typename std::vector<typename T::Section*>::iterator section_it =
-                                section_references[fibre_i](*coord_it).begin();
-                                section_it != section_references[fibre_i](*coord_it).end();
+                                section_references[fibre_i](*index_it).begin();
+                                section_it != section_references[fibre_i](*index_it).end();
                                 ++section_it)
                             voxel.precalculate_interpolation_gradient(**section_it);
                 
@@ -334,7 +334,7 @@ namespace BTS {
                         //            }
                         
                         for (size_t fibre_i1 = 0; fibre_i1 < fibres.size(); fibre_i1++) {
-                            if (!section_references[fibre_i1].is_empty(*coord_it)) {
+                            if (!section_references[fibre_i1].is_empty(*index_it)) {
                                 
                                 //--------------------------------------------//
                                 //  Calculate the first fibre gradient vector //
@@ -343,8 +343,8 @@ namespace BTS {
                                 gradient1.zero();
                                 
                                 for (typename std::vector<typename T::Section*>::iterator section_it =
-                                        section_references[fibre_i1](*coord_it).begin();
-                                        section_it != section_references[fibre_i1](*coord_it).end();
+                                        section_references[fibre_i1](*index_it).begin();
+                                        section_it != section_references[fibre_i1](*index_it).end();
                                         ++section_it) {
                                     
                                     Fibre::Strand::BasicSection section_gradient;
@@ -374,7 +374,7 @@ namespace BTS {
                                 //                  }
                                 
                                 for (size_t fibre_i2 = 0; fibre_i2 < fibres.size(); fibre_i2++) {
-                                    if (!section_references[fibre_i2].is_empty(*coord_it)) {
+                                    if (!section_references[fibre_i2].is_empty(*index_it)) {
                                         
                                         //---------------------------------------------//
                                         //  Calculate the second fibre gradient vector //
@@ -382,9 +382,9 @@ namespace BTS {
                                         T gradient2 = fibres[fibre_i2];
                                         gradient2.zero();
                                         for (typename std::vector<typename T::Section*>::iterator section_it =
-                                                section_references[fibre_i2](*coord_it).begin();
+                                                section_references[fibre_i2](*index_it).begin();
                                                 section_it != section_references[fibre_i2](
-                                                        *coord_it).end(); ++section_it) {
+                                                        *index_it).end(); ++section_it) {
                                             
                                             Fibre::Strand::BasicSection section_gradient;
                                             

@@ -99,11 +99,17 @@ namespace BTS {
                         const typename T::Set& fibres, typename T::Set& gradient,
                         typename T::Set::Tensor& fisher_info);
 
-                double log_prob(double expected, double observed) {
+                double log_prob(double expected, double observed, const Image::Index& index) {
                     
+                    double sig2;
+                    if (!sigma2_map)
+                        sig2 = sigma2_map(index);
+                    else
+                        sig2 = sigma2;
+
                     double diff = expected - observed;
                     
-                    double lprob = -MR::Math::pow2(diff) / (2.0 * this->sigma2);
+                    double lprob = -MR::Math::pow2(diff) / (2.0 * sig2);
                     
                     //Add normalising constant.
 //          lprob +=       - MR::Math::log(MR::Math::sqrt(2.0 * M_PI * this->sigma2));
@@ -129,22 +135,22 @@ namespace BTS {
                     
                 }
                 
-                double log_prob(double expected, double observed, double& d_lprob) {
+                double log_prob(double expected, double observed, double& d_lprob, const Image::Index& index) {
                     
                     double diff = expected - observed;
                     
                     d_lprob = -diff / this->sigma2;
                     
-                    return log_prob(expected, observed);
+                    return log_prob(expected, observed, index);
                     
                 }
                 
                 double log_prob(double expected, double observed, double& d_lprob,
-                                double& d2_lprob2) {
+                                double& d2_lprob2, const Image::Index& index) {
                     
                     d2_lprob2 = -1.0 / this->sigma2;
                     
-                    return log_prob(expected, observed, d_lprob);
+                    return log_prob(expected, observed, d_lprob, index);
                     
                 }
                 

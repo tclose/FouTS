@@ -273,14 +273,14 @@ namespace BTS {
                                                          typename T::Set& gradient,
                                                          typename T::Set::Tensor& hessian);
 
-                virtual double log_prob(double expected, double observed) = 0;
+                virtual double log_prob(double expected, double observed, const Image::Index& index) = 0;
 
                 virtual double b0_log_prob(double expected, double observed) = 0;
 
-                virtual double log_prob(double expected, double observed, double& d_lprob) = 0;
+                virtual double log_prob(double expected, double observed, double& d_lprob, const Image::Index& index) = 0;
 
                 virtual double log_prob(double expected, double observed, double& d_lprob,
-                                        double& d2_lprob2) = 0;
+                                        double& d2_lprob2, const Image::Index& index) = 0;
 
                 void save_expected_image(const std::string& location)    //Used for debugging
                         {
