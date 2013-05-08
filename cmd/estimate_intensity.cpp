@@ -55,7 +55,9 @@ const double MIDDLE_DEFAULT = 0.5;
 const double CURVATURE_DEFAULT = 0.0;
 const double FA_THRESHOLD_DEFAULT = 0.7;
 const double DENSITY_PERCENTILE_DEFAULT = 95.0;
-const size_t NUM_LENGTH_SECTIONS_DEFAULT = 100;
+const size_t NUM_AREA_SAMPLES_DEFAULT = 100;
+const size_t NUM_LENGTH_SECTIONS_DEFAULT = 10;
+const size_t NUM_WIDTH_SECTIONS_DEFAULT = 4;
 
 DESCRIPTION = {
     "Finds the maximum b0 intensity of an image",
@@ -91,14 +93,15 @@ OPTIONS= {
 
     Option ("reference_tract", "Instead of using straight tracks to fit the base intensity, a "
             "set of reference tracts can be provided instead.")
-        + Argument ("reference").type_file(),
+    + Argument ("reference").type_file(),
 
-    Option("num_length_sections", "The number of samples taken along the reference tract.")
-        + Argument("num_length_sections").type_float(1, NUM_LENGTH_SECTIONS_DEFAULT, LARGE_INT),
+    Option("num_area_samples", "The number of samples taken along the reference tract when "
+            "calculating the estimated area.")
+    + Argument("num_area_samples").type_float(1, NUM_AREA_SAMPLES_DEFAULT, LARGE_INT),
 
     Option("density_percentile", "The percentile used to normalise the density to (only applicable "
             "with 'ref_tracts' provided (fraction between 0 and 1).")
-        + Argument("fa_threshold").type_float(0.0, DENSITY_PERCENTILE_DEFAULT, 100.0),
+    + Argument("fa_threshold").type_float(0.0, DENSITY_PERCENTILE_DEFAULT, 100.0),
 
     DIFFUSION_PARAMETERS,
 
@@ -184,10 +187,10 @@ EXECUTE {
 
         //------------------------------------------------------------------------------------------
         // The relative curvature of the reference tract used to calculate the base intensity from
-        size_t num_length_sections = NUM_LENGTH_SECTIONS_DEFAULT;
+        size_t num_area_samples = NUM_AREA_SAMPLES_DEFAULT;
         opt = get_options("num_length_sections");
         if (opt.size())
-            num_length_sections = opt[0][0];
+            num_area_samples = opt[0][0];
 
         //------------------------------------------------------------------------------------------
         // Loads parameters to construct Diffusion::Model ('diff_' prefix)
@@ -243,18 +246,20 @@ EXECUTE {
 
             // Normalise reference tract density to the "density_percentile" and set the base
             // intensity to 1.0.
-            reference_tract[0].normalise_density(num_length_sections, density_percentile);
+            reference_tract[0].normalise_density(num_area_samples, density_percentile);
             reference_tract.set_base_intensity(1.0);
 
             //Generate image
             exp_image->expected_image(reference_tract);
 
+            // Get the average ratio between the observed image and the expected image and set that
+            // to be the estimated intensity.
             for (size_t z = 0; z < obs_image.dim(Z); ++z) {
                 for (size_t y = 0; y < obs_image.dim(Y); ++y) {
                     for (size_t x = 0; x < obs_image.dim(X); ++x) {
                         for (size_t encode_i = 0; encode_i < dwis.size(); ++encode_i) {
-                            estimated_intensity += obs_image(x,y,z)[dwis(encode_i)] /
-                                    (*exp_image)(x,y,z)[dwis(encode_i)]);
+                            estimated_intensity += obs_image(x,y,z)[dwis[encode_i]] /
+                                    (*exp_image)(x,y,z)[dwis[encode_i]];
                         }
                     }
                 }
