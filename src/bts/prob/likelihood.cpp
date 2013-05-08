@@ -101,8 +101,8 @@ namespace BTS {
                                const std::string& b0_include, double outside_scale,
                                const std::string& ref_b0, double ref_signal,
                                const Image::Double::Buffer& noise_map)
-                : obs_image(observed_image), exp_image(expected_image->clone()),
-                  sigma2_map(noise_map), b0_include(b0_include) {
+                : sigma2_map(noise_map), obs_image(observed_image), exp_image(expected_image->clone()),
+                  b0_include(b0_include) {
             
             if (!expected_image->dims_match(obs_image))
                 throw Exception(

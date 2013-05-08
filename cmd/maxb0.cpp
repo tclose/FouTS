@@ -57,17 +57,34 @@ ARGUMENTS= {
 
 OPTIONS= {
 
+
+    Option("percentile", "The percentile of the ""maximum"" b=0 value.")
+    + Argument("").type_float(-1.01, -1.0, 100.0),
+
+    Option("cut_off", "The cut off value above which the percentile is calculated above.")
+        + Argument("").type_float(0.0, 0.0, LARGE_FLOAT),
+
     Option()
 
 };
 
 EXECUTE {
     
-        std::string input_location = argument[0];
-        
-        Image::Observed::Buffer image(input_location);
-        
-        std::cout << image.max_b0();
-        
-    }
+    double percentile = -1.0;
+    Options opt = get_options("percentile");
+    if (opt.size())
+        percentile = opt[0][0];
+
+    double cut_off = -1.0;
+    opt = get_options("cut_off");
+    if (opt.size())
+        cut_off = opt[0][0];
+
+    std::string input_location = argument[0];
+
+    Image::Observed::Buffer image(input_location);
+
+    std::cout << image.max_b0(percentile, cut_off);
+
+}
     

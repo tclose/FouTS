@@ -135,7 +135,7 @@ namespace BTS {
 
                     virtual const Diffusion::Encoding& encoding(size_t index) const = 0;
 
-                    double max_b0() const;
+                    double max_b0(double percentile = -1.0, double cut_off = 0.0) const;
 
                 protected:
                     
@@ -295,8 +295,8 @@ namespace BTS {
 
                     double average_b0() const;
 
-                    double max_b0() const {
-                        return Buffer_tpl<Voxel>::max_b0();
+                    double max_b0(double percentile = -1.0, double cut_off = 0.0) const {
+                        return Buffer_tpl<Voxel>::max_b0(percentile, cut_off);
                     }
                     
                     Double::Buffer isotropic(bool include_b0s) const;

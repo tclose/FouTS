@@ -55,7 +55,7 @@ namespace BTS {
         const char* Tractlet::LENGTH_EPSILON_COMPONENT_EXT_PROP = "length_epislon_comp";
         const char* Tractlet::AVG_DENSITY_EXT_PROP = "avg_density";
 
-        const double Tractlet::STRANDS_PER_AREA_DEFAULT = 1000;
+        const double Tractlet::STRANDS_PER_AREA_DEFAULT = 1; // 1000;
         const double Tractlet::REASONABLE_WIDTH = 0.1;
 
 //    Tractlet::Tractlet (std::vector<Strand> axes, double base_width, double acs)
