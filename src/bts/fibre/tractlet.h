@@ -208,12 +208,19 @@ namespace BTS {
                 
                 double average_area(size_t num_points = 100);
 
+                double percentile_area(double percentile, size_t num_points = 100);
+
                 double average_density(size_t num_points = 100) {
                     return acs() / average_area(num_points);
                 }
                 
-                void normalise_density(size_t num_points = 100) {
-                    set_acs(average_area(num_points));
+                void normalise_density(size_t num_points = 100, double percentile = -1.0) {
+                    double area;
+                    if (percentile < 0.0)
+                        area = average_area(num_points);
+                    else
+                        area = percentile_area(percentile, num_points);
+                    set_acs(area);
                 }
                 
                 double& alpha() {

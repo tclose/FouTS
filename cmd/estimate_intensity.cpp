@@ -54,8 +54,8 @@ SET_COPYRIGHT(NULL);
 const double MIDDLE_DEFAULT = 0.5;
 const double CURVATURE_DEFAULT = 0.0;
 const double FA_THRESHOLD_DEFAULT = 0.7;
-const size_t NUM_LENGTH_SECTIONS_DEFAULT = 10;
-const size_t NUM_WIDTH_SECTIONS_DEFAULT = 2;
+const double DENSITY_PERCENTILE_DEFAULT = 95.0;
+const size_t NUM_LENGTH_SECTIONS_DEFAULT = 100;
 
 DESCRIPTION = {
     "Finds the maximum b0 intensity of an image",
@@ -88,6 +88,17 @@ OPTIONS= {
             "the format [ X Y Z b ], where [ X Y Z ] describe the direction of the "
             "applied gradient, and b gives the b-value in units (1000 s/mm^2).")
     + Argument ("encoding").type_file(),
+
+    Option ("reference_tract", "Instead of using straight tracks to fit the base intensity, a "
+            "set of reference tracts can be provided instead.")
+        + Argument ("reference").type_file(),
+
+    Option("num_length_sections", "The number of samples taken along the reference tract.")
+        + Argument("num_length_sections").type_float(1, NUM_LENGTH_SECTIONS_DEFAULT, LARGE_INT),
+
+    Option("density_percentile", "The percentile used to normalise the density to (only applicable "
+            "with 'ref_tracts' provided (fraction between 0 and 1).")
+        + Argument("fa_threshold").type_float(0.0, DENSITY_PERCENTILE_DEFAULT, 100.0),
 
     DIFFUSION_PARAMETERS,
 
@@ -134,6 +145,13 @@ EXECUTE {
             throw Exception("number of studies in base image does not match that in encoding file");
 
         //------------------------------------------------------------------------------------------
+        // The relative curvature of the reference tract used to calculate the base intensity from
+        Fibre::Tractlet::Set reference_tract;
+        opt = get_options("reference_tract");
+        if (opt.size())
+            reference_tract.load(opt[0][0].c_str());
+
+        //------------------------------------------------------------------------------------------
         // Set the fraction of voxels to include in the final estimate (the middle '--fraction' is used)
         double middle = MIDDLE_DEFAULT;
         opt = get_options("middle");
@@ -158,6 +176,20 @@ EXECUTE {
             fa_threshold = opt[0][0];
 
         //------------------------------------------------------------------------------------------
+          // The relative curvature of the reference tract used to calculate the base intensity from
+          double density_percentile = DENSITY_PERCENTILE_DEFAULT;
+          opt = get_options("density_percentile");
+          if (opt.size())
+              density_percentile = opt[0][0];
+
+        //------------------------------------------------------------------------------------------
+        // The relative curvature of the reference tract used to calculate the base intensity from
+        size_t num_length_sections = NUM_LENGTH_SECTIONS_DEFAULT;
+        opt = get_options("num_length_sections");
+        if (opt.size())
+            num_length_sections = opt[0][0];
+
+        //------------------------------------------------------------------------------------------
         // Loads parameters to construct Diffusion::Model ('diff_' prefix)
         SET_DIFFUSION_PARAMETERS;
         // Loads extra parameters to construct Image::Expected::*::Buffer ('exp_' prefix)
@@ -180,9 +212,6 @@ EXECUTE {
         MR::DWI::guess_DW_directions(dwis, bzeros, grad);
         if (!bzeros.size())
             throw Exception("No b=0 encodings found in gradient encoding scheme");
-        Triple<double> vox_lengths(dwi_header.vox(X), dwi_header.vox(Y), dwi_header.vox(Z));
-        Triple<size_t> dims(1.0, 1.0, 1.0);
-        Triple<double> offsets(0.0, 0.0, 0.0);
         MR::Math::Matrix<float> all_encodings = dwi_header.get_DW_scheme();
         MR::Math::Matrix<double> nonb0_encodings(dwis.size(), 4);
         size_t num_nonb0_encodings = 0;
@@ -192,153 +221,198 @@ EXECUTE {
         // Reference the b_values for readibility
         const MR::Math::Vector<float>& b_values = nonb0_encodings.column(DW);
 
-        //------------------------------------------------------------------------------------------
-        // Create the matrix and its singular-value decomposition used to calculate the diffusion
-        // tensor at each voxel (for the alignment of the reference Fourier tract). The order of the
-        // rows is d_xx, d_yy, d_zz, d_xy, d_xz, dyz.
-        MR::Math::Matrix<double> tensor_encodings(num_nonb0_encodings, 6);
-        for (size_t dim_i = 0; dim_i < 3; ++dim_i) {
-            // Do the d_xx, d_yy and d_zz columns
-            tensor_encodings.column(dim_i) = nonb0_encodings.column(dim_i);
-            tensor_encodings.column(dim_i) *= nonb0_encodings.column(dim_i);
-            // Make the d_xy and d_yz columns
-            if (dim_i < 2) {
-                tensor_encodings.column(dim_i * 2 + 3) = nonb0_encodings.column(dim_i);
-                tensor_encodings.column(dim_i * 2 + 3) *= nonb0_encodings.column(dim_i + 1);
-            }
-        }
-        // Finish of with the d_xz column
-        tensor_encodings.column(4) = nonb0_encodings.column(X);
-        tensor_encodings.column(4) *= nonb0_encodings.column(Z);
-        // Caluculate the singular value decomposition on the tensor encodings matrix
-        Math::USV usv = Math::svd(tensor_encodings);
 
         //------------------------------------------------------------------------------------------
         // Create the expected image voxel
         Diffusion::Model diffusion_model = Diffusion::Model::factory(nonb0_encodings,
                 diff_response_SH, diff_adc, diff_fa, diff_isotropic, diff_warn_b_mismatch);
-        Image::Expected::Buffer* exp_image = Image::Expected::Buffer::factory(exp_type, dims,
-                vox_lengths, diffusion_model, exp_num_length_sections, exp_num_width_sections,
-                exp_interp_extent, offsets, exp_enforce_bounds, exp_half_width);
 
-        //------------------------------------------------------------------------------------------
-        // Loop through all voxels and calculate the base intensities that would produce the
-        // least difference from the voxel generated by the reference tract
-        std::vector<double> intensities;
-        MR::Image::Voxel<float> dwi_vox(dwi_header), intens_vox(intens_header);
-        MR::DataSet::Loop vox_loop("Estimating intensities...", 0, 3);
-        MR::DataSet::Loop encode_loop(3);
-        for (vox_loop.start (dwi_vox, intens_vox); vox_loop.ok();
-                vox_loop.next (dwi_vox, intens_vox)) {
+        double estimated_intensity;
 
+        if (reference_tract.size()) {
 
-            //--------------------------------------------------------------------------------------
-            // Initialise the intensity to 0 (also the default if it can't be estimated from the
-            // current voxel)
-            double intensity = 0.0;
+            if (reference_tract.size() > 1)
+                throw Exception("The reference tracts is only meant to contain a single tract "
+                        "(found " + str(reference_tract.size()) + ").");
 
-            //--------------------------------------------------------------------------------------
-            // Read non-(b==0) encodings into MR::Math::Vector and get the average b==0 value
-            MR::Math::Vector<double> observed(num_nonb0_encodings);
-            size_t all_encode_i = 0;
-            size_t nonb0_encode_i = 0;
-            double b0 = 0.0;
-            double max_value = 0.0;
-            for (encode_loop.start (dwi_vox); encode_loop.ok(); encode_loop.next (dwi_vox)) {
-                double value = (double)dwi_vox.value();
-                if (value > max_value)
-                    max_value = value;
-                if (value < 0)
-                    throw Exception("Negative value found in observed image (" + str(value) + "). "
-                                    "NB: The diffusion tensor can not be found for images with no "
-                                    "istropic components");
-                if (std::find(bzeros.begin(), bzeros.end(), all_encode_i) == bzeros.end())
-                    observed[nonb0_encode_i++] = value;
-                else
-                    b0 += value;
-                ++all_encode_i;
-            }
-            b0 /= bzeros.size();
+            Image::Observed::Buffer obs_image(argument[0]);
 
-            if (max_value > 0.0) {
-                //----------------------------------------------------------------------------------
-                // Calculate the diffusion tensor from the observed intens_header
-                MR::Math::Vector<double> observed_log_ratio(num_nonb0_encodings), tensor_vec(6);
-                for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i)
-                    observed_log_ratio[encode_i] = -MR::Math::log(observed[encode_i] / b0)
-                            / b_values[encode_i];
-                Math::solve_psuedo_inverse(observed_log_ratio, tensor_vec, usv);
-                MR::Math::Matrix<double> tensor(3, 3);
-                for (size_t dim_i = 0; dim_i < 3; ++dim_i) {
-                    tensor(dim_i, dim_i) = tensor_vec[dim_i];
-                    // Make the d_xy and d_yz columns
-                    if (dim_i < 2)
-                        tensor(dim_i, dim_i + 1) = tensor(dim_i + 1, dim_i) = tensor_vec[dim_i * 2 + 3];
+            Image::Expected::Buffer* exp_image = Image::Expected::Buffer::factory(exp_type, obs_image,
+                            diffusion_model, exp_num_length_sections, exp_num_width_sections,
+                            exp_interp_extent, exp_enforce_bounds, exp_half_width);
+
+            // Normalise reference tract density to the "density_percentile" and set the base
+            // intensity to 1.0.
+            reference_tract[0].normalise_density(num_length_sections, density_percentile);
+            reference_tract.set_base_intensity(1.0);
+
+            //Generate image
+            exp_image->expected_image(reference_tract);
+
+            for (size_t z = 0; z < obs_image.dim(Z); ++z) {
+                for (size_t y = 0; y < obs_image.dim(Y); ++y) {
+                    for (size_t x = 0; x < obs_image.dim(X); ++x) {
+                        for (size_t encode_i = 0; encode_i < dwis.size(); ++encode_i) {
+                            estimated_intensity += obs_image(x,y,z)[dwis(encode_i)] /
+                                    (*exp_image)(x,y,z)[dwis(encode_i)]);
+                        }
+                    }
                 }
-                tensor(X, Z) = tensor(Z, X) = tensor_vec[4];
-                // Get the eigenvectors of the tensor matrix
-                MR::Math::Matrix<double> evec(3, 3);
-                MR::Math::Vector<double> eval(3);
-                MR::Math::Eigen::SymmV<double> symmv(3);
-                symmv(eval, tensor, evec);
-                double trace = (eval[0] + eval[1] + eval[2]) / 3.0;
-                double fa =
-                        MR::Math::sqrt(
-                                3.0 / 2.0 * (MR::Math::pow2(eval[0] - trace)
-                                        + MR::Math::pow2(eval[1] - trace)
-                                        + MR::Math::pow2(eval[2] - trace))
-                                / (MR::Math::pow2(eval[0]) + MR::Math::pow2(eval[1])
-                                   + MR::Math::pow2(eval[2])));
+            }
 
-                if (fa > fa_threshold) {
-                    //------------------------------------------------------------------------------
-                    // Create a tract that spans the space that voxel will draw signal from and is
-                    // aligned with the principle eigenvector of the estimated diffusion tensor,
-                    // with a ratio betwen the m=1 and m=2 coefficient vectors of the primary
-                    // axis provided by the '--curvature' option.
-                    Coord tract_extent = exp_interp_extent * vox_lengths * 2.0;
-                    Fibre::Tractlet::Set tcts(1, 3);
-                    tcts.zero();
-                    // Centre the tract in the middle of the voxel
-                    tcts[0](0, 0) = vox_lengths / 2.0;
-                    // Set the main orientation of the tract to be in the direction of the principal
-                    // eigenvector
-                    tcts[0](0, 1) = evec.column(0);
-                    tcts[0](0, 1) *= tract_extent;
-                    // Set the width of the tract so that it extents past the extent of the voxel
-                    tcts[0](1, 0) = evec.column(1);
-                    tcts[0](1, 0) *= tract_extent;
-                    tcts[0](2, 0) = evec.column(2);
-                    tcts[0](2, 0) *= tract_extent;
-                    // Set the curvature of the tract along the second diffusion eigenvector
-                    // with relative magnitude to the main orientation of '--curvature'
-                    tcts[0](0, 2) = evec.column(1);
-                    tcts[0](0, 2) *= tract_extent * curvature;
-                    // Normalize the density of the tract and set the base_intensity of the set to
-                    // 1.0, to calculate the required base intensity value to match that of the
-                    // reference.
-                    tcts.normalise_densities();
-                    tcts.set_base_intensity(1.0);
-                    exp_image->expected_image(tcts);
-                    // The estimated base intensity is then the average scaling required to get the
-                    // expected intensity to match the observed intensity.
+            estimated_intensity /= (double)(obs_image.num_voxels_in_bounds() * dwis.size());
+
+        // If no reference tracts are provided estimate the intensity from the fit of straight tracts
+        // to each single fibre voxel.
+        } else {
+
+
+            Triple<double> vox_lengths(dwi_header.vox(X), dwi_header.vox(Y), dwi_header.vox(Z));
+            Triple<size_t> dims(1.0, 1.0, 1.0);
+            Triple<double> offsets(0.0, 0.0, 0.0);
+            Image::Expected::Buffer* exp_image = Image::Expected::Buffer::factory(exp_type, dims,
+                    vox_lengths, diffusion_model, exp_num_length_sections, exp_num_width_sections,
+                    exp_interp_extent, offsets, exp_enforce_bounds, exp_half_width);
+
+            //------------------------------------------------------------------------------------------
+            // Create the matrix and its singular-value decomposition used to calculate the diffusion
+            // tensor at each voxel (for the alignment of the reference Fourier tract). The order of the
+            // rows is d_xx, d_yy, d_zz, d_xy, d_xz, dyz.
+            MR::Math::Matrix<double> tensor_encodings(num_nonb0_encodings, 6);
+            for (size_t dim_i = 0; dim_i < 3; ++dim_i) {
+                // Do the d_xx, d_yy and d_zz columns
+                tensor_encodings.column(dim_i) = nonb0_encodings.column(dim_i);
+                tensor_encodings.column(dim_i) *= nonb0_encodings.column(dim_i);
+                // Make the d_xy and d_yz columns
+                if (dim_i < 2) {
+                    tensor_encodings.column(dim_i * 2 + 3) = nonb0_encodings.column(dim_i);
+                    tensor_encodings.column(dim_i * 2 + 3) *= nonb0_encodings.column(dim_i + 1);
+                }
+            }
+            // Finish of with the d_xz column
+            tensor_encodings.column(4) = nonb0_encodings.column(X);
+            tensor_encodings.column(4) *= nonb0_encodings.column(Z);
+            // Caluculate the singular value decomposition on the tensor encodings matrix
+            Math::USV usv = Math::svd(tensor_encodings);
+
+            //------------------------------------------------------------------------------------------
+            // Loop through all voxels and calculate the base intensities that would produce the
+            // least difference from the voxel generated by the reference tract
+            std::vector<double> intensities;
+            MR::Image::Voxel<float> dwi_vox(dwi_header), intens_vox(intens_header);
+            MR::DataSet::Loop vox_loop("Estimating intensities...", 0, 3);
+            MR::DataSet::Loop encode_loop(3);
+            for (vox_loop.start (dwi_vox, intens_vox); vox_loop.ok();
+                    vox_loop.next (dwi_vox, intens_vox)) {
+
+                //--------------------------------------------------------------------------------------
+                // Initialise the intensity to 0 (also the default if it can't be estimated from the
+                // current voxel)
+                double intensity = 0.0;
+
+                //--------------------------------------------------------------------------------------
+                // Read non-(b==0) encodings into MR::Math::Vector and get the average b==0 value
+                MR::Math::Vector<double> observed(num_nonb0_encodings);
+                size_t all_encode_i = 0;
+                size_t nonb0_encode_i = 0;
+                double b0 = 0.0;
+                double max_value = 0.0;
+                for (encode_loop.start (dwi_vox); encode_loop.ok(); encode_loop.next (dwi_vox)) {
+                    double value = (double)dwi_vox.value();
+                    if (value > max_value)
+                        max_value = value;
+                    if (value < 0)
+                        throw Exception("Negative value found in observed image (" + str(value) + "). "
+                                        "NB: The diffusion tensor can not be found for images with no "
+                                        "istropic components");
+                    if (std::find(bzeros.begin(), bzeros.end(), all_encode_i) == bzeros.end())
+                        observed[nonb0_encode_i++] = value;
+                    else
+                        b0 += value;
+                    ++all_encode_i;
+                }
+                b0 /= bzeros.size();
+
+                if (max_value > 0.0) {
+                    //----------------------------------------------------------------------------------
+                    // Calculate the diffusion tensor from the observed intens_header
+                    MR::Math::Vector<double> observed_log_ratio(num_nonb0_encodings), tensor_vec(6);
                     for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i)
-                        intensity += observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i];
-                    intensity /= (double)num_nonb0_encodings;
+                        observed_log_ratio[encode_i] = -MR::Math::log(observed[encode_i] / b0)
+                                / b_values[encode_i];
+                    Math::solve_psuedo_inverse(observed_log_ratio, tensor_vec, usv);
+                    MR::Math::Matrix<double> tensor(3, 3);
+                    for (size_t dim_i = 0; dim_i < 3; ++dim_i) {
+                        tensor(dim_i, dim_i) = tensor_vec[dim_i];
+                        // Make the d_xy and d_yz columns
+                        if (dim_i < 2)
+                            tensor(dim_i, dim_i + 1) = tensor(dim_i + 1, dim_i) = tensor_vec[dim_i * 2 + 3];
+                    }
+                    tensor(X, Z) = tensor(Z, X) = tensor_vec[4];
+                    // Get the eigenvectors of the tensor matrix
+                    MR::Math::Matrix<double> evec(3, 3);
+                    MR::Math::Vector<double> eval(3);
+                    MR::Math::Eigen::SymmV<double> symmv(3);
+                    symmv(eval, tensor, evec);
+                    double trace = (eval[0] + eval[1] + eval[2]) / 3.0;
+                    double fa =
+                            MR::Math::sqrt(
+                                    3.0 / 2.0 * (MR::Math::pow2(eval[0] - trace)
+                                            + MR::Math::pow2(eval[1] - trace)
+                                            + MR::Math::pow2(eval[2] - trace))
+                                    / (MR::Math::pow2(eval[0]) + MR::Math::pow2(eval[1])
+                                       + MR::Math::pow2(eval[2])));
 
-                    intensities.push_back(intensity);
+                    if (fa > fa_threshold) {
+                        //------------------------------------------------------------------------------
+                        // Create a tract that spans the space that voxel will draw signal from and is
+                        // aligned with the principle eigenvector of the estimated diffusion tensor,
+                        // with a ratio betwen the m=1 and m=2 coefficient vectors of the primary
+                        // axis provided by the '--curvature' option.
+                        Coord tract_extent = exp_interp_extent * vox_lengths * 2.0;
+                        Fibre::Tractlet::Set tcts(1, 3);
+                        tcts.zero();
+                        // Centre the tract in the middle of the voxel
+                        tcts[0](0, 0) = vox_lengths / 2.0;
+                        // Set the main orientation of the tract to be in the direction of the principal
+                        // eigenvector
+                        tcts[0](0, 1) = evec.column(0);
+                        tcts[0](0, 1) *= tract_extent;
+                        // Set the width of the tract so that it extents past the extent of the voxel
+                        tcts[0](1, 0) = evec.column(1);
+                        tcts[0](1, 0) *= tract_extent;
+                        tcts[0](2, 0) = evec.column(2);
+                        tcts[0](2, 0) *= tract_extent;
+                        // Set the curvature of the tract along the second diffusion eigenvector
+                        // with relative magnitude to the main orientation of '--curvature'
+                        tcts[0](0, 2) = evec.column(1);
+                        tcts[0](0, 2) *= tract_extent * curvature;
+                        // Normalize the density of the tract and set the base_intensity of the set to
+                        // 1.0, to calculate the required base intensity value to match that of the
+                        // reference.
+                        tcts.normalise_densities();
+                        tcts.set_base_intensity(1.0);
+                        exp_image->expected_image(tcts);
+                        // The estimated base intensity is then the average scaling required to get the
+                        // expected intensity to match the observed intensity.
+                        for (size_t encode_i = 0; encode_i < num_nonb0_encodings; ++encode_i)
+                            intensity += observed[encode_i] / (*exp_image)(0, 0, 0)[encode_i];
+                        intensity /= (double)num_nonb0_encodings;
+
+                        intensities.push_back(intensity);
+                    }
                 }
+                // Set the intensity in the intensities image
+                intens_vox.value() = intensity;
             }
-            // Set the intensity in the intensities image
-            intens_vox.value() = intensity;
-        }
 
-        //------------------------------------------------------------------------------------------
-        // Get the median intensity and print it to the command line.
-        if (!intensities.size())
-            throw Exception("No voxels were above the FA threshold (" + str(fa_threshold) + ")");
-        std::sort(intensities.begin(), intensities.end());
-        double median_intensity = intensities[intensities.size() / 2];
+            //------------------------------------------------------------------------------------------
+            // Get the median intensity and print it to the command line.
+            if (!intensities.size())
+                throw Exception("No voxels were above the FA threshold (" + str(fa_threshold) + ")");
+            std::sort(intensities.begin(), intensities.end());
+            estimated_intensity = intensities[intensities.size() / 2];
+        }
         // Print the estimated intensity to the terminal for use with other commands
-        std::cout << median_intensity << std::endl;
+        std::cout << estimated_intensity << std::endl;
     }
