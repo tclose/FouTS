@@ -705,7 +705,7 @@ namespace BTS {
             if (percentile > 100 || percentile < 0.0)
                 throw Exception("Percentile '" + str(percentile) + "' is not in range (0 - 100).");
             std::vector<double> areas = cross_sectional_areas(num_points);
-            size_t nth_index = (size_t)floor((double)areas.size() * 100.0 / percentile);
+            size_t nth_index = (size_t)floor((double)areas.size() * percentile / 100.0);
             std::nth_element(areas.begin(), areas.begin() + nth_index, areas.end());
             return *(areas.begin() + nth_index);
         }
