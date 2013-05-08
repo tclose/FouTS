@@ -58,6 +58,10 @@ const double DENSITY_PERCENTILE_DEFAULT = 95.0;
 const size_t NUM_AREA_SAMPLES_DEFAULT = 100;
 const size_t NUM_LENGTH_SECTIONS_DEFAULT = 10;
 const size_t NUM_WIDTH_SECTIONS_DEFAULT = 4;
+const double RANGE_STEP_DEFAULT = 0.001;
+const double RANGE_LOW_DEFAULT = 0.75;
+const double RANGE_HIGH_DEFAULT = 1.25;
+
 
 DESCRIPTION = {
     "Finds the maximum b0 intensity of an image",
@@ -97,11 +101,17 @@ OPTIONS= {
 
     Option("num_area_samples", "The number of samples taken along the reference tract when "
             "calculating the estimated area.")
-    + Argument("num_area_samples").type_float(1, NUM_AREA_SAMPLES_DEFAULT, LARGE_INT),
+    + Argument("num_area_samples").type_integer(1, NUM_AREA_SAMPLES_DEFAULT, LARGE_INT),
 
     Option("density_percentile", "The percentile used to normalise the density to (only applicable "
             "with 'ref_tracts' provided (fraction between 0 and 1).")
     + Argument("fa_threshold").type_float(0.0, DENSITY_PERCENTILE_DEFAULT, 100.0),
+
+    Option("range", "The percentile used to normalise the density to (only applicable "
+            "with 'ref_tracts' provided (fraction between 0 and 1).")
+    + Argument("low").type_float(0.0, RANGE_LOW_DEFAULT, 100.0)
+    + Argument("step").type_float(0.0, RANGE_STEP_DEFAULT, 100.0)
+    + Argument("high").type_float(0.0, RANGE_HIGH_DEFAULT, 100.0),
 
     DIFFUSION_PARAMETERS,
 
@@ -179,11 +189,11 @@ EXECUTE {
             fa_threshold = opt[0][0];
 
         //------------------------------------------------------------------------------------------
-          // The relative curvature of the reference tract used to calculate the base intensity from
-          double density_percentile = DENSITY_PERCENTILE_DEFAULT;
-          opt = get_options("density_percentile");
-          if (opt.size())
-              density_percentile = opt[0][0];
+        // The relative curvature of the reference tract used to calculate the base intensity from
+        double density_percentile = DENSITY_PERCENTILE_DEFAULT;
+        opt = get_options("density_percentile");
+        if (opt.size())
+          density_percentile = opt[0][0];
 
         //------------------------------------------------------------------------------------------
         // The relative curvature of the reference tract used to calculate the base intensity from
@@ -191,6 +201,18 @@ EXECUTE {
         opt = get_options("num_length_sections");
         if (opt.size())
             num_area_samples = opt[0][0];
+
+        //------------------------------------------------------------------------------------------
+        // The relative curvature of the reference tract used to calculate the base intensity from
+        double range_low = RANGE_LOW_DEFAULT;
+        double range_step = RANGE_STEP_DEFAULT;
+        double range_high = RANGE_HIGH_DEFAULT;
+        opt = get_options("range");
+        if (opt.size()) {
+          range_low = opt[0][0];
+          range_step = opt[0][1];
+          range_high = opt[0][2];
+        }
 
         //------------------------------------------------------------------------------------------
         // Loads parameters to construct Diffusion::Model ('diff_' prefix)
@@ -247,25 +269,37 @@ EXECUTE {
             // Normalise reference tract density to the "density_percentile" and set the base
             // intensity to 1.0.
             reference_tract[0].normalise_density(num_area_samples, density_percentile);
-            reference_tract.set_base_intensity(1.0);
 
-            //Generate image
-            exp_image->expected_image(reference_tract);
+            double intens_low = range_low * reference_tract.base_intensity();
+            double intens_step = range_step * reference_tract.base_intensity();
+            double intens_high = range_high * reference_tract.base_intensity();
 
-            // Get the average ratio between the observed image and the expected image and set that
-            // to be the estimated intensity.
-            for (size_t z = 0; z < obs_image.dim(Z); ++z) {
-                for (size_t y = 0; y < obs_image.dim(Y); ++y) {
-                    for (size_t x = 0; x < obs_image.dim(X); ++x) {
-                        for (size_t encode_i = 0; encode_i < dwis.size(); ++encode_i) {
-                            estimated_intensity += obs_image(x,y,z)[dwis[encode_i]] /
-                                    (*exp_image)(x,y,z)[dwis[encode_i]];
+            // Loop through the range of intensities and determine the optimum one.
+            double max_likelihood = -INFINITY;
+            for (double intens = intens_low; intens < intens_high; intens += intens_step) {
+                //Generate image
+                reference_tract.set_base_intensity(intens);
+                exp_image->expected_image(reference_tract);
+
+                double likelihood = 0.0;
+                // Get the average ratio between the observed image and the expected image and set that
+                // to be the estimated intensity.
+                for (size_t z = 0; z < obs_image.dim(Z); ++z) {
+                    for (size_t y = 0; y < obs_image.dim(Y); ++y) {
+                        for (size_t x = 0; x < obs_image.dim(X); ++x) {
+                            for (size_t encode_i = 0; encode_i < dwis.size(); ++encode_i) {
+                                likelihood -= MR::Math::pow2(obs_image(x,y,z)[dwis[encode_i]] -
+                                        (*exp_image)(x,y,z)[dwis[encode_i]]);
+                            }
                         }
                     }
                 }
-            }
 
-            estimated_intensity /= (double)(obs_image.num_voxels_in_bounds() * dwis.size());
+                if (likelihood > max_likelihood) {
+                    max_likelihood = likelihood;
+                    estimated_intensity = intens;
+                }
+            }
 
         // If no reference tracts are provided estimate the intensity from the fit of straight tracts
         // to each single fibre voxel.

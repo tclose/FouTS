@@ -187,7 +187,7 @@ namespace BTS {
                 
             }
             
-            template<typename T> double Buffer_tpl<T>::max_b0(double percentile, double cut_off) const {
+            template<typename T> double Buffer_tpl<T>::max_b0(double percentile, double threshold) const {
                 
                 double max_b0 = 0;
                 if (percentile < 0.0) {
@@ -209,12 +209,12 @@ namespace BTS {
                         for (size_t encode_i = 0; encode_i < this->num_encodings(); ++encode_i) {
                             if (this->encoding(encode_i).b_value() == 0.0) {
                                 double val = vox_it->second[encode_i];
-                                if (val > cut_off)
+                                if (val > threshold)
                                     b0s.push_back(val);
                             }
                         }
                     }
-                    size_t nth_index = (size_t)floor((double)b0s.size() * 100.0 / percentile);
+                    size_t nth_index = (size_t)floor((double)b0s.size() * percentile / 100.0);
                     std::nth_element(b0s.begin(), b0s.begin() + nth_index, b0s.end());
                     max_b0 = *(b0s.begin() + nth_index);
                     
