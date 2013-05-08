@@ -1,0 +1,1 @@
+estimate_intensity donald/images/corpus_callosum.60.mif --reference_tract donald/images/../ref_tract.60.1.tct

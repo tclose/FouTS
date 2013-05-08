@@ -58,7 +58,7 @@ const double DENSITY_PERCENTILE_DEFAULT = 95.0;
 const size_t NUM_AREA_SAMPLES_DEFAULT = 100;
 const size_t NUM_LENGTH_SECTIONS_DEFAULT = 10;
 const size_t NUM_WIDTH_SECTIONS_DEFAULT = 4;
-const double RANGE_STEP_DEFAULT = 0.001;
+const double RANGE_STEP_DEFAULT = 0.01;
 const double RANGE_LOW_DEFAULT = 0.75;
 const double RANGE_HIGH_DEFAULT = 1.25;
 
@@ -227,20 +227,6 @@ EXECUTE {
         if (!bzeros.size())
             throw Exception("No b=0 encodings found in gradient encoding scheme");
         MR::Math::Matrix<float> all_encodings = dwi_header.get_DW_scheme();
-        MR::Math::Matrix<double> nonb0_encodings(dwis.size(), 4);
-        size_t num_nonb0_encodings = 0;
-        for (size_t encode_i = 0; encode_i < dwi_header.get_DW_scheme().rows(); ++encode_i)
-            if (std::find(bzeros.begin(), bzeros.end(), encode_i) == bzeros.end())
-                nonb0_encodings.row(num_nonb0_encodings++) = all_encodings.row(encode_i);
-        // Reference the b_values for readibility
-        const MR::Math::Vector<float>& b_values = nonb0_encodings.column(DW);
-
-
-        //------------------------------------------------------------------------------------------
-        // Create the expected image voxel
-        Diffusion::Model diffusion_model = Diffusion::Model::factory(nonb0_encodings,
-                diff_response_SH, diff_adc, diff_fa, diff_isotropic, diff_warn_b_mismatch);
-
         double estimated_intensity;
 
         if (reference_tract.size()) {
@@ -250,6 +236,11 @@ EXECUTE {
                         "(found " + str(reference_tract.size()) + ").");
 
             Image::Observed::Buffer obs_image(argument[0]);
+
+            //------------------------------------------------------------------------------------------
+            // Create the expected image voxel
+            Diffusion::Model diffusion_model = Diffusion::Model::factory(all_encodings,
+                    diff_response_SH, diff_adc, diff_fa, diff_isotropic, diff_warn_b_mismatch);
 
             Image::Expected::Buffer* exp_image = Image::Expected::Buffer::factory(exp_type, obs_image,
                             diffusion_model, exp_num_length_sections, exp_num_width_sections,
@@ -265,6 +256,9 @@ EXECUTE {
 
             // Loop through the range of intensities and determine the optimum one.
             double max_likelihood = -INFINITY;
+
+            MR::ProgressBar progress_bar("Estimating intensities", (size_t)((intens_high - intens_low) / intens_step));
+
             for (double intens = intens_low; intens < intens_high; intens += intens_step) {
                 //Generate image
                 reference_tract.set_base_intensity(intens);
@@ -288,11 +282,25 @@ EXECUTE {
                     max_likelihood = likelihood;
                     estimated_intensity = intens;
                 }
+                ++progress_bar;
             }
 
         // If no reference tracts are provided estimate the intensity from the fit of straight tracts
         // to each single fibre voxel.
         } else {
+
+            MR::Math::Matrix<double> nonb0_encodings(dwis.size(), 4);
+            size_t num_nonb0_encodings = 0;
+            for (size_t encode_i = 0; encode_i < dwi_header.get_DW_scheme().rows(); ++encode_i)
+                if (std::find(bzeros.begin(), bzeros.end(), encode_i) == bzeros.end())
+                    nonb0_encodings.row(num_nonb0_encodings++) = all_encodings.row(encode_i);
+            // Reference the b_values for readibility
+            const MR::Math::Vector<float>& b_values = nonb0_encodings.column(DW);
+
+            //------------------------------------------------------------------------------------------
+            // Create the expected image voxel
+            Diffusion::Model diffusion_model = Diffusion::Model::factory(nonb0_encodings,
+                    diff_response_SH, diff_adc, diff_fa, diff_isotropic, diff_warn_b_mismatch);
 
             //------------------------------------------------------------------------------------------
             // Create an image to contain the estimated intensities (not actually used except for sanity
