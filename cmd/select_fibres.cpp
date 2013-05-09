@@ -471,17 +471,16 @@ void set_to_one(const std::string& input_location, const std::string& output_loc
     
     reader.rewind();
     
-    std::map<std::string, std::string> props = input_set.get_extend_props();
-    
-    props["base_intensity"] = "1.0";
-    
+    std::map<std::string, std::string> props; //= input_set.get_extend_props();
+    input_set.insert_props(props);
+
     std::vector<std::string> header;
     
     //Add extra element properties that might be generated in the conversion process.
     add_extra_element_properties<typename InputType::Element, OutputType>(header);
     
     Fibre::Base::Writer<OutputType> writer(output_location,
-            Fibre::Base::Object::select_props<OutputType>(reader.elem_prop_keys()), header);
+            Fibre::Base::Object::select_props<OutputType>(reader.elem_prop_keys()), header, props);
     
     size_t index = 0;
     
