@@ -1,1 +1,1 @@
-estimate_intensity donald/images/corpus_callosum.20.mif --reference_tract donald/images/../ref_tract.20.3.tct
+55.9024

@@ -1,1 +1,1 @@
-estimate_intensity heath/images/corpus_callosum.150.mif --reference_tract heath/images/../ref_tract.150.2.tct
+40.7913

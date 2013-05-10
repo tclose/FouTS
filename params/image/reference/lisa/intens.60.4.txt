@@ -1,1 +1,1 @@
-estimate_intensity lisa/images/corpus_callosum.60.mif --reference_tract lisa/images/../ref_tract.60.4.tct
+29.5932
