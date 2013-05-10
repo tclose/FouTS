@@ -636,13 +636,13 @@ namespace BTS {
             }
             
             template<typename T> Set<T>& Set<T>::select(Set<T>& new_set,
-                                                        std::vector<size_t>& indices) const {
+                                                        const std::vector<size_t>& indices) const {
                 
                 if (!new_set.is_owner())
                     throw Exception(
                             "Cannot select fibres into provided set as it is only a view onto a larger object.");
                 
-                new_set.reset(*props, *elem_props);
+                assert(!new_set.size());
                 
                 new_set.add_extend_elem_props(*this);
                 

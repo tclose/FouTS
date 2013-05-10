@@ -39,6 +39,9 @@
 \
   Derived&                      resize(size_t size, const Derived::Element& elem) \
     { Base::Set<Derived::Element>::resize(size,elem); return *this; } \
+\
+  void                          select(Derived& set, const std::vector<size_t>& indices) const \
+  { set.reset(*props, *elem_props); Object::copy_props(set, *this); Base::Set<Derived::Element>::select(set, indices);  } \
 
 
 namespace BTS {
@@ -459,7 +462,7 @@ namespace BTS {
 
                     Set& permute(Set& permuted, const std::vector<size_t>& indices) const;
 
-                    Set& select(Set& new_set, std::vector<size_t>& indices) const;
+                    Set& select(Set& new_set, const std::vector<size_t>& indices) const;
 
                     void load(const std::string& location);
 

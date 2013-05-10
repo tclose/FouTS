@@ -197,7 +197,7 @@ namespace BTS {
                      * @param destination Destination where the properties are copied to.
                      * @param source Source where the properties are copied from
                      */
-                    template<typename T> void copy_props(T& destination, const Object& source);
+                    template<typename T> static void copy_props(T& destination, const Object& source);
 
                 public:
                     
