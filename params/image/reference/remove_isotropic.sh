@@ -3,6 +3,6 @@ for f in */images/corpus_callosum.*0.mif; do
     b=`basename $f`; 
     n=${b%.mif}; 
     n=${n#corpus_callosum.}; 
-    remove_isotropic $f $d/corpus_callosum.$n.no-iso.mif
-    cp $d/corpus_callosum.$n.no-iso.mif $d/fornix.$.no-iso.mif
+    subtract_isotropic $f $d/corpus_callosum.$n.no-iso.mif
+    cp $d/corpus_callosum.$n.no-iso.mif $d/fornix.$n.no-iso.mif
 done
