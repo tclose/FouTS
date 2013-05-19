@@ -1,0 +1,1 @@
+for f in */images/corpus_callosum.*0.mif; do d=`dirname $f`; b=`basename $f`; n=${b%.mif}; n=${n#corpus_callosum.}; for i in `seq 5`; do estimate_intensity $f --reference_tract $d/../ref_tract.$n.$i.tct > $d/../intens.$n.$i.txt; done; done
