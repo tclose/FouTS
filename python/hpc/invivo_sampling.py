@@ -158,7 +158,7 @@ parser.add_argument('--combo', action='store_true',
                          " as the 1..N values for that parameter, all "
                          "combinations of the provided parameters are tested.")
 parser.add_argument('--dataset', type=str,
-                    default=os.path.join('donald', 'images', 'corpus_callosum.150.mif'),
+                    default=os.path.join('donald', 'images', 'corpus_callosum.150.no-iso.mif'),
                     help="The dataset to use (default: %(default)s).")
 parser.add_argument('--seed_positions', type=str,
                     default=os.path.join('donald', 'corpus_callosum.150.seed.txt'),
