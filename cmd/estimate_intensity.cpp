@@ -71,6 +71,7 @@ DESCRIPTION = {
 
 ARGUMENTS= {
     Argument("dwi", "the input diffusion-weighted image.").type_image_in(),
+    Argument("orientations", "The orientations used to align the reference tracts to.")
     Argument("intensities", "a sanity check of the intensities estimated at each voxel.").optional().type_image_out(),
     Argument()
 };
@@ -129,6 +130,12 @@ EXECUTE {
         MR::Image::Header dwi_header(argument[0]);
         if (dwi_header.ndim() != 4)
             throw Exception("dwi image should contain 4 dimensions");
+
+        //------------------------------------------------------------------------------------------
+        //Load the DWI image header
+        MR::Image::Header orient_header(argument[1]);
+        if (orient_header.ndim() != 4)
+            throw Exception("orientations image should contain 4 dimensions");
 
         //------------------------------------------------------------------------------------------
         // Supply the DW gradient scheme if required
@@ -311,7 +318,7 @@ EXECUTE {
             for (size_t dim_i = 0; dim_i < 3; ++dim_i)
                 intens_header.set_dim (dim_i, dwi_header.dim(dim_i));
             intens_header.set_datatype (MR::DataType::Float32);
-            intens_header.create (argument[1]);
+            intens_header.create (argument[2]);
 
             Triple<double> vox_lengths(dwi_header.vox(X), dwi_header.vox(Y), dwi_header.vox(Z));
             Triple<size_t> dims(1.0, 1.0, 1.0);
