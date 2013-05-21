@@ -87,6 +87,7 @@ EXECUTE {
         // Create an image to contain the estimated intensities (not actually used except for sanity
         // check).
         MR::Image::Header noiso_header = dwi_header;
+        noiso_header.set_datatype (MR::DataType::Float32);
         noiso_header.create (argument[1]);
 
         //------------------------------------------------------------------------------------------
