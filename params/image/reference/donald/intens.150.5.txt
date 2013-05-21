@@ -1,1 +1,1 @@
-31.5479
+estimate_intensity donald/images/whole_brain.150.no-iso.mif --reference_tract donald/images/../ref_tract.150.5.tct

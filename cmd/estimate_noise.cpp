@@ -145,7 +145,7 @@ EXECUTE {
             for (std::vector<float>::iterator val_it = values.begin(); val_it != values.end(); ++val_it)
                 noise_estimate += MR::Math::pow2(*val_it - average);
 
-            noise_estimate /= (float)values.size();
+            noise_estimate /= (float)(values.size() - 1); // minus 1 for an unbiased estimator
 
             noise_vox.value() = sqrt(noise_estimate);
 

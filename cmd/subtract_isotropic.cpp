@@ -129,10 +129,20 @@ EXECUTE {
 
             average /= (float)dwis.size();
 
+            // Copy the non-b==0 voxels across mins the average non-b==0 value
             for (std::vector<int>::iterator it = dwis.begin(); it != dwis.end(); ++it) {
                 dwi_vox[3] = *it;
                 noiso_vox[3] = *it;
-                noiso_vox.value() = dwi_vox.value() - average;
+                float value = dwi_vox.value();
+                noiso_vox.value() = value - average;
+            }
+
+            // Copy across the b==0 values unchanged
+            for (std::vector<int>::iterator it = bzeros.begin(); it != bzeros.end(); ++it) {
+                dwi_vox[3] = *it;
+                noiso_vox[3] = *it;
+                float value = dwi_vox.value();
+                noiso_vox.value() = value;
             }
 
         }
