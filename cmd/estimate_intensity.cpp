@@ -224,7 +224,6 @@ EXECUTE {
         if (!opt.size())
             exp_num_width_sections = NUM_WIDTH_SECTIONS_DEFAULT;
         // Set the diffusion model to isotropic (overiding the default)
-        diff_isotropic = true;
 
         //------------------------------------------------------------------------------------------
         // Get the matrix of non b=0 encoding directions
@@ -370,6 +369,26 @@ EXECUTE {
 
                 // Check to see if there is a peak over the threshold
                 if (orient.valid()) {
+
+
+                    //--------------------------------------------------------------------------------------
+                    // Read non-(b==0) encodings into MR::Math::Vector and get the average b==0 value
+                    MR::Math::Vector<double> observed(num_nonb0_encodings);
+                    size_t all_encode_i = 0;
+                    size_t nonb0_encode_i = 0;
+                    double b0 = 0.0;
+                    double max_value = 0.0;
+                    for (encode_loop.start (dwi_vox); encode_loop.ok(); encode_loop.next (dwi_vox)) {
+                        double value = (double)dwi_vox.value();
+                        if (value > max_value)
+                            max_value = value;
+                        if (std::find(bzeros.begin(), bzeros.end(), all_encode_i) == bzeros.end())
+                            observed[nonb0_encode_i++] = value;
+                        else
+                            b0 += value;
+                        ++all_encode_i;
+                    }
+                    b0 /= bzeros.size();
 
                     //------------------------------------------------------------------------------
                     // Create a tract that spans the space that voxel will draw signal from and is
