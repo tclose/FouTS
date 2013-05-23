@@ -1,1 +1,0 @@
-estimate_intensity heath/images/whole_brain.60.no-iso.mif --reference_tract heath/images/../ref_tract.60.5.tct

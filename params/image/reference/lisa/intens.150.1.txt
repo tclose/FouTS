@@ -1,1 +1,0 @@
-estimate_intensity lisa/images/whole_brain.150.no-iso.mif --reference_tract lisa/images/../ref_tract.150.1.tct
