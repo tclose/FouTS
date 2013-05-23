@@ -109,11 +109,16 @@ namespace BTS {
                         "Expected image dimensions (" + str(expected_image->dims())
                         + ") do not match and observed image (" + str(obs_image.dims()) + ").");
             
-            if (!sigma2_map)
+            if (!sigma2_map.dim(X))
                 set_assumed_snr(assumed_snr, ref_b0, ref_signal);
             else {
                 sigma2_map *= noise_map; // Convert the noise map into a variance map
-                sigma2 = NAN;
+                // Set the maximum element as the default value for when the signal lies outside the
+                // true image bounds.
+                sigma2 = -INFINITY;
+                for (Image::Double::Buffer::iterator it = sigma2_map.begin(); it != sigma2_map.end(); ++it)
+                    if (it->second > sigma2)
+                        sigma2 = it->second;
             }
 
             

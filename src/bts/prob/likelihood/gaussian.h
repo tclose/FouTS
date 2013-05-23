@@ -102,10 +102,10 @@ namespace BTS {
                 double log_prob(double expected, double observed, const Image::Index& index) {
                     
                     double sig2;
-//                    if (!sigma2_map)
+                    if (sigma2_map.in_bounds(index))
                         sig2 = sigma2_map(index);
-//                    else
-//                        sig2 = sigma2;
+                    else
+                        sig2 = sigma2;
 
                     double diff = expected - observed;
                     

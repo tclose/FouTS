@@ -277,7 +277,7 @@ namespace BTS {
         return strcmp(a, b) < 0;
         
     }
-    
+
     template<class T>
     struct PrintMap: public std::unary_function<T, void> {
             std::ostream& os;
