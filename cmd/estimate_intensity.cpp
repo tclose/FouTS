@@ -259,7 +259,8 @@ EXECUTE {
                 for (std::vector<int>::iterator it = dwis.begin(); it != dwis.end(); ++it) {
                     dwi_vox[3] = *it;
                     float observed = dwi_vox.value();
-                    intensity += observed / (*exp_image)(0, 0, 0)[encode_i++];
+                    float expected = (*exp_image)(0, 0, 0)[encode_i++];
+                    intensity += observed / expected;
                 }
                 intensity /= (double)num_nonb0_encodings;
 //
