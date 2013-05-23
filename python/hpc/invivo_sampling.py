@@ -16,7 +16,8 @@ def sampling_cmd(args, work_dir, dataset_path, random_seed, prior_freq,
                  prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin,
                  like_snr, init_name, samples_name, last_name):
     if args.like_noise_map:
-        noise_option = '--like_noise_map {}'.format(args.like_noise_map)
+        noise_option = '--like_noise_map {}'.format(os.path.join(work_dir, 'params', 'image',
+                                                    'reference', args.like_noise_map))
     else:
         noise_option = '-like_snr {like_snr}'.format(like_snr)
     cmd = \
