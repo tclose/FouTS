@@ -15,6 +15,10 @@ import time
 def sampling_cmd(args, work_dir, dataset_path, random_seed, prior_freq,
                  prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin,
                  like_snr, init_name, samples_name, last_name):
+    if args.like_noise_map:
+        noise_option = '--like_noise_map {}'.format(args.like_noise_map)
+    else:
+        noise_option = '-like_snr {like_snr}'.format(like_snr)
     cmd = \
 """
 # Calculate appropriate number of length and width samples                
@@ -31,7 +35,7 @@ set_properties {work_dir}/output/{init_name}.tct \
                 
 # Run metropolis
 time metropolis {dataset_path} {work_dir}/output/{init_name}.tct \
-{work_dir}/output/{samples_name}.tst -like_snr {like_snr} \
+{work_dir}/output/{samples_name}.tst {noise_option} \
 -exp_interp_extent {args.assumed_interp_extent} \
 -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -seed {random_seed} \
@@ -54,7 +58,7 @@ select_fibres {work_dir}/output/{samples_name}.tst \
            samples_name=samples_name, last_name=last_name, random_seed=random_seed + 1,
            prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,
            prior_density_high=prior_density_high, prior_hook=prior_hook, prior_thin=prior_thin,
-           like_snr=like_snr, last_sample=(args.num_iterations // args.sample_period) - 1)
+           noise_option=noise_option, last_sample=(args.num_iterations // args.sample_period) - 1)
     return cmd
 
 
@@ -135,6 +139,9 @@ parser.add_argument('--img_snr', default=20.0, type=float,
 parser.add_argument('--like_snr', default=[20.0], type=float, nargs='+',
                     help="The assumed snr to used in the likelihood function "
                          "in the metropolis sampling")
+parser.add_argument('--like_noise_map', default=None, type=str,
+                    help="The noise map to used in the likelihood function "
+                         "in the metropolis sampling instead of the like_snr")
 parser.add_argument('--init_extent', default=(1, 1, 1), nargs=3, type=int,
                     help="The extent (in number of voxels) of the ROI in which "
                          "the inital tracts are generated")

@@ -106,7 +106,7 @@ namespace BTS {
                 inline const T& operator()(const Index& c) const;
 
                 inline bool operator!() const
-                { return dimensions == Triple<size_t>::Zeros; }
+                { return !dimensions[0] || !dimensions[1] || !dimensions[2]; }
 
                 bool is_empty(size_t x, size_t y, size_t z) const {
                     return is_empty(Index(x, y, z));
