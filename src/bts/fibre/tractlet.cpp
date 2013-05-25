@@ -77,7 +77,7 @@ namespace BTS {
 
         Tractlet::Tractlet(Track t, size_t degree, double width)
                 : Base::Object((size_t)3, 3 * degree, select_props<Tractlet>(*t.props)), dgree(
-                          degree) {
+                          degree), parent(0) {
 
             from_track(t, degree, width);
 
@@ -87,8 +87,8 @@ namespace BTS {
         }
 
         Tractlet::Tractlet(const Strand& s, double width)
-                : Base::Object((size_t)3, 3 * s.degree(), select_props<Tractlet>(*s.props)), dgree(
-                          s.degree()) {
+                : Base::Object((size_t)3, 9 * s.degree(), select_props<Tractlet>(*s.props)), dgree(
+                          s.degree()), parent(0) {
 
             from_track(Track(s, Track::NUM_LENGTH_SECTIONS_DEFAULT), s.degree(), width);
 
@@ -727,7 +727,7 @@ namespace BTS {
             return acs;
         }
 
-        void Tractlet::set_acs(double acs) {
+        Tractlet& Tractlet::set_acs(double acs) {
             if (acs < 0.0)
                 throw Exception("ACS must be greater than 0.0 (" + str(acs) + ")");
             if (!has_var_acs())
@@ -753,6 +753,8 @@ namespace BTS {
                 alpha = 0.0;
             }
             prop(ALPHA_PROP) = alpha;
+
+            return *this;
         }
 
     }

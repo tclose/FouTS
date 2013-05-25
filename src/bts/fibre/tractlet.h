@@ -196,10 +196,10 @@ namespace BTS {
 
                 double acs() const;
 
-                void set_acs(double acs);
+                Tractlet& set_acs(double acs);
 
-                void remove_acs() {
-                    remove_prop(ALPHA_PROP);
+                Tractlet& remove_acs() {
+                    remove_prop(ALPHA_PROP); return *this;
                 }
                 
                 bool has_var_acs() const {

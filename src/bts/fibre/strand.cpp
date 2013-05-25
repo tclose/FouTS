@@ -49,7 +49,7 @@ namespace BTS {
         const double MERGE_FUDGE_FACTOR = 1.2;
         
         Strand::Strand(const Track& t, size_t degree)
-                : Base::Object(degree, (size_t) 3, select_props<Strand>(*t.props)) {
+                : Base::Object(degree, 3 * degree, select_props<Strand>(*t.props)) {
             
             size_t effective_degree = degree;
             
@@ -110,6 +110,10 @@ namespace BTS {
             return Track(*this, num_points, include_endpoints);
         }
         
+        Tractlet Strand::to_tractlet(double width) const {
+            return Tractlet(*this, width);
+        }
+
         Track Strand::to_tangents(size_t num_points, bool include_endpoints) const {
             
             if (num_points == 0)
