@@ -6,7 +6,9 @@ function [dims, true_location, voxel_lengths, offset] = get_observed_properties(
     obs_image_location = properties.obs_image;
   else
     disp('Warning!! Did not find observed image location field of using  image dimensions default (3x3x3).');
-    dims = [3 3 3];
+    dims = [0 0 0];
+    voxel_lengths = [0 0 0 0];
+    offset = [0 0 0];
     return;
   end
   

@@ -123,7 +123,8 @@ function main_fig = plot_tracts(varargin)
             'include        ', [],          'matrix_:x:', 'The indices of the strands to include in the plot';...                       
             'colours_of_bundles', colours_of_bundles,     'matrix_:x3', 'Colours of the plotted strands';...
             'voxel_size     ', 0.15,        'float',  'Size of reference voxel';...
-            'num_voxels     ', 3,           'int',    'Number of reference voxels';...
+            'voxel_trans    ', 0.25,         'float',  'The alpha value of the voxel lines';...
+            'num_voxels     ', -1,           'int',    'Number of reference voxels';...
             'cube_size      ', 0,           'float',  'Size of reference voxel';...
             'num_length_sections   ', 100,         'int',    'Number of segments to plot for each tract.';...            
             'strand_radius  ', 0.02,        'float',  'Radii of the plotted strands. (NB: can only be used with ''-style'' option ''strands'').';...
@@ -183,6 +184,12 @@ function main_fig = plot_tracts(varargin)
   [tracts, props, prop_keys, prop_values] = load_tracts(tracts_filename);
    
   num_loaded_tracts = size(tracts,1);
+  
+  if (num_voxels < 0)
+    [num_voxels, ~, voxel_length, voxel_offset] = get_observed_properties(props);
+    num_voxels = num_voxels(1:3);
+    voxel_length = voxel_length(1:3);
+  end
   
   bundle_indices = get_properties(prop_keys, prop_values, 'bundle_index', (0:(num_loaded_tracts-1))', num_loaded_tracts);  
    
@@ -265,10 +272,15 @@ function main_fig = plot_tracts(varargin)
   add_sphere_to_plot(sphere_radius);
 
 
-  if voxel_size ~= 0
-    
-    add_vox_lines_to_plot(voxel_size,num_voxels,~no_voxline_highlight);
-    
+  if voxel_size ~= 0 || isempty(voxel_length)
+
+    if isempty(voxel_length)
+        voxel_length = [voxel_size, voxel_size, voxel_size];
+    end
+
+    add_vox_lines_to_plot(voxel_length,num_voxels,~no_voxline_highlight,...
+          voxel_offset, voxel_trans);
+
   end
   
   set(gcf, 'color', [0 0 0]);
