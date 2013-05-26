@@ -122,6 +122,7 @@ EXECUTE {
         Fibre::Tractlet::Set tracts(input_location);
         Fibre::Tractlet::Set output_tracts(0, tracts.degree());
         output_tracts.add_elem_prop(Fibre::Base::Object::ALPHA_PROP);
+        output_tracts.copy_props(tracts);
         
         MR::ProgressBar progress_bar("Splitting tracts in two.", tracts.size());
 
@@ -178,13 +179,20 @@ EXECUTE {
 
                 }
 
-                double tract_width;
+                double tract_radius;
                 if (constant_tract_width > 0.0)
-                    tract_width = constant_tract_width;
+                    tract_radius = constant_tract_width;
                 else
-                    tract_width = MR::Math::sqrt(tract.acs() / 2.0);
-                output_tracts.push_back(tck1.to_strand(tract.degree()).to_tractlet(tract_width).set_acs(tract.acs()));
-                output_tracts.push_back(tck2.to_strand(tract.degree()).to_tractlet(tract_width).set_acs(tract.acs()));
+                    tract_radius = MR::Math::sqrt(tract.acs() / 2.0 * M_PI);
+                Fibre::Tractlet tct1 = tck1.to_strand(tract.degree()).to_tractlet(tract_radius);
+                Fibre::Tractlet tct2 = tck2.to_strand(tract.degree()).to_tractlet(tract_radius);
+
+                double tract_acs = tract.acs() / 2.0;
+                tct1.set_acs(tract_acs);
+                tct2.set_acs(tract_acs);
+
+                output_tracts.push_back(tct1);
+                output_tracts.push_back(tct2);
             }
             ++progress_bar;
         }

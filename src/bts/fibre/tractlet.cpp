@@ -75,29 +75,29 @@ namespace BTS {
 //
 //    }
 
-        Tractlet::Tractlet(Track t, size_t degree, double width)
+        Tractlet::Tractlet(Track t, size_t degree, double radius)
                 : Base::Object((size_t)3, 3 * degree, select_props<Tractlet>(*t.props)), dgree(
                           degree), parent(0) {
 
-            from_track(t, degree, width);
+            from_track(t, degree, radius);
 
             for (size_t prop_i = 0; prop_i < num_props(); ++prop_i)
                 prop(prop_i) = t.prop(t.prop_key(prop_i));
 
         }
 
-        Tractlet::Tractlet(const Strand& s, double width)
+        Tractlet::Tractlet(const Strand& s, double radius)
                 : Base::Object((size_t)3, 9 * s.degree(), select_props<Tractlet>(*s.props)), dgree(
                           s.degree()), parent(0) {
 
-            from_track(Track(s, Track::NUM_LENGTH_SECTIONS_DEFAULT), s.degree(), width);
+            from_track(Track(s, Track::NUM_LENGTH_SECTIONS_DEFAULT), s.degree(), radius);
 
             for (size_t prop_i = 0; prop_i < num_props(); ++prop_i)
                 prop(prop_i) = s.prop(s.prop_key(prop_i));
 
         }
 
-        void Tractlet::from_track(Track primary_axis, size_t degree, double width) {
+        void Tractlet::from_track(Track primary_axis, size_t degree, double radius) {
 
             //acs(acs), base_width(1.0), axes(3) {
 
@@ -115,12 +115,12 @@ namespace BTS {
             ::generate_post_points(tcks, post_points);
 
             //Assign the radius of the primary axis to be that of the desired width.
-            tcks.add_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP, str(width));
+            tcks.add_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP, str(radius));
 
             ::convert_mr_to_nfg(&c, tcks, pre_points, post_points);
 
             //Subdivide the strand so that 7 subdivided strands are in place of the original axis.
-            ::subdivide_collection(&subdivided_c, &c, width / 2.0001);
+            ::subdivide_collection(&subdivided_c, &c, radius / 2.0001);
 
             ::convert_nfg_to_mr(subdivided, pre_points, post_points, &subdivided_c);
 
