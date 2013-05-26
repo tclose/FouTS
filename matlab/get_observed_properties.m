@@ -1,15 +1,21 @@
-function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_observed_properties(properties)
+function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_observed_properties(properties, obs_image_location)
+
+  if ~exist('obs_image_location', 'var')
+      obs_image_location = [];
+  end
 
   true_location = [];
 
-  if isfield(properties, 'obs_image')
-    obs_image_location = properties.obs_image;
-  else
-    disp('Warning!! Did not find observed image location field of using  image dimensions default (3x3x3).');
-    dims = [0 0 0];
-    voxel_lengths = [0 0 0 0];
-    offset = [0 0 0];
-    return;
+  if isempty(obs_image_location)  
+      if isfield(properties, 'obs_image')
+        obs_image_location = properties.obs_image;
+      else
+        disp('Warning!! Did not find observed image location field of using  image dimensions default (3x3x3).');
+        dims = [0 0 0];
+        voxel_lengths = [0 0 0 0];
+        offset = [0 0 0];
+        return;
+      end
   end
   
   f = fopen (obs_image_location, 'r');

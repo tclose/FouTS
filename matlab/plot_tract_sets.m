@@ -118,9 +118,8 @@ function main_fig = plot_tracts_sets(varargin)
             'hold_on',        0, 'bool', 'Adds the plot to the previous figure';...
             'highlight_axes', 0,     'bool', 'Highlights the axes when printing in ''strand'' or ''line'' style';...
             'invisible', 0,     'bool', 'Makes the figure invisible (for automatically saving afterwards).';...
-            'x_slice', -1,     'int', 'Overlays a slice along the x observed image.';...
-            'y_slice', -1,     'int', 'Overlays a slice along the y observed image.';...
-            'z_slice', -1,     'int', 'Overlays a slice along the z observed image.'};         
+            'obs_image', [],   'string', 'Overlays a slice along the x observed image.';...
+            'show_slices', [-1 -1 -1],     'matrix_1x3', 'Overlays slices of observed image along the given indices.'};
 
   parse_arguments      
   if (help_display) 
@@ -163,11 +162,14 @@ function main_fig = plot_tracts_sets(varargin)
   
   num_sets = size(tract_sets,1);
   
-  if (num_voxels < 0 || true_tracts_plot)
-    [num_voxels, true_location, voxel_length, voxel_offset] = get_observed_properties(properties);
-    num_voxels = num_voxels(1:3);
-    voxel_length = voxel_length(1:3);
-  end
+  [num_voxels, true_location, voxel_length, voxel_offset, obs_image] = get_observed_properties(properties, obs_image);
+  
+  if (ndims(num_voxels) == 1 || true_tracts_plot)
+      if (num_voxels < 0 || true_tracts_plot) 
+        num_voxels = num_voxels(1:3);
+        voxel_length = voxel_length(1:3);
+      end
+  end  
 
   [loaded_num_length_sections, loaded_num_width_sections] = get_num_section_properties(properties,style);
   
@@ -317,21 +319,10 @@ function main_fig = plot_tracts_sets(varargin)
     end  
 
     add_sphere_to_plot(sphere_radius, properties);
-    
-    
-    if x_slice > 0 || y_slice > 0 || z_slice > 0
         
-        obs_image = load_image(obs_image_location);
+    if ~isempty(show_slices)
         
-        if x_slce > 0
-            add_mri_slice_to_plot(obs_image, 1, x_slice)
-        end
-        if y_slce > 0
-            add_mri_slice_to_plot(obs_image, 2, y_slice)
-        end
-        if z_slce > 0
-            add_mri_slice_to_plot(obs_image, 3, z_slice)
-        end
+        add_mri_slice_to_plot(obs_image, show_slices)
         
     elseif voxel_size ~= 0 || isempty(voxel_length)
         
