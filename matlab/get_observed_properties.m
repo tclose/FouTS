@@ -1,4 +1,4 @@
-function [dims, true_location, voxel_lengths, offset] = get_observed_properties(properties)
+function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_observed_properties(properties)
 
   true_location = [];
 

@@ -117,7 +117,10 @@ function main_fig = plot_tracts_sets(varargin)
             'no_density_plot',    0,     'bool', 'Omitts density from properties plot';...
             'hold_on',        0, 'bool', 'Adds the plot to the previous figure';...
             'highlight_axes', 0,     'bool', 'Highlights the axes when printing in ''strand'' or ''line'' style';...
-            'invisible', 0,     'bool', 'Makes the figure invisible (for automatically saving afterwards).'};         
+            'invisible', 0,     'bool', 'Makes the figure invisible (for automatically saving afterwards).';...
+            'x_slice', -1,     'int', 'Overlays a slice along the x observed image.';...
+            'y_slice', -1,     'int', 'Overlays a slice along the y observed image.';...
+            'z_slice', -1,     'int', 'Overlays a slice along the z observed image.'};         
 
   parse_arguments      
   if (help_display) 
@@ -255,7 +258,7 @@ function main_fig = plot_tracts_sets(varargin)
     if ~hold_on
       main_fig = my_figure(tracts_filename, 1, num_figs, [1 1 1], 1, [],[],~invisible);
     else
-      main_fig = gcf
+      main_fig = gcf;
     end
         
     if isempty(include)
@@ -315,7 +318,22 @@ function main_fig = plot_tracts_sets(varargin)
 
     add_sphere_to_plot(sphere_radius, properties);
     
-    if voxel_size ~= 0 || isempty(voxel_length)
+    
+    if x_slice > 0 || y_slice > 0 || z_slice > 0
+        
+        obs_image = load_image(obs_image_location);
+        
+        if x_slce > 0
+            add_mri_slice_to_plot(obs_image, 1, x_slice)
+        end
+        if y_slce > 0
+            add_mri_slice_to_plot(obs_image, 2, y_slice)
+        end
+        if z_slce > 0
+            add_mri_slice_to_plot(obs_image, 3, z_slice)
+        end
+        
+    elseif voxel_size ~= 0 || isempty(voxel_length)
         
       if isempty(voxel_length)
         voxel_length = [voxel_size, voxel_size, voxel_size];
