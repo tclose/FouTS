@@ -11,9 +11,9 @@ function [num_length_sections, num_width_sections] = get_num_section_properties(
 
   need_width_sections = false;
 
-  if (strfind('lines', style) == 1)
+  if (strfind(style, 'lines') == 1)
     need_width_sections = true;
-  elseif (strfind('tubes', style) == 1)
+  elseif (strfind(style, 'tubes') == 1)
     need_width_sections = true;
   end
 

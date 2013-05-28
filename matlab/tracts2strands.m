@@ -1,4 +1,4 @@
-function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_strands, highlight_axes, oblong, tract_indices)
+function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_strands, highlight_axes, oblong, tract_indices, strands_per_acs, acs)
 
   if ~exist('highlight_axes','var')
     highlight_axes = 0;
@@ -12,6 +12,15 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
     tract_indices = [];
   end
   
+  if ~exist('strands_per_acs','var')
+    strands_per_acs = -1;
+  end
+  
+  if ~exist('acs', 'var')
+    acs = ones(length(tracts),1);
+  end
+
+  
   if isempty(tract_indices)
     tract_indices = [0:1:size(tracts,1)-1];
   end
@@ -24,16 +33,16 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
   strand_count = 0;
   tcks = cell(num_tracts * (2 * num_strands + 1),4);
   
-  width_fraction = 1 / num_strands;
+  if strands_per_acs ~= -1
+      num_strands = round(sqrt(strands_per_acs * acs));    
+  end
+  
+  width_fractions = ones(length(tracts),1) ./ num_strands;
   
   if num_strands < 0
     error(['''-num_strands'' must be greater than zero (' num2str(num_strands) ').']);  
   end
-  
-  %ax_fractions = (-1+width_fraction):(2*width_fraction):(1-width_fraction);
-  
-  ax_fractions = (-1+width_fraction):(2*width_fraction):(1-width_fraction);
-  
+    
   for tract_i = 1:num_tracts
 
     base_index = tract_indices(tract_i);
@@ -41,7 +50,9 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
     if highlight_axes
       base_index = base_index * 4;
     end
-      
+    
+    ax_fractions = (-1+width_fractions(tract_i)):(2*width_fractions(tract_i)):(1-width_fractions(tract_i));
+    
     for ax2_frac = ax_fractions
 
       for ax3_frac = ax_fractions

@@ -4,6 +4,12 @@ function add_vox_lines_to_plot(vox_lengths, num_voxels, colourize, offset, trans
 
   if length(vox_lengths) == 1
       vox_lengths = [vox_lengths, vox_lengths, vox_lengths];
+  elseif length(vox_lengths) == 4
+      vox_lengths = vox_lengths(1:3);
+  end
+  
+  if length(num_voxels) == 4
+      num_voxels = num_voxels(1:3);
   end
 
   if ~exist('colourize', 'var')

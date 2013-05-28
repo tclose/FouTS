@@ -129,6 +129,7 @@ function main_fig = plot_tracts(varargin)
             'num_length_sections   ', 100,         'int',    'Number of segments to plot for each tract.';...            
             'strand_radius  ', 0.02,        'float',  'Radii of the plotted strands. (NB: can only be used with ''-style'' option ''strands'').';...
             'num_width_sections    ', 2,           'int',    'Number of strands to plot along each axis. If zero the default 3D surface option will be used instead.';...            
+            'strands_per_acs', -1, 'float', 'Instead of a fixed number of width sections the number of plotted strands is determined by the ACS of the tract';...
             'style          ', 'tractlets',    'string', 'Change plot to ''line style''.(NB: Only relevant with ''-num_width_sections'' option > 0).';...
             'tube_corners   ', 12,          'int',    'Change plot to ''line style''.(NB: Only relevant with ''-num_width_sections'' option = 0).';...
             'sphere_radius  ', 0,    'float',  'Size of reference sphere';...
@@ -145,7 +146,9 @@ function main_fig = plot_tracts(varargin)
             'invisible', 0,     'bool', 'Makes the figure invisible (for automatically saving afterwards).';...
             'hold_on'          , 0, 'bool', 'plot on previous figure'...
             'obs_image', [],   'string', 'Overlays a slice along the x observed image.';...
-            'show_slices', [-1 -1 -1],     'matrix_1x3', 'Overlays slices of observed image along the given indices.'};         
+            'slice_x', [],     'matrix_:x:', 'Overlays slices of observed image along the given indices.';...
+            'slice_y', [],     'matrix_:x:', 'Overlays slices of observed image along the given indices.';...
+            'slice_z', [],     'matrix_:x:', 'Overlays slices of observed image along the given indices.'};         
 
 
   parse_arguments      
@@ -195,6 +198,7 @@ function main_fig = plot_tracts(varargin)
     voxel_length = voxel_length(1:3);
   end
   
+  acs = get_properties(prop_keys, prop_values, 'alpha', (0:(num_loaded_tracts-1))', num_loaded_tracts).^2;  
   bundle_indices = get_properties(prop_keys, prop_values, 'bundle_index', (0:(num_loaded_tracts-1))', num_loaded_tracts);  
    
   if ~isempty(include)
@@ -251,7 +255,7 @@ function main_fig = plot_tracts(varargin)
      
   elseif strfind(style, 'tubes') == 1
   
-    [strands, bundle_indices] = tracts2strands(tracts, ones(num_tracts,1), num_width_sections, highlight_axes, oblong, bundle_indices);
+    [strands, bundle_indices] = tracts2strands(tracts, ones(num_tracts,1), num_width_sections, highlight_axes, oblong, bundle_indices, strands_per_acs, acs);
     tcks = strands2tcks(strands);
     
     radii = ones(size(tcks)) * strand_radius;
@@ -262,7 +266,7 @@ function main_fig = plot_tracts(varargin)
     
   elseif strfind('lines', style) == 1
     
-    [strands, bundle_indices] = tracts2strands(tracts, ones(num_tracts,1), num_width_sections, highlight_axes, oblong, bundle_indices);  
+    [strands, bundle_indices] = tracts2strands(tracts, ones(num_tracts,1), num_width_sections, highlight_axes, oblong, bundle_indices, strands_per_acs, acs);  
     tcks = strands2tcks(strands);    
     
     add_lines_to_plot(tcks, colours_of_bundles, bundle_indices);     
@@ -275,9 +279,10 @@ function main_fig = plot_tracts(varargin)
     
   add_sphere_to_plot(sphere_radius);
         
-  if ~isempty(show_slices)
+        
+  if any([~isempty(slice_x) ~isempty(slice_y) ~isempty(slice_z)])
 
-      add_mri_slice_to_plot(obs_image, show_slices)
+      add_mri_slice_to_plot(obs_image, slice_x, slice_y, slice_z)
 
   elseif voxel_size ~= 0 || isempty(voxel_length)
 
