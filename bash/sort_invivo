@@ -20,7 +20,7 @@ for d in $1/*; do
     image_name=`basename $dataset`
     structure=${image_name%%.*}
     num_encodings=${image_name#*.}
-    num_encodings=${num_encodings%.*}
+    num_encodings=${num_encodings%%.*}
     parent_dir=$destination/$structure/$subject/$num_encodings
     mkdir -p $parent_dir
     count=1

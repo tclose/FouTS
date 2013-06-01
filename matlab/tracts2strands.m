@@ -37,7 +37,7 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
       num_strands = round(sqrt(strands_per_acs * acs));    
   end
   
-  width_fractions = ones(length(tracts),1) ./ num_strands;
+  width_fractions = ones(size(tracts,1),1) ./ num_strands;
   
   if num_strands < 0
     error(['''-num_strands'' must be greater than zero (' num2str(num_strands) ').']);  
