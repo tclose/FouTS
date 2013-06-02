@@ -29,11 +29,11 @@ for subject_dir in $data_dir/corpus_callosum/*; do
             img_offset="\"`mrinfo $obs_image | grep --after-context=2 'Transform:' | xargs echo | awk '{print $5 "," $9 "," $13}'`\""
             gradient_file=${obs_image%.mif}.grad
             mrinfo $obs_image -gradient $gradient_file
-            #generate_image $run_dir/last.tct $run_dir/last.mif -img_dims $img_dims -img_vox_lengths $img_vox_lengths -img_offset $img_offset -exp_num_length_sections $num_length -exp_num_width_sections $num_width -diff_encodings_location $gradient_file
-            #echo $img_dims - $img_vox_lengths - $img_offset - $num_length - $num_width
+            generate_image $run_dir/last.tct $run_dir/last.mif -img_dims $img_dims -img_vox_lengths $img_vox_lengths -img_offset $img_offset -exp_num_length_sections $num_length -exp_num_width_sections $num_width -diff_encodings_location $gradient_file -clean
         done
         num_runs=`ls $data_dir/corpus_callosum/$subject/$dw | wc | awk '{print $1}'`
-        #echo $subject - $dw - $num_runs
-        mradd $data_dir/corpus_callosum/$subject/$dw/*/last.mif - | mrmath $num_runs -divide $data_dir/corpus_callosum/$subject/$dw/avg_last.mif
+        mradd $data_dir/corpus_callosum/$subject/$dw/*/last.mif $data_dir/corpus_callosum/$subject/$dw/sum_last.mif 
+        mrmath -force $data_dir/corpus_callosum/$subject/$dw/sum_last.mif $num_runs -divide $data_dir/corpus_callosum/$subject/$dw/avg_last.mif
+        mrmath -force $REFERENCE_DIR/$subject/images/fornix.$dw.no-iso.mif $data_dir/corpus_callosum/$subject/$dw/avg_last.mif -subtract $REFERENCE_DIR/$subject/images/fornix.$dw.no-corpus.mif
     done
 done
