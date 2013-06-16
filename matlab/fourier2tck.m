@@ -16,15 +16,17 @@ k = [0:1:(num_points-1)]'./(num_points-1);
 
 
 if (degree < 1)
-	error('Fourier coefficients have degree of less than 1');
+	disp('WARNING! Fourier coefficients have degree of less than 1');
+    tck = [];
+else
+    psi = ones(num_points,1);
+
+    for (d = [1:(degree-1)])
+
+        psi = [psi, sqrt(2) * cos(pi * k * d)];
+
+    end
+
+    tck = psi * fourier;    
 end
 
-psi = ones(num_points,1);
-
-for (d = [1:(degree-1)])
-	
-	psi = [psi, sqrt(2) * cos(pi * k * d)];
-
-end
-
-tck = psi * fourier;

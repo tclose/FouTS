@@ -1,7 +1,7 @@
 function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_observed_properties(properties, obs_image_location)
 
   if ~exist('obs_image_location', 'var')
-      obs_image_location = [];
+      obs_image_location = []; 
   end
 
   true_location = [];
@@ -16,6 +16,8 @@ function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_
         offset = [0 0 0];
         return;
       end
+  else
+      disp('here')
   end
   
   f = fopen (obs_image_location, 'r');
@@ -27,6 +29,8 @@ function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_
     if (f<1)
         disp (['Warning!! could not open observed image file ''' obs_image_location ''' to determine image dimensions']);
         dims = [3,3,3];
+        voxel_lengths = [0 0 0 0];
+        offset = [0 0 0];
         return
     end
   end
@@ -35,6 +39,8 @@ function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_
     fclose(f);
     disp (['Warning!! observed image file ''' obs_image_location ''' is not in MRtrix format, could not determine image dimensions.']);
     dims = [3 3 3];
+    voxel_lengths = [0 0 0 0];
+    offset = [0 0 0];
     return
   end
   
@@ -67,18 +73,7 @@ function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_
   offset = cell2mat(offset);
   
   fclose(f);
- 
-%   if isempty(dims)
-%     disp('Warning!! Observed image location did not specifiy image dimensions.');
-%     dims = [3 3 3];
-%   end
-%   
-%   if isempty(true_location)
-%     disp('Warning!! Observed image location did not specifiy inital location.');
-%   end
 
-  
-    
 end
 
   

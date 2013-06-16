@@ -34,6 +34,6 @@ for subject_dir in $data_dir/corpus_callosum/*; do
         num_runs=`ls $data_dir/corpus_callosum/$subject/$dw | wc | awk '{print $1}'`
         mradd $data_dir/corpus_callosum/$subject/$dw/*/last.mif $data_dir/corpus_callosum/$subject/$dw/sum_last.mif 
         mrmath -force $data_dir/corpus_callosum/$subject/$dw/sum_last.mif $num_runs -divide $data_dir/corpus_callosum/$subject/$dw/avg_last.mif
-        mrmath -force $REFERENCE_DIR/$subject/images/fornix.$dw.no-iso.mif $data_dir/corpus_callosum/$subject/$dw/avg_last.mif -subtract $REFERENCE_DIR/$subject/images/fornix.$dw.no-corpus.mif
+        mrmath -force $REFERENCE_DIR/$subject/images/fornix.$dw.no-iso.mif $data_dir/corpus_callosum/$subject/$dw/avg_last.mif -subtract $REFERENCE_DIR/$subject/images/fornix.$dw.no-corpus_cst.mif
     done
 done

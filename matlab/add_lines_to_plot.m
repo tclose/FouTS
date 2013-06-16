@@ -7,10 +7,11 @@ function add_lines_to_plot(tcks, colours, bundle_indices)
   
   for tck_i = 1:num_tcks
 
-    h = plot3(tcks{tck_i}(:,1), tcks{tck_i}(:,2), tcks{tck_i}(:,3));
-    
-    set(h, 'Color', colours(bundle_indices(tck_i)+1,:));
-    
+    if ~isempty(tcks{tck_i})
+        h = plot3(tcks{tck_i}(:,1), tcks{tck_i}(:,2), tcks{tck_i}(:,3));
+
+        set(h, 'Color', colours(bundle_indices(tck_i)+1,:));
+    end
   end
   
   hold off;
