@@ -137,7 +137,7 @@ def create_env(work_dir):
 
 
 def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, copy_to_output=[],
-               dry_run=False):
+               max_memory='4G', virtual_memory='4G', time_limit=None, dry_run=False):
     """
     Create a jobscript in the work directory and then submit it to the HPC que
     
@@ -154,7 +154,14 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', en
         env = create_env(work_dir)
     else:
         env = copy(env)
-    copy_cmd = ''
+    if time_limit:
+        if type(time_limit) != str or len(time_limit.split(':')) != 3:
+            raise Exception("Poorly formatted time limit string '{}' passed to submit job"
+                            .format(time_limit))
+        time_limit_option= "\n# Set the maximum run time\n#$ -l h_rt {}\n".format(time_limit)
+    else:
+        time_limit_option=''
+   copy_cmd = ''
     for to_copy in copy_to_output:
         origin = work_dir + os.path.sep + to_copy
         destination = output_dir + os.path.sep + to_copy
@@ -189,6 +196,12 @@ cp -r {origin} {destination}
 #$ -v PATH
 #$ -v LD_LIBRARY_PATH
 
+# Set the memory limits for the script
+#$ -l h_vmem={max_mem}
+#$ -l virtual_free={virt_mem}
+
+{time_limit}
+
 ###################################################
 ### Copy the model to all machines we are using ###
 ###################################################
@@ -214,7 +227,8 @@ cp {work_dir}/output_stream {output_dir}/output
 """.format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
       ld_library_path=env['LD_LIBRARY_PATH'], np=np,
       que_name=que_name, cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd,
-      jobscript_path=jobscript_path))
+      jobscript_path=jobscript_path, max_mem=max_memory, virt_mem=virtual_memory, 
+      time_limit=time_limit_option))
     f.close()
     # Submit job
     print "Submitting job '%s' to que" % jobscript_path
