@@ -1,4 +1,4 @@
-function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_strands, highlight_axes, oblong, tract_indices, strands_per_acs, acs, acurate_acs)
+function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_strands, highlight_axes, oblong, tract_indices, strands_per_acs, acs, accurate_acs)
 
   if exist('num_strands', 'var')
       if num_strands < 0
@@ -32,7 +32,7 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
   % to be represented by whole number increments in number of strands 
   % rather than whole number increments in the square-root of strands
   if ~exist('acurate_acs','var')
-    acurate_acs = false; 
+    accurate_acs = false; 
   end
   
   if isempty(tract_indices)
@@ -55,7 +55,7 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
       base_index = base_index * 4;
     end
   
-    if acurate_acs
+    if accurate_acs
        ax_fractions = get_axis_fractions(strands_per_acs * acs);
     else
         if strands_per_acs ~= -1
