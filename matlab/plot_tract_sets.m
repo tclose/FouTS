@@ -172,7 +172,7 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
         num_voxels = num_voxels(1:3);
         voxel_lengths = voxel_lengths(1:3);
     end
-  elseif isempty(voxel_offsets) %#ok<NODEF>
+  elseif isempty(voxel_offsets) && all(num_voxels ~= 0) %#ok<NODEF>
       voxel_offsets = - num_voxels .* voxel_lengths ./2;
   end
   
@@ -349,7 +349,7 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
         
         add_mri_slice_to_plot(obs_image, slice_x, slice_y, slice_z)
         
-    elseif ~isempty(num_voxels)
+    elseif ~isempty(num_voxels) && all(num_voxels ~= 0)
 
         add_vox_lines_to_plot(voxel_lengths,num_voxels,~no_voxline_highlight,...
               voxel_offsets, voxel_transparency);

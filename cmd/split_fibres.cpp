@@ -60,6 +60,7 @@ using namespace BTS;
 const double THRESHOLD_DEFAULT = -0.5;
 const size_t NUM_LENGTH_SECTIONS_DEFAULT = 20;
 const double TRACT_WIDTH_DEFAULT = 1.0;
+const double ACS_FRACTION_DEFAULT = 0.25;
 SET_VERSION_DEFAULT
 ;
 SET_AUTHOR("Thomas G. Close");
@@ -82,11 +83,15 @@ OPTIONS= {
     Option ("orientation", "The orientation of the plane to split the Fourier tract into.")
     + Argument ("offsets", "").type_text ("auto"),
 
-    Option ("num_length_sections", "The number of strands to split the tracts into")
+    Option ("num_length_sections", "The number of samples along the tract to take to generate "
+                                   "the new tracts from")
     + Argument ("num_length_sections", "").type_integer (1, NUM_LENGTH_SECTIONS_DEFAULT, LARGE_INT),
 
-    Option ("tract_width", "The number of strands to split the tracts into")
-    + Argument ("tract_width", "").type_integer (SMALL_FLOAT, TRACT_WIDTH_DEFAULT, LARGE_FLOAT),
+    Option ("tract_width", "The width of the new tracts")
+    + Argument ("tract_width", "").type_float (SMALL_FLOAT, TRACT_WIDTH_DEFAULT, LARGE_FLOAT),
+
+    Option ("acs_fraction", "The width of the new tracts")
+    + Argument ("acs_fraction", "").type_float (SMALL_FLOAT, ACS_FRACTION_DEFAULT, LARGE_FLOAT),
 
     Option ("include","The indices of the strands to include")
     + Argument ("include","").type_text(),
@@ -101,6 +106,7 @@ EXECUTE {
         Triple<double> orient(1.0, 0.0, 0.0);
         size_t num_length_sections = NUM_LENGTH_SECTIONS_DEFAULT;
         double constant_tract_width = -1.0;
+        double acs_fraction = ACS_FRACTION_DEFAULT;
         std::vector<size_t> include;
         
         Options opt = get_options("orientation");
@@ -115,6 +121,10 @@ EXECUTE {
         if (opt.size())
             constant_tract_width = opt[0][0];
         
+        opt = get_options("acs_fraction");
+        if (opt.size())
+            acs_fraction = opt[0][0];
+
         opt = get_options("include");
         if (opt.size())
             include = parse_sequence<size_t>(opt[0][0]);
@@ -187,9 +197,9 @@ EXECUTE {
                 Fibre::Tractlet tct1 = tck1.to_strand(tract.degree()).to_tractlet(tract_radius);
                 Fibre::Tractlet tct2 = tck2.to_strand(tract.degree()).to_tractlet(tract_radius);
 
-                double tract_acs = tract.acs() / 2.0;
-                tct1.set_acs(tract_acs);
-                tct2.set_acs(tract_acs);
+                double new_acs = tract.acs() * acs_fraction;
+                tct1.set_acs(new_acs);
+                tct2.set_acs(new_acs);
 
                 output_tracts.push_back(tct1);
                 output_tracts.push_back(tct2);

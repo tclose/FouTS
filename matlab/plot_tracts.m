@@ -131,7 +131,7 @@ function main_fig = plot_tracts(varargin)
             'strand_radius  ',          0.02,       'float',        'Radii of the plotted strands. (NB: can only be used with ''-style'' option ''strands'').';...
             'num_width_sections    ',   2,          'int',          'Number of strands to plot along each axis. If zero the default 3D surface option will be used instead.';...            
             'strands_per_acs',          -1,         'float',        'Instead of a fixed number of width sections the number of plotted strands is determined by the ACS of the tract';...
-            'style          ',          'tractlets','string',       'Change plot to ''line style''.(NB: Only relevant with ''-num_width_sections'' option > 0).';...
+            'style          ',          'tracts','string',       'Change plot to ''line style''.(NB: Only relevant with ''-num_width_sections'' option > 0).';...
             'tube_corners   ',          12,         'int',          'Change plot to ''line style''.(NB: Only relevant with ''-num_width_sections'' option = 0).';...
             'sphere_radius  ',          0,          'float',        'Size of reference sphere';...
             'no_axes',                  0,          'bool',         'Removes axes from plot';...
@@ -240,7 +240,7 @@ function main_fig = plot_tracts(varargin)
   cameratoolbar('Show');
   cameratoolbar('SetMode','orbit');
   
-  
+  num_plots = 0;
   % If '-num_width_sections' parameter is not set plot the boundary of the tract
   % instead.
   if strfind(style, 'tracts') ~= 0
@@ -255,7 +255,7 @@ function main_fig = plot_tracts(varargin)
     end
     
     add_tracts_to_plot(tracts, colours_of_bundles, ones(num_tracts,1), ones(num_tracts,1), tube_corners, num_length_sections, transparency, bundle_indices);
-     
+    num_plots = num_plots + 1;
   end
   if strfind(style, 'tubes') ~= 0
   
@@ -267,7 +267,7 @@ function main_fig = plot_tracts(varargin)
     add_tcks_to_plot(tcks, radii, colours_of_bundles, bundle_indices); 
 
     %[tcks, colours_of_bundles] = display_strands(tcks, colours_of_bundles, include, 'bundle', line_style);
-    
+    num_plots = num_plots + 1;
   end
   if strfind(style, 'lines') ~= 0
     
@@ -275,8 +275,13 @@ function main_fig = plot_tracts(varargin)
     tcks = strands2tcks(strands);    
     
     add_lines_to_plot(tcks, colours_of_bundles, bundle_indices);     
-  end  
-    
+    num_plots = num_plots + 1;
+  end
+  
+  if num_plots == 0
+      error(['Style ''', style, ''' did not match any of the valid types (''tracts'', ''tubes'', ''lines'')'])
+  end
+  
   add_sphere_to_plot(sphere_radius);
         
         
