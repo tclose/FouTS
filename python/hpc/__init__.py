@@ -161,7 +161,7 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', en
         time_limit_option= "\n# Set the maximum run time\n#$ -l h_rt {}\n".format(time_limit)
     else:
         time_limit_option=''
-   copy_cmd = ''
+    copy_cmd = ''
     for to_copy in copy_to_output:
         origin = work_dir + os.path.sep + to_copy
         destination = output_dir + os.path.sep + to_copy
