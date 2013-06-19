@@ -1,4 +1,12 @@
-function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_strands, highlight_axes, oblong, tract_indices, strands_per_acs, acs)
+function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_strands, highlight_axes, oblong, tract_indices, strands_per_acs, acs, accurate_acs)
+
+  if exist('num_strands', 'var')
+      if num_strands < 0
+          error(['''-num_strands'' must be greater than zero (' num2str(num_strands) ').']);  
+      end
+  else
+      num_strands = 4;
+  end
 
   if ~exist('highlight_axes','var')
     highlight_axes = 0;
@@ -19,7 +27,13 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
   if ~exist('acs', 'var')
     acs = ones(length(tracts),1);
   end
-
+  
+  % Uses axis fractions generated from optimisations, allowing the ACS
+  % to be represented by whole number increments in number of strands 
+  % rather than whole number increments in the square-root of strands
+  if ~exist('acurate_acs','var')
+    accurate_acs = false; 
+  end
   
   if isempty(tract_indices)
     tract_indices = [0:1:size(tracts,1)-1];
@@ -32,16 +46,6 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
   
   strand_count = 0;
   tcks = cell(num_tracts * (2 * num_strands + 1),4);
-  
-  if strands_per_acs ~= -1
-      num_strands = round(sqrt(strands_per_acs * acs));    
-  end
-  
-  width_fractions = ones(size(tracts,1),1) ./ num_strands;
-  
-  if num_strands < 0
-    error(['''-num_strands'' must be greater than zero (' num2str(num_strands) ').']);  
-  end
     
   for tract_i = 1:num_tracts
 
@@ -50,12 +54,23 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
     if highlight_axes
       base_index = base_index * 4;
     end
-    
-    ax_fractions = (-1+width_fractions(tract_i)):(2*width_fractions(tract_i)):(1-width_fractions(tract_i));
-    
-    for ax2_frac = ax_fractions
+  
+    if accurate_acs
+       ax_fractions = get_axis_fractions(strands_per_acs * acs);
+    else
+        if strands_per_acs ~= -1
+          num_strands = round(sqrt(strands_per_acs * acs));    
+        end
 
-      for ax3_frac = ax_fractions
+        width_fractions = ones(size(tracts,1),1) ./ num_strands;
+
+        ax_frac_col = (-1+width_fractions(tract_i)):(2*width_fractions(tract_i)):(1-width_fractions(tract_i));
+        ax_fractions = [ax_frac_col; ax_frac_col];
+    end
+    
+    for ax2_frac = ax_fractions(1, :)
+
+      for ax3_frac = ax_fractions(2, :)
 
         if (sqrt(ax2_frac^2 + ax3_frac^2) <= 1.0) || oblong
           strand_count = strand_count + 1;
