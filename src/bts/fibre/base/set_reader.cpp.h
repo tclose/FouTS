@@ -82,7 +82,7 @@ namespace BTS {
                             throw Exception(
                                     "No corresponding line found in extended properties file.");
                         
-                        properties = parse_props_line(this->prop_hdr, line);
+                        properties = this->parse_props_line(this->prop_hdr, line);
                         
                         set.extract_and_set_props(properties);
                         set.set_extend_props(properties);
