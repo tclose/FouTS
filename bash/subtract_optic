@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Subtracts the signal modelled by the corpus callosum from the fornix image
 
-REFERENCE_DIR="$HOME/fouts/params/image/reference"
+REFERENCE_DIR="$HOME/fouts/params/image/reference/"
 
 if [ $# -lt 1 ]; then
     echo "The directory to sort must be provided as an argument"

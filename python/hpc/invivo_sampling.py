@@ -14,7 +14,7 @@ import time
 
 def sampling_cmd(args, work_dir, dataset_path, random_seed, prior_freq,
                  prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin,
-                 like_snr, init_name, samples_name, last_name):
+                 like_snr, init_name, samples_name, last_name, num_iterations):
     if args.like_noise_map:
         noise_option = '--like_noise_map {}'.format(os.path.join(work_dir, 'params', 'image',
                                                     'reference', args.like_noise_map))
@@ -38,7 +38,7 @@ set_properties {work_dir}/output/{init_name}.tct \
 time metropolis {dataset_path} {work_dir}/output/{init_name}.tct \
 {work_dir}/output/{samples_name}.tst {noise_option} \
 -exp_interp_extent {args.assumed_interp_extent} \
--walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
+-walk_step_scale {args.step_scale} -num_iter {num_iterations} \
 -sample_period {args.sample_period} -seed {random_seed} \
 -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -prior_freq {prior_freq} {prior_aux_freq} \
@@ -59,7 +59,7 @@ select_fibres {work_dir}/output/{samples_name}.tst \
            samples_name=samples_name, last_name=last_name, random_seed=random_seed + 1,
            prior_freq=prior_freq, prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low,
            prior_density_high=prior_density_high, prior_hook=prior_hook, prior_thin=prior_thin,
-           noise_option=noise_option, last_sample=(args.num_iterations // args.sample_period) - 1)
+           noise_option=noise_option, last_sample=(args.num_iterations // args.sample_period) - 1, num_iterations=num_iterations)
     return cmd
 
 
@@ -75,6 +75,9 @@ parser.add_argument('--step_scale', default=0.015, type=float,
                          "sampling (default: %(default)s)")
 parser.add_argument('--num_iterations', default=75000, type=int,
                     help="The number of interations in the metropolis sampling "
+                         "(default: %(default)s)")
+parser.add_argument('--num_after_split_iterations', default=50000, type=int,
+                    help="The number of interations in the metropolis sampling after the split"
                          "(default: %(default)s)")
 parser.add_argument('--sample_period', default=250, type=int,
                     help="The sample period of the metropolis sampling "
@@ -242,7 +245,8 @@ normalise_density {work_dir}/output/init.tct
                                  prior_density_high=prior_density_high, prior_hook=prior_hook,
                                  prior_thin=prior_thin, like_snr=like_snr, init_name='init',
                                  samples_name='samples_first' if args.split else 'samples',
-                                 last_name='end_first' if args.split else 'last')
+                                 last_name='end_first' if args.split else 'last',
+                                 num_iterations=args.num_iterations)
 
         if args.split:
 
@@ -260,7 +264,7 @@ split_fibres  {work_dir}/output/end_first.tct {work_dir}/output/init_second.tct
                                      prior_density_high=prior_density_high, prior_hook=prior_hook,
                                      prior_thin=prior_thin, like_snr=like_snr,
                                      init_name='init_second', samples_name='samples',
-                                     last_name='last')
+                                     last_name='last', num_iterations=args.num_after_split_iterations)
 
             # Submit job to que
         hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,

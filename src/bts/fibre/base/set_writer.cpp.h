@@ -76,7 +76,7 @@ namespace BTS {
                                     
                     set[elem_i].insert_props(properties_row);
                     
-                    write_properties_row(this->elem_prop_hdr, properties_row, this->ext_elem_out);
+                    this->write_properties_row(this->elem_prop_hdr, properties_row, this->ext_elem_out);
                     
                 }
                 
