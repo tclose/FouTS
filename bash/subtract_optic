@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Subtracts the signal modelled by the corpus callosum from the fornix image
+
+REFERENCE_DIR="$HOME/fouts/params/image/reference"
+
+if [ $# -lt 1 ]; then
+    echo "The directory to sort must be provided as an argument"
+    exit 1
+elif [ $# == 1 ]; then
+    data_dir=$1
+else
+    echo "Only one argument is required ('data directory')."
+    exit 1
+fi
+
+for subject_dir in $data_dir/optic_tract/*; do
+    subject=`basename $subject_dir`
+    for dw_dir in $data_dir/optic_tract/$subject/*; do 
+        dw=`basename $dw_dir`
+        for run_dir in $data_dir/optic_tract/$subject/$dw/*; do 
+            run=`basename $run_dir`
+            run_dir=$data_dir/optic_tract/$subject/$dw/$run
+            num_length=`fibre_info $run_dir/samples.tst | grep exp_num_length_sections| awk '{print $2}'`
+            num_width=`fibre_info $run_dir/samples.tst | grep exp_num_width_sections | awk '{print $2}'`
+            obs_image=`fibre_info $run_dir/samples.tst | grep obs_image | awk '{print $2}'`
+            obs_image=$REFERENCE_DIR/${obs_image#*params/image/reference/}
+            img_dims="\"`mrinfo $obs_image | grep Dimensions: | awk '{print $2 "," $4 "," $6}'`\""
+            img_vox_lengths="\"`mrinfo $obs_image | grep 'Voxel size:' | awk '{print $3 "," $5 "," $7}'`\""
+            img_offset="\"`mrinfo $obs_image | grep --after-context=2 'Transform:' | xargs echo | awk '{print $5 "," $9 "," $13}'`\""
+            gradient_file=${obs_image%.mif}.grad
+            mrinfo $obs_image -gradient $gradient_file
+            generate_image $run_dir/last.tct $run_dir/last.mif -img_dims $img_dims -img_vox_lengths $img_vox_lengths -img_offset $img_offset -exp_num_length_sections $num_length -exp_num_width_sections $num_width -diff_encodings_location $gradient_file -clean
+        done
+        num_runs=`ls $data_dir/optic_tract/$subject/$dw | wc | awk '{print $1}'`
+        mradd $data_dir/optic_tract/$subject/$dw/*/last.mif $data_dir/optic_tract/$subject/$dw/sum_last.mif 
+        mrmath -force $data_dir/optic_tract/$subject/$dw/sum_last.mif $num_runs -divide $data_dir/optic_tract/$subject/$dw/avg_last.mif
+        mrmath -force $REFERENCE_DIR/$subject/images/optic_tract.$dw.no-corpus_cst.mif $data_dir/optic_tract/$subject/$dw/avg_last.mif -subtract $REFERENCE_DIR/$subject/images/fornix.$dw.no-corpus_cst_optic.mif
+    done
+done
