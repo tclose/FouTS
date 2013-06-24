@@ -20,9 +20,25 @@ end
 
 function x = sample_evenly_on_disc(N)
     % Create randomly distributed points within a circle
-    r = rand(N,1);
-    theta = 2 * pi * rand(N,1);
-    x0 = [cos(theta) .* r, sin(theta) .* r];
+    x0 = zeros(N,2);
+    step = 2 / floor(sqrt(N));
+    count = 0;
+    for x=-1:step1
+        for y=-1:step:1
+            if x^2 + y^2 < 1
+                count = count + 1;
+                x0(count,:) = [x, y];
+            end
+        end
+    end
+    circ_step = 2*pi / (N - count);
+    for theta = 0:circ_step:(2*pi - circ_step)
+        count = count + 1;
+        x0(count, :) = [cos(theta) sin(theta)];
+    end
+    if count ~= N
+        error('count doesn''t equal N')
+    end
     % Perform the optimisation
     options = optimset('Algorithm', 'active-set', 'MaxFunEvals', 1e5,...
                         'MaxIter', 1e3, 'TolCon', 1e-3);
