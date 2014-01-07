@@ -17,7 +17,7 @@ function add_vox_lines_to_plot(vox_lengths, num_voxels, colourize, offset, trans
   end
   
   if ~exist('offset', 'var')
-    offset = -half_vox_lengths.*num_voxels;
+    offset = -(vox_lengths.*num_voxels)./2;
   end
 
   if ~exist('transparency', 'var')
