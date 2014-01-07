@@ -54,10 +54,10 @@ ARGUMENTS= {
 OPTIONS= {
 
     Option("num_steps","")
-    + Argument("num_steps").type_integer(0,LARGE_INT,NUM_STEPS_DEFAULT),
+    + Argument("num_steps").type_integer(0,NUM_STEPS_DEFAULT,LARGE_INT),
 
     Option("angle","")
-    + Argument("angle").type_float(0, 2.0 * M_PI, ANGLE_DEFAULT),
+    + Argument("angle").type_float(0, ANGLE_DEFAULT, 2.0 * M_PI),
 
     Option("axis","")
     + Argument("axis").type_text(AXIS_DEFAULT.c_str()),
