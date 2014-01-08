@@ -27,6 +27,7 @@ parser.add_argument('--sample_period', type=int, default=1000, help='the number 
 parser.add_argument('--num_length', type=int, default=30, help='The number of samples along the fibre length')
 parser.add_argument('--perturb_scale', type=float, default=0.001, help='the perturbation applied to the true configuration')
 parser.add_argument('--interp_extent', type=float, default=1.0, help='the extent of the interpolation kernel')
+parser.add_argument('--step_scale', type=float, default=1.0, help='scale the metropolis steps')
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other
@@ -37,11 +38,12 @@ num_strands_n_scales = [(1, 0.001), (3, 0.001), (5, 0.001), (7, 0.001)]
 required_dirs = [os.path.join('params', 'fibre', 'tract', 'single'),
                  os.path.join('params', 'fibre', 'strand', 'masks'),
                  os.path.join('params', 'diffusion')]
-for num_strands, step_scale in num_strands_n_scales:
+for num_strands, rel_step_scale in num_strands_n_scales:
     # Create work directory and get path for output directory
     work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir,
                                                required_dirs=required_dirs)
 
+    step_scale = rel_step_scale * args.step_scale
     acs = 1.0 / float(num_strands)
     # Set up command to run the script
     cmd_line = """
