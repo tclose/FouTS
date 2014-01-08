@@ -75,7 +75,7 @@ metropolis {work_dir}/image_{num_strands}.mif {work_dir}/init_{num_strands}.str 
 -exp_base_intensity 1 -like_snr {args.like_snr} -walk_step_scale {step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -diff_isotropic -exp_type sinc -exp_interp {args.interp_extent} \
 -like_ref_signal $NOISE_REF -walk_step_location \
-{work_dir}/params/fibre/strand/masks/mcmc/metropolis/default{args.degree}.tct
+{work_dir}/params/fibre/strand/masks/mcmc/metropolis/default.str
 
 stats_fibres {work_dir}/true_{num_strands}.str {work_dir}/samples_{num_strands}.sst
     """.format(work_dir=work_dir, num_strands=num_strands, step_scale=step_scale, args=args,
