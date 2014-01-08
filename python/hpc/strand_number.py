@@ -41,7 +41,8 @@ for num_strands, step_scale in num_strands_n_scales:
     # Create work directory and get path for output directory
     work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir,
                                                required_dirs=required_dirs)
-
+    with open(os.path.join(work_dir, 'output', 'num_strands.txt'), 'w') as f:
+        f.write(str(num_strands))
     acs = 1.0 / float(num_strands)
     # Set up command to run the script
     cmd_line = """
