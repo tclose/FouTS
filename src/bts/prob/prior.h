@@ -50,9 +50,9 @@
    + Argument ("prior_length_scale", "").optional().type_float(0, Prob::PriorComponent::Length::SCALE_DEFAULT,LARGE_FLOAT) \
    + Argument ("prior_length_mean", "").optional().type_float(0, Prob::PriorComponent::Length::MEAN_DEFAULT,LARGE_FLOAT), \
 \
-  Option ("prior_thinness", "The prior placed on the tractlet thinness") \
-   + Argument ("prior_thinness_scale", "").optional().type_float(0, Prob::PriorComponent::Thinness::SCALE_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_thinness_power", "").optional().type_float(0, Prob::PriorComponent::Thinness::POWER_DEFAULT,LARGE_FLOAT) \
+  Option ("prior_end_on_sphere", "The prior placed on the tractlet end_on_sphere") \
+   + Argument ("prior_end_on_sphere_scale", "").optional().type_float(0, Prob::PriorComponent::EndOnSphere::SCALE_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_end_on_sphere_radius", "").optional().type_float(0, Prob::PriorComponent::EndOnSphere::RADIUS_DEFAULT,LARGE_FLOAT) \
 \
 
 //Loads the 'prior' parameters into variables
@@ -124,15 +124,15 @@
       prior_length_mean = prior_opt[0][1]; \
   } \
  \
-  double prior_thinness_scale  = Prob::PriorComponent::Thinness::SCALE_DEFAULT; \
-  double prior_thinness_power  = Prob::PriorComponent::Thinness::POWER_DEFAULT; \
+  double prior_end_on_sphere_scale  = Prob::PriorComponent::EndOnSphere::SCALE_DEFAULT; \
+  double prior_end_on_sphere_radius  = Prob::PriorComponent::EndOnSphere::RADIUS_DEFAULT; \
  \
-  prior_opt = get_options("prior_thinness"); \
+  prior_opt = get_options("prior_end_on_sphere"); \
   if (prior_opt.size()) { \
     if (prior_opt[0].size() >= 1) \
-      prior_thinness_scale = prior_opt[0][0]; \
+      prior_end_on_sphere_scale = prior_opt[0][0]; \
     if (prior_opt[0].size() >= 2) \
-      prior_thinness_power = prior_opt[0][1]; \
+      prior_end_on_sphere_radius = prior_opt[0][1]; \
   } \
  \
 
@@ -169,9 +169,9 @@
       properties["prior_length_mean"]                 = str(prior_length_mean); \
     } \
   \
-    if (prior_thinness_scale) { \
-      properties["prior_thinness_scale"]                = str(prior_thinness_scale); \
-      properties["prior_thinness_power"]                = str(prior_thinness_power); \
+    if (prior_end_on_sphere_scale) { \
+      properties["prior_end_on_sphere_scale"]                = str(prior_end_on_sphere_scale); \
+      properties["prior_end_on_sphere_radius"]                = str(prior_end_on_sphere_radius); \
     } \
   }
 
@@ -180,7 +180,7 @@
 #include "bts/prob/prior_component/density.h"
 #include "bts/prob/prior_component/acs.h"
 #include "bts/prob/prior_component/length.h"
-#include "bts/prob/prior_component/thinness.h"
+#include "bts/prob/prior_component/end_on_sphere.h"
 
 #include "bts/common.h"  
 
@@ -209,7 +209,7 @@ namespace BTS {
                 PriorComponent::Density density;
                 PriorComponent::ACS acs;
                 PriorComponent::Length length;
-                PriorComponent::Thinness thinness;
+                PriorComponent::EndOnSphere end_on_sphere;
 
             public:
                 
@@ -217,12 +217,12 @@ namespace BTS {
                       double hook_num_points, double hook_num_width_sections,
                       double density_high_scale, double density_low_scale,
                       double density_num_points, double acs_scale, double acs_mean,
-                      double length_scale, double length_mean, double thinness_scale,
-                      size_t thinness_power);
+                      double length_scale, double length_mean, double end_on_sphere_scale,
+                      size_t end_on_sphere_radius);
 
                 Prior(const Prior& p)
                         : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(
-                                  p.acs), length(p.length), thinness(p.thinness) {
+                                  p.acs), length(p.length), end_on_sphere(p.end_on_sphere) {
                 }
                 
                 Prior& operator=(const Prior& p) {
@@ -232,7 +232,7 @@ namespace BTS {
                     density = p.density;
                     acs = p.acs;
                     length = p.length;
-                    thinness = p.thinness;
+                    end_on_sphere = p.end_on_sphere;
                     return *this;
                 }
                 
@@ -246,7 +246,7 @@ namespace BTS {
                     components.push_back(PriorComponent::Density::NAME);
                     components.push_back(PriorComponent::ACS::NAME);
                     components.push_back(PriorComponent::Length::NAME);
-                    components.push_back(PriorComponent::Thinness::NAME);
+                    components.push_back(PriorComponent::EndOnSphere::NAME);
                     return components;
                 }
                 

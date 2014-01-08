@@ -41,8 +41,6 @@ namespace BTS {
             
             double Length::log_prob(const Fibre::Strand strand, Fibre::Strand gradient) {
                 
-                assert(!gradient.is_owner());
-                
                 // If gradient hasn't been initialised, initialise it to the size of the tractlet, otherwise check its degree.
                 if (!gradient.degree()) {
                     gradient = strand;

@@ -305,9 +305,12 @@ namespace BTS {
                     return Base::Object::bmatrix(3);
                 }
                 
+                //! Added to match the metropolis template functions but of course is meaningless for strands.
                 std::vector<double> cross_sectional_areas(size_t num_points) {
-                    throw Exception(
-                            "Should not be used, just added to debug template function with tractlets.");
+                    std::vector<double> areas(num_points);
+                    for (size_t i = 0; i < num_points; ++i)
+                        areas[i] = 0.0;
+                    return areas;
                 }
                 
             protected:

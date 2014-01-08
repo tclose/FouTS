@@ -44,9 +44,12 @@ namespace BTS {
                 if (step_location.size()) {
                     step.load(step_location);
                     
-                    if (!step.props_match(state))
+                    if (!step.props_match(state)) {
+                        std::cout << step << std::endl;
+                        std::cout << state << std::endl;
                         throw Exception(
                                 "Properties do not match between loaded properties and state properties.");
+                    }
                     
                     if (step.size() == 1) {
                         
@@ -56,13 +59,14 @@ namespace BTS {
                         
                         for (size_t tract_i = 0; tract_i < state.size(); ++tract_i) {
                             
+                            step[tract_i] = step_template;
+
                             if (state[tract_i].size() > step_template.size())
                                 throw Exception(
                                         "Strand (" + str(tract_i)
                                         + ") is larger than step template.");
-                            
-                            step[tract_i] = step_template;
-                            step[tract_i].resize(state[tract_i].size());
+                            else if (state[tract_i].degree() < step_template.degree())
+                                step[tract_i].resize(state[tract_i].size());
                             
                         }
                         

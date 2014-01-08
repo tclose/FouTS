@@ -336,7 +336,7 @@ EXECUTE {
         Prob::Prior prior(prior_scale, prior_freq_scale, prior_freq_aux_scale, prior_hook_scale,
                 prior_hook_num_points, prior_hook_num_width_sections, prior_density_high_scale,
                 prior_density_low_scale, prior_density_num_points, prior_acs_scale, prior_acs_mean,
-                prior_length_scale, prior_length_mean, prior_thinness_scale, prior_thinness_power);
+                prior_length_scale, prior_length_mean, prior_end_on_sphere_scale, prior_end_on_sphere_radius);
         
         if (File::has_extension<Fibre::Strand>(initial_location)) {
             
