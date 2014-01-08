@@ -72,7 +72,7 @@ metropolis {work_dir}/image_{num_strands}.mif {work_dir}/init_{num_strands}.str 
 {work_dir}/samples_{num_strands}.sst -exp_num_length {args.num_length} \
 -diff_encodings {work_dir}/params/diffusion/encoding_60.b \
 -exp_base_intensity 1 -like_snr {args.like_snr} -walk_step_scale {step_scale} -num_iter {args.num_iterations} \
--sample_period {args.sample_period} -diff_isotropic -save_image -exp_type sinc -exp_interp {args.interp_extent} \
+-sample_period {args.sample_period} -diff_isotropic -exp_type sinc -exp_interp {args.interp_extent} \
 -like_ref_signal $NOISE_REF -walk_step_location \
 {work_dir}/params/fibre/strand/masks/mcmc/metropolis/default{args.degree}.tct
 
