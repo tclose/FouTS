@@ -59,6 +59,10 @@ OPTIONS= {
     + Argument ("name", "Name of property")
     + Argument ("value", "Value the property will be set to."),
 
+    Option ("set_elem", "Set a property to a new value").allow_multiple()
+    + Argument ("name", "Name of property")
+    + Argument ("value", "Value the property will be set to."),
+
     Option()};
 
 template<typename T> void set_properties(const std::string& input_location,
@@ -111,6 +115,28 @@ template<typename T> void set_set_properties(const std::string& input_location,
     
 }
 
+template<typename T> void set_elem_properties(const std::string& input_location,
+                                              const std::string& output_location, App::Options& opt) {
+
+    typename T::Set fibres(input_location);
+
+    for (size_t prop_i = 0; prop_i < opt.size(); ++prop_i) {
+
+        std::string property_name = opt[prop_i][0];
+        std::string property_value = opt[prop_i][1];
+
+        for (size_t fibre_i = 0; fibre_i < fibres.size(); ++fibre_i) {
+            if (property_name == "acs") {
+                fibres[fibre_i].set_acs(to<double>(property_value));
+            } else
+                fibres.set_extend_elem_prop(property_name, property_value, fibre_i);
+        }
+    }
+
+    fibres.save(output_location);
+
+}
+
 EXECUTE {
     
         std::string input_location = argument[0];
@@ -125,33 +151,57 @@ EXECUTE {
         
         Options opt = get_options("set");
         
-        if (File::has_or_txt_extension<Fibre::Strand>(input_location)) {
+        if (opt.size()) {
             
-            set_properties<Fibre::Strand>(input_location, output_location, opt);
-            
-        } else if (File::has_or_txt_extension<Fibre::Tractlet>(input_location)) {
-            
-            set_properties<Fibre::Tractlet>(input_location, output_location, opt);
-            
-        } else if (File::has_or_txt_extension<Fibre::Track>(input_location)) {
-            
-            set_properties<Fibre::Track>(input_location, output_location, opt);
-            
-        } else if (File::has_extension<Fibre::Strand::Set>(input_location)) {
-            
-            set_set_properties<Fibre::Strand::Set>(input_location, output_location, opt);
-            
-        } else if (File::has_extension<Fibre::Tractlet::Set>(input_location)) {
-            
-            set_set_properties<Fibre::Tractlet::Set>(input_location, output_location, opt);
-            
-        } else if (File::has_extension<Fibre::Track::Set>(input_location)) {
-            
-            set_set_properties<Fibre::Track::Set>(input_location, output_location, opt);
-            
-        } else
-            throw Exception("Unrecognised extension '" + File::extension(input_location) + "'.");
-        
+            if (File::has_or_txt_extension<Fibre::Strand>(input_location)) {
+
+                set_properties<Fibre::Strand>(input_location, output_location, opt);
+
+            } else if (File::has_or_txt_extension<Fibre::Tractlet>(input_location)) {
+
+                set_properties<Fibre::Tractlet>(input_location, output_location, opt);
+
+            } else if (File::has_or_txt_extension<Fibre::Track>(input_location)) {
+
+                set_properties<Fibre::Track>(input_location, output_location, opt);
+
+            } else if (File::has_extension<Fibre::Strand::Set>(input_location)) {
+
+                set_set_properties<Fibre::Strand::Set>(input_location, output_location, opt);
+
+            } else if (File::has_extension<Fibre::Tractlet::Set>(input_location)) {
+
+                set_set_properties<Fibre::Tractlet::Set>(input_location, output_location, opt);
+
+            } else if (File::has_extension<Fibre::Track::Set>(input_location)) {
+
+                set_set_properties<Fibre::Track::Set>(input_location, output_location, opt);
+
+            } else
+                throw Exception("Unrecognised extension '" + File::extension(input_location) + "'.");
+        }
+
+        opt = get_options("set_elem");
+
+        if (opt.size()) {
+
+            if (File::has_or_txt_extension<Fibre::Strand>(input_location)) {
+
+                set_elem_properties<Fibre::Strand>(input_location, output_location, opt);
+
+            } else if (File::has_or_txt_extension<Fibre::Tractlet>(input_location)) {
+
+                set_elem_properties<Fibre::Tractlet>(input_location, output_location, opt);
+
+            } else if (File::has_or_txt_extension<Fibre::Track>(input_location)) {
+
+                set_elem_properties<Fibre::Track>(input_location, output_location, opt);
+
+            } else
+                throw Exception("Unrecognised extension '" + File::extension(input_location) + "'.");
+
+        }
+
         //MR::ProgressBar::done();
     }
     
