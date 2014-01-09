@@ -21,15 +21,16 @@ parser.add_argument('--output_dir', default=None, type=str, help='The parent dir
 parser.add_argument('--num_runs', default=1, type=int, help='The number of runs to submit to the que')
 parser.add_argument('--dry_run', action='store_true', help='Only perform a dry run (create jobscript then quit)')
 parser.add_argument('--np', type=int, default=1, help='The the number of processes to use for the simulation (default: %(default)s)')
-parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to(default: %(default)s)')
+parser.add_argument('--que_name', type=str, default='long', help='The the que to submit the job to(default: %(default)s)')
 parser.add_argument('--num_iterations', type=int, default=100000, help='the number of iterations to perform')
 parser.add_argument('--sample_period', type=int, default=1000, help='the number of iterations before sampling')
 parser.add_argument('--num_length', type=int, default=30, help='The number of samples along the fibre length')
 parser.add_argument('--perturb_scale', type=float, default=0.001, help='the perturbation applied to the true configuration')
 parser.add_argument('--interp_extent', type=float, default=1.0, help='the extent of the interpolation kernel')
 parser.add_argument('--step_scale', type=float, default=0.002, help='scale the metropolis steps')
-parser.add_argument('--num_strands', type=int, default=[1, 3, 5, 9], nargs='+',
+parser.add_argument('--num_strands', type=int, default=[1, 3, 5, 7, 8, 9], nargs='+',
                     help='The number of strands to test')
+parser.add_argument('--end_on_sphere_scale', type=float, default=100, help="The scale of the end_on_sphere prior")
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other
@@ -78,7 +79,8 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.str \
 -exp_base_intensity 1 -like_snr {args.like_snr} -walk_step_scale {args.step_scale} \
 -num_iter {args.num_iterations} -sample_period {args.sample_period} -diff_isotropic -exp_type sinc \
 -exp_interp {args.interp_extent} -like_ref_signal $NOISE_REF -walk_step_location \
-{work_dir}/params/fibre/strand/masks/mcmc/metropolis/default.str
+{work_dir}/params/fibre/strand/masks/mcmc/metropolis/default.str \
+-prior_end_on_sphere_scale {args.end_on_sphere_scale}
 
 stats_fibres {work_dir}/true.str {work_dir}/samples.sst
     """.format(work_dir=work_dir, num_strands=num_strands, args=args)
