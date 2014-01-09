@@ -27,7 +27,7 @@ parser.add_argument('--sample_period', type=int, default=1000, help='the number 
 parser.add_argument('--num_length', type=int, default=30, help='The number of samples along the fibre length')
 parser.add_argument('--perturb_scale', type=float, default=0.001, help='the perturbation applied to the true configuration')
 parser.add_argument('--interp_extent', type=float, default=1.0, help='the extent of the interpolation kernel')
-parser.add_argument('--step_scale', type=float, default=1.0, help='scale the metropolis steps')
+parser.add_argument('--step_scale', type=float, default=0.002, help='scale the metropolis steps')
 parser.add_argument('--num_strands', type=int, default=[1, 3, 5, 9], nargs='+',
                     help='The number of strands to test')
 args = parser.parse_args()
