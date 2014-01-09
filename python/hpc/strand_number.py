@@ -28,23 +28,23 @@ parser.add_argument('--num_length', type=int, default=30, help='The number of sa
 parser.add_argument('--perturb_scale', type=float, default=0.001, help='the perturbation applied to the true configuration')
 parser.add_argument('--interp_extent', type=float, default=1.0, help='the extent of the interpolation kernel')
 parser.add_argument('--step_scale', type=float, default=1.0, help='scale the metropolis steps')
+parser.add_argument('--num_strands', type=int, default=[1, 3, 5, 9], nargs='+',
+                    help='The number of strands to test')
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other
 # parameters in the set. Otherwise if the '--combo' option is provided then loop through all combinations of the
 # provided parameters.
 
-num_strands_n_scales = [(1, 0.001), (3, 0.001), (5, 0.001), (7, 0.001)]
 required_dirs = [os.path.join('params', 'fibre', 'tract', 'single'),
                  os.path.join('params', 'fibre', 'strand', 'masks'),
                  os.path.join('params', 'diffusion')]
-for num_strands, rel_step_scale in num_strands_n_scales:
+for num_strands in args.num_strands:
     # Create work directory and get path for output directory
     work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir,
                                                required_dirs=required_dirs)
-    step_scale = rel_step_scale * args.step_scale
     with open(os.path.join(work_dir, 'output', 'num_strands'), 'w') as f:
-        f.write(str(num_strands))
+        f.write('{}\n'.format(num_strands))
     # Set up command to run the script
     cmd_line = """
 select_fibres {work_dir}/params/fibre/tract/single/x.tct {work_dir}/noise_ref.str -num_width 1
@@ -75,13 +75,13 @@ perturb_fibres {work_dir}/true.str {work_dir}/output/init.str -std {args.perturb
 metropolis {work_dir}/output/image.mif {work_dir}/output/init.str \
 {work_dir}/output/samples.sst -exp_num_length {args.num_length} \
 -diff_encodings {work_dir}/params/diffusion/encoding_60.b \
--exp_base_intensity 1 -like_snr {args.like_snr} -walk_step_scale {step_scale} -num_iter {args.num_iterations} \
--sample_period {args.sample_period} -diff_isotropic -exp_type sinc -exp_interp {args.interp_extent} \
--like_ref_signal $NOISE_REF -walk_step_location \
+-exp_base_intensity 1 -like_snr {args.like_snr} -walk_step_scale {args.step_scale} \
+-num_iter {args.num_iterations} -sample_period {args.sample_period} -diff_isotropic -exp_type sinc \
+-exp_interp {args.interp_extent} -like_ref_signal $NOISE_REF -walk_step_location \
 {work_dir}/params/fibre/strand/masks/mcmc/metropolis/default.str
 
 stats_fibres {work_dir}/true.str {work_dir}/samples.sst
-    """.format(work_dir=work_dir, num_strands=num_strands, step_scale=step_scale, args=args)
+    """.format(work_dir=work_dir, num_strands=num_strands, args=args)
         # Submit job to que
     hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
                    dry_run=args.dry_run)
