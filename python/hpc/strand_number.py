@@ -43,7 +43,7 @@ for num_strands, rel_step_scale in num_strands_n_scales:
     work_dir, output_dir = hpc.create_work_dir(SCRIPT_NAME, args.output_dir,
                                                required_dirs=required_dirs)
     step_scale = rel_step_scale * args.step_scale
-    with open(os.path.join(work_dir, 'output', 'num_strands.txt'), 'w') as f:
+    with open(os.path.join(work_dir, 'output', 'num_strands'), 'w') as f:
         f.write(str(num_strands))
     # Set up command to run the script
     cmd_line = """
@@ -57,31 +57,31 @@ generate_image {work_dir}/noise_ref.str {work_dir}/noise_ref.mif \
 
 NOISE_REF=`maxb0 {work_dir}/noise_ref.mif`
 
-select_fibres {work_dir}/params/fibre/tract/single/x.tct {work_dir}/true_{num_strands}.str -num_width {num_strands}
+select_fibres {work_dir}/params/fibre/tract/single/x.tct {work_dir}/true.str -num_width {num_strands}
 
-ACS=$(echo "1.0/`fibre_info {work_dir}/true_{num_strands}.str | grep total_count | awk '{{print $2}}'`" | bc -l)
+ACS=$(echo "1.0/`fibre_info {work_dir}/true.str | grep total_count | awk '{{print $2}}'`" | bc -l)
 
-set_properties {work_dir}/true_{num_strands}.str -set_elem acs $ACS
+set_properties {work_dir}/true.str -set_elem acs $ACS
 
 #Generate image with appropriate SNR.
-generate_image {work_dir}/true_{num_strands}.str {work_dir}/output/image_{num_strands}.mif \
+generate_image {work_dir}/true.str {work_dir}/output/image.mif \
 -exp_num_length {args.num_length} -img_dim 3,3,3 -diff_encodings {work_dir}/params/diffusion/encoding_60.b \
 -exp_base_intensity 1 -diff_isotropic -exp_type sinc -exp_interp {args.interp_extent} -clean
 
-perturb_fibres {work_dir}/true_{num_strands}.str {work_dir}/output/init_{num_strands}.str -std {args.perturb_scale} \
+perturb_fibres {work_dir}/true.str {work_dir}/output/init.str -std {args.perturb_scale} \
 -scales_location {work_dir}/params/fibre/strand/masks/no_intens.str
 
 #Perform MH sampling
-metropolis {work_dir}/output/image_{num_strands}.mif {work_dir}/output/init_{num_strands}.str \
-{work_dir}/samples_{num_strands}.sst -exp_num_length {args.num_length} \
+metropolis {work_dir}/output/image.mif {work_dir}/output/init.str \
+{work_dir}/output/samples.sst -exp_num_length {args.num_length} \
 -diff_encodings {work_dir}/params/diffusion/encoding_60.b \
 -exp_base_intensity 1 -like_snr {args.like_snr} -walk_step_scale {step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -diff_isotropic -exp_type sinc -exp_interp {args.interp_extent} \
 -like_ref_signal $NOISE_REF -walk_step_location \
 {work_dir}/params/fibre/strand/masks/mcmc/metropolis/default.str
 
-stats_fibres {work_dir}/true_{num_strands}.str {work_dir}/samples_{num_strands}.sst
+stats_fibres {work_dir}/true.str {work_dir}/samples.sst
     """.format(work_dir=work_dir, num_strands=num_strands, step_scale=step_scale, args=args)
         # Submit job to que
     hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
-                   copy_to_output=required_dirs, dry_run=args.dry_run)
+                   dry_run=args.dry_run)
