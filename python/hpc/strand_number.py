@@ -57,14 +57,14 @@ generate_image {work_dir}/noise_ref.str {work_dir}/noise_ref.mif \
 
 NOISE_REF=`maxb0 {work_dir}/noise_ref.mif`
 
-select_fibres {work_dir}/params/fibre/tract/single/x.tct {work_dir}/true.str -num_width {num_strands}
+select_fibres {work_dir}/params/fibre/tract/single/x.tct {work_dir}/output/true.str -num_width {num_strands}
 
 ACS=$(echo "1.0/`fibre_info {work_dir}/true.str | grep total_count | awk '{{print $2}}'`" | bc -l)
 
 set_properties {work_dir}/true.str -set_elem acs $ACS
 
 #Generate image with appropriate SNR.
-generate_image {work_dir}/true.str {work_dir}/output/image.mif \
+generate_image {work_dir}/output/true.str {work_dir}/output/image.mif \
 -exp_num_length {args.num_length} -img_dim 3,3,3 -diff_encodings {work_dir}/params/diffusion/encoding_60.b \
 -exp_base_intensity 1 -diff_isotropic -exp_type sinc -exp_interp {args.interp_extent} -clean
 
@@ -80,7 +80,7 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.str \
 -exp_interp {args.interp_extent} -like_ref_signal $NOISE_REF -walk_step_location \
 {work_dir}/params/fibre/strand/masks/mcmc/metropolis/default.str
 
-stats_fibres {work_dir}/true.str {work_dir}/samples.sst
+stats_fibres {work_dir}/output/true.str {work_dir}/output/samples.sst
     """.format(work_dir=work_dir, num_strands=num_strands, args=args)
         # Submit job to que
     hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
