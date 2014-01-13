@@ -5,7 +5,7 @@
  Author: Tom Close (tclose@oist.jp)
  Created: 6/8/2012
 """
-#Required Imports
+# Required Imports
 import numpy as np
 import os.path
 import math
@@ -22,7 +22,7 @@ PLOT_COLOURS = {'rician': 'orange', 'gaussian': 'dodgerblue', 'diff': 'indigo'}
 SUMMARISE_CONF_INTERVALS = True
 for snr_i, snr in enumerate(SNR_RANGE):
     fig = plt.figure()
-    axes = fig.add_subplot(111) #fig.add_subplot(2, 2, snr_i + 1)
+    axes = fig.add_subplot(111)  # fig.add_subplot(2, 2, snr_i + 1)
     # Calculate the minimum value for the current plot
     conf_interval_sizes = {'rician': [], 'gaussian': [], 'diff': []}
     conf_interval_centres = {'rician': [], 'gaussian': [], 'diff': []}
@@ -36,7 +36,7 @@ for snr_i, snr in enumerate(SNR_RANGE):
         # Count the number of samples
         num_samples = len(rician)
         assert(len(gauss) == num_samples)
-        bin_width = math.pi / float(num_samples - 1) # The width of the bins used in the scan
+        bin_width = math.pi / float(num_samples - 1)  # The width of the bins used in the scan
         # Normalise probabilities
         rician -= np.log(np.sum(np.exp(rician)) * bin_width)
         gauss -= np.log(np.sum(np.exp(gauss)) * bin_width)
@@ -105,6 +105,6 @@ for snr_i, snr in enumerate(SNR_RANGE):
     axes.set_ylim((plot_min, plot_max))
     axes.set_xlim((-math.pi / 2.0, math.pi / 2.0))
     axes.set_title('SNR {}'.format(snr))
-    axes.set_xlabel('Rotation (Radians)')
-    axes.set_ylabel('Probability Density')
+    axes.set_xlabel('Rotation from true orientation (Radians)')
+    axes.set_ylabel('Posterior probability log density function')
 plt.show()
