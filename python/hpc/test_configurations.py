@@ -6,12 +6,13 @@
  Author: Tom Close (tclose@oist.jp)
  Created: 6/8/2012
 """
-#Name of the script for the output directory and submitted mpi job
+# Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'test_configurations'
-CONFIGURATIONS = ['layer-n3-d5', 'layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
-                  'x-n2', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-y_x-curve--y-n3', 'x-rotate-big', 'x_xxy',
-                  'x-curve-z', 'x-rotate', 'x_xy', 'x_xy-n3', 'x-curve-z_y-curve--z']
-#CONFIGURATIONS = ['x', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-z']
+# CONFIGURATIONS = ['layer-n3-d5', 'layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
+#                   'x-n2', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-y_x-curve--y-n3', 'x-rotate-big', 'x_xxy',
+#                   'x-curve-z', 'x-rotate', 'x_xy', 'x_xy-n3', 'x-curve-z_y-curve--z']
+CONFIGURATIONS = ['x-small', 'x-big', 'x-curve-z', 'x-rotate-big', 'x_xy', 'x_xxy', 'x-curve-z_y-curve--z', 'x-curve-y_x-curve--y']
+# CONFIGURATIONS = ['x', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-z']
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 # Required imports
 import hpc
@@ -52,10 +53,10 @@ parser.add_argument('--que_name', type=str, default='short', help='The the que t
 (default: %(default)s)')
 parser.add_argument('--combo', action='store_true', help='Instead of treating each ranging parameter sequence as the 1..N values for that parameter, all combinations of the provided parameters are tested.')
 args = parser.parse_args()
-# For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton 
-# list it is assumed to be constant and that value that value is replicated to match the number of other of other 
-# parameters in the set. Otherwise if the '--combo' option is provided then loop through all combinations of the 
-# provided parameters. 
+# For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton
+# list it is assumed to be constant and that value that value is replicated to match the number of other of other
+# parameters in the set. Otherwise if the '--combo' option is provided then loop through all combinations of the
+# provided parameters.
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low', 'prior_density_high',
                             'prior_hook', 'prior_thin', 'like_snr', 'width_epsilon', 'length_epsilon']
 ranging_params = hpc.combo_params(args, ranging_param_names, args.combo)
@@ -87,13 +88,13 @@ for i in xrange(args.num_runs):
                 f.write(config + '\n')
                 for par_name in ranging_param_names:
                     f.write('{par}: {val}\n'.format(par=par_name, val=eval(par_name)))
-            # Create a file in the output directory with just the configuration printed in it (usefulf for quickly 
+            # Create a file in the output directory with just the configuration printed in it (usefulf for quickly
             # determining what the configuration is
             with open(os.path.join(work_dir, 'output', 'config_name'), 'w') as config_name_file:
                 config_name_file.write(config + '\n')
             # Strip configuration of symbols for tract number and img dimension
-            config_name = re.sub('\-n[0-9]+', '', config) # Strip tract number
-            config_name = re.sub('\-d[0-9]+', '', config_name) # Strip dimension
+            config_name = re.sub('\-n[0-9]+', '', config)  # Strip tract number
+            config_name = re.sub('\-d[0-9]+', '', config_name)  # Strip dimension
             # Get the configuration path
             config_path = '{work_dir}/params/fibre/tract/test_configurations/{config_name}.tct'.format(work_dir=work_dir,
                                                                                                  config_name=config_name)
