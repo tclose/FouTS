@@ -15,23 +15,21 @@ import argparse
 import os.path
 
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--img_dims', default=10, type=int, help='The size of the noisy image to fit against')
-parser.add_argument('--like_snr', default=20, type=float, help='The assumed snr to used in the likelihood function in the metropolis sampling')
-parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/Output)')
-parser.add_argument('--num_runs', default=1, type=int, help='The number of runs to submit to the que')
+parser.add_argument('--output_dir', default=None, type=str, help='The parent directory in which the output directory will be created (defaults to $HOME/output)')
 parser.add_argument('--dry_run', action='store_true', help='Only perform a dry run (create jobscript then quit)')
 parser.add_argument('--np', type=int, default=1, help='The the number of processes to use for the simulation (default: %(default)s)')
-parser.add_argument('--que_name', type=str, default='long', help='The the que to submit the job to(default: %(default)s)')
-parser.add_argument('--num_iterations', type=int, default=100000, help='the number of iterations to perform')
-parser.add_argument('--sample_period', type=int, default=1000, help='the number of iterations before sampling')
-parser.add_argument('--num_length', type=int, default=30, help='The number of samples along the fibre length')
-parser.add_argument('--perturb_scale', type=float, default=0.001, help='the perturbation applied to the true configuration')
-parser.add_argument('--interp_extent', type=float, default=1.0, help='the extent of the interpolation kernel')
-parser.add_argument('--step_scale', type=float, default=0.002, help='scale the metropolis steps')
+parser.add_argument('--que_name', type=str, default='long', help='The the que to submit the job to (default: %(default)s)')
+parser.add_argument('--num_iterations', type=int, default=100000, help='the number of iterations to perform (default: %(default)s)')
+parser.add_argument('--sample_period', type=int, default=1000, help='the number of iterations before sampling (default: %(default)s)')
+parser.add_argument('--num_length', type=int, default=30, help='The number of samples along the fibre length (default: %(default)s)')
+parser.add_argument('--perturb_scale', type=float, default=0.001, help='the perturbation applied to the true configuration (default: %(default)s)')
+parser.add_argument('--like_snr', default=20, type=float, help='The assumed snr to used in the likelihood function in the metropolis sampling (default: %(default)s)')
+parser.add_argument('--interp_extent', type=float, default=1.0, help='the extent of the interpolation kernel (default: %(default)s)')
+parser.add_argument('--step_scale', type=float, default=0.002, help='scale the metropolis steps (default: %(default)s)')
 parser.add_argument('--num_strands', type=int, default=[1, 3, 5, 7, 8, 9], nargs='+',
-                    help='The number of strands to test')
-parser.add_argument('--end_on_sphere_scale', type=float, default=100, help="The scale of the end_on_sphere prior")
-parser.add_argument('--end_on_sphere_radius', type=float, default=0.225, help="The radius of the end_on_sphere prior")
+                    help='The number of strands to test (default: %(default)s)')
+parser.add_argument('--end_on_sphere_scale', type=float, default=0, help="The scale of the end_on_sphere prior (default: %(default)s)")
+parser.add_argument('--end_on_sphere_radius', type=float, default=0.225, help="The radius of the end_on_sphere prior (default: %(default)s)")
 args = parser.parse_args()
 # For the following parameters to this script, ensure that number of parameter values match, or if they are a singleton
 # list it is assumed to be constant and that value that value is replicated to match the number of other of other
@@ -61,16 +59,16 @@ NOISE_REF=`maxb0 {work_dir}/noise_ref.mif`
 
 select_fibres {work_dir}/params/fibre/tract/single/x.tct {work_dir}/output/true.str -num_width {num_strands}
 
-ACS=$(echo "1.0/`fibre_info {work_dir}/true.str | grep total_count | awk '{{print $2}}'`" | bc -l)
+ACS=$(echo "1.0/`fibre_info {work_dir}/output/true.str | grep total_count | awk '{{print $2}}'`" | bc -l)
 
-set_properties {work_dir}/true.str -set_elem acs $ACS
+set_properties {work_dir}/output/true.str -set_elem acs $ACS
 
 #Generate image with appropriate SNR.
 generate_image {work_dir}/output/true.str {work_dir}/output/image.mif \
 -exp_num_length {args.num_length} -img_dim 3,3,3 -diff_encodings {work_dir}/params/diffusion/encoding_60.b \
 -exp_base_intensity 1 -diff_isotropic -exp_type sinc -exp_interp {args.interp_extent} -clean
 
-perturb_fibres {work_dir}/true.str {work_dir}/output/init.str -std {args.perturb_scale} \
+perturb_fibres {work_dir}/output/true.str {work_dir}/output/init.str -std {args.perturb_scale} \
 -scales_location {work_dir}/params/fibre/strand/masks/no_intens.str
 
 #Perform MH sampling
