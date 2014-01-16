@@ -37,7 +37,6 @@ parser.add_argument('--prior_aux_freq', default=[60.0], type=float, nargs='+', h
 parser.add_argument('--prior_density_high', default=[1], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_density_low', default=[0.01], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_hook', default=[100000.0], type=float, nargs='+', help='The scaling of the density prior')
-parser.add_argument('--prior_thin', default=[0.0], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--width_epsilon', default=[0.01], type=float, nargs='+', help='The amount of width epsilon to use')
 parser.add_argument('--length_epsilon', default=[0.01], type=float, nargs='+', help='The amount of length epsilon to use')
 parser.add_argument('--img_snr', default=20.0, type=float, help='The snr to used in the noisy image')
@@ -58,7 +57,7 @@ args = parser.parse_args()
 # parameters in the set. Otherwise if the '--combo' option is provided then loop through all combinations of the
 # provided parameters.
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low', 'prior_density_high',
-                            'prior_hook', 'prior_thin', 'like_snr', 'width_epsilon', 'length_epsilon']
+                            'prior_hook', 'like_snr', 'width_epsilon', 'length_epsilon']
 ranging_params = hpc.combo_params(args, ranging_param_names, args.combo)
 # Get parameters directory
 param_dir = os.path.join(hpc.get_project_dir(), 'params')
@@ -79,7 +78,7 @@ noise_ref_signal = sp.check_output('maxb0 {}/noise_ref.mif'.format(output_parent
 # Generate a random seed to seed the random number generators of the cmds
 seed = int(time.time() * 100)
 for i in xrange(args.num_runs):
-    for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin, like_snr, \
+    for prior_freq, prior_aux_freq, prior_density_low, prior_density_high, prior_hook, like_snr, \
                                                                 width_epsilon, length_epsilon in zip(*ranging_params):
         for config in CONFIGURATIONS:
             # Create work directory and get path for output directory
@@ -132,7 +131,7 @@ generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif \
 
 # Initialise fibres
 init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
--img_dims "3 3 3" -degree {args.degree} -seed {init_seed} -base_intensity 1.0 \
+-img_dims "3 3 3" -degree {args.degree} -random_seed {init_seed} -base_intensity 1.0 \
 -width_epsilon {width_epsilon} -length_epsilon {length_epsilon} -length_std 0.02 -width_mean 0.05 \
 -width_std 0.005
 
@@ -141,7 +140,7 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/out
 -exp_interp_extent {args.assumed_interp_extent} -walk_step_scale {args.step_scale} -num_iter {args.num_iterations} \
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
-{prior_density_low} 100 -prior_hook {prior_hook} 100 15 -prior_thin {prior_thin} 2 -exp_num_width_sections {args.num_width_sections} \
+{prior_density_low} 100 -prior_hook {prior_hook} 100 15 -exp_num_width_sections {args.num_width_sections} \
  -exp_type {args.interp_type}
     
 # Map to closest tract in the true configuration
@@ -152,7 +151,7 @@ stats_fibres {config_path} {work_dir}/output/samples.tst
     """.format(work_dir=work_dir, config_path=config_path, config=config, args=args, noise_ref_signal=noise_ref_signal,
                num_tracts=num_tracts, img_dim=img_dim, init_seed=seed, metropolis_seed=seed + 1, prior_freq=prior_freq,
                prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low, prior_density_high=prior_density_high,
-               prior_hook=prior_hook, prior_thin=prior_thin, like_snr=like_snr, width_epsilon=width_epsilon,
+               prior_hook=prior_hook, like_snr=like_snr, width_epsilon=width_epsilon,
                length_epsilon=length_epsilon)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
