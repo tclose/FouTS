@@ -11,7 +11,7 @@ SCRIPT_NAME = 'test_configurations'
 # CONFIGURATIONS = ['layer-n3-d5', 'layer-n5-d5', 'x-curve-z_y-curve--z', 'x-small', 'x_y', 'x-big', 'x-pos-yz', 'x',
 #                   'x-n2', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-y_x-curve--y-n3', 'x-rotate-big', 'x_xxy',
 #                   'x-curve-z', 'x-rotate', 'x_xy', 'x_xy-n3', 'x-curve-z_y-curve--z']
-CONFIGURATIONS = ['x-small', 'x-big', 'x-curve-z', 'x-rotate-big', 'x_xy', 'x_xxy', 'x-curve-z_y-curve--z', 'x-curve-y_x-curve--y']
+CONFIGURATIONS = ['x-small', 'x-thin', 'x-big', 'x-curve-z', 'x-rotate-big', 'x_xy', 'x_xxy', 'x-curve-z_y-curve--z', 'x-curve-y_x-curve--y']
 # CONFIGURATIONS = ['x', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-z']
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 # Required imports
