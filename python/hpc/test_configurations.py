@@ -144,7 +144,8 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/out
  -exp_type {args.interp_type}
     
 # Map to closest tract in the true configuration
-map_colours {work_dir}/output/samples.tst {work_dir}/output/samples-mapped.tst
+select_fibres {work_dir}/output/samples.tst {work_dir}/output/last.tct --include 99
+map_colours {work_dir}/output/config.tct {work_dir}/output/last.tct {work_dir}/output/samples-mapped.tst {work_dir}/output/samples.tst
     
 # Run analysis
 stats_fibres {config_path} {work_dir}/output/samples.tst
