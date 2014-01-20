@@ -232,7 +232,7 @@ EXECUTE {
         SET_IMAGE_PARAMETERS;
         
         if (!img_offsets.valid())
-            img_offsets = Image::Observed::Buffer::default_corner_offset(img_dims, img_vox_lengths);
+            img_offsets = Triple<double>(0.0, 0.0, 0.0); // Image::Observed::Buffer::default_corner_offset(img_dims, img_vox_lengths);
         
         Triple<double> roi_extent = (img_vox_lengths * img_dims) / 2.0 - edge_buffer;
         
