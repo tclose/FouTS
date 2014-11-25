@@ -32,7 +32,11 @@ function [strands, bundle_indices] = tracts2strands(tracts, base_widths, num_str
   % to be represented by whole number increments in number of strands 
   % rather than whole number increments in the square-root of strands
   if ~exist('acurate_acs','var')
-    accurate_acs = true; 
+    if strands_per_acs < 0
+      accurate_acs = false;
+    else
+      accurate_acs = true;
+    end
   end
   
   if isempty(tract_indices)
