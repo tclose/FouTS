@@ -82,8 +82,8 @@ namespace BTS {
                     std::vector<const char*> prp_keys;
                     std::vector<std::string> ext_prp_keys;
                     std::ifstream prop_in;
-                    off64_t prop_begin;
-                    off64_t begin;
+                    int64_t prop_begin;
+                    int64_t begin;
 
                 public:
                     

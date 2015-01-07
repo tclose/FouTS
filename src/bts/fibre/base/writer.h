@@ -142,7 +142,7 @@ namespace BTS {
                         return this->out;
                     }
                     
-                    off64_t get_count_offset() {
+                    int64_t get_count_offset() {
                         return this->count_offset;
                     }
                     
@@ -207,9 +207,9 @@ namespace BTS {
                             std::ofstream& fout);
 
 #ifdef FAST_WRITE //Will inline writing file to avoid overhead call.  However, this will remove the ability to write to text files.
-                    void replace_end_of_file(const Coord& t, off64_t start_pos);
+                    void replace_end_of_file(const Coord& t, int64_t start_pos);
 #else
-                    virtual void replace_end_of_file(const Coord& t, off64_t start_pos);
+                    virtual void replace_end_of_file(const Coord& t, int64_t start_pos);
 #endif
                     
                     void init();
@@ -248,7 +248,7 @@ namespace BTS {
                     
                     void write(const Coord& coord);
 
-                    void replace_end_of_file(const Coord& c, off64_t start_pos) {
+                    void replace_end_of_file(const Coord& c, int64_t start_pos) {
                     }
                     
                     Coord write_first(const Coord& c) {
