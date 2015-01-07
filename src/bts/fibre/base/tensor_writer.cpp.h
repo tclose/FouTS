@@ -86,7 +86,7 @@ namespace BTS {
                 for (size_t prop_i = 0; prop_i < strand.num_props(); ++prop_i)
                     header.push_back(prefix + strand.prop_key(prop_i) + ">");
                 
-                for (uint degree_i = 0; degree_i < strand.degree(); degree_i++)
+                for (size_t degree_i = 0; degree_i < strand.degree(); degree_i++)
                     header_element(strand[degree_i], header,
                             prefix + "degree" + str(degree_i) + ">");
                 
@@ -99,7 +99,7 @@ namespace BTS {
                 for (size_t prop_i = 0; prop_i < tractlet.num_props(); ++prop_i)
                     header.push_back(prefix + tractlet.prop_key(prop_i) + ">");
                 
-                for (uint ax_i = 0; ax_i < 3; ax_i++)
+                for (size_t ax_i = 0; ax_i < 3; ax_i++)
                     header_element(tractlet[ax_i], header, prefix + "axis" + str(ax_i) + ">");
                 
             }
@@ -111,7 +111,7 @@ namespace BTS {
                 for (size_t prop_i = 0; prop_i < set.num_props(); ++prop_i)
                     header.push_back(prefix + set.prop_key(prop_i) + ">");
                 
-                for (uint elem_i = 0; elem_i < set.size(); elem_i++)
+                for (size_t elem_i = 0; elem_i < set.size(); elem_i++)
                     header_element(set[elem_i], header, prefix + "tractlet" + str(elem_i) + ">");
                 
             }
@@ -123,7 +123,7 @@ namespace BTS {
                 for (size_t prop_i = 0; prop_i < set.num_props(); ++prop_i)
                     header.push_back(prefix + set.prop_key(prop_i) + ">");
                 
-                for (uint elem_i = 0; elem_i < set.size(); elem_i++)
+                for (size_t elem_i = 0; elem_i < set.size(); elem_i++)
                     header_element(set[elem_i], header, prefix + "strand" + str(elem_i) + ">");
                 
             }
@@ -132,7 +132,7 @@ namespace BTS {
                     const Coord& element, std::vector<std::string>& header,
                     const std::string& prefix) {
                 
-                for (uint dim_i = 0; dim_i < 3; dim_i++)
+                for (size_t dim_i = 0; dim_i < 3; dim_i++)
                     header.push_back(prefix + "dim" + str(dim_i) + ">");
                 
             }

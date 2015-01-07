@@ -47,7 +47,7 @@
 #include <sstream>
 #include <iostream>
 #include <unistd.h>
-#include <linux/limits.h>
+#include <limits.h>
 
 #include "types.h"
 #include "mrtrix.h"

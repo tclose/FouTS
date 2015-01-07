@@ -24,11 +24,11 @@
 #include <set>
 
 #include "bts/common.h"
+/*
+include "bts/math/blossom.h"
 
-#include "bts/math/blossom.h"
-
-#include "blossom5/PerfectMatching.h"
-#include "blossom5/CheckPerfectMatching.h"
+include "blossom5/PerfectMatching.h"
+include "blossom5/CheckPerfectMatching.h"
 
 const double WEIGHTS_RANGE = 1e6;
 
@@ -229,3 +229,5 @@ namespace BTS {
     }
 
 }
+*/
+

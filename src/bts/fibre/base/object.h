@@ -770,7 +770,7 @@ namespace BTS {
             inline std::map<std::string, std::string>& Object::insert_props(
                     std::map<std::string, std::string>& properties, size_t precision) const {
                 
-                for (uint prop_i = 0; prop_i < num_props(); ++prop_i)
+                for (size_t prop_i = 0; prop_i < num_props(); ++prop_i)
                     properties[prop_key(prop_i)] = str(prop(prop_i), precision);
                 
                 return properties;

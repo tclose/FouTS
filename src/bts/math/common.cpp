@@ -80,7 +80,7 @@ namespace BTS {
             
             stream << "[";
             
-            for (uint i = 0; i < v.size() - 1; i++)
+            for (size_t i = 0; i < v.size() - 1; i++)
                 stream << v[i] << " ";
             
             stream << v[v.size() - 1];
@@ -96,8 +96,8 @@ namespace BTS {
             std::ostringstream stream;
             stream << "[";
             
-            for (uint row_i = 0; row_i < m.rows(); row_i++) {
-                for (uint col_i = 0; col_i < m.columns(); col_i++) {
+            for (size_t row_i = 0; row_i < m.rows(); row_i++) {
+                for (size_t col_i = 0; col_i < m.columns(); col_i++) {
                     stream << m(row_i, col_i);
                     if (col_i != m.columns() - 1)
                         stream << ", ";
@@ -134,7 +134,7 @@ namespace BTS {
             
             double sum = 0.0;
             
-            for (uint i = 0; i < m.rows(); ++i)
+            for (size_t i = 0; i < m.rows(); ++i)
                 sum += m(i, i);
             
             return sum;
