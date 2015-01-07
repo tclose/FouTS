@@ -12,5 +12,5 @@ if [ ${#TARGET} -gt 0 ]; then
 
 fi
 
-../MRtrix/build $TARGET $@
+../mrtrix/build $TARGET $@
 

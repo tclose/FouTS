@@ -93,7 +93,7 @@ namespace BTS {
                 
                 // Record position of current END_OF_DATA marker, so it can be replaced as the last step, thus ensuring
                 // that the subsequent fibre object is completely written before the END_OF_DATA marker is updated.
-                off64_t start_pos = this->out.tellp();
+                int64_t start_pos = this->out.tellp();
                 
                 // Holds the Triple that will replace the END_OF_DATA marker in the final step
                 Coord first_coord;
@@ -223,7 +223,7 @@ namespace BTS {
             
             template<typename T> void Writer<T>::update_count() {
                 
-                off64_t current_pos = this->out.tellp();
+                int64_t current_pos = this->out.tellp();
                 
                 this->out.seekp(this->count_offset);
                 this->out << this->count << "\ntotal_count: " << this->total_count << "\nEND\n";
@@ -233,9 +233,9 @@ namespace BTS {
             }
             
             template<typename T> void Writer<T>::replace_end_of_file(const Coord& t,
-                                                                     off64_t start_pos) {
+                                                                     int64_t start_pos) {
                 
-                off64_t current = this->out.tellp();
+                int64_t current = this->out.tellp();
                 this->out.seekp(start_pos - sizeof_coord);
                 write(t);
                 this->out.seekp(current);
