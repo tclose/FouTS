@@ -23,4 +23,6 @@ fi
   
 echo $TARGET
 
-/home/tclose/git/MRtrix/build debug $TARGET $@ 
+PATH=/usr/local/bin:$PATH
+DYLD_LIBRARY_PATH=/usr/local/lib:$DYLD_LIBRARY_PATH
+../mrtrix/build debug $TARGET $@ 

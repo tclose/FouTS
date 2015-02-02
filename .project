@@ -3,6 +3,7 @@
 	<name>FouTS</name>
 	<comment></comment>
 	<projects>
+		<project>MRtrix</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

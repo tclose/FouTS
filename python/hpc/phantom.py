@@ -12,7 +12,6 @@ import argparse
 import os.path
 import time
 
-
 def sampling_cmd(args, work_dir, dataset_path, random_seed, prior_freq,
                  prior_aux_freq, prior_density_low, prior_density_high, prior_hook, prior_thin,
                  like_snr, init_name, samples_name, last_name, num_iterations):
@@ -23,7 +22,7 @@ def sampling_cmd(args, work_dir, dataset_path, random_seed, prior_freq,
         noise_option = '-like_snr {like_snr}'.format(like_snr)
     cmd = \
 """
-# Calculate appropriate number of length and width samples
+# Calculate appropriate number of length and width samples                
 calculate_num_samples --samples_per_acs {args.samples_per_acs} \
 --samples_per_length {args.samples_per_length} --strategy max \
 --min_length_sections {args.min_length_samples} \
@@ -34,7 +33,7 @@ calculate_num_samples --samples_per_acs {args.samples_per_acs} \
 set_properties {work_dir}/output/{init_name}.tct \
 -set length_epsilon {args.length_epsilon} \
 -set width_epsilon {args.width_epsilon} -set base_intensity 1.0
-
+                
 # Run metropolis
 time metropolis {dataset_path} {work_dir}/output/{init_name}.tct \
 {work_dir}/output/{samples_name}.tst {noise_option} \
@@ -64,7 +63,7 @@ select_fibres {work_dir}/output/{samples_name}.tst \
     return cmd
 
 
-# Name of the script for the output directory and submitted mpi job
+#Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'invivo_sampling'
 # Required dirs for the script to run
 REQUIRED_DIRS = ['params/image/reference', 'params/diffusion',
@@ -78,8 +77,7 @@ parser.add_argument('--num_iterations', default=75000, type=int,
                     help="The number of interations in the metropolis sampling "
                          "(default: %(default)s)")
 parser.add_argument('--num_after_split_iterations', default=50000, type=int,
-                    help="The number of interations in the metropolis sampling"
-                         " after the split"
+                    help="The number of interations in the metropolis sampling after the split"
                          "(default: %(default)s)")
 parser.add_argument('--sample_period', default=250, type=int,
                     help="The sample period of the metropolis sampling "
@@ -108,11 +106,11 @@ parser.add_argument('--interp_type', default='sinc', type=str,
                     help="The type of interpolation used in the reference "
                          "image (default: %(default)s)")
 parser.add_argument('--interp_extent', default=1, type=int,
-                    help="The interpolation extent used in the reference image"
-                         " (default: %(default)s)")
+                    help="The interpolation extent used in the reference image "
+                         "(default: %(default)s)")
 parser.add_argument('--assumed_interp_extent', default=1, type=int,
-                    help="The interpolation type used in the likelihood images"
-                         " (default: %(default)s)")
+                    help="The interpolation type used in the likelihood images "
+                         "(default: %(default)s)")
 parser.add_argument('--degree', default=5, type=int,
                     help="The degree of the fibre used to sample from "
                          "(default: %(default)s)")
@@ -149,10 +147,10 @@ parser.add_argument('--like_noise_map', default=None, type=str,
                     help="The noise map to used in the likelihood function "
                          "in the metropolis sampling instead of the like_snr")
 parser.add_argument('--init_extent', default=(1, 1, 1), nargs=3, type=int,
-                    help="The extent (in number of voxels) of the ROI in which"
-                         " the inital tracts are generated")
-parser.add_argument('--random_seed', type=int, 
-                    help="The random seed for the whole run")
+                    help="The extent (in number of voxels) of the ROI in which "
+                         "the inital tracts are generated")
+parser.add_argument('--random_seed', type=int, help="The random seed for the whole "
+                                             "run")
 parser.add_argument('--output_dir', default=None, type=str,
                     help="The parent directory in which the output directory "
                          "will be created (defaults to $HOME/Output)")
@@ -161,8 +159,8 @@ parser.add_argument('--num_runs', default=1, type=int,
 parser.add_argument('--dry_run', action='store_true',
                     help="Only perform a dry run (create jobscript then quit)")
 parser.add_argument('--np', type=int, default=1,
-                    help="The the number of processes to use for the "
-                         "simulation (default: %(default)s)")
+                    help="The the number of processes to use for the simulation"
+                         "(default: %(default)s)")
 parser.add_argument('--que_name', type=str, default='long',
                     help="The the que to submit the job to  (default: "
                          "%(default)s)")
@@ -171,12 +169,10 @@ parser.add_argument('--combo', action='store_true',
                          " as the 1..N values for that parameter, all "
                          "combinations of the provided parameters are tested.")
 parser.add_argument('--dataset', type=str,
-                    default=os.path.join('donald', 'images',
-                                         'corpus_callosum.150.no-iso.mif'),
+                    default=os.path.join('donald', 'images', 'corpus_callosum.150.no-iso.mif'),
                     help="The dataset to use (default: %(default)s).")
 parser.add_argument('--seed_positions', type=str,
-                    default=os.path.join('donald',
-                                         'corpus_callosum.150.seed.txt'),
+                    default=os.path.join('donald', 'corpus_callosum.150.seed.txt'),
                     help="The seed locations of the tracts.")
 parser.add_argument('--seed_pos_stddev', type=float, default=0.5,
                     help="The standard deviation about the seed positions")
@@ -186,11 +182,11 @@ parser.add_argument('--intensity_estimate', type=str,
 parser.add_argument('--split', action='store_true',
                     help='Split the tracts in two and repeat the sampling')
 args = parser.parse_args()
-# For the following parameters to this script, ensure that number of parameter
-# values match, or if they are a singleton list it is assumed to be constant
-# and that value that value is replicated to match the number of other of other
-# parameters in the set. Otherwise if the '--combo' option is provided then
-# loop through all combinations of the provided parameters.
+# For the following parameters to this script, ensure that number of parameter 
+# values match, or if they are a singleton list it is assumed to be constant 
+# and that value that value is replicated to match the number of other of other 
+# parameters in the set. Otherwise if the '--combo' option is provided then loop
+# through all combinations of the provided parameters. 
 
 ranging_param_names = ['prior_freq', 'prior_aux_freq', 'prior_density_low',
                        'prior_density_high', 'prior_hook', 'prior_thin',

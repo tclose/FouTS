@@ -77,7 +77,7 @@ namespace BTS {
             bool Object::props_match(const std::vector<const char*>* properties) const {
                 
                 bool match;
-                
+
                 if (props == properties)    // Point to the same properties
                     match = true;
                 else if (!props->size() && !properties->size())    // Both contain no properties

@@ -49,7 +49,8 @@ function fig = plot_image(varargin)
 %  
 %  
 
-
+  [path, ~, ~] = fileparts(mfilename('fullpath'));
+  default_diffusion_dir = fullfile(path, 'diffusion_encodings');
 
   description = 'Plots DW-MRI signals from a neighbourhood of voxels on a 3D grid';
   
@@ -94,9 +95,9 @@ function fig = plot_image(varargin)
     num_voxels = img_struct.dim(1) * img_struct.dim(2) * img_struct.dim(3);
     
     if num_voxels <= 125
-      auto_plot_directions = '/home/tclose/Data/Tractography/diffusion/encoding/encoding_1000.b';
+      auto_plot_directions = fullfile(default_diffusion_dir, 'encoding_1000.b');
     else
-      auto_plot_directions = '/home/tclose/Data/Tractography/diffusion/encoding/encoding_60.b';
+      auto_plot_directions = fullfile(default_diffusion_dir, 'encoding_60.b');
     end
 
   end  
@@ -112,7 +113,7 @@ function fig = plot_image(varargin)
             'colour         ',       [1 1 0],  'matrix_1x3', 'Colour of the non-negative lobes of the signal';...
             'transparency   ', 1.0,      'float', 'Transparency of the lobes';...
             'neg_colour     ',   [1 1 1],  'matrix_1x3', 'Colour of the negative lobes of the signal';...
-            'grad_directions',        '/home/tclose/Data/Tractography/diffusion/encoding/encoding_60.b',...
+            'grad_directions',        fullfile(default_diffusion_dir, 'encoding_60.b'),...
                                       'string', 'Gradient encoding used.';...            
             'plot_directions',        auto_plot_directions,...
                                       'string', 'The direction encoding used for the plotting.';...
