@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import platform, sys, os, time, threading, subprocess, copy
+import platform, sys, os, time, threading, subprocess, copy, re
 
 
 config_file = 'config.default'
@@ -33,7 +33,7 @@ def disp (msg):
 bin_dir = 'bin'
 cmd_dir = 'cmd'
 lib_dir = 'lib'
-misc_dir = 'src'
+src_dir = 'src'
 doc_dir = 'doc'
 dev_dir = 'dev'
 
@@ -48,7 +48,7 @@ config_suffix = ''
 
 
 
-include_paths = [ misc_dir, cmd_dir ]
+include_paths = [ src_dir, cmd_dir ]
 
 # check if we are compiling a separate project:
 mrtrix_dir = '.'
@@ -65,7 +65,7 @@ while os.path.abspath (os.path.dirname (get_real_name (build_script))) != os.pat
   separate_project = True
   build_script = os.path.normpath (os.path.join (mrtrix_dir, get_real_name (build_script)))
   mrtrix_dir = os.path.dirname (build_script)
-  include_paths += [ os.path.join (mrtrix_dir, misc_dir) ]
+  include_paths += [ os.path.join (mrtrix_dir, src_dir) ]
   if verbose: 
     print '    ' + mrtrix_dir
 
@@ -120,15 +120,16 @@ please run "./configure" prior to invoking this script
 # get version info:
 
 if ld_enabled:
-  f = open (os.path.join (lib_dir, 'mrtrix.h'), 'r')
-  for line in f:
-    line = line.split()
-    if len(line) != 3: continue
-    if line[0] == '#define':
-      if line[1] == 'MRTRIX_MAJOR_VERSION': major = line[2]
-      elif line[1] == 'MRTRIX_MINOR_VERSION': minor = line[2]
-      elif line[1] == 'MRTRIX_MICRO_VERSION': micro = line[2]
-  f.close()
+  with open (os.path.join (src_dir, 'bts', 'version.h'), 'r') as f:
+      for line in f:
+        match = re.match('    const size_t BTS_(\w+)_VERSION = (.*);', line)
+        if match:
+            if match.group(1) == 'MAJOR':
+                major = match.group(2)
+            elif match.group(1) == 'MINOR':
+                minor = match.group(2)
+            elif match.group(1) == 'MICRO':
+                micro = match.group(2)
 
   libname += '-' + major + '_' + minor + '_' + micro + config_suffix
 

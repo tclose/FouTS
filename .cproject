@@ -79,6 +79,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.release.600959894" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.release">
 								<option id="gnu.both.asm.option.include.paths.1330914329" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../src"/>
+									<listOptionValue builtIn="false" value="../lib2"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1647060145" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
