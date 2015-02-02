@@ -57,7 +57,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.1433576441" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.1434170" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
 								<option id="gnu.cpp.link.option.paths.95727480" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MRtrix/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="../lib"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.745647443" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="gsl"/>
@@ -67,7 +67,7 @@
 									<listOptionValue builtIn="false" value="lapack_atlas"/>
 									<listOptionValue builtIn="false" value="gfortran"/>
 									<listOptionValue builtIn="false" value="gslcblas"/>
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="&quot;${workspace_loc:/MRtrix/lib/libmrtrix-0_3_5.so}&quot;"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="&quot;${ProjDirPath}/lib/libfouts-0_0_3.dylib&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.debugging.gprof.651873332" name="Generate gprof information (-pg)" superClass="gnu.cpp.link.option.debugging.gprof" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.debugging.prof.38053965" name="Generate prof information (-p)" superClass="gnu.cpp.link.option.debugging.prof" value="true" valueType="boolean"/>
@@ -79,7 +79,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.release.600959894" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.release">
 								<option id="gnu.both.asm.option.include.paths.1330914329" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../src"/>
-									<listOptionValue builtIn="false" value="../lib2"/>
+									<listOptionValue builtIn="false" value="../lib"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1647060145" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -87,6 +87,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cmd"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="lib"/>
 						<entry excluding="*.o" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
