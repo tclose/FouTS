@@ -42,7 +42,7 @@ icon_dep = 'icons/icon.rc'
 
 cpp_suffix = '.cpp'
 h_suffix = '.h'
-libname = 'mrtrix'
+libname = 'fouts'
 config_suffix = ''
 
 
