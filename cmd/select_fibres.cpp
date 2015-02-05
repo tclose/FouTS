@@ -593,7 +593,7 @@ EXECUTE {
         opt = get_options("degree");
         if (opt.size())
             degree = opt[0][0];
-        
+
         opt = get_options("num_tractlets");
         if (opt.size())
             num_tractlets = opt[0][0];

@@ -93,7 +93,7 @@ namespace BTS {
                            const std::string& cluster_save_location)
                 : Fibre::Base::Set<Tractlet>(select_props<Set>(*tcks.props),
                         select_props<Tractlet>(*tcks.elem_props), tcks.get_extend_props()) {
-            
+
             from_strands(Strand::Set(tcks, degree), num_tractlets, cluster_save_location);
             
         }
@@ -103,8 +103,8 @@ namespace BTS {
                 : Fibre::Base::Set<Tractlet>(select_props<Set>(*tcks.props),
                         select_props<Tractlet>(*tcks.elem_props), tcks.get_extend_props()) {
             
-            from_strands(Strand::Set(tcks), width);
-            
+            from_strands(Strand::Set(tcks, degree), width);
+
         }
         
         void Tractlet::Set::from_strands(const Strand::Set& strands) {

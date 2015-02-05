@@ -163,7 +163,7 @@ function main_fig = plot_tcks(varargin)
   num_tcks = size(tcks,1);
 
   bundle_indices  = get_properties(prop_keys, prop_values, 'bundle_index', [0:1:(num_tcks-1)]', num_tcks);
-  radii           = get_properties(prop_keys, prop_values, 'tract_radius', tcks_radius, num_tcks);
+  radii           = get_properties(prop_keys, prop_values, 'track_radius', tcks_radius, num_tcks);
     
   add_colour_key(bundle_indices,colours_of_bundles);
   
