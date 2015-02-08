@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
- This script submits scripts to generate random prior shapes from noisy images 
+ This script submits scripts to generate random prior shapes from noisy images
  and submit them to the job que on a sun grid engine
 
  Author: Tom Close (tclose@oist.jp)
@@ -15,7 +15,8 @@ import time
 # Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'phantom_sampling'
 # Required dirs for the script to run
-REQUIRED_DIRS = ['params/image/phantom/paper/from_tcks/one/trim', 'params/diffusion',
+REQUIRED_DIRS = ['params/image/phantom/paper/from_tcks/one/trim',
+                 'params/diffusion',
                  'params/fibre/tract/masks/mcmc/metropolis']
 
 
@@ -23,34 +24,42 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
     dataset_path = os.path.join(
         work_dir, 'params', 'image', 'phantom', 'paper', 'from_tcks',
         args.true_interp_style, 'trim', str(args.voxel_res))
-    cmd = (
-    """
-    init_fibres {work_dir}/init.tct -degree {degree} -num_fibres  \\
-    {num_tracts} -img_dims {img_dims} -curve_stddev 0.001 -base_intensity 1 \\
-    -width_epsilon {width_epsilon} -width_stddev {init_width_stddev} \\
-    -length_stddev {init_length} -width_mean {init_width_mean}  \\
-    -length_epsilon {length_epsilon} -img_offsets {img_offsets}
-    
-    # run the metropolis algorithm
-    metropolis {dataset_path}/{phantom_index}.mif {work_dir}/init.tct \\
-    {work_dir}/samples.tst -like_snr {assumed_snr} -exp_type {interp_type} \\
-    -exp_interp_extent {interp_extent} -walk_step_scale {step_scale} \\
-    -exp_num_width_sections {num_width_sections} \\
-    -exp_base_intensity {base_intensity} \\
-    -exp_num_length_sections {num_length_sections} \\
-    -walk_step_location {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default.tct \\
-    -num_iterations {num_iterations} -sample_period {sample_period} \\
-    -prior_freq {prior_freq} {prior_aux_freq} \\
-    -prior_density {prior_density_high} {prior_density_low} 100 \\
-    -prior_hook {prior_hook} 100 15 -diff_warn -save_image
-    """.format(
-        work_dir=work_dir, phantom_index=phantom_index, step_scale=args.step_scale,
-        num_iterations=args.num_iterations, sample_period=args.sample_period,
-        num_length_sections=args.num_length_sections, dataset_path=dataset_path,
+    mask_path = os.path.join(
+        work_dir, 'params', 'fibre', 'tract', 'masks', 'mcmc', 'metropolis',
+        'default.tct')
+    cmd = ("""
+        init_fibres {work_dir}/init.tct -degree {degree} -num_fibres  \\
+        {num_tracts} -img_dims 3,3,3 -curve_stddev 0.001 \\
+        -base_intensity 1 -width_epsilon {width_epsilon} \\
+        -width_stddev {init_width_stddev} -length_stddev {init_length} \\
+        -width_mean {init_width_mean}  -length_epsilon {length_epsilon} \\
+        -img_vox_lengths {args.vox_res},{args.vox_res},{args.vox_res}
+
+        # run the metropolis algorithm
+        metropolis {dataset_path}/{phantom_index}.mif {work_dir}/init.tct \\
+        {work_dir}/samples.tst -like_snr {assumed_snr} \\
+        -exp_type {interp_type} -exp_interp_extent {interp_extent} \\
+        -walk_step_scale {step_scale} -seed {seed} \\
+        -exp_num_width_sections {num_width_sections} \\
+        -exp_base_intensity {base_intensity} \\
+        -exp_num_length_sections {num_length_sections} \\
+        -walk_step_location {mask_path} \\
+        -num_iterations {num_iterations} -sample_period {sample_period} \\
+        -prior_freq {prior_freq} {prior_aux_freq} \\
+        -prior_density {prior_density_high} {prior_density_low} 100 \\
+        -prior_hook {prior_hook} 100 15 -diff_warn -save_image
+        """.format(
+        work_dir=work_dir, phantom_index=phantom_index,
+        step_scale=args.step_scale,
+        num_iterations=args.num_iterations,
+        sample_period=args.sample_period,
+        num_length_sections=args.num_length_sections,
+        dataset_path=dataset_path,
         num_width_sections=args.num_width_sections, num_tracts=args.num_tracts,
         interp_type=args.interp_type, interp_extent=args.interp_extent,
         init_perturb_stddev=args.init_perturb_stddev,
-        img_dims=','.join(str(d) for d in args.img_dims), true_degree=args.true_degree,
+        img_dims=','.join(str(d) for d in args.img_dims),
+        true_degree=args.true_degree, mask_path=mask_path,
         degree=args.degree, prior_freq=args.prior_freq,
         prior_aux_freq=args.prior_aux_freq,
         prior_density_high=args.prior_density_high,
@@ -59,8 +68,8 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         init_length=args.init_length, init_width_mean=args.init_width_mean,
         init_width_stddev=args.init_width_stddev,
         base_intensity=args.base_intensity,
-        img_offsets=','.join(str(o) for o in args.img_offsets),
-        width_epsilon=args.width_epsilon, length_epsilon=args.length_epsilon))
+        width_epsilon=args.width_epsilon,
+        length_epsilon=args.length_epsilon, seed=random_seed))
     return cmd
 
 # Arguments that can be given to the script
@@ -71,53 +80,51 @@ parser.add_argument('--step_scale', default=0.001, type=float,
                     help="The scale of the steps used for the metropolis "
                          "sampling (default: %(default)s)")
 parser.add_argument('--num_iterations', default=50000, type=int,
-                    help="The number of interations in the metropolis sampling "
-                         "(default: %(default)s)") 
+                    help="The number of interations in the metropolis sampling"
+                         " (default: %(default)s)")
 parser.add_argument('--sample_period', default=1000, type=int,
                     help="The sample period of the metropolis sampling "
                          "(default: %(default)s)")
-parser.add_argument('--num_length_sections', default=10, type=float) 
-parser.add_argument('--num_width_sections', default=4, type=float) 
-parser.add_argument('--num_tracts', default=6, type=float) 
-parser.add_argument('--phantom_index', default=9, type=float) 
+parser.add_argument('--num_length_sections', default=10, type=float)
+parser.add_argument('--num_width_sections', default=4, type=float)
+parser.add_argument('--num_tracts', default=6, type=float)
+parser.add_argument('--phantom_index', default=9, type=float)
 parser.add_argument('--interp_type', default='sinc', type=str,
                     help="The type of interpolation used in the reference "
-                         "image (default: %(default)s)") 
+                         "image (default: %(default)s)")
 parser.add_argument('--interp_extent', default=1, type=int,
                     help="The interpolation extent used in the reference image"
-                         " (default: %(default)s)") 
+                         " (default: %(default)s)")
 parser.add_argument('--true_interp_style', default='one', type=str,
                     help="The style of interpolation extent used in the "
                          "reference image, either 'full' or 'one'")
-parser.add_argument('--init_perturb_stddev', default=0.2, type=float) 
-parser.add_argument('--img_dims', default=(3,3,3), type=float) 
-parser.add_argument('--true_degree', default=8, type=float) 
+parser.add_argument('--init_perturb_stddev', default=0.2, type=float)
+parser.add_argument('--true_degree', default=8, type=float)
 parser.add_argument('--degree', default=3, type=int,
                     help="The degree of the fibre used to sample from "
                          "(default: %(default)s)")
 parser.add_argument('--prior_freq', default=15.0, type=float,
                     help="The scaling of the frequency prior (default: "
                          "%(default)s)")
-parser.add_argument('--prior_aux_freq', default=60.0,  type=float,
+parser.add_argument('--prior_aux_freq', default=60.0, type=float,
                     help="The scaling of the auxiliary frequency prior "
                          "(default: %(default)s)")
 parser.add_argument('--prior_density_high', default=1, type=float,
                     help="The scaling of the density prior (default: "
-                         "%(default)s)") 
+                         "%(default)s)")
 parser.add_argument('--prior_density_low', default=1, type=float,
                     help="The scaling of the density prior (default: "
-                         "%(default)s)") 
+                         "%(default)s)")
 parser.add_argument('--prior_hook', default=100000.0, type=float,
                     help="The scaling of the density prior (default: "
-                         "%(default)s)") 
-parser.add_argument('--assumed_snr', default=20, type=float) 
-parser.add_argument('--init_acs', default=0.5, type=float) 
-parser.add_argument('--init_length', default=0.01, type=float) 
-parser.add_argument('--init_width_mean', default=0.025, type=float) 
-parser.add_argument('--init_width_stddev', default=0.0025, type=float) 
-parser.add_argument('--base_intensity', default=679.7634, type=float) 
-parser.add_argument('--img_offsets', default=(0.3,0.3,0.30), type=float) 
-parser.add_argument('--width_epsilon', default=0.001, type=float) 
+                         "%(default)s)")
+parser.add_argument('--assumed_snr', default=20, type=float)
+parser.add_argument('--init_acs', default=0.5, type=float)
+parser.add_argument('--init_length', default=0.01, type=float)
+parser.add_argument('--init_width_mean', default=0.025, type=float)
+parser.add_argument('--init_width_stddev', default=0.0025, type=float)
+parser.add_argument('--base_intensity', default=679.7634, type=float)
+parser.add_argument('--width_epsilon', default=0.001, type=float)
 parser.add_argument('--length_epsilon', default=0.001, type=float)
 parser.add_argument('--random_seed', type=int, default=None,
                     help="The random seed for the whole run")
@@ -147,7 +154,7 @@ for run_i in xrange(args.num_runs):
         # Create work directory and get path for output directory
         work_dir, output_dir = hpc.create_work_dir(
             SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
-        # Create a file in the output directory with just the dataset 
+        # Create a file in the output directory with just the dataset
         # printed in it (useful for quickly determining what the dataset is)
         with open(os.path.join(work_dir, 'output', 'dataset_name.txt'),
                   'w') as dataset_file:
@@ -163,22 +170,21 @@ for run_i in xrange(args.num_runs):
         # the metropolis) so the next run is run with a different random seed
         random_seed += 2
 
-# #select tractlets to tracks parameters, 
-# strand_per_vol=10000, 
-# true_strands_per_area=100000, 
-# include_range=50:99, 
-# true_num_length_sections=1000, 
-# 
-# tdi_degree=20, 
-# tdi_vox=0.0075,0.0075,0.0444, 
-# tdi_suffix='', 
-# trim_dist=0.375, 
-# 
-# #cleanup samples parameters, 
-# display_min_vol=0.0, 
-# 
-# true_ext='tck', 
-# num_tractlets=8, 
-# num_final_tractlets=8, 
-# save_strands_per_area=1000, 
-    
+# #select tractlets to tracks parameters,
+# strand_per_vol=10000,
+# true_strands_per_area=100000,
+# include_range=50:99,
+# true_num_length_sections=1000,
+#
+# tdi_degree=20,
+# tdi_vox=0.0075,0.0075,0.0444,
+# tdi_suffix='',
+# trim_dist=0.375,
+#
+# #cleanup samples parameters,
+# display_min_vol=0.0,
+#
+# true_ext='tck',
+# num_tractlets=8,
+# num_final_tractlets=8,
+# save_strands_per_area=1000,
