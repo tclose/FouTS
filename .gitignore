@@ -10,3 +10,6 @@
 *.swo
 /params/image/phantom/paper
 *.dylib
+*.so
+*.log
+*.old

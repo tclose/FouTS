@@ -4,40 +4,35 @@
 #
 # configure output:
 # 
-# MRtrix build type requested: release
+# MRtrix build type requested: release [command-line only]
 # 
-# Checking C++ compiler [g++]: 4.2.1 - tested ok
-# Detecting OS: darwin
+# Checking C++ compiler [g++]: 4.4.7 - tested ok
+# Detecting OS: linux
 # Detecting pointer size: 64 bit
 # Detecting byte order: little-endian
-# Checking for C++ TR1 implementation: not present - using SGI hash_map instead
+# Checking for C++ TR1 implementation: present
 # Checking for 64-bit integer type: yes
-# Checking for zlib compression library: 1.2.5
+# Checking for zlib compression library: 1.2.3
 # Checking for POSIX threads: yes
-# Checking for GNU Scientific Library: 1.16
+# Checking for GNU Scientific Library: 1.13
 # Checking whether GSL compiles with -DHAVE_INLINE: yes
 # Checking shared library generation: yes
-# Checking for Qt4 moc: moc (version 4.8.6)
-# Checking for Qt4 qmake: qmake (version 4.8.6)
-# Checking for Qt4: 4.8.6
-# Checking for OpenGL: 2.1 NVIDIA-10.0.43 310.41.05f01
 
 
 obj_suffix = '.o'
 exe_suffix = ''
 lib_prefix = 'lib'
-lib_suffix = '.dylib'
-cpp = [ 'g++-4.9', '-c', 'CFLAGS', 'SRC', '-o', 'OBJECT' ]
-cpp_flags = [ '-Wno-unused-parameter', '-fPIC', '-Wno-deprecated', '-Wno-deprecated-declarations', '-DMACOSX', '-DWORD64', '-O2', '-DNDEBUG' ]
-ld = [ 'g++-4.9', 'OBJECTS', 'LDFLAGS', '-o', 'EXECUTABLE' ]
+lib_suffix = '.so'
+cpp = [ 'g++', '-c', 'CFLAGS', 'SRC', '-o', 'OBJECT' ]
+cpp_flags = [ '-fPIC', '-Wno-unused-parameter', '-DWORD64', '-DUSE_TR1', '-O2', '-DNDEBUG' ]
+ld = [ 'g++', 'OBJECTS', 'LDFLAGS', '-o', 'EXECUTABLE' ]
 ld_flags = [ '-lz' ]
 ld_enabled = True
-ld_lib = [ 'g++-4.9', '-shared', 'OBJECTS', 'LDLIB_FLAGS', '-o', 'LIB' ]
-ld_lib_flags = [ '-dynamiclib', '-lz', '-lgsl', '-lgslcblas' ]
+ld_lib = [ 'g++', '-shared', 'LDLIB_FLAGS', 'OBJECTS', '-o', 'LIB' ]
+ld_lib_flags = [ '-lz' ]
 thread_cflags = []
 thread_ldflags = [ '-lpthread' ]
 gsl_cflags = [ '-DHAVE_INLINE' ]
 gsl_ldflags = [ '-lgsl', '-lgslcblas' ]
-moc = 'moc'
-qt_cflags = [ '-pipe', '-stdlib=libc++', '-mmacosx-version-min=10.7', '-O2', '-arch', 'x86_64', '-Wall', '-W', '-DQT_NO_DEBUG', '-DQT_OPENGL_LIB', '-DQT_GUI_LIB', '-DQT_CORE_LIB', '-DQT_SHARED', '-I/usr/local/Cellar/qt/4.8.6/mkspecs/unsupported/macx-clang-libc++', '-I/usr/local/Cellar/qt/4.8.6/lib/QtCore.framework/Versions/4/Headers', '-I/usr/local/Cellar/qt/4.8.6/lib/QtCore.framework/Versions/4/Headers', '-I/usr/local/Cellar/qt/4.8.6/lib/QtGui.framework/Versions/4/Headers', '-I/usr/local/Cellar/qt/4.8.6/lib/QtGui.framework/Versions/4/Headers', '-I/usr/local/Cellar/qt/4.8.6/lib/QtOpenGL.framework/Versions/4/Headers', '-I/usr/local/Cellar/qt/4.8.6/lib/QtOpenGL.framework/Versions/4/Headers', '-I/usr/local/Cellar/qt/4.8.6/include', '-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers', '-I/System/Library/Frameworks/AGL.framework/Headers', '-F/usr/local/Cellar/qt/4.8.6/lib' ]
-qt_ldflags = [ '-headerpad_max_install_names', '-stdlib=libc++', '-mmacosx-version-min=10.7', '-arch', 'x86_64', '-F/usr/local/Cellar/qt/4.8.6/lib', '-L/usr/local/Cellar/qt/4.8.6/lib', '-framework', 'QtOpenGL', '-L/usr/local/Cellar/qt/4.8.6/lib', '-F/usr/local/Cellar/qt/4.8.6/lib', '-framework', 'QtGui', '-framework', 'QtCore', '-framework', 'OpenGL', '-framework', 'AGL' ]
+qt_cflags = []
+qt_ldflags = []
