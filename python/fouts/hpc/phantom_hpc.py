@@ -74,7 +74,8 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
 # Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--voxel_res', default=0.15, type=float,
-                    help="The resolution of the image to fit")
+                    help="The resolution of the image to fit "
+                         "(default: %(default)s)")
 parser.add_argument('--step_scale', default=0.001, type=float,
                     help="The scale of the steps used for the metropolis "
                          "sampling (default: %(default)s)")
@@ -131,7 +132,8 @@ parser.add_argument('--output_dir', default=None, type=str,
                     help="The parent directory in which the output directory "
                          "will be created (defaults to $HOME/Output)")
 parser.add_argument('--num_runs', default=1, type=int,
-                    help="The number of runs to submit to the que")
+                    help="The number of runs to submit to the que "
+                         "(default: %(default)s).")
 parser.add_argument('--dry_run', action='store_true',
                     help="Only perform a dry run (create jobscript then quit)")
 parser.add_argument('--np', type=int, default=1,
