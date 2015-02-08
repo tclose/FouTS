@@ -8,4 +8,5 @@
 *.swp
 *~
 *.swo
+/params/image/phantom/paper
 *.dylib
