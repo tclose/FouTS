@@ -43,7 +43,7 @@ namespace BTS {
             
             if (state.size()) {
                 
-                off64_t start_pos = fout.tellp();
+                int64_t start_pos = fout.tellp();
                 start_pos -= sizeof("%END\n") - 1;
                 fout.seekp(start_pos);
                 

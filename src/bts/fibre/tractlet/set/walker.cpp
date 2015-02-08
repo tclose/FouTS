@@ -65,8 +65,15 @@ namespace BTS {
                                 throw Exception(
                                         "Tractlet (" + str(tract_i)
                                         + ") is larger than step template.");
-                            else if (state[tract_i].degree() < step_template.degree())
-                                step[tract_i].redegree(state[tract_i].degree());
+                            else if (state[tract_i].degree() < step_template.degree()) {
+                                throw Exception(
+                                    "Degrees of state (" +
+                                    str(state[tract_i].degree()) +
+                                    ") and step mask (" +
+                                    str(step_template.degree()) +
+                                    ") do not match");
+                                //step[tract_i].redegree(state[tract_i].degree());
+                            }
                             
                         }
                         

@@ -174,7 +174,7 @@ namespace BTS {
                     
                     void write(const Coord& coord);
 
-                    void replace_end_of_file(const Coord& t, off64_t start_pos) {
+                    void replace_end_of_file(const Coord& t, int64_t start_pos) {
                     }
                     
                     Coord write_first(const Coord& t) {

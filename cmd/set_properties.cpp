@@ -125,6 +125,9 @@ template<typename T> void set_elem_properties(const std::string& input_location,
         std::string property_name = opt[prop_i][0];
         std::string property_value = opt[prop_i][1];
 
+        if (property_name == "acs" && !fibres.has_elem_prop(Fibre::Tractlet::ALPHA_PROP))
+            fibres.add_elem_prop(Fibre::Tractlet::ALPHA_PROP);
+
         for (size_t fibre_i = 0; fibre_i < fibres.size(); ++fibre_i) {
             if (property_name == "acs") {
                 fibres[fibre_i].set_acs(to<double>(property_value));

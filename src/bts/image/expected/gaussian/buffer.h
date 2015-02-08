@@ -51,8 +51,8 @@ namespace BTS {
                     public:
                         
                         Buffer()
-                                : Buffer_tpl<Gaussian::Voxel>(this) {
-                        }
+                                : Buffer_tpl<Gaussian::Voxel>(this),
+                                  variance(0.0) {}
                         
                         Buffer(const Triple<size_t>& dimensions, const Triple<double>& voxel_sizes,
                                const Diffusion::Model& diffusion_model, size_t num_sections =

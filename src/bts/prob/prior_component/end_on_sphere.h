@@ -48,7 +48,7 @@ namespace BTS {
 
           public:
 
-            static double           radius_default(uint dim, double vox_length);
+            static double           radius_default(size_t dim, double vox_length);
 
             static double           radius_default(const Image::Observed::Buffer& obs_image);
 

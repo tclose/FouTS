@@ -628,7 +628,7 @@ namespace BTS {
             template<typename T> std::vector<std::string>& Set<T>::insert_elem_prop_keys(
                     std::vector<std::string>& header) const {
                 
-                for (uint prop_i = 0; prop_i < num_elem_props(); ++prop_i)
+                for (size_t prop_i = 0; prop_i < num_elem_props(); ++prop_i)
                     header.push_back(elem_prop_key(prop_i));
                 
                 return header;

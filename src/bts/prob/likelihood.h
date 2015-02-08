@@ -320,4 +320,5 @@ namespace BTS {
 
 }
 
+#include "bts/prob/likelihood.cpp.h"
 #endif

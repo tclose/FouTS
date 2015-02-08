@@ -77,7 +77,7 @@ namespace BTS {
             bool Object::props_match(const std::vector<const char*>* properties) const {
                 
                 bool match;
-                
+
                 if (props == properties)    // Point to the same properties
                     match = true;
                 else if (!props->size() && !properties->size())    // Both contain no properties
@@ -348,7 +348,7 @@ namespace BTS {
             
             Object& Object::set(double value) {
                 
-                for (uint i = 0; i < vsize(); ++i)
+                for (size_t i = 0; i < vsize(); ++i)
                     this->MR::Math::Vector<double>::operator[](i) = value;
                 
                 return *this;
@@ -373,7 +373,7 @@ namespace BTS {
             
             Object& Object::invert() {
                 
-                for (uint i = 0; i < vsize(); ++i)
+                for (size_t i = 0; i < vsize(); ++i)
                     MR::Math::Vector<double>::operator[](i) = -MR::Math::Vector<double>::operator[](
                             i);
                 
@@ -428,7 +428,7 @@ namespace BTS {
                 
                 stream << std::endl;
                 
-                for (uint prop_i = 0; prop_i < fibre.num_props(); ++prop_i)
+                for (size_t prop_i = 0; prop_i < fibre.num_props(); ++prop_i)
                     stream << fibre.prop_key(prop_i) << ": " << fibre.prop(prop_i) << std::endl;
                 
                 for (size_t i = 0; i < fibre.size(); i++)

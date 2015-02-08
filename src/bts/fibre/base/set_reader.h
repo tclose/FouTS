@@ -46,7 +46,7 @@ namespace BTS {
                     std::vector<std::string> ext_elem_prp_keys;
 
                     std::ifstream elem_in;
-                    off64_t elem_begin;
+                    int64_t elem_begin;
 
                     // Public methods and constructors.
                 public:
