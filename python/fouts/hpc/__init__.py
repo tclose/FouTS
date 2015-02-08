@@ -18,7 +18,7 @@ def get_project_dir():
     """
     Returns the root directory of the project
     """
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')) # Root directory of the project code
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')) # Root directory of the project code
 
 def create_seed(seed):
     if not seed:

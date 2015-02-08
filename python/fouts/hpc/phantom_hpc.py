@@ -15,11 +15,15 @@ import time
 # Name of the script for the output directory and submitted mpi job
 SCRIPT_NAME = 'phantom_sampling'
 # Required dirs for the script to run
-REQUIRED_DIRS = ['params/image/reference', 'params/diffusion',
+REQUIRED_DIRS = ['params/image/phantom/paper/from_tcks/one/trim', 'params/diffusion',
                  'params/fibre/tract/masks/mcmc/metropolis']
 
 
-def sampling_cmd(args, work_dir, dataset_path, random_seed):
+def sampling_cmd(args, work_dir, random_seed, phantom_index):
+    dataset_path = os.path.join(
+        work_dir, 'params', 'image', 'phantom', 'paper', 'from_tcks',
+        args.true_interp_style, 'trim', str(args.voxel_res))
+    cmd = (
     """
     init_fibres {work_dir}/init.tct -degree {degree} -num_fibres  \\
     {num_tracts} -img_dims {img_dims} -curve_stddev 0.001 -base_intensity 1 \\
@@ -28,26 +32,25 @@ def sampling_cmd(args, work_dir, dataset_path, random_seed):
     -length_epsilon {length_epsilon} -img_offsets {img_offsets}
     
     # run the metropolis algorithm
-    metropolis {image_dir}/{phantom_index}.mif {work_dir}/init.tct \\
+    metropolis {dataset_path}/{phantom_index}.mif {work_dir}/init.tct \\
     {work_dir}/samples.tst -like_snr {assumed_snr} -exp_type {interp_type} \\
     -exp_interp_extent {interp_extent} -walk_step_scale {step_scale} \\
     -exp_num_width_sections {num_width_sections} \\
     -exp_base_intensity {base_intensity} \\
     -exp_num_length_sections {num_length_sections} \\
-    -walk_step_location {base_dir}/mask.tct -num_iterations {num_iterations} \\
-    -sample_period {sample_period} -diff_encodings_location {gradients} \\
+    -walk_step_location {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default.tct \\
+    -num_iterations {num_iterations} -sample_period {sample_period} \\
     -prior_freq {prior_freq} {prior_aux_freq} \\
     -prior_density {prior_density_high} {prior_density_low} 100 \\
     -prior_hook {prior_hook} 100 15 -diff_warn -save_image
     """.format(
-        step_scale=args.step_scale, num_iterations=args.num_iterations,
-        sample_period=args.sample_period,
-        num_length_sections=args.num_length_sections,
+        work_dir=work_dir, phantom_index=phantom_index, step_scale=args.step_scale,
+        num_iterations=args.num_iterations, sample_period=args.sample_period,
+        num_length_sections=args.num_length_sections, dataset_path=dataset_path,
         num_width_sections=args.num_width_sections, num_tracts=args.num_tracts,
-        phantom_index=args.phantom_index, interp_type=args.interp_type,
-        interp_extent=args.interp_extent,
+        interp_type=args.interp_type, interp_extent=args.interp_extent,
         init_perturb_stddev=args.init_perturb_stddev,
-        img_dims=','.join(args.img_dims), true_degree=args.true_degree,
+        img_dims=','.join(str(d) for d in args.img_dims), true_degree=args.true_degree,
         degree=args.degree, prior_freq=args.prior_freq,
         prior_aux_freq=args.prior_aux_freq,
         prior_density_high=args.prior_density_high,
@@ -56,18 +59,18 @@ def sampling_cmd(args, work_dir, dataset_path, random_seed):
         init_length=args.init_length, init_width_mean=args.init_width_mean,
         init_width_stddev=args.init_width_stddev,
         base_intensity=args.base_intensity,
-        img_offsets=','.join(args.img_offsets),
-        width_epsilon=args.width_epsilon, length_epsilon=args.length_epsilon)
-
+        img_offsets=','.join(str(o) for o in args.img_offsets),
+        width_epsilon=args.width_epsilon, length_epsilon=args.length_epsilon))
+    return cmd
 
 # Arguments that can be given to the script
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--voxel_res', default=0.15, type=float,
                     help="The resolution of the image to fit")
-parser.add_argument('--step_scale', default=0.0015, type=float,
+parser.add_argument('--step_scale', default=0.001, type=float,
                     help="The scale of the steps used for the metropolis "
                          "sampling (default: %(default)s)")
-parser.add_argument('--num_iterations', default=10000, type=int,
+parser.add_argument('--num_iterations', default=50000, type=int,
                     help="The number of interations in the metropolis sampling "
                          "(default: %(default)s)") 
 parser.add_argument('--sample_period', default=1000, type=int,
@@ -83,6 +86,9 @@ parser.add_argument('--interp_type', default='sinc', type=str,
 parser.add_argument('--interp_extent', default=1, type=int,
                     help="The interpolation extent used in the reference image"
                          " (default: %(default)s)") 
+parser.add_argument('--true_interp_style', default='one', type=str,
+                    help="The style of interpolation extent used in the "
+                         "reference image, either 'full' or 'one'")
 parser.add_argument('--init_perturb_stddev', default=0.2, type=float) 
 parser.add_argument('--img_dims', default=(3,3,3), type=float) 
 parser.add_argument('--true_degree', default=8, type=float) 
@@ -146,12 +152,8 @@ for run_i in xrange(args.num_runs):
         with open(os.path.join(work_dir, 'output', 'dataset_name.txt'),
                   'w') as dataset_file:
             dataset_file.write('{}/{}\n'.format(args.voxel_res, phantom_i))
-        # Strip dataset of symbols for tract number and img dimension
-        # Get the dataset path
-        dataset_path = os.path.join(work_dir, 'params', 'image',
-                                    'reference', phantom_i)
         cmd_line = sampling_cmd(args=args, work_dir=work_dir,
-                                dataset_path=dataset_path,
+                                phantom_index=phantom_i,
                                 random_seed=random_seed + 1)
         # Submit job to que
         hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
