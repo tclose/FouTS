@@ -22,7 +22,7 @@ import re
 import subprocess as sp
 import time
 # Arguments that can be given to the script
-parser = argparse.ArgumentParser(description=__doc__)
+parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--img_dim', default=3, type=int, help='The size of the noisy image to fit against')
 parser.add_argument('--step_scale', default=0.001, type=float, help='The scale of the steps used for the metropolis sampling')
 parser.add_argument('--num_iterations', default=100000, type=int, help='The number of interations in the metropolis sampling')
