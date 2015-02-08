@@ -33,7 +33,7 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         -base_intensity 1 -width_epsilon {width_epsilon} \\
         -width_stddev {init_width_stddev} -length_stddev {init_length} \\
         -width_mean {init_width_mean}  -length_epsilon {length_epsilon} \\
-        -img_vox_lengths {args.vox_res},{args.vox_res},{args.vox_res}
+        -img_vox_lengths {voxel_res},{voxel_res},{voxel_res} \\
 
         # run the metropolis algorithm
         metropolis {dataset_path}/{phantom_index}.mif {work_dir}/init.tct \\
@@ -41,7 +41,7 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         -exp_type {interp_type} -exp_interp_extent {interp_extent} \\
         -walk_step_scale {step_scale} -seed {seed} \\
         -exp_num_width_sections {num_width_sections} \\
-        -exp_base_intensity {base_intensity} \\
+        -exp_base_intensity `cat {dataset_path}/maxb0.ratio.txt` \\
         -exp_num_length_sections {num_length_sections} \\
         -walk_step_location {mask_path} \\
         -num_iterations {num_iterations} -sample_period {sample_period} \\
@@ -50,7 +50,7 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         -prior_hook {prior_hook} 100 15 -diff_warn -save_image
         """.format(
         work_dir=work_dir, phantom_index=phantom_index,
-        step_scale=args.step_scale,
+        step_scale=args.step_scale, voxel_res=args.voxel_res,
         num_iterations=args.num_iterations,
         sample_period=args.sample_period,
         num_length_sections=args.num_length_sections,
@@ -58,7 +58,6 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         num_width_sections=args.num_width_sections, num_tracts=args.num_tracts,
         interp_type=args.interp_type, interp_extent=args.interp_extent,
         init_perturb_stddev=args.init_perturb_stddev,
-        img_dims=','.join(str(d) for d in args.img_dims),
         true_degree=args.true_degree, mask_path=mask_path,
         degree=args.degree, prior_freq=args.prior_freq,
         prior_aux_freq=args.prior_aux_freq,
