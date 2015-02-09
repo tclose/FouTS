@@ -58,15 +58,13 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         num_width_sections=args.num_width_sections, num_tracts=args.num_tracts,
         interp_type=args.interp_type, interp_extent=args.interp_extent,
         init_perturb_stddev=args.init_perturb_stddev,
-        true_degree=args.true_degree, mask_path=mask_path,
-        degree=args.degree, prior_freq=args.prior_freq,
+        mask_path=mask_path, degree=args.degree, prior_freq=args.prior_freq,
         prior_aux_freq=args.prior_aux_freq,
         prior_density_high=args.prior_density_high,
         prior_density_low=args.prior_density_low, prior_hook=args.prior_hook,
         assumed_snr=args.assumed_snr, init_acs=args.init_acs,
         init_length=args.init_length, init_width_mean=args.init_width_mean,
         init_width_stddev=args.init_width_stddev,
-        base_intensity=args.base_intensity,
         width_epsilon=args.width_epsilon,
         length_epsilon=args.length_epsilon, seed=random_seed))
     return cmd
@@ -85,10 +83,10 @@ parser.add_argument('--num_iterations', default=50000, type=int,
 parser.add_argument('--sample_period', default=1000, type=int,
                     help="The sample period of the metropolis sampling "
                          "(default: %(default)s)")
-parser.add_argument('--num_length_sections', default=10, type=float)
+parser.add_argument('--num_length_sections', default=20, type=float)
 parser.add_argument('--num_width_sections', default=4, type=float)
-parser.add_argument('--num_tracts', default=6, type=float)
-parser.add_argument('--phantom_index', default=9, type=float)
+parser.add_argument('--num_tracts', default=5, type=float,
+                    help="The number of tracts to fit (default: %(default)s")
 parser.add_argument('--interp_type', default='sinc', type=str,
                     help="The type of interpolation used in the reference "
                          "image (default: %(default)s)")
@@ -99,7 +97,6 @@ parser.add_argument('--true_interp_style', default='one', type=str,
                     help="The style of interpolation extent used in the "
                          "reference image, either 'full' or 'one'")
 parser.add_argument('--init_perturb_stddev', default=0.2, type=float)
-parser.add_argument('--true_degree', default=8, type=float)
 parser.add_argument('--degree', default=3, type=int,
                     help="The degree of the fibre used to sample from "
                          "(default: %(default)s)")
@@ -123,7 +120,6 @@ parser.add_argument('--init_acs', default=0.5, type=float)
 parser.add_argument('--init_length', default=0.01, type=float)
 parser.add_argument('--init_width_mean', default=0.025, type=float)
 parser.add_argument('--init_width_stddev', default=0.0025, type=float)
-parser.add_argument('--base_intensity', default=679.7634, type=float)
 parser.add_argument('--width_epsilon', default=0.001, type=float)
 parser.add_argument('--length_epsilon', default=0.001, type=float)
 parser.add_argument('--random_seed', type=int, default=None,
@@ -160,6 +156,8 @@ for run_i in xrange(args.num_runs):
         with open(os.path.join(work_dir, 'output', 'dataset_name.txt'),
                   'w') as dataset_file:
             dataset_file.write('{}/{}\n'.format(args.voxel_res, phantom_i))
+        # Create directory to save images for debugging.
+        os.mkdir(os.path.join(work_dir, 'images'))
         cmd_line = sampling_cmd(args=args, work_dir=work_dir,
                                 phantom_index=phantom_i,
                                 random_seed=random_seed + 1)
