@@ -147,7 +147,7 @@ if args.random_seed is None:
 else:
     random_seed = args.random_seed
 for run_i in xrange(args.num_runs):
-    for phantom_i in xrange(10):
+    for phantom_i in xrange(1, 11):
         # Create work directory and get path for output directory
         work_dir, output_dir = hpc.create_work_dir(
             SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
