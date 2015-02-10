@@ -163,8 +163,7 @@ for run_i in xrange(args.num_runs):
                                 random_seed=random_seed + 1)
         # Submit job to que
         hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
-                       que_name=args.que_name, dry_run=args.dry_run,
-                       copy_to_output=['summary.txt'])
+                       que_name=args.que_name, dry_run=args.dry_run)
         # Increment the random seed by two (one for the init and another for
         # the metropolis) so the next run is run with a different random seed
         random_seed += 2
