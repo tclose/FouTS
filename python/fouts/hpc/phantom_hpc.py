@@ -106,7 +106,7 @@ parser.add_argument('--prior_freq', default=15.0, type=float,
 parser.add_argument('--prior_aux_freq', default=60.0, type=float,
                     help="The scaling of the auxiliary frequency prior "
                          "(default: %(default)s)")
-parser.add_argument('--prior_density_high', default=1, type=float,
+parser.add_argument('--prior_density_high', default=10, type=float,
                     help="The scaling of the density prior (default: "
                          "%(default)s)")
 parser.add_argument('--prior_density_low', default=1, type=float,
