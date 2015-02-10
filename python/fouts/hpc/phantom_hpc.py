@@ -28,19 +28,19 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         work_dir, 'params', 'fibre', 'tract', 'masks', 'mcmc', 'metropolis',
         'default.tct')
     cmd = ("""
-        init_fibres {work_dir}/init.tct -degree {degree} -num_fibres  \\
-        {num_tracts} -img_dims 3,3,3 -curve_stddev 0.001 \\
+        init_fibres {work_dir}/output/init.tct -degree {degree} \\
+        -num_fibres {num_tracts} -img_dims 3,3,3 -curve_stddev 0.001 \\
         -base_intensity 1 -width_epsilon {width_epsilon} \\
         -width_stddev {init_width_stddev} -length_stddev {init_length} \\
         -width_mean {init_width_mean}  -length_epsilon {length_epsilon} \\
         -img_vox_lengths {voxel_res},{voxel_res},{voxel_res} \\
 
         # run the metropolis algorithm
-        metropolis {dataset_path}/{phantom_index}.mif {work_dir}/init.tct \\
-        {work_dir}/samples.tst -like_snr {assumed_snr} \\
-        -exp_type {interp_type} -exp_interp_extent {interp_extent} \\
-        -walk_step_scale {step_scale} -seed {seed} \\
-        -exp_num_width_sections {num_width_sections} \\
+        metropolis {dataset_path}/{phantom_index}.mif \\
+        {work_dir}/output/init.tct {work_dir}/output/samples.tst \\
+        -like_snr {assumed_snr} -exp_type {interp_type} \\
+        -exp_interp_extent {interp_extent} -walk_step_scale {step_scale} \\
+        -seed {seed} -exp_num_width_sections {num_width_sections} \\
         -exp_base_intensity `cat {dataset_path}/maxb0.ratio.txt` \\
         -exp_num_length_sections {num_length_sections} \\
         -walk_step_location {mask_path} \\
