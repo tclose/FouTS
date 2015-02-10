@@ -77,7 +77,7 @@ parser.add_argument('--voxel_res', default=0.15, type=float,
 parser.add_argument('--step_scale', default=0.001, type=float,
                     help="The scale of the steps used for the metropolis "
                          "sampling (default: %(default)s)")
-parser.add_argument('--num_iterations', default=50000, type=int,
+parser.add_argument('--num_iterations', default=25000, type=int,
                     help="The number of interations in the metropolis sampling"
                          " (default: %(default)s)")
 parser.add_argument('--sample_period', default=1000, type=int,
@@ -85,7 +85,7 @@ parser.add_argument('--sample_period', default=1000, type=int,
                          "(default: %(default)s)")
 parser.add_argument('--num_length_sections', default=20, type=float)
 parser.add_argument('--num_width_sections', default=4, type=float)
-parser.add_argument('--num_tracts', default=5, type=float,
+parser.add_argument('--num_tracts', default=6, type=float,
                     help="The number of tracts to fit (default: %(default)s")
 parser.add_argument('--interp_type', default='sinc', type=str,
                     help="The type of interpolation used in the reference "
