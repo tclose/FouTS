@@ -42,7 +42,7 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         -exp_interp_extent {interp_extent} -walk_step_scale {step_scale} \\
         -seed {seed} -exp_num_width_sections {num_width_sections} \\
         -exp_base_intensity `cat {dataset_path}/maxb0.ratio.txt` \\
-        -exp_num_length_sections {num_length_sections} \\
+        -exp_num_length_sections {num_length_sections} -exp_enforce_bounds \\
         -walk_step_location {mask_path} \\
         -num_iterations {num_iterations} -sample_period {sample_period} \\
         -prior_freq {prior_freq} {prior_aux_freq} \\
@@ -111,13 +111,13 @@ parser.add_argument('--prior_freq', default=15.0, type=float,
 parser.add_argument('--prior_aux_freq', default=60.0, type=float,
                     help="The scaling of the auxiliary frequency prior "
                          "(default: %(default)s)")
-parser.add_argument('--prior_density_high', default=10, type=float,
+parser.add_argument('--prior_density_high', default=1, type=float,
                     help="The scaling of the density prior (default: "
                          "%(default)s)")
 parser.add_argument('--prior_density_low', default=1, type=float,
                     help="The scaling of the density prior (default: "
                          "%(default)s)")
-parser.add_argument('--prior_hook', default=100000.0, type=float,
+parser.add_argument('--prior_hook', default=1e5, type=float,
                     help="The scaling of the density prior (default: "
                          "%(default)s)")
 parser.add_argument('--prior_in_image_scale', default=1e6, type=float,
