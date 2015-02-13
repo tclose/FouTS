@@ -370,7 +370,7 @@ namespace MR
 
   void App::print_help () const
   {
-    fprintf (stderr, "%s: part of the MRtrix package\n\n", App::name().c_str());
+    fprintf (stderr, "%s: part of the FouTS package\n\n", App::name().c_str());
     if (command_description[0]) {
       print_formatted_paragraph ("", command_description[0], HELP_PURPOSE_INDENT);
       fprintf (stderr, "\n");

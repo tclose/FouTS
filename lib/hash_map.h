@@ -42,9 +42,9 @@
 #      undef HASH_MAP_TYPE
 #      define HASH_MAP_TYPE ::hash_map
 #    else
-#      include <ext/hash_map>
+#      include <unordered_map>
 #      undef HASH_MAP_TYPE
-#      define HASH_MAP_TYPE ::__gnu_cxx::hash_map
+#      define HASH_MAP_TYPE std::unordered_map //::__gnu_cxx::hash_map
 #    endif
 #  endif
 #endif
