@@ -155,9 +155,10 @@ for run_i in xrange(args.num_runs):
         # printed in it (useful for quickly determining what the dataset is)
         with open(os.path.join(work_dir, 'output', 'dataset_name.txt'),
                   'w') as dataset_file:
-            dataset_file.write('{}/{}\n'.format(args.voxel_res, phantom_i))
+            dataset_file.write('{}/{}/{}\n'
+                               .format(args.voxel_res, phantom_i, run_i))
         # Create directory to save images for debugging.
-        os.mkdir(os.path.join(work_dir, 'images'))
+        os.mkdir(os.path.join(work_dir, 'output', 'images'))
         cmd_line = sampling_cmd(args=args, work_dir=work_dir,
                                 phantom_index=phantom_i,
                                 random_seed=random_seed + 1)
