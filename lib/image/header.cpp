@@ -31,6 +31,7 @@
 #include "image/format/list.h"
 #include "image/handler/default.h"
 
+
 namespace MR
 {
   namespace Image
@@ -100,7 +101,7 @@ namespace MR
       }
 
 
-      if (!isfinite (vox (0)) || !isfinite (vox (1)) || !isfinite (vox (2))) {
+      if (!finite (vox (0)) || !finite (vox (1)) || !finite (vox (2))) {
         error ("invalid voxel sizes - resetting to sane defaults");
         set_vox (0, 1.0);
         set_vox (1, 1.0);
@@ -115,7 +116,7 @@ namespace MR
         else {
           for (size_t i = 0; i < 3; i++) {
             for (size_t j = 0; j < 4; j++) {
-              if (!isfinite (transform_ (i,j))) {
+              if (!finite (transform_ (i,j))) {
                 transform_.clear();
                 error ("transform matrix contains invalid entries - resetting to sane defaults");
                 break;

@@ -78,9 +78,9 @@ ARGUMENTS= {
 };
 
 OPTIONS= {
-
-    Option ("threshold","Threshold above which to strands will be merged together.")
-    + Argument ("","").type_float (-1, Fibre::Tractlet::STRANDS_PER_AREA_DEFAULT, LARGE_FLOAT),
+//
+//    Option ("threshold","Threshold above which to strands will be merged together.")
+//    + Argument ("","").type_float (-1, Fibre::Tractlet::STRANDS_PER_AREA_DEFAULT, LARGE_FLOAT),
 
     Option ("strands_per_acs","Basewidth of the imported tractlets.")
     + Argument ("","").type_float (-1, THRESHOLD_DEFAULT, LARGE_FLOAT),
@@ -117,17 +117,17 @@ EXECUTE {
         if (header.ndim() != 4)
             throw Exception("dwi image should contain 4 dimensions");
         
-        float threshold = THRESHOLD_DEFAULT;
+//        float threshold = THRESHOLD_DEFAULT;
         float strands_per_acs = Fibre::Tractlet::STRANDS_PER_AREA_DEFAULT;
         size_t num_tractlets = 0;
         size_t num_length_sections = NUM_LENGTH_SECTIONS_DEFAULT;
         size_t new_degree = Fibre::Strand::DEFAULT_DEGREE;
         
-        Options opt = get_options("threshold");
-        if (opt.size())
-            threshold = opt[0][0];
+//        Options opt = get_options("threshold");
+//        if (opt.size())
+//            threshold = opt[0][0];
         
-        opt = get_options("strands_per_acs");
+        Options opt = get_options("strands_per_acs");
         if (opt.size())
             strands_per_acs = opt[0][0];
         
