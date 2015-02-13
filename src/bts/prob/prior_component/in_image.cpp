@@ -51,7 +51,7 @@ namespace BTS {
 
                 for (size_t section_i = 0; section_i < sections.size(); ++section_i) {
                     const Triple<double>& pos = sections[section_i].position();
-                    const Triple<double>& x = (pos - extent / 2.0) /extent;
+                    const Triple<double>& x = (pos - extent / 2.0) / extent;
                     for (size_t dim_i = 0; dim_i < 3; ++dim_i)
                         log_prob -= scale * MR::Math::pow(x[dim_i], (double)power * 2.0);
                 }
@@ -71,7 +71,7 @@ namespace BTS {
 
             Triple<double> InImage::get_extent(const Image::Observed::Buffer& obs_image,
                                                double border) {
-                return obs_image.dims() + obs_image.vox_lengths() * (1.0 + 2.0 * border);
+                return obs_image.vox_lengths() * (obs_image.dims() + 2.0 * border);
             }
         
         }

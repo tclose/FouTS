@@ -1,14 +1,13 @@
 python
 import sys
+from os import path, environ
 
 #Set pretty printers system paths.
-sys.path.insert(0, '/home/tclose/Code/python/gdb_printers/python')
-sys.path.insert(0, '/home/tclose/git/FouTS/gdb_printers/python')
-sys.path.insert(0, '/home/tclose/git/MRtrix/gdb_printers/python')
+sys.path.insert(0, path.join(environ['HOME'], 'git', 'fouts', 'gdb_printers', 'python'))
 
 #Import and register 'std::*' pretty printers.
-from libstdcxx.v6.printers import register_libstdcxx_printers
-register_libstdcxx_printers (None)
+#from libstdcxx.v6.printers import register_libstdcxx_printers
+#register_libstdcxx_printers (None)
 
 #Import and register 'BTS::Fibre::*' pretty printers.
 from bts.fibre.printers import register_bts_fibre_printers

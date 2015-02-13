@@ -92,8 +92,6 @@ namespace BTS {
 //        } else
                 momentum = Momentum(proposal_distribution, step_vector);
                 
-                VAR(momentum);
-                
                 return momentum;
                 
             }

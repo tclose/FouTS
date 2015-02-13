@@ -87,7 +87,9 @@ ARGUMENTS= {
 
     Argument ("third_end_fibres", "The ending point of the scan.").optional().type_file (),
 
-    Argument ("output", "The output file containing the function scan. Will be either a text file if it is a linear scan or an image file if it is multi-dimension scan.").optional().type_file (),
+    Argument ("output", "The output file containing the function scan. "
+              "Will be either a text file if it is a linear scan or an image "
+              " file if it is multi-dimension scan.").optional().type_file (),
 
     Argument()
 };
@@ -364,6 +366,10 @@ EXECUTE {
             
         }
         
+        VAR(obs_image.offsets());
+        VAR(prior_in_image_border);
+        VAR(obs_image.dims());
+
         //----------------------------//
         //  Initialize Expected Image //
         //----------------------------//

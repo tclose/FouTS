@@ -52,9 +52,9 @@
 \
   Option ("prior_in_image", "The prior placed on the tractlet being in the image") \
    + Argument ("prior_in_image_scale", "").optional().type_float(0, Prob::PriorComponent::InImage::SCALE_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_in_image_power", "").optional().type_float(0, Prob::PriorComponent::InImage::POWER_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_in_image_num_length_sections", "").optional().type_float(0, Prob::PriorComponent::InImage::NUM_LENGTH_SECTIONS_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_in_image_num_width_sections", "").optional().type_float(0, Prob::PriorComponent::InImage::NUM_WIDTH_SECTIONS_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_in_image_power", "").optional().type_integer(0, Prob::PriorComponent::InImage::POWER_DEFAULT,LARGE_INT) \
+   + Argument ("prior_in_image_num_length_sections", "").optional().type_integer(0, Prob::PriorComponent::InImage::NUM_LENGTH_SECTIONS_DEFAULT,LARGE_INT) \
+   + Argument ("prior_in_image_num_width_sections", "").optional().type_integer(0, Prob::PriorComponent::InImage::NUM_WIDTH_SECTIONS_DEFAULT,LARGE_INT) \
    + Argument ("prior_in_image_border", "").optional().type_float(0, Prob::PriorComponent::InImage::BORDER_DEFAULT,LARGE_FLOAT) \
 \
 
@@ -128,7 +128,7 @@
   } \
  \
   double prior_in_image_scale  = Prob::PriorComponent::InImage::SCALE_DEFAULT; \
-  double prior_in_image_power  = Prob::PriorComponent::InImage::POWER_DEFAULT; \
+  size_t prior_in_image_power  = Prob::PriorComponent::InImage::POWER_DEFAULT; \
   size_t prior_in_image_num_length_sections  = Prob::PriorComponent::InImage::NUM_LENGTH_SECTIONS_DEFAULT; \
   size_t prior_in_image_num_width_sections  = Prob::PriorComponent::InImage::NUM_WIDTH_SECTIONS_DEFAULT; \
   double prior_in_image_border  = Prob::PriorComponent::InImage::BORDER_DEFAULT; \
