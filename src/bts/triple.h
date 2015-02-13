@@ -648,9 +648,9 @@ namespace BTS {
         size_t end_number;
         
         size_t dim_i = 0;
-        
+
         start_number = s.find_first_of("0123456789.-");
-        
+
         while (start_number != std::string::npos && (dim_i < 3)) {
             
             end_number = s.find_first_not_of("0123456789.-", start_number);

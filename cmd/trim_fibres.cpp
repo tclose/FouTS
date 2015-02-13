@@ -73,17 +73,22 @@ OPTIONS= {
     Option ("num_width_sections", "The number of width sections used in conversion between tractlets and tracks.")
     + Argument ("num_width_sections", "").type_integer (1, NUM_WIDTH_SECTIONS_DEFAULT, LARGE_INT),
 
+    Option ("offsets", "an offset by which the fibres should be shifted before they are trimmed to the sphere/cube")
+    + Argument("offsets", "").type_text ("[0.0,0.0,0.0]"), \
+
     Option ("cube", "Trim the set to a cube instead of the default sphere."),
 
     Option()};
 
 BTS::Fibre::Track::Set trim_tcks(BTS::Fibre::Track::Set& input_tcks, double sphere_r,
-                                 double length_reject_threshold, bool trim_to_cube);
+                                 double length_reject_threshold, bool trim_to_cube,
+                                 const Triple<double>& offsets);
 
 BTS::Fibre::Tractlet::Set trim_tractlets(BTS::Fibre::Tractlet::Set& input_tractlets,
                                          double distance, double length_reject_threshold,
                                          bool trim_to_cube, size_t num_length_sections,
-                                         size_t num_width_sections);
+                                         size_t num_width_sections,
+                                         const Triple<double>& offsets);
 
 EXECUTE {
     
@@ -101,6 +106,7 @@ EXECUTE {
         double distance = 1.0;
         double length_reject_threshold = 0.05;
         bool cube = false;
+        Triple<double> offsets = Triple<double>::Zeros;
         
         Options opt = get_options("num_length_sections");
         if (opt.size())
@@ -126,6 +132,10 @@ EXECUTE {
         if (opt.size())
             cube = true;
         
+        opt = get_options("offsets");
+        if (opt.size())
+          offsets = parse_triple<double>(std::string(opt[0][0]));
+
         if (File::has_or_txt_extension<BTS::Fibre::Strand>(input_location) || File::has_or_txt_extension<
                     BTS::Fibre::Track>(input_location)) {
             
@@ -134,7 +144,7 @@ EXECUTE {
             MR::ProgressBar progress_bar("Trimming strands/tracks...");
             
             BTS::Fibre::Track::Set output = trim_tcks(input, distance, length_reject_threshold,
-                    cube);
+                    cube, offsets);
             
             output.save(output_location, degree);
             
@@ -145,7 +155,8 @@ EXECUTE {
             BTS::Fibre::Tractlet::Set input(input_location);
             
             BTS::Fibre::Tractlet::Set output = trim_tractlets(input, distance,
-                    length_reject_threshold, cube, num_length_sections, num_width_sections);
+                    length_reject_threshold, cube, num_length_sections,
+                    num_width_sections, offsets);
             
             output.save(output_location);
             
@@ -177,7 +188,7 @@ EXECUTE {
                 std::map<std::string, std::string> props = strands.get_extend_props();
                 
                 BTS::Fibre::Track::Set trimmed_tcks = trim_tcks(tcks, distance,
-                        length_reject_threshold, cube);
+                        length_reject_threshold, cube, offsets);
                 
                 //FIXME: Remove explicit as it should be handled by the "loaded_degree" property
                 strands = trimmed_tcks.to_strands(strands[0].degree());
@@ -202,7 +213,7 @@ EXECUTE {
             BTS::Fibre::Track::Set tracks;
             
             while (reader.next(tracks)) {
-                writer.append(trim_tcks(tracks, distance, length_reject_threshold, cube));
+                writer.append(trim_tcks(tracks, distance, length_reject_threshold, cube, offsets));
                 
                 ++progress_bar;
             }
@@ -231,7 +242,7 @@ EXECUTE {
             while (reader.next(tractlets)) {
                 writer.append(
                         trim_tractlets(tractlets, distance, length_reject_threshold, cube,
-                                num_length_sections, num_width_sections));
+                                num_length_sections, num_width_sections, offsets));
                 ++progress_bar;
             }
             
@@ -243,13 +254,17 @@ EXECUTE {
     }
     
     BTS::Fibre::Track::Set trim_tcks(BTS::Fibre::Track::Set& input_tcks, double distance,
-                                     double length_reject_threshold, bool trim_to_cube) {
+                                     double length_reject_threshold, bool trim_to_cube,
+                                     const Triple<double>& offsets) {
         
         BTS::Fibre::Track::Set trimmed_tcks(input_tcks.get_extend_props());
         
         std::vector<Triple<double> > pre_points;
         std::vector<Triple<double> > post_points;
         
+        for (size_t tck_i = 0; tck_i < input_tcks.size(); ++tck_i)
+            input_tcks[tck_i] -= offsets;
+
         Strand_collection c, trimmed_c;
         
         input_tcks.remove_short_tracks(3);
@@ -271,7 +286,8 @@ EXECUTE {
     BTS::Fibre::Tractlet::Set trim_tractlets(BTS::Fibre::Tractlet::Set& input_tractlets,
                                              double distance, double length_reject_threshold,
                                              bool trim_to_cube, size_t num_length_sections,
-                                             size_t num_width_sections) {
+                                             size_t num_width_sections,
+                                             const Triple<double>& offsets) {
         
         //FIXME: Remove this as it should be handled by the "loaded_degree" property
         size_t degree = input_tractlets[0].degree();
@@ -280,7 +296,7 @@ EXECUTE {
                 num_width_sections);
         
         BTS::Fibre::Track::Set trimmed_tcks = trim_tcks(input_tcks, distance,
-                length_reject_threshold, trim_to_cube);
+                length_reject_threshold, trim_to_cube, offsets);
         
         BTS::Fibre::Tractlet::Set trimmed_tractlets = trimmed_tcks.to_tractlets(degree);
         
