@@ -47,7 +47,7 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         -num_iterations {num_iterations} -sample_period {sample_period} \\
         -prior_freq {prior_freq} {prior_aux_freq} \\
         -prior_density {prior_density_high} {prior_density_low} 100 \\
-        -prior_hook {prior_hook} 100 15 -diff_warn
+        -prior_hook {prior_hook} 100 15 -diff_warn \\
         -prior_in_image {in_img_scale} {in_img_power} 100 7 {in_img_border} \\
         -save_image
         """.format(
@@ -71,7 +71,7 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         length_epsilon=args.length_epsilon, seed=random_seed,
         in_img_scale=args.prior_in_image_scale,
         in_img_power=args.prior_in_image_power,
-        in_image_border=args.interp_extent / 2.0))
+        in_img_border=args.interp_extent / 2.0))
     return cmd
 
 # Arguments that can be given to the script
@@ -133,6 +133,8 @@ parser.add_argument('--init_width_mean', default=0.025, type=float)
 parser.add_argument('--init_width_stddev', default=0.0025, type=float)
 parser.add_argument('--width_epsilon', default=0.001, type=float)
 parser.add_argument('--length_epsilon', default=0.001, type=float)
+parser.add_argument('--phantoms', default=range(1, 11), type=int,
+                    nargs='+', help="The indices of the phantoms to sample")
 parser.add_argument('--random_seed', type=int, default=None,
                     help="The random seed for the whole run")
 parser.add_argument('--output_dir', default=None, type=str,
@@ -157,8 +159,9 @@ if args.random_seed is None:
     print "Using random_seed {}".format(random_seed)
 else:
     random_seed = args.random_seed
+
 for run_i in xrange(args.num_runs):
-    for phantom_i in xrange(1, 11):
+    for phantom_i in args.phantoms:
         # Create work directory and get path for output directory
         work_dir, output_dir = hpc.create_work_dir(
             SCRIPT_NAME, args.output_dir, required_dirs=REQUIRED_DIRS)
