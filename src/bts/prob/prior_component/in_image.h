@@ -76,11 +76,6 @@ namespace BTS {
                          num_length_sections(num_length_sections),
                          num_width_sections(num_width_sections) {
 
-                        VAR(scale);
-                        VAR(power);
-                        VAR(offset);
-                        VAR(extent);
-
                     }
                     
                     InImage(const InImage& ii)

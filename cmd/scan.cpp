@@ -365,10 +365,6 @@ EXECUTE {
             }
             
         }
-        
-        VAR(obs_image.offsets());
-        VAR(prior_in_image_border);
-        VAR(obs_image.dims());
 
         //----------------------------//
         //  Initialize Expected Image //
