@@ -213,7 +213,10 @@ EXECUTE {
         Prob::Prior prior(prior_scale, prior_freq_scale, prior_freq_aux_scale, prior_hook_scale,
                 prior_hook_num_points, prior_hook_num_width_sections, prior_density_high_scale,
                 prior_density_low_scale, prior_density_num_points, prior_acs_scale, prior_acs_mean,
-                prior_length_scale, prior_length_mean, prior_end_on_sphere_scale, prior_end_on_sphere_radius);
+                prior_length_scale, prior_length_mean, prior_in_image_scale, prior_in_image_power,
+                Prob::PriorComponent::InImage::get_offset(obs_image, prior_in_image_border),
+                Prob::PriorComponent::InImage::get_extent(obs_image, prior_in_image_border),
+                prior_in_image_num_length_sections, prior_in_image_num_width_sections);
         
         Fibre::Strand::Set strands(input_location, strands_per_acs);
         

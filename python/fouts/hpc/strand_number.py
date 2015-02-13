@@ -79,7 +79,7 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.str \
 -num_iter {args.num_iterations} -sample_period {args.sample_period} -diff_isotropic -exp_type sinc \
 -exp_interp {args.interp_extent} -like_ref_signal $NOISE_REF -walk_step_location \
 {work_dir}/params/fibre/strand/masks/mcmc/metropolis/default.str \
--prior_end_on_sphere {args.end_on_sphere_scale} {args.end_on_sphere_radius}
+-prior_in_image {args.end_on_sphere_scale} {args.end_on_sphere_radius}
 
 stats_fibres {work_dir}/output/true.str {work_dir}/output/samples.sst
     """.format(work_dir=work_dir, num_strands=num_strands, args=args)

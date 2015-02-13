@@ -24,7 +24,8 @@
 #include "bts/prob/prior_component/frequency.h"
 #include "bts/prob/prior_component/hook.h"
 #include "bts/prob/prior_component/density.h"
-#include "bts/prob/prior_component/end_on_sphere.h"
+#include "bts/prob/prior_component/in_image.h"
+#include "bts/image/observed/buffer.h"
 
 #include "bts/image/inline_functions.h"
 #include "bts/prob/inline_functions.h"
@@ -40,12 +41,16 @@ namespace BTS {
                      double hook_num_points, double hook_num_width_sections,
                      double density_high_scale, double density_low_scale, double density_num_points,
                      double acs_scale, double acs_mean, double length_scale, double length_mean,
-                     double end_on_sphere_scale, size_t end_on_sphere_radius)
+                     double in_image_scale, double in_image_power, const Triple<double>& in_image_offset,
+                     const Triple<double>& in_image_extent, size_t in_image_num_length_sections,
+                     size_t in_image_num_width_sections)
                 : scale(scale), frequency(freq_scale, freq_aux_scale), hook(hook_scale,
-                          hook_num_points, hook_num_width_sections), density(density_high_scale,
-                          density_low_scale, density_num_points), acs(acs_scale, acs_mean), length(
-                          length_scale, length_mean), end_on_sphere(end_on_sphere_scale, end_on_sphere_radius) {
-        }
+                  hook_num_points, hook_num_width_sections), density(density_high_scale,
+                  density_low_scale, density_num_points), acs(acs_scale, acs_mean), length(
+                  length_scale, length_mean),
+                  in_image(in_image_scale, in_image_power, in_image_offset,
+                           in_image_extent, in_image_num_length_sections,
+                           in_image_num_width_sections) { }
         
         std::map<std::string, double> Prior::get_component_values(const Fibre::Strand fibres) {
             Fibre::Strand gradient;
@@ -54,7 +59,6 @@ namespace BTS {
             component_map[PriorComponent::Frequency::NAME] = frequency.log_prob(fibres, gradient);
             component_map[PriorComponent::Hook::NAME] = hook.log_prob(fibres, gradient);
             component_map[PriorComponent::Length::NAME] = length.log_prob(fibres, gradient);
-            component_map[PriorComponent::EndOnSphere::NAME] = end_on_sphere.log_prob(fibres, gradient);
             component_map[PriorComponent::Density::NAME] = 0.0;
             component_map[PriorComponent::ACS::NAME] = 0.0;
             return component_map;
@@ -67,7 +71,7 @@ namespace BTS {
             component_map[PriorComponent::Frequency::NAME] = frequency.log_prob(fibres, gradient);
             component_map[PriorComponent::Hook::NAME] = hook.log_prob(fibres, gradient);
             component_map[PriorComponent::Length::NAME] = length.log_prob(fibres[0], gradient[0]);
-            component_map[PriorComponent::EndOnSphere::NAME] = 0.0;
+            component_map[PriorComponent::InImage::NAME] = in_image.log_prob(fibres, gradient);
             component_map[PriorComponent::Density::NAME] = density.log_prob(fibres, gradient);
             component_map[PriorComponent::ACS::NAME] = acs.log_prob(fibres);
             return component_map;
@@ -80,7 +84,6 @@ namespace BTS {
             lprob += frequency.log_prob(strand, gradient);
             lprob += hook.log_prob(strand, gradient);
             lprob += length.log_prob(strand, gradient);
-            lprob += end_on_sphere.log_prob(strand, gradient);
             
             return lprob;
             
@@ -94,6 +97,7 @@ namespace BTS {
             lprob += length.log_prob(tractlet[0], gradient[0]);
             lprob += density.log_prob(tractlet, gradient);
             lprob += acs.log_prob(tractlet, gradient);
+            lprob += in_image.log_prob(tractlet, gradient);
             
             return lprob;
             

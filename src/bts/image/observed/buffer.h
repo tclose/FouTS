@@ -104,6 +104,10 @@ namespace BTS {
                         return voxel_lengths[dim_index];
                     }
                     
+                    const Triple<double>& extent() const {
+                        return voxel_lengths * this->dimensions;
+                    }
+
                     //! Offset of the lowest corner of the lowest voxel coordinate ([0,0,0]) of the image.
                     const Triple<double>& offsets() const {
                         return corner_offsets;

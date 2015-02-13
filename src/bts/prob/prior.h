@@ -50,9 +50,12 @@
    + Argument ("prior_length_scale", "").optional().type_float(0, Prob::PriorComponent::Length::SCALE_DEFAULT,LARGE_FLOAT) \
    + Argument ("prior_length_mean", "").optional().type_float(0, Prob::PriorComponent::Length::MEAN_DEFAULT,LARGE_FLOAT), \
 \
-  Option ("prior_end_on_sphere", "The prior placed on the tractlet end_on_sphere") \
-   + Argument ("prior_end_on_sphere_scale", "").optional().type_float(0, Prob::PriorComponent::EndOnSphere::SCALE_DEFAULT,LARGE_FLOAT) \
-   + Argument ("prior_end_on_sphere_radius", "").optional().type_float(0, Prob::PriorComponent::EndOnSphere::RADIUS_DEFAULT,LARGE_FLOAT) \
+  Option ("prior_in_image", "The prior placed on the tractlet being in the image") \
+   + Argument ("prior_in_image_scale", "").optional().type_float(0, Prob::PriorComponent::InImage::SCALE_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_in_image_power", "").optional().type_float(0, Prob::PriorComponent::InImage::POWER_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_in_image_num_length_sections", "").optional().type_float(0, Prob::PriorComponent::InImage::NUM_LENGTH_SECTIONS_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_in_image_num_width_sections", "").optional().type_float(0, Prob::PriorComponent::InImage::NUM_WIDTH_SECTIONS_DEFAULT,LARGE_FLOAT) \
+   + Argument ("prior_in_image_border", "").optional().type_float(0, Prob::PriorComponent::InImage::BORDER_DEFAULT,LARGE_FLOAT) \
 \
 
 //Loads the 'prior' parameters into variables
@@ -124,15 +127,24 @@
       prior_length_mean = prior_opt[0][1]; \
   } \
  \
-  double prior_end_on_sphere_scale  = Prob::PriorComponent::EndOnSphere::SCALE_DEFAULT; \
-  double prior_end_on_sphere_radius  = Prob::PriorComponent::EndOnSphere::RADIUS_DEFAULT; \
+  double prior_in_image_scale  = Prob::PriorComponent::InImage::SCALE_DEFAULT; \
+  double prior_in_image_power  = Prob::PriorComponent::InImage::POWER_DEFAULT; \
+  size_t prior_in_image_num_length_sections  = Prob::PriorComponent::InImage::NUM_LENGTH_SECTIONS_DEFAULT; \
+  size_t prior_in_image_num_width_sections  = Prob::PriorComponent::InImage::NUM_WIDTH_SECTIONS_DEFAULT; \
+  double prior_in_image_border  = Prob::PriorComponent::InImage::BORDER_DEFAULT; \
  \
-  prior_opt = get_options("prior_end_on_sphere"); \
+  prior_opt = get_options("prior_in_image"); \
   if (prior_opt.size()) { \
     if (prior_opt[0].size() >= 1) \
-      prior_end_on_sphere_scale = prior_opt[0][0]; \
+      prior_in_image_scale = prior_opt[0][0]; \
     if (prior_opt[0].size() >= 2) \
-      prior_end_on_sphere_radius = prior_opt[0][1]; \
+      prior_in_image_power = prior_opt[0][1]; \
+    if (prior_opt[0].size() >= 3) \
+      prior_in_image_num_length_sections = prior_opt[0][2]; \
+    if (prior_opt[0].size() >= 4) \
+      prior_in_image_num_width_sections = prior_opt[0][3]; \
+    if (prior_opt[0].size() >= 5) \
+      prior_in_image_border = prior_opt[0][4]; \
   } \
  \
 
@@ -169,9 +181,12 @@
       properties["prior_length_mean"]                 = str(prior_length_mean); \
     } \
   \
-    if (prior_end_on_sphere_scale) { \
-      properties["prior_end_on_sphere_scale"]                = str(prior_end_on_sphere_scale); \
-      properties["prior_end_on_sphere_radius"]                = str(prior_end_on_sphere_radius); \
+    if (prior_in_image_scale) { \
+      properties["prior_in_image_scale"]              = str(prior_in_image_scale); \
+      properties["prior_in_image_power"]              = str(prior_in_image_power); \
+      properties["prior_in_image_num_length_sections"]= str(prior_in_image_num_length_sections); \
+      properties["prior_in_image_num_width_sections"] = str(prior_in_image_num_width_sections); \
+      properties["prior_in_image_border"]             = str(prior_in_image_border); \
     } \
   }
 
@@ -180,7 +195,7 @@
 #include "bts/prob/prior_component/density.h"
 #include "bts/prob/prior_component/acs.h"
 #include "bts/prob/prior_component/length.h"
-#include "bts/prob/prior_component/end_on_sphere.h"
+#include "bts/prob/prior_component/in_image.h"
 
 #include "bts/common.h"  
 
@@ -209,7 +224,7 @@ namespace BTS {
                 PriorComponent::Density density;
                 PriorComponent::ACS acs;
                 PriorComponent::Length length;
-                PriorComponent::EndOnSphere end_on_sphere;
+                PriorComponent::InImage in_image;
 
             public:
                 
@@ -217,12 +232,14 @@ namespace BTS {
                       double hook_num_points, double hook_num_width_sections,
                       double density_high_scale, double density_low_scale,
                       double density_num_points, double acs_scale, double acs_mean,
-                      double length_scale, double length_mean, double end_on_sphere_scale,
-                      size_t end_on_sphere_radius);
+                      double length_scale, double length_mean,
+                      double in_image_scale, double in_image_power, const Triple<double>& in_image_offset,
+                      const Triple<double>& in_image_extent, size_t in_image_num_length_sections,
+                      size_t in_image_num_width_sections);
 
                 Prior(const Prior& p)
                         : scale(p.scale), frequency(p.frequency), hook(p.hook), density(p.density), acs(
-                                  p.acs), length(p.length), end_on_sphere(p.end_on_sphere) {
+                                  p.acs), length(p.length), in_image(p.in_image) {
                 }
                 
                 Prior& operator=(const Prior& p) {
@@ -232,7 +249,7 @@ namespace BTS {
                     density = p.density;
                     acs = p.acs;
                     length = p.length;
-                    end_on_sphere = p.end_on_sphere;
+                    in_image = p.in_image;
                     return *this;
                 }
                 
@@ -246,7 +263,7 @@ namespace BTS {
                     components.push_back(PriorComponent::Density::NAME);
                     components.push_back(PriorComponent::ACS::NAME);
                     components.push_back(PriorComponent::Length::NAME);
-                    components.push_back(PriorComponent::EndOnSphere::NAME);
+                    components.push_back(PriorComponent::InImage::NAME);
                     return components;
                 }
                 

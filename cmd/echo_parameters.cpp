@@ -674,19 +674,19 @@
  } else if (Prob::Prior::EndOutSphere::ACTIVE_DEFAULT == Active)
  echo_options["prior_end_out_sphere"] = "0 1";
 
- if (echo_options.count("prior_end_on_sphere_scale")) {
+ if (echo_options.count("prior_in_image_scale")) {
 
  std::vector< std::pair<std::string, std::string> > key_values;
 
- key_values.push_back(std::pair<std::string, std::string> ("prior_end_on_sphere_scale", str(Prob::Prior::EndOnSphere::SCALE_DEFAULT)));
- key_values.push_back(std::pair<std::string, std::string> ("prior_end_on_sphere_radius", str(Prob::Prior::EndOnSphere::radius_default(obs_image))));
+ key_values.push_back(std::pair<std::string, std::string> ("prior_in_image_scale", str(Prob::Prior::EndOnSphere::SCALE_DEFAULT)));
+ key_values.push_back(std::pair<std::string, std::string> ("prior_in_image_radius", str(Prob::Prior::EndOnSphere::radius_default(obs_image))));
 
 
- check_parameters_group(echo_options, "prior_end_on_sphere", key_values, Prob::Prior::EndOnSphere::ACTIVE_DEFAULT);
+ check_parameters_group(echo_options, "prior_in_image", key_values, Prob::Prior::EndOnSphere::ACTIVE_DEFAULT);
 
 
  } else if (Prob::Prior::EndOnSphere::ACTIVE_DEFAULT == Active)
- echo_options["prior_end_on_sphere"] = "0 1";
+ echo_options["prior_in_image"] = "0 1";
 
 
  if (echo_options.count("prior_mid_sphere_scale")) {

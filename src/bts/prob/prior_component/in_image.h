@@ -20,8 +20,8 @@
 
  */
 
-#ifndef __bts_prob_prior_tractlet_density__
-#define __bts_prob_prior_tractlet_density__
+#ifndef __bts_prob_prior_in_image__
+#define __bts_prob_prior_in_image__
 
 #include "bts/fibre/tractlet.h"
 #include "bts/fibre/tractlet/tensor.h"
@@ -37,22 +37,29 @@ namespace BTS {
                     
                 public:
                     
+                    static Triple<double> get_offset(const Image::Observed::Buffer& obs_image,
+                                              double border);
+                    static Triple<double> get_extent(const Image::Observed::Buffer& obs_image,
+                                                                  double border);
+
+                public:
+
                     const static double SCALE_DEFAULT;
-                    const static double POWER_DEFAULT;
+                    const static size_t POWER_DEFAULT;
                     const static std::string NAME;
                     const static size_t NUM_LENGTH_SECTIONS_DEFAULT;
                     const static size_t NUM_WIDTH_SECTIONS_DEFAULT;
                     const static double BORDER_DEFAULT;
 
+
                 protected:
                     
                     double scale;
-                    double power;
-                    Image::Observed::Buffer obs_image;
+                    size_t power;
+                    Triple<double> offset;
+                    Triple<double> extent;
                     size_t num_length_sections;
                     size_t num_width_sections;
-                    Triple<double> centre;
-                    Triple<double> lengths;
 
                 public:
                     
@@ -61,36 +68,30 @@ namespace BTS {
                        num_width_sections(0) {
                     }
                     
-                    InImage(double scale, double power,
-                            Image::Observed::Buffer obs_image,
+                    InImage(double scale, size_t power,
+                            const Triple<double>& offset, const Triple<double>& extent,
                             size_t num_length_sections = NUM_LENGTH_SECTIONS_DEFAULT,
-                            size_t num_width_sections = NUM_WIDTH_SECTIONS_DEFAULT,
-                            double border = BORDER_DEFAULT)
-                       : scale(scale), power(power), obs_image(obs_image)
+                            size_t num_width_sections = NUM_WIDTH_SECTIONS_DEFAULT)
+                       : scale(scale), power(power), offset(offset), extent(extent),
                          num_length_sections(num_length_sections),
                          num_width_sections(num_width_sections) {
-                        for (size_t dim_i = 0; dim_i < 3; ++dim_i) {
-                            centre[dim_i] = (double)obs_image.dim(dim_i) / 2.0;
-                            lengths[dim_i] = (double)obs_image.dim(dim_i) / 2.0 + border;
-                        }
 
                     }
                     
                     InImage(const InImage& ii)
-                       : scale(ii.scale), power(ii.power), obs_image(ii.obs_image),
+                       : scale(ii.scale), power(ii.power),
+                         offset(ii.offset), extent(ii.extent),
                          num_length_sections(ii.num_length_sections),
-                         num_width_sections(ii.num_width_sections),
-                         centre(centre), lengths(lengths)) {
+                         num_width_sections(ii.num_width_sections) {
                     }
                     
                     InImage& operator=(const InImage& ii) {
                         scale = ii.scale;
                         power = ii.power;
-                        obs_image = ii.obs_image;
+                        offset = ii.offset;
+                        extent = ii.extent;
                         num_length_sections = ii.num_length_sections;
                         num_width_sections = ii.num_width_sections;
-                        centre = ii.centre;
-                        lengths = ii.lengths;
                         return *this;
                     }
                     
