@@ -47,7 +47,9 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         -num_iterations {num_iterations} -sample_period {sample_period} \\
         -prior_freq {prior_freq} {prior_aux_freq} \\
         -prior_density {prior_density_high} {prior_density_low} 100 \\
-        -prior_hook {prior_hook} 100 15 -diff_warn -save_image
+        -prior_hook {prior_hook} 100 15 -diff_warn
+        -prior_in_image {in_img_scale} {in_img_power} 100 7 {in_img_border} \\
+        -save_image
         """.format(
         work_dir=work_dir, phantom_index=phantom_index,
         step_scale=args.step_scale, voxel_res=args.voxel_res,
@@ -66,7 +68,10 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         init_length=args.init_length, init_width_mean=args.init_width_mean,
         init_width_stddev=args.init_width_stddev,
         width_epsilon=args.width_epsilon,
-        length_epsilon=args.length_epsilon, seed=random_seed))
+        length_epsilon=args.length_epsilon, seed=random_seed,
+        in_img_scale=args.prior_in_image_scale,
+        in_img_power=args.prior_in_image_power,
+        in_image_border=args.interp_extent / 2.0))
     return cmd
 
 # Arguments that can be given to the script
@@ -115,6 +120,12 @@ parser.add_argument('--prior_density_low', default=1, type=float,
 parser.add_argument('--prior_hook', default=100000.0, type=float,
                     help="The scaling of the density prior (default: "
                          "%(default)s)")
+parser.add_argument('--prior_in_image_scale', default=1e6, type=float,
+                    help="The scale of the prior component designed to keep "
+                         "the tracts inside the image (default: %(default)s).")
+parser.add_argument('--prior_in_image_power', default=10, type=float,
+                    help="The power of the prior component designed to keep "
+                         "the tracts inside the image (default: %(default)s).")
 parser.add_argument('--assumed_snr', default=20, type=float)
 parser.add_argument('--init_acs', default=0.5, type=float)
 parser.add_argument('--init_length', default=0.01, type=float)
