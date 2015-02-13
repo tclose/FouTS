@@ -177,7 +177,7 @@ namespace BTS {
                 //Public member functions
             public:
                 
-                Model() {
+                Model() : includes_iso(false) {
                 }
                 
                 //TODO: Use b_value from encoding matrix to generate response function per direction.
@@ -204,7 +204,7 @@ namespace BTS {
                     return *this;
                 }
                 
-                const static double default_strand_volume_fraction = 0.2262 * .0005 * 1e5 * 2.0;
+//                double default_strand_volume_fraction = 0.2262 * .0005 * 1e5 * 2.0;
 
                 size_t num_encodings() const {
                     return responses.size();

@@ -43,8 +43,8 @@ namespace MR
     {
       debug ("memory-mapping file \"" + Entry::name + "\"...");
 
-      struct stat64 sbuf;
-      if (stat64 (Entry::name.c_str(), &sbuf))
+      struct stat sbuf;
+      if (stat (Entry::name.c_str(), &sbuf))
         throw Exception ("cannot stat file \"" + Entry::name + "\": " + strerror (errno));
 
       mtime = sbuf.st_mtime;
@@ -107,8 +107,8 @@ namespace MR
     bool MMap::changed () const
     {
       assert (fd >= 0);
-      struct stat64 sbuf;
-      if (fstat64 (fd, &sbuf)) return (false);
+      struct stat sbuf;
+      if (fstat (fd, &sbuf)) return (false);
       if (int64_t (msize) != sbuf.st_size) return (true);
       if (mtime != sbuf.st_mtime) return (true);
       return (false);

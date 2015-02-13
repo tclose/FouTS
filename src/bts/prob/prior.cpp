@@ -26,6 +26,7 @@
 #include "bts/prob/prior_component/density.h"
 #include "bts/prob/prior_component/end_on_sphere.h"
 
+#include "bts/image/inline_functions.h"
 #include "bts/prob/inline_functions.h"
 
 namespace BTS {

@@ -140,7 +140,7 @@ namespace BTS {
                         set(proposal_distribution, relative_step);
                     }
                     
-                    ~Momentum() {
+                    virtual ~Momentum() {
                         if (prop_distr)
                             delete prop_distr;
                     }

@@ -51,7 +51,7 @@ SET_VERSION_DEFAULT
 SET_AUTHOR("Thomas G. Close");
 SET_COPYRIGHT(NULL);
 
-const double MIDDLE_DEFAULT = 0.5;
+//const double MIDDLE_DEFAULT = 0.5;
 const double CURVATURE_DEFAULT = 0.0;
 const size_t NUM_LENGTH_SECTIONS_DEFAULT = 10;
 const size_t NUM_WIDTH_SECTIONS_DEFAULT = 4;
@@ -165,7 +165,7 @@ EXECUTE {
         if (!bzeros.size())
             throw Exception("No b=0 encodings found in gradient encoding scheme");
         MR::Math::Matrix<float> all_encodings = dwi_header.get_DW_scheme();
-        double estimated_intensity;
+//        double estimated_intensity;
 
         MR::Math::Matrix<double> nonb0_encodings(dwis.size(), 4);
         size_t num_nonb0_encodings = 0;
@@ -173,7 +173,7 @@ EXECUTE {
             if (std::find(bzeros.begin(), bzeros.end(), encode_i) == bzeros.end())
                 nonb0_encodings.row(num_nonb0_encodings++) = all_encodings.row(encode_i);
         // Reference the b_values for readibility
-        const MR::Math::Vector<float>& b_values = nonb0_encodings.column(DW);
+//        const MR::Math::Vector<float>& b_values = nonb0_encodings.column(DW);
 
         //------------------------------------------------------------------------------------------
         // Create the expected image voxel

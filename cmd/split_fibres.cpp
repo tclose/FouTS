@@ -57,7 +57,7 @@
 
 using namespace BTS;
 
-const double THRESHOLD_DEFAULT = -0.5;
+//const double THRESHOLD_DEFAULT = -0.5;
 const size_t NUM_LENGTH_SECTIONS_DEFAULT = 20;
 const double TRACT_WIDTH_DEFAULT = 1.0;
 const double ACS_FRACTION_DEFAULT = 0.2;

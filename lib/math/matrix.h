@@ -149,7 +149,6 @@ namespace MR
               return Matrix<T>::operator= (M);
             }
 
-          private:
             View () {
               assert (0);
             }

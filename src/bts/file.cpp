@@ -44,7 +44,7 @@ namespace BTS {
             
             while (!(filename = dir.read_name()).empty()) {
                 
-                if (filename[0] != '.' && filename.size() - prefix.size() - suffix.size() >= 0) {    //If the file is not hidden or has a name shorter than the prefix and suffix combined. 
+                if (filename[0] != '.' && ((int)filename.size() - (int)prefix.size() - (int)suffix.size() >= 0)) {    //If the file is not hidden or has a name shorter than the prefix and suffix combined.
                         
                     if (!filename.substr(0, prefix.size()).compare(prefix) && !filename.substr(
                                 filename.size() - suffix.size(), filename.size()).compare(suffix))    //If the file matches the prefix and suffix

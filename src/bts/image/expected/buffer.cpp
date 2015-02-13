@@ -141,6 +141,13 @@ namespace BTS {
                 
             }
         
+            std::map<Index, Voxel>::iterator Buffer::begin() {
+                throw Exception("not implemented");
+            }
+
+            std::map<Index, Voxel>::iterator Buffer::end() {
+                throw Exception("not implemented");
+            }
         }
     
     }

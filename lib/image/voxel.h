@@ -65,22 +65,22 @@ namespace MR
       }
 
       // specialisation for conversion to bool
-      template <> bool __getLE<bool,float> (const void* data, size_t i)
-      {
-        return (Math::round (MR::getLE<float> (data, i)));
-      }
-      template <> bool __getBE<bool,float> (const void* data, size_t i)
-      {
-        return (Math::round (MR::getBE<float> (data, i)));
-      }
-      template <> bool __getLE<bool,double> (const void* data, size_t i)
-      {
-        return (Math::round (MR::getLE<double> (data, i)));
-      }
-      template <> bool __getBE<bool,double> (const void* data, size_t i)
-      {
-        return (Math::round (MR::getBE<double> (data, i)));
-      }
+//      template <> bool __getLE<bool,float> (const void* data, size_t i)
+//      {
+//        return (Math::round (MR::getLE<float> (data, i)));
+//      }
+//      template <> bool __getBE<bool,float> (const void* data, size_t i)
+//      {
+//        return (Math::round (MR::getBE<float> (data, i)));
+//      }
+//      template <> bool __getLE<bool,double> (const void* data, size_t i)
+//      {
+//        return (Math::round (MR::getLE<double> (data, i)));
+//      }
+//      template <> bool __getBE<bool,double> (const void* data, size_t i)
+//      {
+//        return (Math::round (MR::getBE<double> (data, i)));
+//      }
     }
 
     // \endcond

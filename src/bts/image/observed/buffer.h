@@ -93,7 +93,7 @@ namespace BTS {
 
                 public:
                     
-                    ~Buffer_tpl() {
+                    virtual ~Buffer_tpl() {
                     }
                     
                     const Triple<double>& vox_lengths() const {

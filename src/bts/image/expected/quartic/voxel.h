@@ -54,7 +54,7 @@ namespace BTS {
 
                     public:
                         
-                        Voxel() {
+                        Voxel() : image(NULL) {
                         }
                         
                         Voxel(Buffer& buffer, const Index& coord);
@@ -90,13 +90,13 @@ namespace BTS {
                                            Fibre::Strand::BasicSection::Tensor& hessian);
 
                         double interpolate(const Fibre::Tractlet::Section& section,
-                                           Fibre::Tractlet::Section& gradient) {
+                                           Fibre::Strand::BasicSection& gradient) {
                             return interpolate((const Fibre::Strand::BasicSection&) section,
                                     (Fibre::Strand::BasicSection&) gradient);
                         }
                         
                         double interpolate(const Fibre::Tractlet::Section& section,
-                                           Fibre::Tractlet::Section& gradient,
+                                           Fibre::Strand::BasicSection& gradient,
                                            Fibre::Tractlet::Section::Tensor& hessian);
 
                         //      protected:

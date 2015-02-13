@@ -75,7 +75,7 @@ namespace BTS {
 
                 public:
                     
-                    Voxel() {
+                    Voxel() : precalc_interpolation(0.0) {
                     }
                     
                     Voxel(Expected::Buffer& exp_image, const Index& index,

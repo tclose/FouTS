@@ -54,7 +54,7 @@ class KMdata {
         KCtree* kcTree;		// kc-tree for the points
     private:
         // copy functions (not implemented)
-        KMdata(const KMdata& p)		// copy constructor
+        KMdata(const KMdata& p)	: dim(0), nPts(0)	// copy constructor
         {
             assert(false);
         }

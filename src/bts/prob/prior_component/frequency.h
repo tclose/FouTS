@@ -56,7 +56,7 @@ namespace BTS {
                     }
                     
                     Frequency(const Frequency& m)
-                            : scale(m.scale), aux_scale(aux_scale) {
+                            : scale(m.scale), aux_scale(m.aux_scale) {
                     }
                     
                     Frequency& operator=(const Frequency& m) {

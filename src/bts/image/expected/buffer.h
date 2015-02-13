@@ -275,6 +275,8 @@ namespace BTS {
 
                 public:
                     
+                    virtual ~Buffer() {}
+
                     virtual Voxel& operator()(int x, int y, int z) = 0;
 
                     virtual const Voxel& operator()(int x, int y, int z) const = 0;
@@ -395,13 +397,9 @@ namespace BTS {
                     virtual Buffer& operator-=(
                             const Image::Buffer_tpl<Observed::Voxel>& buffer) = 0;
 
-                    virtual iterator begin() {
-                        throw Exception("not implemented");
-                    }
+                    virtual iterator begin();
                     
-                    virtual iterator end() {
-                        throw Exception("not implemented");
-                    }
+                    virtual iterator end();
             };
             
 #define EXPECTED_BUFFER_FUNCTIONS \

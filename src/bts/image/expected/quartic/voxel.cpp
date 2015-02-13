@@ -226,13 +226,13 @@ namespace BTS {
                 }
                 
                 double Voxel::interpolate(const Fibre::Tractlet::Section& section,
-                                          Fibre::Tractlet::Section& gradient,
+                                          Fibre::Strand::BasicSection& gradient,
                                           Fibre::Tractlet::Section::Tensor& hessian) {
                     
                     Fibre::Strand::BasicSection::Tensor strand_hessian;
                     
                     double interp = interpolate((const Fibre::Strand::BasicSection&) section,
-                            (Fibre::Strand::BasicSection&) gradient, strand_hessian);
+                                                gradient, strand_hessian);
                     
                     hessian = strand_hessian;
                     

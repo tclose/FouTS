@@ -148,9 +148,9 @@ namespace MR
 
         // offset and scale:
         float scale = get<float32> (&NH.scl_slope, is_BE);
-        if (finite (scale) && scale != 0.0) {
+        if (isfinite (scale) && scale != 0.0) {
           float offset = get<float32> (&NH.scl_inter, is_BE);
-          if (!finite (offset)) offset = 0.0;
+          if (!isfinite (offset)) offset = 0.0;
           H.set_scaling (scale, offset);
         }
         else H.set_scaling ();

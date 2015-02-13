@@ -115,22 +115,22 @@ EXECUTE {
         const char* PROP_3 = "PROP_3";
         const char* PROP_4 = "PROP_4";
         const char* PROP_5 = "PROP_5";
-        const char* PROP_6 = "PROP_6";
-        const char* PROP_7 = "PROP_7";
-        const char* PROP_8 = "PROP_8";
-        const char* PROP_9 = "PROP_9";
-        const char* PROP_10 = "PROP_10";
+//        const char* PROP_6 = "PROP_6";
+//        const char* PROP_7 = "PROP_7";
+//        const char* PROP_8 = "PROP_8";
+//        const char* PROP_9 = "PROP_9";
+//        const char* PROP_10 = "PROP_10";
         
         const char* ELEM_PROP_1 = "ELEM_PROP_1";
         const char* ELEM_PROP_2 = "ELEM_PROP_2";
         const char* ELEM_PROP_3 = "ELEM_PROP_3";
         const char* ELEM_PROP_4 = "ELEM_PROP_4";
         const char* ELEM_PROP_5 = "ELEM_PROP_5";
-        const char* ELEM_PROP_6 = "ELEM_PROP_6";
-        const char* ELEM_PROP_7 = "ELEM_PROP_7";
-        const char* ELEM_PROP_8 = "ELEM_PROP_8";
-        const char* ELEM_PROP_9 = "ELEM_PROP_9";
-        const char* ELEM_PROP_10 = "ELEM_PROP_10";
+//        const char* ELEM_PROP_6 = "ELEM_PROP_6";
+//        const char* ELEM_PROP_7 = "ELEM_PROP_7";
+//        const char* ELEM_PROP_8 = "ELEM_PROP_8";
+//        const char* ELEM_PROP_9 = "ELEM_PROP_9";
+//        const char* ELEM_PROP_10 = "ELEM_PROP_10";
         
         std::string EXT_ELEM_PROP_1 = "EXT_ELEM_PROP_1";
         std::string EXT_ELEM_PROP_2 = "EXT_ELEM_PROP_2";

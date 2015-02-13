@@ -49,7 +49,7 @@ namespace BTS {
 
                 public:
                     
-                    Density() {
+                    Density() : high_scale(0.0), low_scale(0.0), num_points(0) {
                     }
                     
                     Density(double high_scale, double low_scale, size_t num_points =
@@ -58,8 +58,8 @@ namespace BTS {
                     }
                     
                     Density(const Density& d)
-                            : high_scale(d.high_scale), low_scale(d.low_scale), num_points(
-                                      num_points) {
+                            : high_scale(d.high_scale), low_scale(d.low_scale),
+                              num_points(d.num_points) {
                     }
                     
                     Density& operator=(const Density& d) {

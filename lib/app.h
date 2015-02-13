@@ -102,7 +102,6 @@ namespace MR
         return (application_name);
       }
 
-    protected:
       class ParsedArgument;
 
       class Options

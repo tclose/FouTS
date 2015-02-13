@@ -206,7 +206,6 @@ namespace MR
               return Vector<T>::operator= (V);
             }
 
-          private:
             View () {
               assert (0);
             }

@@ -74,6 +74,8 @@ namespace BTS {
                         return *this;
                     }
                     
+                    using Momentum::update_state;
+
                     virtual void update_state(MR::Math::Vector<double>& state,
                                               const MR::Math::Matrix<double>& weights_chol,
                                               double time_direction = 1.0) const;

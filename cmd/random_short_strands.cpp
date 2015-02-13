@@ -77,7 +77,7 @@ EXECUTE {
         
         size_t degree = 3;
         double sphere_radius = 1.0;
-        size_t num_strands = 0.05;
+        size_t num_strands = 5;
         double strand_length = 0.01;
         size_t num_points = 0;
         

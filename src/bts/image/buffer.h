@@ -83,7 +83,7 @@ namespace BTS {
                         : dimensions(B.dims()), voxels(B.voxels), enforce_bounds(B.enforce_bounds) {
                 }
                 
-                ~Buffer_tpl() {
+                virtual ~Buffer_tpl() {
                 }
                 
                 Buffer_tpl<T>& operator=(const Buffer_tpl<T>& B) {

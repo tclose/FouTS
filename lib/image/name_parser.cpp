@@ -32,19 +32,19 @@ namespace MR
     namespace
     {
 
-      inline bool is_seq_char (char c)
-      {
-        return isdigit (c) || c == ',' || c == ':' || c == '%';
-      }
-
-
-
-      inline int last_bracket (const std::string& str, int from, char c)
-      {
-        while (str[from] != c && from >= 0)
-          from--;
-        return from;
-      }
+//      inline bool is_seq_char (char c)
+//      {
+//        return isdigit (c) || c == ',' || c == ':' || c == '%';
+//      }
+//
+//
+//
+//      inline int last_bracket (const std::string& str, int from, char c)
+//      {
+//        while (str[from] != c && from >= 0)
+//          from--;
+//        return from;
+//      }
 
 
 

@@ -40,7 +40,7 @@ extern "C" {
 
 const size_t DEGREE_DEFAULT = 3;
 const double SPHERE_RADIUS_DEFAULT = 0.225;
-const double BASE_WIDTH_DEFAULT = 0.1;
+//const double BASE_WIDTH_DEFAULT = 0.1;
 const double STRAND_RADIUS_LBOUND_DEFAULT = 0.12;
 const double STRAND_RADIUS_UBOUND_DEFAULT = 0.3;
 const double CONTROL_POINT_FREQUENCY_DEFAULT = 50.0;

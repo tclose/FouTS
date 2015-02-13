@@ -62,7 +62,7 @@ OPTIONS= {
     + Argument("acs","").type_float(SMALL_FLOAT,ACS_DEFAULT,LARGE_FLOAT),
 
     Option("base_intensity","Base intensity of the generated fibres.")
-    + Argument("base_intensity","").type_float(SMALL_FLOAT,ACS_DEFAULT,LARGE_FLOAT),
+    + Argument("base_intensity","").type_float(SMALL_FLOAT,BASE_INTENSITY_DEFAULT,LARGE_FLOAT),
 
     Option("degree","The degree of the generated fibres.")
     + Argument("degree","").type_integer(0,DEGREE_DEFAULT,LARGE_INT),

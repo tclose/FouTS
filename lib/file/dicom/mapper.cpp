@@ -78,7 +78,7 @@ namespace MR
 
         const float slice_thickness = (*series[0]) [0]->slice_thickness;
         float slice_separation = (*series[0]) [0]->slice_spacing;
-        if (!finite (slice_separation))
+        if (!isfinite (slice_separation))
           slice_separation = slice_thickness;
 
         for (size_t s = 0; s < series.size(); s++) {
@@ -87,11 +87,11 @@ namespace MR
             const Image& image (* (*series[s]) [i*dim[0]]);
             float sep = image.distance - previous_distance;
 
-            if (finite (slice_separation))
+            if (isfinite (slice_separation))
               if (Math::abs (sep - slice_separation) > 1e-4)
                 slicesep_warning = true;
 
-            if (!finite (slice_separation) || sep > slice_separation + 1e-4)
+            if (!isfinite (slice_separation) || sep > slice_separation + 1e-4)
               slice_separation = sep;
 
             previous_distance = image.distance;
