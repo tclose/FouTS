@@ -26,7 +26,7 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         args.true_interp_style, 'trim', str(args.voxel_res))
     mask_path = os.path.join(
         work_dir, 'params', 'fibre', 'tract', 'masks', 'mcmc', 'metropolis',
-        'default.tct')
+        'default{degree}.tct'.format(degree=args.degree))
     cmd = ("""
         init_fibres {work_dir}/output/init.tct -degree {degree} \\
         -num_fibres {num_tracts} -img_dims 3,3,3 -curve_stddev 0.001 \\
