@@ -36,7 +36,7 @@ namespace BTS {
                     const std::string& location, const std::vector<const char*>& prop_keys,
                     const std::vector<std::string> extend_prop_keys,
                     std::map<std::string, std::string> file_props) {
-                
+
                 //Combine prop keys and extended prop keys into one header vector.
                 std::vector<std::string> prop_header;
                 
@@ -45,7 +45,7 @@ namespace BTS {
                 
                 prop_header.insert(prop_header.end(), extend_prop_keys.begin(),
                         extend_prop_keys.end());
-                
+
                 file_props["software version"] = version_number_string();
                 file_props["datetime"] = current_datetime();
                 

@@ -62,7 +62,7 @@ OPTIONS= {
     + Argument ("degree", "Limit the degree of the Strand coefficients used to describe the strands to the first - degrees").type_integer (1, 200, 3),
 
     Option ("distance", "The radius of the sphere the strands will be trimmed to")
-    + Argument ("new_sphere_r", "").type_float (SMALL_FLOAT, 1.0, LARGE_FLOAT),
+    + Argument ("distance", "").type_float (SMALL_FLOAT, 1.0, LARGE_FLOAT),
 
     Option ("length_reject_threshold", "The length below which new strands will be rejected")
     + Argument ("length_reject_threshold", "").type_float (SMALL_FLOAT, 1.0, LARGE_FLOAT),

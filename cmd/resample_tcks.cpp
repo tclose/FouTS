@@ -54,8 +54,8 @@ ARGUMENTS= {
 
 OPTIONS= {
 
-    Option ("resample_length", "Defines the length of the new inter control-point intervals")
-    + Argument ("resample_length", "").type_float (0.00001, 0.02, 10000.0),
+    Option ("step_size", "Defines the length of the new inter control-point intervals")
+    + Argument ("step_size", "").type_float (0.00001, 0.02, 10000.0),
 
     Option ("double_back_angle_threshold", "The angle between successive segments above which the second segment is considered to have doubled back on itself")
     + Argument ("double_back_angle_threshold", "").type_float (90.0, 150.0, 180.0),
@@ -75,21 +75,22 @@ EXECUTE {
     
         std::string input_path = argument[0];
         std::string output_path;
+
         
         if (argument.size() > 1)
             output_path = argument[1].c_str();
         else
             output_path = input_path;
         
-        double resample_length = 0.02;
+        double step_size = 0.02;
         double double_back_angle_threshold = 150.0;
         double forward_angle_threshold = 80.0;
         size_t num_points = 0;
         size_t degree = 0;
         
-        Options opt = get_options("resample_length");
+        Options opt = get_options("step_size");
         if (opt.size())
-            resample_length = opt[0][0];
+            step_size = opt[0][0];
         
         opt = get_options("double_back_angle_threshold");
         if (opt.size())
@@ -108,8 +109,10 @@ EXECUTE {
             degree = opt[0][0];
         
         BTS::Fibre::Track::Set tcks(input_path, num_points);
-        BTS::Fibre::Track::Set resampled_tcks(tcks.get_extend_props());
+        // Extract properties and add extra properties
         
+        BTS::Fibre::Track::Set resampled_tcks(tcks.get_extend_props());
+
         std::vector<Triple<double> > pre_points;
         std::vector<Triple<double> > post_points;
         
@@ -122,12 +125,14 @@ EXECUTE {
         convert_mr_to_nfg(&c, tcks, pre_points, post_points);
         
         MR::ProgressBar progress_bar("Resampling tracks...");
-        resample_collection(&c, &resampled_c, resample_length, double_back_angle_threshold,
+        resample_collection(&c, &resampled_c, step_size, double_back_angle_threshold,
                 forward_angle_threshold);
         //MR::ProgressBar::done();
         
         convert_nfg_to_mr(resampled_tcks, pre_points, post_points, &resampled_c);
         
+        resampled_tcks.set_extend_prop("step_size", str(step_size));
+
         resampled_tcks.save(output_path, degree);
         
     }

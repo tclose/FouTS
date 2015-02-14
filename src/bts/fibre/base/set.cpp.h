@@ -822,7 +822,7 @@ namespace BTS {
                 
                 if (ext_props)
                     properties = *ext_props;
-                
+
                 //Insert the properties for the set into the header along with the extended properties
                 insert_props(properties);
                 

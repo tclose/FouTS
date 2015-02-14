@@ -34,6 +34,7 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         -width_stddev {init_width_stddev} -length_stddev {init_length} \\
         -width_mean {init_width_mean}  -length_epsilon {length_epsilon} \\
         -img_vox_lengths {voxel_res},{voxel_res},{voxel_res} \\
+        -edge_buffer {voxel_res}
 
         # run the metropolis algorithm
         metropolis {dataset_path}/{phantom_index}.mif \\
@@ -90,7 +91,7 @@ parser.add_argument('--sample_period', default=1000, type=int,
                          "(default: %(default)s)")
 parser.add_argument('--num_length_sections', default=20, type=float)
 parser.add_argument('--num_width_sections', default=4, type=float)
-parser.add_argument('--num_tracts', default=6, type=float,
+parser.add_argument('--num_tracts', default=8, type=float,
                     help="The number of tracts to fit (default: %(default)s")
 parser.add_argument('--interp_type', default='sinc', type=str,
                     help="The type of interpolation used in the reference "
@@ -102,7 +103,7 @@ parser.add_argument('--true_interp_style', default='one', type=str,
                     help="The style of interpolation extent used in the "
                          "reference image, either 'full' or 'one'")
 parser.add_argument('--init_perturb_stddev', default=0.2, type=float)
-parser.add_argument('--degree', default=3, type=int,
+parser.add_argument('--degree', default=5, type=int,
                     help="The degree of the fibre used to sample from "
                          "(default: %(default)s)")
 parser.add_argument('--prior_freq', default=15.0, type=float,
