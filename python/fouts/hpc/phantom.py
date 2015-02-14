@@ -91,7 +91,7 @@ parser.add_argument('--sample_period', default=1000, type=int,
                          "(default: %(default)s)")
 parser.add_argument('--num_length_sections', default=20, type=float)
 parser.add_argument('--num_width_sections', default=4, type=float)
-parser.add_argument('--num_tracts', default=8, type=float,
+parser.add_argument('--num_tracts', default=4, type=float,
                     help="The number of tracts to fit (default: %(default)s")
 parser.add_argument('--interp_type', default='sinc', type=str,
                     help="The type of interpolation used in the reference "
@@ -103,7 +103,7 @@ parser.add_argument('--true_interp_style', default='one', type=str,
                     help="The style of interpolation extent used in the "
                          "reference image, either 'full' or 'one'")
 parser.add_argument('--init_perturb_stddev', default=0.2, type=float)
-parser.add_argument('--degree', default=5, type=int,
+parser.add_argument('--degree', default=4, type=int,
                     help="The degree of the fibre used to sample from "
                          "(default: %(default)s)")
 parser.add_argument('--prior_freq', default=15.0, type=float,
@@ -161,7 +161,7 @@ if args.random_seed is None:
 else:
     random_seed = args.random_seed
 
-for run_i in xrange(args.num_runs):
+for run_i in xrange(1, args.num_runs + 1):
     for phantom_i in args.phantoms:
         # Create work directory and get path for output directory
         work_dir, output_dir = hpc.create_work_dir(
