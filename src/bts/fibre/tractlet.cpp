@@ -76,7 +76,7 @@ namespace BTS {
 //    }
 
         Tractlet::Tractlet(Track t, size_t degree, double radius)
-                : Base::Object((size_t)3, 3 * degree, select_props<Tractlet>(*t.props)), dgree(
+                : Base::Object((size_t)3, 9 * degree, select_props<Tractlet>(*t.props)), dgree(
                           degree), parent(0) {
 
             from_track(t, degree, radius);

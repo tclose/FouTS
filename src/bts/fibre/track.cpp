@@ -93,7 +93,58 @@ namespace BTS {
             
             return (stream);
         }
-    
+
+
+        Track Track::resample(double step_size) {
+
+            if (!size())
+                throw Exception("Track has no points");
+
+            Fibre::Track new_tck;
+            // Add the first point of the track to the new track
+            // The distance along the previous interval to start from
+            // (a step_size away) is saved in in this variable.
+            double t = 0.0;
+            for (size_t point_i = 0; point_i + 1 < size(); ++point_i) {
+
+                // Get the orientation and length of the current interval.
+                const Triple<double> start = operator[](point_i);
+                const Triple<double> end = operator[](point_i + 1);
+                Triple<double> disp = end - start;
+                double length = disp.norm();
+
+                // Add the resampled points along the current inverval
+                double step_incr = step_size / length;
+                for (; t < 1.0; t += step_incr)
+                    new_tck.push_back(start + disp * t);
+
+                // Find the starting "time" on the next interval
+                if (point_i + 2 < size()) {
+                    t = 1.0;
+                    while (t >= 1.0) {
+                        // Get the first step on the current interval of the original track.
+                        const Triple<double>& new_point = new_tck[new_tck.size() - 1];
+                        const Triple<double>& next = operator[](point_i + 2);
+                        // Solve for the "time" on the line passing through the next interval that is a 'step_size' away from the new_point
+                        double a = next.norm2() - 2.0 * end.dot(next) + end.norm2();
+                        double b = 2.0 * end.dot(next) - 2.0 * next.dot(new_point) - 2.0 * end.norm2() + 2.0 * end.dot(new_point);
+                        double c = end.norm2() - 2.0 * end.dot(new_point) + new_point.norm2() - MR::Math::pow2(step_size);
+                        // Get the times along the line joining the interval
+                        double t1 = (-b + sqrt(b * b - 4.0 * a * c)) / (2.0 * a);
+                        double t2 = (-b - sqrt(b * b - 4.0 * a * c)) / (2.0 * a);
+                        // Find if the points actually lie on the interval
+                        if (t1 >= 0.0 && t1 < 1.0)
+                            t = t1;
+                        else if (t2 >= 0.0 && t2 < 1.0)
+                            t = t2;
+                        else
+                            ++point_i; // Skip to the next point if the next step is outside the next interval
+                    }
+                }
+
+            }
+            return new_tck;
+        }
     }
 
 }
