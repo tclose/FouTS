@@ -38,7 +38,7 @@
 #include "bts/inline_functions.h"
 
 const static double STEP_SIZE_DEFAULT = 0.05;
-const static double PER_ACS_DEFAULT = 10000;
+const static double PER_ACS_DEFAULT = 1e7;
 const static size_t DEGREE_DEFAULT = 50;
 const static size_t NUM_POINTS_DEFAULT = 100;
 
@@ -68,6 +68,9 @@ OPTIONS= {
     Option ("per_acs","Number of tracks per ACS of tract.")
     + Argument ("per_acs","").type_float (0.0, PER_ACS_DEFAULT, LARGE_FLOAT),
 
+    Option ("radius","Radius of tract (uses 'track_radius' property if not provided).")
+    + Argument ("radius","").type_float (0.0, NAN, LARGE_FLOAT),
+
     Option ("degree","The degree of the Fourier tract tracks will be converted"
                      "into before generating the tdi tracks.")
     + Argument ("degree","").type_integer(0, DEGREE_DEFAULT, LARGE_INT),
@@ -87,6 +90,7 @@ EXECUTE {
         double step_size = STEP_SIZE_DEFAULT;
         double per_acs = PER_ACS_DEFAULT;
         size_t num_points = NUM_POINTS_DEFAULT;
+        double radius = NAN;
         
         Options opt = get_options("degree");
         if (opt.size())
@@ -104,12 +108,19 @@ EXECUTE {
         if (opt.size())
             num_points = opt[0][0];
 
+        opt = get_options("radius");
+        if (opt.size())
+            radius = opt[0][0];
+
         if (!File::has_extension<Fibre::Track>(output_location))
             throw Exception("Only supports writing to 'tck' format (output "
                             "provided " + input_location + ").");
 
         // Get input tractlets
-        Fibre::Tractlet::Set input_tracts;
+        std::vector<const char*> props, elem_props;
+        elem_props.push_back(Fibre::Base::Object::ALPHA_PROP);
+        Fibre::Tractlet::Set input_tracts(props, elem_props);
+
         std::map<std::string, std::string> properties_row;
 
         if (File::has_extension<Fibre::Tractlet>(input_location)) {
@@ -123,8 +134,10 @@ EXECUTE {
             Fibre::Track::Reader reader(input_location);
             Fibre::Track tck;
             while (reader.next(tck, properties_row)) {
-                double width = to<double>(properties_row[Fibre::Track::RADIUS_PROP]);
-                Fibre::Tractlet tract(tck, degree, width);
+                double tck_radius = radius;
+                if (isnan(tck_radius))
+                   tck_radius = to<double>(properties_row[Fibre::Track::RADIUS_PROP]);
+                Fibre::Tractlet tract(tck, degree, tck_radius);
                 tract.normalise_density();
                 input_tracts.push_back(tract);
             }
@@ -132,6 +145,8 @@ EXECUTE {
         } else
             throw Exception("Invalid input extension '" + File::extension(input_location) +
                             "' (only accepts '.tct', or '.tck')");
+
+
 
         Fibre::Properties properties;
         properties["step_size"] = str(step_size);

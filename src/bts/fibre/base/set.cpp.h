@@ -1493,7 +1493,7 @@ namespace BTS {
                 
                 //Loop through properties and insert the new property in the appropriate position for alphabetical order
                 size_t insert_index = 0;
-                
+                TEST;
                 for (std::vector<const char*>::iterator prop_it = elem_props->begin();
                         prop_it != elem_props->end(); ++prop_it) {
                     
