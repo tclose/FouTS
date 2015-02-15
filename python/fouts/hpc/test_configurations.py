@@ -15,7 +15,7 @@ CONFIGURATIONS = ['x-small', 'x-thin', 'x-big', 'x-curve-z', 'x-rotate-big', 'x_
 # CONFIGURATIONS = ['x', 'yz-curve-x', 'x-curve-y_x-curve--y', 'x-curve-z']
 REQUIRED_DIRS = ['params/fibre/tract/test_configurations', 'params/diffusion']
 # Required imports
-import hpc
+from fouts import hpc
 import argparse
 import os.path
 import re
@@ -35,8 +35,14 @@ parser.add_argument('--assumed_interp_extent', default=1, type=int, help='The in
 parser.add_argument('--prior_freq', default=[15.0], type=float, nargs='+', help='The scaling of the frequency prior')
 parser.add_argument('--prior_aux_freq', default=[60.0], type=float, nargs='+', help='The scaling of the frequency prior')
 parser.add_argument('--prior_density_high', default=[1], type=float, nargs='+', help='The scaling of the density prior')
-parser.add_argument('--prior_density_low', default=[0.01], type=float, nargs='+', help='The scaling of the density prior')
+parser.add_argument('--prior_density_low', default=[1], type=float, nargs='+', help='The scaling of the density prior')
 parser.add_argument('--prior_hook', default=[100000.0], type=float, nargs='+', help='The scaling of the density prior')
+parser.add_argument('--prior_in_image_scale', default=1e6, type=float,
+                    help="The scale of the prior component designed to keep "
+                         "the tracts inside the image (default: %(default)s).")
+parser.add_argument('--prior_in_image_power', default=10, type=float,
+                    help="The power of the prior component designed to keep "
+                         "the tracts inside the image (default: %(default)s).")
 parser.add_argument('--width_epsilon', default=[0.01], type=float, nargs='+', help='The amount of width epsilon to use')
 parser.add_argument('--length_epsilon', default=[0.01], type=float, nargs='+', help='The amount of length epsilon to use')
 parser.add_argument('--img_snr', default=20.0, type=float, help='The snr to used in the noisy image')
@@ -68,13 +74,15 @@ gen_img_cmd = "generate_image {param_dir}/fibre/tract/noise_ref.tct {output_dir}
 -diff_encodings_location {param_dir}/diffusion/encoding_60.b".format(param_dir=param_dir,
                                       output_dir=output_parent_dir, args=args)
 try:
-#    print sp.check_output("generate_image --help", shell=True, env=os.environ.copy())
     sp.check_call(gen_img_cmd, shell=True, env=os.environ.copy())
 except Exception as e:
     raise Exception('Generate image command: ''{0}'' caused an error ''{1}'''.format(gen_img_cmd, e))
 print "Generated noise reference image {}/noise_ref.mif', with command: {}".format(output_parent_dir, gen_img_cmd)
-noise_ref_signal = sp.check_output('maxb0 {}/noise_ref.mif'.format(output_parent_dir), shell=True,
-                                   env=os.environ.copy())
+try:
+    noise_ref_signal = sp.check_output('maxb0 {}/noise_ref.mif'.format(output_parent_dir), shell=True,
+                                       env=os.environ.copy())
+except Exception as e:
+    raise Exception("'maxb0' caused and error: \n\n{}".format(e))
 # Generate a random seed to seed the random number generators of the cmds
 seed = int(time.time() * 100)
 for i in xrange(args.num_runs):
@@ -133,7 +141,7 @@ generate_image {work_dir}/output/config.tct {work_dir}/output/image.mif \
 init_fibres {work_dir}/output/init.tct -num_fibres {num_tracts} \
 -img_dims "3 3 3" -degree {args.degree} -random_seed {init_seed} -base_intensity 1.0 \
 -width_epsilon {width_epsilon} -length_epsilon {length_epsilon} -length_std 0.02 -width_mean 0.05 \
--width_std 0.005
+-width_std 0.005 -edge_buffer 0.15
 
 # Run metropolis
 metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/output/samples.tst \
@@ -142,7 +150,7 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/out
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
 {prior_density_low} 100 -prior_hook {prior_hook} 100 15 -exp_num_width_sections {args.num_width_sections} \
- -exp_type {args.interp_type}
+ -exp_type {args.interp_type} -exp_enforce_bounds -prior_in_image -prior_in_image {args.prior_in_img_scale} {args.prior_in_img_power} 100 7 0.075
     
 # Map to closest tract in the true configuration
 select_fibres {work_dir}/output/samples.tst {work_dir}/output/last.tct --include 99
