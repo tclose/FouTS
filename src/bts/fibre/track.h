@@ -193,6 +193,8 @@ namespace BTS {
 
                 Coord left_product(const MR::Math::Vector<double>::View& row_vector) const;
 
+                Track resample(double step_size);
+
             protected:
                 
                 void set_parent(const Base::Set<Track>* prent) {
