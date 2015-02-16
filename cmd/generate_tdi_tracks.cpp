@@ -38,7 +38,7 @@
 #include "bts/inline_functions.h"
 
 const static double STEP_SIZE_DEFAULT = 0.05;
-const static double PER_ACS_DEFAULT = 1e7;
+const static double PER_ACS_DEFAULT = 1e6;
 const static size_t DEGREE_DEFAULT = 50;
 const static size_t NUM_POINTS_DEFAULT = 100;
 
@@ -180,6 +180,7 @@ EXECUTE {
                         Fibre::Track resampled_tck = tck.resample(step_size);
                         writer.append(resampled_tck);
                     }
+            ++progress_bar;
         }
 }
 
