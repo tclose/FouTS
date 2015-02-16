@@ -238,6 +238,10 @@ EXECUTE {
         Image::Observed::Buffer obs_image(obs_image_location,
                 Diffusion::Encoding::Set(diff_encodings));
         
+        VAR(obs_image.dims());
+        VAR(obs_image.vox_lengths());
+        VAR(obs_image.offsets());
+
         //If gradient scheme is included in reference image header, use that instead of default (NB: Will override any gradients passed to '-diff_encodings' option).
         if (header.get_DW_scheme().rows()) {
             diff_encodings = header.get_DW_scheme();
