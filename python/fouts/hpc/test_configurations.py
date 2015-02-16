@@ -146,7 +146,7 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/out
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
 {prior_density_low} 100 -prior_hook {prior_hook} 100 15 -exp_num_width_sections {args.num_width_sections} \
- -exp_type {args.interp_type} -exp_enforce_bounds -prior_in_image {args.prior_in_img_scale} {args.prior_in_img_power} 100 7 {in_image_border}
+ -exp_type {args.interp_type} -exp_enforce_bounds -prior_in_image {args.prior_in_image_scale} {args.prior_in_image_power} 100 7 {in_image_border}
     
 # Map to closest tract in the true configuration
 select_fibres {work_dir}/output/samples.tst {work_dir}/output/last.tct --include 99
