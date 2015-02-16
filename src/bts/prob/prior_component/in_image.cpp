@@ -32,8 +32,8 @@ namespace BTS {
         
         namespace PriorComponent {
             
-            const double InImage::SCALE_DEFAULT = 0.0;
-            const size_t InImage::POWER_DEFAULT = 2;
+            const double InImage::SCALE_DEFAULT = 1e6;
+            const size_t InImage::POWER_DEFAULT = 10;
             const std::string InImage::NAME = "inside_image";
             const size_t InImage::NUM_LENGTH_SECTIONS_DEFAULT = 100;
             const size_t InImage::NUM_WIDTH_SECTIONS_DEFAULT = 7;

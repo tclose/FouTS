@@ -51,6 +51,16 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         -prior_hook {prior_hook} 100 15 -diff_warn \\
         -prior_in_image {in_img_scale} {in_img_power} 100 7 {in_img_border} \\
         -save_image
+
+        # Generate the TDI images
+        select {work_dir}/output/samples.tst {work_dir}/tdi.tct \\
+        -include "{tdi_include}"
+
+        generate_tdi_tracks {work_dir}/tdi.tct {work_dir}/tdi.tck \\
+        -per_acs {tdi_per_acs}
+
+        tckmap {work_dir}/tdi.tck {work_dir}/output/tdi.mif -vox "{tdi_vox}" \\
+        -dec -template {dataset_path}/{phantom_index}.mif
         """.format(
         work_dir=work_dir, phantom_index=phantom_index,
         step_scale=args.step_scale, voxel_res=args.voxel_res,
@@ -72,7 +82,9 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         length_epsilon=args.length_epsilon, seed=random_seed,
         in_img_scale=args.prior_in_image_scale,
         in_img_power=args.prior_in_image_power,
-        in_img_border=args.interp_extent / 2.0))
+        in_img_border=args.interp_extent / 2.0,
+        tdi_include=','.join(args.tdi_include), tdi_per_acs=args.tdi_per_acs,
+        tdi_vox=' '.join(args.tdi_vox)))
     return cmd
 
 # Arguments that can be given to the script
@@ -136,6 +148,13 @@ parser.add_argument('--width_epsilon', default=0.001, type=float)
 parser.add_argument('--length_epsilon', default=0.001, type=float)
 parser.add_argument('--phantoms', default=range(1, 11), type=int,
                     nargs='+', help="The indices of the phantoms to sample")
+parser.add_argument('--tdi_include', default=range(15, 24, 2), type=int,
+                    nargs='+', help="The samples to include in the TDI images")
+parser.add_argument('--tdi_per_acs', default=2e5, type=float,
+                    help="The number of tcks per acs to generate for the "
+                         "TDI images")
+parser.add_argument('--tdi_vox', default=(0.0075, 0.0075, 0.0444), type=float,
+                    nargs=3, help="The voxel resolution of the tdi images")
 parser.add_argument('--random_seed', type=int, default=None,
                     help="The random seed for the whole run")
 parser.add_argument('--output_dir', default=None, type=str,
