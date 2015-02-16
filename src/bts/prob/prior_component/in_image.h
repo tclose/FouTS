@@ -55,7 +55,7 @@ namespace BTS {
                 protected:
                     
                     double scale;
-                    size_t power;
+                    double double_power;
                     Triple<double> offset;
                     Triple<double> extent;
                     size_t num_length_sections;
@@ -64,7 +64,7 @@ namespace BTS {
                 public:
                     
                     InImage()
-                     : scale(0.0), power(0.0), num_length_sections(0),
+                     : scale(0.0), double_power(0.0), num_length_sections(0),
                        num_width_sections(0) {
                     }
                     
@@ -72,14 +72,15 @@ namespace BTS {
                             const Triple<double>& offset, const Triple<double>& extent,
                             size_t num_length_sections = NUM_LENGTH_SECTIONS_DEFAULT,
                             size_t num_width_sections = NUM_WIDTH_SECTIONS_DEFAULT)
-                       : scale(scale), power(power), offset(offset), extent(extent),
+                       : scale(scale), double_power((double)(power * 2)),
+                         offset(offset), extent(extent),
                          num_length_sections(num_length_sections),
                          num_width_sections(num_width_sections) {
 
                     }
                     
                     InImage(const InImage& ii)
-                       : scale(ii.scale), power(ii.power),
+                       : scale(ii.scale), double_power(ii.double_power),
                          offset(ii.offset), extent(ii.extent),
                          num_length_sections(ii.num_length_sections),
                          num_width_sections(ii.num_width_sections) {
@@ -87,7 +88,7 @@ namespace BTS {
                     
                     InImage& operator=(const InImage& ii) {
                         scale = ii.scale;
-                        power = ii.power;
+                        double_power = ii.double_power;
                         offset = ii.offset;
                         extent = ii.extent;
                         num_length_sections = ii.num_length_sections;

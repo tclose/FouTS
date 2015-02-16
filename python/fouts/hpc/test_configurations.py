@@ -50,7 +50,7 @@ parser.add_argument('--num_runs', default=1, type=int, help='The number of runs 
 parser.add_argument('--dry_run', action='store_true', help='Only perform a dry run (create jobscript then quit)')
 parser.add_argument('--np', type=int, default=1, help='The the number of processes to use for the simulation \
 (default: %(default)s)')
-parser.add_argument('--que_name', type=str, default='short', help='The the que to submit the job to \
+parser.add_argument('--que_name', type=str, default='long', help='The the que to submit the job to \
 (default: %(default)s)')
 parser.add_argument('--combo', action='store_true', help='Instead of treating each ranging parameter sequence as the 1..N values for that parameter, all combinations of the provided parameters are tested.')
 args = parser.parse_args()
@@ -146,7 +146,7 @@ metropolis {work_dir}/output/image.mif {work_dir}/output/init.tct {work_dir}/out
 -sample_period {args.sample_period} -diff_encodings_location {work_dir}/params/diffusion/encoding_60.b \
 -seed {metropolis_seed} -prior_freq {prior_freq} {prior_aux_freq} -prior_density {prior_density_high} \
 {prior_density_low} 100 -prior_hook {prior_hook} 100 15 -exp_num_width_sections {args.num_width_sections} \
- -exp_type {args.interp_type} -exp_enforce_bounds -prior_in_image {args.prior_in_image_scale} {args.prior_in_image_power} 100 7 0.075
+ -exp_type {args.interp_type} -exp_enforce_bounds -prior_in_image {args.prior_in_img_scale} {args.prior_in_img_power} 100 7 {in_image_border}
     
 # Map to closest tract in the true configuration
 select_fibres {work_dir}/output/samples.tst {work_dir}/output/last.tct --include 99
@@ -158,7 +158,7 @@ stats_fibres {config_path} {work_dir}/output/samples.tst
                num_tracts=num_tracts, img_dim=img_dim, init_seed=seed, metropolis_seed=seed + 1, prior_freq=prior_freq,
                prior_aux_freq=prior_aux_freq, prior_density_low=prior_density_low, prior_density_high=prior_density_high,
                prior_hook=prior_hook, like_snr=like_snr, width_epsilon=width_epsilon,
-               length_epsilon=length_epsilon)
+               length_epsilon=length_epsilon, in_image_border=args.interp_extent / 2.0)
             # Submit job to que
             hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir, que_name=args.que_name,
                                                                 dry_run=args.dry_run, copy_to_output=['summary.txt'])
