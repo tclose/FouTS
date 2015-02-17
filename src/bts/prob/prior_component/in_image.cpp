@@ -70,7 +70,7 @@ namespace BTS {
 
             Triple<double> InImage::get_extent(const Image::Observed::Buffer& obs_image,
                                                double border) {
-                return obs_image.vox_lengths() * (obs_image.dims() / 2.0 + border);
+                return obs_image.vox_lengths() * (obs_image.dims() + 2.0 * border);
             }
         
         }
