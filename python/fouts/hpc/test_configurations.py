@@ -94,7 +94,7 @@ for i in xrange(args.num_runs):
             # Create a file in the output directory with just the configuration printed in it (usefulf for quickly
             # determining what the configuration is
             with open(os.path.join(work_dir, 'output', 'config_name'), 'w') as config_name_file:
-                config_name_file.write(config + '\n')
+                config_name_file.write('{}/{}\n'.format(config, i + 1))
             # Strip configuration of symbols for tract number and img dimension
             config_name = re.sub('\-n[0-9]+', '', config)  # Strip tract number
             config_name = re.sub('\-d[0-9]+', '', config_name)  # Strip dimension
