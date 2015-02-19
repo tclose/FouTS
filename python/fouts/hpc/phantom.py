@@ -28,6 +28,8 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         work_dir, 'params', 'fibre', 'tract', 'masks', 'mcmc', 'metropolis',
         'default{degree}.tct'.format(degree=args.degree))
     cmd = ("""
+        module load gcc/4.8.3
+
         init_fibres {work_dir}/output/init.tct -degree {degree} \\
         -num_fibres {num_tracts} -img_dims 3,3,3 -curve_stddev 0.001 \\
         -base_intensity 1 -width_epsilon {width_epsilon} \\
@@ -53,10 +55,10 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         -save_image
 
         # Generate the TDI images
-        select {work_dir}/output/samples.tst {work_dir}/tdi.tct \\
+        select_fibres {work_dir}/output/samples.tst {work_dir}/tdi.tct \\
         -include "{tdi_include}"
 
-        generate_tdi_tracks {work_dir}/tdi.tct {work_dir}/tdi.tck \\
+        generate_tdi_tracks {work_dir}/tdi.tct {work_dir}/output/tdi.tck \\
         -per_acs {tdi_per_acs}
 
         tckmap {work_dir}/tdi.tck {work_dir}/output/tdi.mif -vox "{tdi_vox}" \\
@@ -83,8 +85,9 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         in_img_scale=args.prior_in_image_scale,
         in_img_power=args.prior_in_image_power,
         in_img_border=args.interp_extent / 2.0,
-        tdi_include=','.join(args.tdi_include), tdi_per_acs=args.tdi_per_acs,
-        tdi_vox=' '.join(args.tdi_vox)))
+        tdi_include=','.join(str(i) for i in args.tdi_include),
+        tdi_per_acs=args.tdi_per_acs,
+        tdi_vox=' '.join(str(v) for v in args.tdi_vox)))
     return cmd
 
 # Arguments that can be given to the script
