@@ -53,14 +53,14 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         -save_image
 
         # Generate the TDI images
-        select {work_dir}/output/samples.tst {work_dir}/tdi.tct \\
+        select {work_dir}/output/samples.tst {work_dir}/output/tdi.tct \\
         -include "{tdi_include}"
 
-        generate_tdi_tracks {work_dir}/tdi.tct {work_dir}/tdi.tck \\
-        -per_acs {tdi_per_acs}
+        generate_tdi_tracks {work_dir}/output/tdi.tct \\
+        {work_dir}/output/tdi.tck -per_acs {tdi_per_acs}
 
-        tckmap {work_dir}/tdi.tck {work_dir}/output/tdi.mif -vox "{tdi_vox}" \\
-        -dec -template {dataset_path}/{phantom_index}.mif
+        tckmap {work_dir}/output/tdi.tck {work_dir}/output/tdi.mif \\
+        -vox "{tdi_vox}" -dec -template {dataset_path}/{phantom_index}.mif
         """.format(
         work_dir=work_dir, phantom_index=phantom_index,
         step_scale=args.step_scale, voxel_res=args.voxel_res,

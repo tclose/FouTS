@@ -16,8 +16,6 @@ function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_
         offset = [0 0 0];
         return;
       end
-  else
-      disp('here')
   end
   
   f = fopen (obs_image_location, 'r');
