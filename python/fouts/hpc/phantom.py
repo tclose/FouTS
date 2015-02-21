@@ -28,6 +28,8 @@ def sampling_cmd(args, work_dir, random_seed, phantom_index):
         work_dir, 'params', 'fibre', 'tract', 'masks', 'mcmc', 'metropolis',
         'default{degree}.tct'.format(degree=args.degree))
     cmd = ("""
+        module load gcc/4.8.3
+
         init_fibres {work_dir}/output/init.tct -degree {degree} \\
         -num_fibres {num_tracts} -img_dims 3,3,3 -curve_stddev 0.001 \\
         -base_intensity 1 -width_epsilon {width_epsilon} \\
