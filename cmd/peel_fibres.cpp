@@ -62,6 +62,8 @@ OPTIONS= {
 
     Option("cube", "Peel to cube instead of sphere."),
 
+    Option("by_bundles", "Peel to cube instead of sphere."),
+
     Option()};
 
 EXECUTE {
@@ -76,6 +78,7 @@ EXECUTE {
         
         double distance = 0.0;
         bool cube = false;
+        bool by_bundles = false;
         size_t num_length_sections = 100;
         size_t num_width_sections = 6;
         
@@ -87,6 +90,10 @@ EXECUTE {
         if (opt.size())
             cube = true;
         
+        opt = get_options("by_bundles");
+        if (opt.size())
+            by_bundles = true;
+
         opt = get_options("num_length_sections");
         if (opt.size())
             num_length_sections = opt[0][0];
@@ -114,7 +121,7 @@ EXECUTE {
             
             Fibre::Track::Set include_tcks;
             
-            include_tcks = all_tcks.peel(distance, cube);
+            include_tcks = all_tcks.peel(distance, cube, by_bundles);
             
             include_tcks.save(output_location);
             

@@ -166,7 +166,9 @@ namespace BTS {
 
                 Tractlet::Set to_tractlets(size_t degree, double width) const;
 
-                Set peel(double distance, bool to_cube = false);
+                Set peel(double distance, bool to_cube = false, bool by_bundles = false) const;
+
+                size_t max_bundle_index() const;
 
                 Set trim(double sphere_radius);
 

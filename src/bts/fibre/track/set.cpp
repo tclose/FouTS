@@ -275,7 +275,7 @@ namespace BTS {
             
         }
         
-        Track::Set Track::Set::peel(double distance, bool to_cube) {
+        Track::Set Track::Set::peel(double distance, bool to_cube, bool by_bundles) const {
             
             Track::Set include(get_extend_props());
             
@@ -288,36 +288,61 @@ namespace BTS {
             
             include.add_extend_elem_props(*this);
             
+            std::vector<bool> in_rois(max_bundle_index());
+            for (size_t i = 0; i < in_rois.size(); ++i)
+                in_rois[i] = false;
+
             for (size_t tck_i = 0; tck_i < this->size(); tck_i++) {
                 
                 Track tck = operator[](tck_i);
-                
-                bool in_roi = false;
-                
+                size_t in_roi_i;
+                if (has_extend_elem_prop(Fibre::Track::BUNDLE_INDEX_EPROP) && by_bundles)
+                    in_roi_i = to<size_t>(get_extend_elem_prop(Fibre::Track::BUNDLE_INDEX_EPROP, tck_i));
+                else
+                    in_roi_i = tck_i;
                 for (size_t point_i = 0; point_i < tck.num_points(); point_i++) {
                     
                     if (to_cube) {
                         if ((abs(tck[point_i][X]) <= distance) && (abs(tck[point_i][Y]) <= distance)
                             && (abs(tck[point_i][Z]) <= distance)) {
-                            in_roi = true;
+                            in_rois[in_roi_i] = true;
                             break;
                         }
                     } else if (tck[point_i].norm() <= distance) {
-                        in_roi = true;
+                        in_rois[in_roi_i] = true;
                         break;
                     }
                     
                 }
-                
-                if (in_roi)
-                    include.push_back(tck, this->get_extend_elem_prop_row(tck_i));
-                
             }
             
+            for (size_t tck_i = 0; tck_i < this->size(); ++tck_i) {
+                size_t in_roi_i;
+                if (has_extend_elem_prop(Fibre::Track::BUNDLE_INDEX_EPROP) && by_bundles)
+                    in_roi_i = to<size_t>(get_extend_elem_prop(Fibre::Track::BUNDLE_INDEX_EPROP, tck_i));
+                else
+                    in_roi_i = tck_i;
+                if (in_rois[in_roi_i])
+                    include.push_back(operator[](tck_i), this->get_extend_elem_prop_row(tck_i));
+            }
+
             include.copy_props(*this);
-            include.copy_relevant_elem_props(*this);
             
             return include;
+        }
+
+        size_t Track::Set::max_bundle_index() const {
+            size_t max_bundle_index = 0;
+            if (has_extend_elem_prop(Fibre::Track::BUNDLE_INDEX_EPROP)) {
+                for (size_t tck_i = 0; tck_i < size(); ++tck_i) {
+                    size_t bundle_index = to<size_t>(
+                            get_extend_elem_prop(Fibre::Track::BUNDLE_INDEX_EPROP, tck_i));
+                    if (bundle_index > max_bundle_index)
+                        max_bundle_index = bundle_index;
+                }
+            } else
+                max_bundle_index = size();
+            return max_bundle_index;
         }
     
     }
