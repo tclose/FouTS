@@ -12,7 +12,7 @@ function main_fig = plot_tracts(varargin)
 %                 The indices of the strands to include in the plot
 %                 matrix_:x:
 %  
-%          -colours_of_bundles
+%          -colours
 %                 Colours of the plotted strands
 %                 matrix_:x3
 %  
@@ -113,20 +113,19 @@ function main_fig = plot_tracts(varargin)
 
   main_fig = -1;
 
-  global colours_of_bundles;
-
   description = 'Plots strands from strand files, and optionally displays reference sphere and voxels';
   
   arguments = {'tracts_filename', 'The filename of the tracts (''.tct'' format).'};
   
   options = {...
             'include        ',          [],         'matrix_:x:',   'The indices of the strands to include in the plot';...                       
-            'colours_of_bundles',       colours_of_bundles,         'matrix_:x3', 'Colours of the plotted strands';...
+            'colours',       [],         'matrix_:x3', 'Colours of the plotted strands';...
+            'colour_indices',           [],         'matrix_:x1',   'The mapping from bundle indices to the colours used';... 
+            'compact_colours',  0,          'bool',   'Compact the range of colours created to only use the number needed';...
             'num_voxels     ',          [],         'matrix_1x3',   'Number of reference voxels';...
             'voxel_lengths',            [],         'matrix_1x3',   'Size of reference voxel';...
             'voxel_offsets  ',          [],         'matrix_1x3',   'Offset of reference voxels';...
             'voxel_transparency',       0.25,       'float',        'The alpha value of the voxel lines';...
-            'cube_size      ',          0,          'float',        'Size of reference voxel';...
             'num_length_sections   ',   100,        'int',          'Number of segments to plot for each tract.';...            
             'strand_radius  ',          0.02,       'float',        'Radii of the plotted strands. (NB: can only be used with ''-style'' option ''strands'').';...
             'num_width_sections    ',   2,          'int',          'Number of strands to plot along each axis. If zero the default 3D surface option will be used instead.';...            
@@ -164,20 +163,7 @@ function main_fig = plot_tracts(varargin)
   end
   
 %   End arguments %
-
-  if happy_colours
-    
-    if inv_happy_colours
-      error('Can''t use ''-happy_colours'' and ''-inv_happy_colours'' simultaneously');
-    end
-    
-    load('/home/tclose/Data/Tractography/misc/comb_happy_colours.mat');
-    
-  elseif inv_happy_colours
-    
-    load('/home/tclose/Data/Tractography/misc/inv_comb_happy_colours.mat');
-    
-  end
+  colours = get_happy_colours(colours, happy_colours, inv_happy_colours); %#ok<NODEF>
 
   if ~strcmp(file_extension(tracts_filename), 'tct')
     error (['Extension, ''' file_extension(tracts_filename) ''' is not a valid tract file (''.tct'').']);
@@ -218,18 +204,9 @@ function main_fig = plot_tracts(varargin)
 
   %   base_widths = get_properties(prop_keys, prop_values, 'base_width', 1.0, num_tracts);  
   
-  num_tracts = size(tracts,1);
+  num_tracts = size(tracts,1); 
   
-  max_bundle_index = max(bundle_indices);
-  
-  if highlight_axes
-    num_required_colours = max_bundle_index * 4;  
-  else
-    num_required_colours = max_bundle_index;
-  end
-  
-  
-  set_bundle_colours(num_required_colours);
+  colour_indices = set_bundle_colours(bundle_indices, colour_indices, compact_colours); %#ok<NODEF>
 
   %Set up the figure
   if ~hold_on
@@ -254,7 +231,7 @@ function main_fig = plot_tracts(varargin)
       error('''-highlight_axes'' option cannot be used with ''tracts'' style');
     end
     
-    add_tracts_to_plot(tracts, colours_of_bundles, ones(num_tracts,1), ones(num_tracts,1), tube_corners, num_length_sections, transparency, bundle_indices);
+    add_tracts_to_plot(tracts, colours, ones(num_tracts,1), ones(num_tracts,1), tube_corners, num_length_sections, transparency, bundle_indices, colour_indices);
     num_plots = num_plots + 1;
   end
   if strfind(style, 'tubes') ~= 0
@@ -264,9 +241,9 @@ function main_fig = plot_tracts(varargin)
     
     radii = ones(size(tcks)) * strand_radius;
     
-    add_tcks_to_plot(tcks, radii, colours_of_bundles, bundle_indices); 
+    add_tcks_to_plot(tcks, radii, colours, bundle_indices, colour_indices); 
 
-    %[tcks, colours_of_bundles] = display_strands(tcks, colours_of_bundles, include, 'bundle', line_style);
+    %[tcks, colours] = display_strands(tcks, colours, include, 'bundle', line_style);
     num_plots = num_plots + 1;
   end
   if strfind(style, 'lines') ~= 0
@@ -274,7 +251,7 @@ function main_fig = plot_tracts(varargin)
     [strands, bundle_indices] = tracts2strands(tracts, ones(num_tracts,1), num_width_sections, highlight_axes, oblong, bundle_indices, strands_per_acs, acs);  
     tcks = strands2tcks(strands);    
     
-    add_lines_to_plot(tcks, colours_of_bundles, bundle_indices);     
+    add_lines_to_plot(tcks, colours, bundle_indices, colour_indices);     
     num_plots = num_plots + 1;
   end
   
@@ -326,7 +303,7 @@ function main_fig = plot_tracts(varargin)
   
   
   if colour_key
-    add_colour_key(bundle_indices);
+    add_colour_key(bundle_indices, colour_indices);
   end
   
 end

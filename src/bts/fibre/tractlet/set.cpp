@@ -638,7 +638,7 @@ namespace BTS {
         Tractlet::Set Tractlet::Set::peel(double distance, size_t num_length_sections,
                                           size_t num_width_sections, bool to_cube) const {
             
-            Tractlet::Set include;
+            Tractlet::Set include(get_extend_props());
             
             include.set_extend_prop("peel_distance", str(distance));
             
@@ -648,19 +648,19 @@ namespace BTS {
                 include.set_extend_prop("peel_shape", "sphere");
             
             include.add_extend_elem_props(*this);
-            
+
             for (size_t tract_i = 0; tract_i < size(); ++tract_i) {
-                
+
                 Track::Set tcks = operator[](tract_i).to_strands(num_width_sections).to_tracks(
                         num_length_sections);
-                
+
                 bool in_roi = false;
-                
+
                 for (size_t tck_i = 0; tck_i < tcks.size(); ++tck_i) {
                     for (size_t point_i = 0; point_i < tcks[tck_i].num_points(); point_i++) {
-                        
+
                         Track tck = tcks[tck_i];
-                        
+
                         if (to_cube) {
                             if ((abs(tck[point_i][X]) <= distance) && (abs(tck[point_i][Y])
                                     <= distance)
@@ -675,22 +675,22 @@ namespace BTS {
                             }
                         }
                     }
-                    
+
                     if (in_roi)
                         break;
                 }
-                
+
                 if (in_roi)
                     include.push_back(operator[](tract_i), get_extend_elem_prop_row(tract_i));
-                
+
             }
             
             include.copy_props(*this);
-            include.copy_relevant_elem_props(*this);
+
             
             return include;
         }
-        
+
         void Tractlet::Set::set_width_epsilon(double width_epsilon) {
             if (!has_elem_prop(Tractlet::ALPHA_PROP))
                 add_elem_prop(Tractlet::ALPHA_PROP, 1.0);

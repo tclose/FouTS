@@ -21,7 +21,7 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
 %                 The indices of the tracts to include in the plot
 %                 matrix_:x:
 %  
-%          -colours_of_bundles
+%          -colours
 %                 Colours of the plotted strands
 %                 matrix_:x3
 %  
@@ -82,8 +82,6 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
 
   main_fig = -1;
 
-  global colours_of_bundles;
-
   description = 'Plots strands from strand files, and optionally displays reference sphere and voxels';
   
   arguments = {'tracts_filename', 'The filename of the tracts (''.tct'' format).'};
@@ -93,7 +91,9 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
             'dont_include        ', [],     'matrix_:x:', 'The indices of the samples not to include in the plot';...  
             'last',            0,           'bool',       'Overrides ''-include'' to only print the last tract set.';...
             'tract_include  ', [],          'matrix_:x:', 'The indices of the tracts to include in the plot';... 
-            'colours_of_bundles', colours_of_bundles,     'matrix_:x3', 'Colours of the plotted strands';...
+            'colours', [],     'matrix_:x3', 'Colours of the plotted strands';...
+            'colour_indices',           [],         'matrix_:x1',   'The mapping from bundle indices to the colours used';... 
+            'compact_colours',  0,          'bool',   'Compact the range of colours created to only use the number needed';...
             'num_voxels     ',          [],         'matrix_1x3',   'Number of reference voxels';...
             'voxel_lengths',            [],         'matrix_1x3',   'Size of reference voxel';...
             'voxel_offsets  ',          [],         'matrix_1x3',   'Offset of reference voxels';...
@@ -138,20 +138,7 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
   
   
 % End arguments %
-  if happy_colours
-    
-    if inv_happy_colours
-      error('Can''t use ''-happy_colours'' and ''-inv_happy_colours'' simultaneously');
-    end
-    
-    load('/home/tclose/Data/Tractography/misc/comb_happy_colours.mat');
-    
-  elseif inv_happy_colours
-    
-    load('/home/tclose/Data/Tractography/misc/inv_comb_happy_colours.mat');
-    
-  end
-  
+  colours = get_happy_colours(colours, happy_colours, inv_happy_colours);
   
   if ~strcmp(file_extension(tracts_filename), 'tst')
     error (['Extension, ''' file_extension(tracts_filename) ''' is not a valid tract set file (''.tst'').']);
@@ -239,7 +226,7 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
   
   if properties_plot ~= 2
      
-    overall_max_bundle_index = 0;
+    all_bundle_indices = [];
 
     for set_i = 1:num_sets
       
@@ -253,21 +240,10 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
       
       bundle_indices = get_properties(elem_prop_keys, prop_values, 'bundle_index', [0:1:(num_tracts-1)]', num_tracts);
       
-      max_bundle_index = max(bundle_indices);
-      
-      if max_bundle_index > overall_max_bundle_index
-        overall_max_bundle_index = max_bundle_index;
-      end
+      all_bundle_indices = sort(unique([all_bundle_indices; bundle_indices]));
     end  
 
-    if highlight_axes
-      
-      overall_max_bundle_index = (overall_max_bundle_index+1)*4-1;
-      
-    end
-    
-    set_bundle_colours(overall_max_bundle_index);    
-    
+    [colours, colour_indices] = set_bundle_colours(all_bundle_indices, colours, colour_indices, compact_colours, highlight_axes); %#ok<NODEF>
 
     %Set up the figure.
     if ~hold_on
@@ -308,29 +284,29 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
       
       if strfind(style, 'tracts') ~= 0
 
-        add_tracts_to_plot(tracts, colours_of_bundles, intensities, ones(num_tracts,1), tube_corners, num_length_sections, transparency, bundle_indices);
+        add_tracts_to_plot(tracts, colours, intensities, ones(num_tracts,1), tube_corners, num_length_sections, transparency, bundle_indices, colour_indices);
 
         num_plots = num_plots + 1;
         
       end
       if strfind(style, 'tubes') ~= 0
 
-        [strands, bundle_indices] = tracts2strands(tracts, ones(num_tracts,1), num_width_sections, highlight_axes, oblong, bundle_indices, strands_per_acs, acs);
+        [strands, bundle_indices] = tracts2strands(tracts, ones(num_tracts,1), num_width_sections, highlight_axes, oblong, bundle_indices, strands_per_acs, acs, colour_indices);
         tcks = strands2tcks(strands, num_length_sections);
 
         radii = ones(size(tcks)) * strand_radius;
 
-        add_tcks_to_plot(tcks, radii, colours_of_bundles, bundle_indices, tube_corners); 
+        add_tcks_to_plot(tcks, radii, colours, bundle_indices, tube_corners); 
 
         num_plots = num_plots + 1;
         
       end
       if strfind(style, 'lines') ~= 0
 
-        [strands, bundle_indices] = tracts2strands(tracts, ones(num_tracts,1), num_width_sections, highlight_axes, oblong, bundle_indices, strands_per_acs, acs);  
+        [strands, bundle_indices] = tracts2strands(tracts, ones(num_tracts,1), num_width_sections, highlight_axes, oblong, bundle_indices, strands_per_acs, acs, colour_indices);  
         tcks = strands2tcks(strands, num_length_sections);    
 
-        add_lines_to_plot(tcks, colours_of_bundles, bundle_indices);     
+        add_lines_to_plot(tcks, colours, bundle_indices);     
 
         num_plots = num_plots + 1;
       end
@@ -411,7 +387,7 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
       end
       
       
-      ext_ext_props_fig = plot_extend_elem_properties([tracts_filename 'xx'], elem_prop_keys, elem_prop_values, colours_of_bundles, include, tract_include, num_figs - true_tracts_plot, num_figs, omit_properties);
+      ext_ext_props_fig = plot_extend_elem_properties([tracts_filename 'xx'], elem_prop_keys, elem_prop_values, colours, include, tract_include, num_figs - true_tracts_plot, num_figs, omit_properties);
   
     end
     
@@ -448,7 +424,7 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
       
       set_bundle_colours(max(unique_indices));    
       
-      add_tcks_to_plot(true_tcks,true_radii,colours_of_bundles, mapped_indices,tube_corners);
+      add_tcks_to_plot(true_tcks,true_radii,colours, mapped_indices,tube_corners);
       
     elseif (file_extension(true_location) == 'tct')
     
@@ -458,7 +434,7 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
 
       set_bundle_colours(num_true_tracts-1);
 
-      add_tracts_to_plot(true_tracts, colours_of_bundles, ones(num_true_tracts,1), ones(num_true_tracts,1), tube_corners, num_length_sections, 1.0);
+      add_tracts_to_plot(true_tracts, colours, ones(num_true_tracts,1), ones(num_true_tracts,1), tube_corners, num_length_sections, 1.0);
 
     else
       error(['Unrecognised extension of true location file ''' true_location '''.']);

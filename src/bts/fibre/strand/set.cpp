@@ -368,7 +368,6 @@ namespace BTS {
             }
             
             include.copy_props(*this);
-            include.copy_relevant_elem_props(*this);
             
             return include;
         }

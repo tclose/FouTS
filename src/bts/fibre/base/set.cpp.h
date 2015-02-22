@@ -925,13 +925,11 @@ namespace BTS {
                                                          std::vector<size_t>& matched_indices,
                                                          double strands_per_acs,
                                                          bool add_extra) const {
-                
                 BTS::Math::Munkres<double> munkres_algorithm(this->size(), reference.size());
                 MR::Math::Matrix<double> similarity(this->size(), reference.size());
-                
                 return distance(reference, matched_indices, munkres_algorithm, similarity,
                         strands_per_acs, add_extra);
-                
+
             }
             
             template<typename T> void Set<T>::similarity_matrix(

@@ -68,7 +68,7 @@ function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_
     end
   end
   
-  offset = cell2mat(offset);
+  offset = cell2mat(offset) - voxel_lengths / 2.0;
   
   fclose(f);
 

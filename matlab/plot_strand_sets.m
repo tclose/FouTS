@@ -35,7 +35,7 @@ function main_fig = plot_strands_sets(varargin)
 %                 The indices of the bundles to include in the plot
 %                 matrix_:x:
 %  
-%          -colours_of_bundles
+%          -colours
 %                 Colours of the plotted strands
 %                 matrix_:x3
 %  
@@ -81,8 +81,6 @@ function main_fig = plot_strands_sets(varargin)
 
   main_fig = -1;
 
-  global colours_of_bundles;
-
   description = 'Plots strands from strand files, and optionally displays reference sphere and voxels';
   
   arguments = {'strands_filename', 'The filename of the strands in either .tck or .frr formats.'};
@@ -95,7 +93,9 @@ function main_fig = plot_strands_sets(varargin)
             'last',            0,           'bool',       'Overrides ''-include'' to only print the last tract set.';...            
             'strand_include ', [],          'matrix_:x:', 'The indices of the strands to include in the plot';...             
             'bundle_include ', [],          'matrix_:x:', 'The indices of the bundles to include in the plot';...            
-            'colours_of_bundles', colours_of_bundles,     'matrix_:x3', 'Colours of the plotted strands';...
+            'colours', [],     'matrix_:x3', 'Colours of the plotted strands';...
+            'colour_indices',           [],         'matrix_:x1',   'The mapping from bundle indices to the colours used';...
+            'compact_colours',  0,          'bool',   'Compact the range of colours created to only use the number needed';...
             'voxel_size     ', 0.15,        'float',  'Size of reference voxel';...
             'num_voxels     ', 3,           'int',    'Number of reference voxels';...
             'cube_size      ', 0,           'float',  'Size of reference voxel';...
@@ -124,20 +124,7 @@ function main_fig = plot_strands_sets(varargin)
   
   
 %   End arguments %
-
-  if happy_colours
-    
-    if inv_happy_colours
-      error('Can''t use ''-happy_colours'' and ''-inv_happy_colours'' simultaneously');
-    end
-    
-    load('/home/tclose/Data/Tractography/misc/comb_happy_colours.mat');
-    
-  elseif inv_happy_colours
-    
-    load('/home/tclose/Data/Tractography/misc/inv_comb_happy_colours.mat');
-    
-  end
+  colours = get_happy_colours(colours, happy_colours, inv_happy_colours); %#ok<NODEF>
     
   [strand_sets, props, set_prop_keys, set_prop_values, elem_prop_keys, elem_prop_values] = load_strand_sets(strands_filename, [], 1);
   
@@ -175,10 +162,9 @@ function main_fig = plot_strands_sets(varargin)
   
   include = include + 1;
   
-  
   if properties_plot < 2
-
-    overall_max_bundle_index = 0;
+      
+    all_bundle_indices = [];
 
     for set_i = 1:num_sets
       
@@ -192,14 +178,10 @@ function main_fig = plot_strands_sets(varargin)
       
       bundle_indices = get_properties(elem_prop_keys, prop_values, 'bundle_index', [0:1:(num_strands-1)]', num_strands);
       
-      max_bundle_index = max(bundle_indices);
-      
-      if max_bundle_index > overall_max_bundle_index
-        overall_max_bundle_index = max_bundle_index;
-      end
+      all_bundle_indices = sort(unique([all_bundle_indices; bundle_indices]));
     end  
 
-    set_bundle_colours(overall_max_bundle_index);    
+    colour_indices = set_bundle_colours(all_bundle_indices, colour_indices, compact_colours); %#ok<NODEF>   
 
     %Set up the figure.
     main_fig = my_figure(strands_filename, 1, 3, [1 1 1], 1, [],[],~invisible);
@@ -288,11 +270,11 @@ function main_fig = plot_strands_sets(varargin)
 
       if strfind('tubes', style) == 1
 
-        add_tcks_to_plot(tcks, radii, colours_of_bundles, bundle_indices, tube_corners); 
+        add_tcks_to_plot(tcks, radii, colours, bundle_indices, tube_corners, colour_indices); 
 
       elseif strfind('lines', style) == 1
 
-        add_lines_to_plot(tcks, colours_of_bundles, bundle_indices);    
+        add_lines_to_plot(tcks, colours, bundle_indices, colour_indices);    
 
       else
 
@@ -321,7 +303,7 @@ function main_fig = plot_strands_sets(varargin)
   if (properties_plot == 1 || properties_plot == 3) && length(include) ~= 1
     if exist([strands_filename 'xx'])
       
-      ext_ext_props_fig = plot_extended_extend_elem_properties([strands_filename 'xx'], elem_prop_keys, elem_prop_values, colours_of_bundles, include);
+      ext_ext_props_fig = plot_extended_extend_elem_properties([strands_filename 'xx'], elem_prop_keys, elem_prop_values, colours, include);
   
     end
     

@@ -1,5 +1,5 @@
 function [ax_fractions] = get_axis_fractions(num_strands)
-    MAX_NUM_STRANDS = 30;
+    MAX_NUM_NONRANDOM = 40;
 
     if num_strands == 0
         ax_fractions = [];
@@ -12,29 +12,31 @@ function [ax_fractions] = get_axis_fractions(num_strands)
            precalc_samples = cell(0);
         end
 
-        if num_strands > MAX_NUM_STRANDS
-            error(['Number of strands ' num2str(num_strands) ...
-                   ' exceeds manual upper limit ' num2str(MAX_NUM_STRANDS)... 
-                   ', please extend this limit or reduce the strands_per_acs ratio'])
-        end
-        
-        if num_strands > length(precalc_samples)
-            for n=(length(precalc_samples)+1):num_strands
-                precalc_samples{n} = sample_evenly_on_disc(n);
+        if num_strands > MAX_NUM_NONRANDOM
+            warning(['Number of strands ' num2str(num_strands) ...
+                   ' exceeds manual upper limit ' num2str(MAX_NUM_NONRANDOM)... 
+                   ', strands will be randomly located within the disc '])
+            ax_fractions = sample_randomly_on_disc(num_strands);
+        else
+            if num_strands > length(precalc_samples)
+                for n=(length(precalc_samples)+1):num_strands
+                    precalc_samples{n} = sample_evenly_on_disc(n);
+                end
+                save(precalc_samples_location, 'precalc_samples')
             end
-            save(precalc_samples_location, 'precalc_samples')
+            ax_fractions = precalc_samples{num_strands}';    
         end
-        ax_fractions = precalc_samples{num_strands}';
     end
 end
 
 function x = sample_evenly_on_disc(N)
     MAX_NUM_ITERATIONS = 2e3;
+    MAX_FUNC_EVALS = 2e5;
 
     if N == 1
         x = [0, 0];
     else
-        % Create randomly distributed points within a circle
+        % Create points distributed on a grid within a circle
         x0 = zeros(N,2);
         step = 2 / floor(sqrt(N));
         count = 0;
@@ -55,11 +57,28 @@ function x = sample_evenly_on_disc(N)
             error('count doesn''t equal N')
         end
         % Perform the optimisation
-        options = optimset('Algorithm', 'active-set', 'MaxFunEvals', 1e5,...
+        options = optimset('Algorithm', 'active-set', 'MaxFunEvals', MAX_FUNC_EVALS,...
                             'MaxIter', MAX_NUM_ITERATIONS, 'TolCon', 1e-3);
         x = fmincon(@fmin, x0, [], [], [], [], [], [], @fcon, options);
         % Calculate the scale away from the edge of the tube
         x = x * (1 - 1 / ceil(sqrt(N)));
+    end
+end
+
+function x = sample_randomly_on_disc(N)
+    if N == 1
+        x = [0, 0];
+    else
+        x = [];
+        while size(x, 1) < N
+             % Calculate the scale away from the edge of the tube
+            radius_cutoff = (1 - 1 / ceil(sqrt(N)));
+            x_append = rand(2 * N, 2);
+            radius = sqrt(x_append(:,1)^2 + x_append(:,2)^2);
+            x_append = x_append(radius < radius_cutoff, :);
+            x = [x; x_append]; %#ok<AGROW>
+        end
+        x = x(1:N, :);
     end
 end
 

@@ -1,7 +1,19 @@
-function add_tcks_to_plot(tcks, radii, colours, bundle_indices, num_tube_corners)
+function add_tcks_to_plot(tcks, radii, colours, bundle_indices, num_tube_corners, transparency, colour_indices)
 
   if ~exist('num_tube_corners','var')
     num_tube_corners = 12;
+  end
+      
+  if ~exist('transparency', 'var')
+    transparency = 1.0;
+  end
+  
+  if ~exist('colour_indices', 'var')
+    colour_indices = [];
+  end
+
+  if isempty(colour_indices)
+    colour_indices = 1:(max(bundle_indices)+1);
   end
   
   hold on;
@@ -94,8 +106,12 @@ function add_tcks_to_plot(tcks, radii, colours, bundle_indices, num_tube_corners
 
     h = surf(X,Y,Z);
     
-    set(h,'facecolor', colours(bundle_indices(tck_i)+1,:));
+    set(h,'facecolor', colours(colour_indices(bundle_indices(tck_i)+1),:));
     set(h,'edgecolor', 'none');
+    
+    if transparency ~= 1
+      set(h, 'FaceAlpha', transparency);
+    end
 
     if (mod(tck_i,25) == 0)
       fprintf('.');

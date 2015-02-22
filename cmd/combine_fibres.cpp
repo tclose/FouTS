@@ -117,7 +117,13 @@ EXECUTE {
         
         sneak_peek_reader.close();
         
-        typename T::Writer writer(output_location, sneak_peek_reader);
+        const Fibre::Properties& sneak_props = sneak_peek_reader.get_extend_props();
+//        const std::string step_size_key = str("step_size");
+        Fibre::Properties props;
+        if (sneak_props.count("step_size"))
+            props["step_size"] = "0.05";
+
+        typename T::Writer writer(output_location, sneak_peek_reader, props);
         
         for (typename std::vector<std::string>::const_iterator input_it = input_locations.begin();
                 input_it != input_locations.end(); ++input_it)

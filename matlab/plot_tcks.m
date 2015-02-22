@@ -26,11 +26,11 @@ function main_fig = plot_tcks(varargin)
 %                 The indices of the bundles to include in the plot
 %                 matrix_:x:
 %  
-%          -colours_of_bundles
+%          -colours
 %                 Colours of the plotted tcks
 %                 matrix_:x3
 %  
-%          -voxel_size     
+%          -voxel_lengths     
 %                 Size of reference voxel
 %                 float
 %                 0.15
@@ -71,9 +71,6 @@ function main_fig = plot_tcks(varargin)
 % 
 
   main_fig = -1;
-
-  global colours_of_bundles;
-
   description = 'Plots tcks from tcks files, and optionally displays reference sphere and voxels';
   
   arguments = {'tcks_filename', 'The filename of the tcks in either .tck or .frr formats.'};
@@ -83,10 +80,13 @@ function main_fig = plot_tcks(varargin)
             'num_points     ', 100,         'int',    'Number of points to plot along each tcks.';...            
             'include        ', [],          'matrix_:x:', 'The indices of the tcks to include in the plot';...            
             'bundle_include ', [],          'matrix_:x:', 'The indices of the bundles to include in the plot';...            
-            'colours_of_bundles',        colours_of_bundles,     'matrix_:x3', 'Colours of the plotted tcks';...
-            'voxel_size     ', 0.15,        'float',  'Size of reference voxel';...
-            'num_voxels     ', 3,           'int',    'Number of reference voxels';...
-            'cube_size      ', 0,           'float',  'Size of reference voxel';...
+            'colours',        [],     'matrix_:x3', 'Colours of the plotted tcks';...
+            'colour_indices',           [],         'matrix_:x1',   'The mapping from bundle indices to the colours used';...
+            'compact_colours',  0,          'bool',   'Compact the range of colours created to only use the number needed';...
+            'num_voxels     ',          [],         'matrix_1x3',   'Number of reference voxels';...
+            'voxel_lengths',            [],         'matrix_1x3',   'Size of reference voxel';...
+            'voxel_offsets  ',          [],         'matrix_1x3',   'Offset of reference voxels';...
+            'voxel_transparency',       0.25,       'float',        'The alpha value of the voxel lines';...
             'style          ', 'tubes',   'string', 'Plot to style (either ''tcks'' or ''lines'')..';...
             'line_style     ', '-',   'string', 'Line plot to style (internal Matlab linespec format). Only valid with ''-style lines''..';...
             'sphere_radius  ', 0,    'float',  'Size of reference sphere';...
@@ -96,6 +96,8 @@ function main_fig = plot_tcks(varargin)
             'happy_colours',         0,     'bool', 'Uses ''happy colours''';...
             'inv_happy_colours',         0,     'bool', 'Uses the inverse of ''happy colours''';...
             'no_voxline_highlight', 0, 'bool', 'Doesn''t highlight corner axes of voxel lines.';...
+            'obs_image',                [],         'string',       'Overlays a slice along the x observed image.';...
+            'transparency'   ,          1,          'float',        'Fix the transparency of the tracts to a set value.  If 0 the intensities of the of the tracts are used instead.';...
             'campos',      [],      'matrix_1x3', 'Position of the camera'};         
 
 
@@ -105,28 +107,25 @@ function main_fig = plot_tcks(varargin)
   end
 
   if clean
-    voxel_size = 0;
+    voxel_lengths = 0;
     sphere_radius = 0;
     no_axes = 1;
   end
   
 %   End arguments %
+  colours = get_happy_colours(colours, happy_colours, inv_happy_colours); %#ok<NODEF>
   
-  if happy_colours
-    
-    if inv_happy_colours
-      error('Can''t use ''-happy_colours'' and ''-inv_happy_colours'' simultaneously');
-    end
-    
-    load('/home/tclose/Data/Tractography/misc/comb_happy_colours.mat');
-    
-  elseif inv_happy_colours
-    
-    load('/home/tclose/Data/Tractography/misc/inv_comb_happy_colours.mat');
-    
-  end
-
   [tcks, props, prop_keys, prop_values] = load_tcks(tcks_filename);
+  
+  if isempty(num_voxels)    %#ok<NODEF>
+    [num_voxels, ~, voxel_lengths, voxel_offsets, obs_image] = get_observed_properties(props, obs_image); %#ok<NODEF,ASGLU>
+    if ~isempty(num_voxels)
+        num_voxels = num_voxels(1:3);
+        voxel_lengths = voxel_lengths(1:3);
+    end
+  elseif isempty(voxel_offsets) %#ok<NODEF>
+      voxel_offsets = - num_voxels .* voxel_lengths ./2;
+  end
   
   if ~isempty(bundle_include)
   
@@ -136,7 +135,7 @@ function main_fig = plot_tcks(varargin)
       error('Cannot use ''include'' and ''bundle_include simultaneously');
     end    
     
-    bundle_indices  = get_properties(prop_keys, prop_values, 'bundle_index', 0:1:(num_tcks-1), num_tcks);
+    bundle_indices  = get_properties(prop_keys, prop_values, 'bundle_index', 0:1:(num_tcks-1), num_tcks);    
     
     for tcks_i = 1:num_tcks
       if any(find(bundle_include == bundle_indices(tcks_i)))
@@ -166,7 +165,8 @@ function main_fig = plot_tcks(varargin)
   bundle_indices  = get_properties(prop_keys, prop_values, 'bundle_index', [0:1:(num_tcks-1)]', num_tcks);
   radii           = get_properties(prop_keys, prop_values, 'track_radius', tcks_radius, num_tcks);
     
-  add_colour_key(bundle_indices,colours_of_bundles);
+  [colours, colour_indices] = set_bundle_colours(bundle_indices, colours, colour_indices, compact_colours); %#ok<NODEF>
+  colour_indices = add_colour_key(bundle_indices, colours, colour_indices); %#ok<NODEF>
   
   %Set up the figure.
   main_fig = my_figure(strrep(tcks_filename,'_',''));
@@ -176,11 +176,11 @@ function main_fig = plot_tcks(varargin)
   
   if strfind('tubes', style) == 1
     
-    add_tcks_to_plot(tcks, radii, colours_of_bundles, bundle_indices, tube_corners); 
+    add_tcks_to_plot(tcks, radii, colours, bundle_indices, tube_corners, transparency, colour_indices); 
     
   elseif strfind('lines', style) == 1
     
-    add_lines_to_plot(tcks, colours_of_bundles, bundle_indices, line_style);    
+    add_lines_to_plot(tcks, colours, bundle_indices, line_style, colour_indices);    
     
   else
     
@@ -195,10 +195,11 @@ function main_fig = plot_tcks(varargin)
     
 	end	
   
-  if voxel_size ~= 0
-    
-    add_vox_lines_to_plot(voxel_size,num_voxels,~no_voxline_highlight);
-    
+  if ~isempty(num_voxels)
+
+    add_vox_lines_to_plot(voxel_lengths,num_voxels,~no_voxline_highlight,...
+          voxel_offsets, voxel_transparency);
+
   end
   
   

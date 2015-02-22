@@ -26,7 +26,7 @@ function main_fig = plot_strands(varargin)
 %                 The indices of the bundles to include in the plot
 %                 matrix_:x:
 %  
-%          -colours_of_bundles
+%          -colours
 %                 Colours of the plotted strands
 %                 matrix_:x3
 %  
@@ -71,8 +71,6 @@ function main_fig = plot_strands(varargin)
 
   main_fig = -1;
 
-  global colours_of_bundles;
-
   description = 'Plots strands from strand files, and optionally displays reference sphere and voxels';
   
   arguments = {'strands_filename', 'The filename of the strands in either .tck or .frr formats.'};
@@ -82,7 +80,9 @@ function main_fig = plot_strands(varargin)
             'num_points     ', 100,         'int',    'Number of points to plot along each strand.';...            
             'include        ', [],          'matrix_:x:', 'The indices of the strands to include in the plot';...            
             'bundle_include ', [],          'matrix_:x:', 'The indices of the bundles to include in the plot';...            
-            'colours_of_bundles', colours_of_bundles,     'matrix_:x3', 'Colours of the plotted strands';...
+            'colours', [],     'matrix_:x3', 'Colours of the plotted strands';...
+            'colour_indices',           [],         'matrix_:x1',   'The mapping from bundle indices to the colours used';... 
+            'compact_colours',  0,          'bool',   'Compact the range of colours created to only use the number needed';...
             'voxel_size     ', 0.15,        'float',  'Size of reference voxel';...
             'num_voxels     ', 3,           'int',    'Number of reference voxels';...
             'cube_size      ', 0,           'float',  'Size of reference voxel';...
@@ -113,20 +113,7 @@ function main_fig = plot_strands(varargin)
   
   
 %   End arguments %
-  
-  if happy_colours
-    
-    if inv_happy_colours
-      error('Can''t use ''-happy_colours'' and ''-inv_happy_colours'' simultaneously');
-    end
-    
-    load('/home/tclose/Data/Tractography/misc/comb_happy_colours.mat');
-    
-  elseif inv_happy_colours
-    
-    load('/home/tclose/Data/Tractography/misc/inv_comb_happy_colours.mat');
-    
-  end
+  colours = get_happy_colours(colours, happy_colours, inv_happy_colours); %#ok<NODEF>
 
 
   [strands, props, prop_keys, prop_values] = load_strands(strands_filename);
@@ -141,6 +128,8 @@ function main_fig = plot_strands(varargin)
     end    
     
     bundle_indices  = get_properties(prop_keys, prop_values, 'bundle_index', 0:1:(num_strands-1), num_strands);
+    
+    colour_indices = set_bundle_colours(bundle_indices, colour_indices, compact_colours); %#ok<NODEF>
     
     for strand_i = 1:num_strands
       if any(find(bundle_include == bundle_indices(strand_i)))
@@ -170,7 +159,7 @@ function main_fig = plot_strands(varargin)
   bundle_indices  = get_properties(prop_keys, prop_values, 'bundle_index', [0:1:(num_strands-1)]', num_strands);
   radii           = get_properties(prop_keys, prop_values, 'track_radius', strand_radius, num_strands);
     
-  add_colour_key(bundle_indices,colours_of_bundles);
+  add_colour_key(bundle_indices,colours);
   
   main_fig = my_figure(strrep(strands_filename,'_',''), 1, 1, [1 1 1], 1, [],[],~invisible);
 
@@ -188,11 +177,11 @@ function main_fig = plot_strands(varargin)
   
   if strfind('tubes', style) == 1
     
-    add_tcks_to_plot(tcks, radii, colours_of_bundles, bundle_indices, tube_corners); 
+    add_tcks_to_plot(tcks, radii, colours, bundle_indices, tube_corners, colour_indices); 
     
   elseif strfind('lines', style) == 1
     
-    add_lines_to_plot(tcks, colours_of_bundles, bundle_indices);    
+    add_lines_to_plot(tcks, colours, bundle_indices, colour_indices);    
     
   else
     
