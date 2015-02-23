@@ -24,7 +24,7 @@ function [colours, colour_indices] = set_bundle_colours(bundle_indices, colours,
             % for the bundle indices actually used.
             colour_indices = zeros(last_required_index, 1);
             unique_indices = sort(unique(bundle_indices));
-            for i=1:length(unique_indices)-1
+            for i=1:(length(unique_indices)-1)
                 colour_indices((unique_indices(i)+1):(unique_indices(i+1))) = i;
             end
             colour_indices(last_required_index) = length(unique_indices);

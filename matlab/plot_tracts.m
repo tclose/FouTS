@@ -1,4 +1,4 @@
-function main_fig = plot_tracts(varargin)
+function [main_fig, colour_indices] = plot_tracts(varargin)
 %  
 % PURPOSE: Plots strands from strand files, and optionally displays reference sphere and voxels
 %  

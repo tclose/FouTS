@@ -1,4 +1,4 @@
-function main_fig = plot_tcks_sets(varargin)
+function [main_fig, colour_indices] = plot_tcks_sets(varargin)
 %  
 % PURPOSE: Plots tcks from tck files, and optionally displays reference sphere and voxels
 %  

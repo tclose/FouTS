@@ -9,7 +9,7 @@ function add_lines_to_plot(tcks, colours, bundle_indices, line_style, colour_ind
     colour_indices = [];
   end
   
-  num_tcks = length(tcks,1);
+  num_tcks = size(tcks,1);
   
   if isempty(colour_indices)
     colour_indices = 1:(max(bundle_indices)+1);

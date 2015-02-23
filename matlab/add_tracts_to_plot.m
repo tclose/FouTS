@@ -21,7 +21,7 @@ function add_tracts_to_plot (tracts, colours, intensities, base_widths, tube_cor
       bundle_indices = [];
   end
   
-  if isempty(bundle)
+  if isempty(bundle_indices)
       bundle_indices = 0:1:(size(tracts,1)-1);
   end
 
@@ -33,7 +33,7 @@ function add_tracts_to_plot (tracts, colours, intensities, base_widths, tube_cor
       colour_indices = 1:max(bundle_indices+1);
   end  
   
-  if nargin > 8
+  if nargin > 9
     error(['Incorrect number of arguments (' num2str(nargin) '). Cannot have more than 8']);
   end
 
@@ -69,7 +69,7 @@ function add_tracts_to_plot (tracts, colours, intensities, base_widths, tube_cor
 
     h = surf(X,Y,Z);
 
-    set(h,'facecolor', colours(colour_indices(tract_i),:));
+    set(h,'facecolor', colours(colour_indices(bundle_indices(tract_i)+1),:));
     set(h,'edgecolor', 'none');
     
     if fixed_transparency ~= 0

@@ -1,4 +1,4 @@
-function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets(varargin)
+function [main_fig, num_voxels, voxel_lengths, voxel_offsets, colour_indices] = plot_tracts_sets(varargin)
 %  
 % PURPOSE: Plots strands from strand files, and optionally displays reference sphere and voxels
 %  
@@ -284,7 +284,9 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
       
       if strfind(style, 'tracts') ~= 0
 
-        add_tracts_to_plot(tracts, colours, intensities, ones(num_tracts,1), tube_corners, num_length_sections, transparency, bundle_indices, colour_indices);
+        add_tracts_to_plot(tracts, colours, intensities, ones(num_tracts,1),...
+                           tube_corners, num_length_sections, transparency,...
+                           bundle_indices, colour_indices);
 
         num_plots = num_plots + 1;
         
@@ -296,7 +298,7 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
 
         radii = ones(size(tcks)) * strand_radius;
 
-        add_tcks_to_plot(tcks, radii, colours, bundle_indices, tube_corners); 
+        add_tcks_to_plot(tcks, radii, colours, bundle_indices, tube_corners, 1, colour_indices); 
 
         num_plots = num_plots + 1;
         
@@ -306,7 +308,7 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets] = plot_tracts_sets
         [strands, bundle_indices] = tracts2strands(tracts, ones(num_tracts,1), num_width_sections, highlight_axes, oblong, bundle_indices, strands_per_acs, acs, colour_indices);  
         tcks = strands2tcks(strands, num_length_sections);    
 
-        add_lines_to_plot(tcks, colours, bundle_indices);     
+        add_lines_to_plot(tcks, colours, bundle_indices, '-', colour_indices);     
 
         num_plots = num_plots + 1;
       end
