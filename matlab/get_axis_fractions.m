@@ -1,5 +1,5 @@
 function [ax_fractions] = get_axis_fractions(num_strands)
-    MAX_NUM_NONRANDOM = 40;
+    MAX_NUM_NONRANDOM = 30;
 
     if num_strands == 0
         ax_fractions = [];
