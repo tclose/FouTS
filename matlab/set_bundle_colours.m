@@ -55,10 +55,11 @@ function [colours, colour_indices] = set_bundle_colours(bundle_indices, colours,
 
     if size(colours, 1) < num_colours_required
         if length_supplied_colours
-            error(['The number of supplied colours (', num2str(length_supplied_colours),...
-                   ') was less than the number required (', num2str(num_colours_required), ')']);
+            warning(['The number of supplied colours (', num2str(length_supplied_colours),...
+                     ') was less than the number required (', num2str(num_colours_required), ')']);
         end
-        colours = rand([num_colours_required, 3]);
+        rand_colours = rand([num_colours_required - size(colours, 1), 3]);
+        colours = [colours; rand_colours];
         colours_of_bundles = colours;
     end
 
