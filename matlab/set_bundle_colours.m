@@ -24,18 +24,24 @@ function [colours, colour_indices] = set_bundle_colours(bundle_indices, colours,
             % for the bundle indices actually used.
             colour_indices = zeros(last_required_index, 1);
             unique_indices = sort(unique(bundle_indices));
-            for i=1:(length(unique_indices)-1)
-                colour_indices((unique_indices(i)+1):(unique_indices(i+1))) = i;
+            compact_index = 1;
+            non_compact_index = length(unique_indices)+1;
+            for bundle_i = 0:1:(last_required_index-1)
+                if ismember(bundle_i, unique_indices)
+                    colour_indices(bundle_i+1) = compact_index;
+                    compact_index = compact_index + 1;
+                else
+                    colour_indices(bundle_i+1) = non_compact_index;
+                    non_compact_index = non_compact_index + 1;
+                end
             end
-            colour_indices(last_required_index) = length(unique_indices);
         else
             colour_indices = 1:last_required_index;
         end
     else
         if length(colour_indices) < max(bundle_indices)
-            error(['Length of colour indices (', num2str(length(colour_indices)),...
-                   ') must be greater than or equal to the largest bundle index (',...
-                  num2str(max(bundle_indices)), ')'])
+            colour_indices = [colour_indices;
+                ((length(colour_indices)+1):(max(bundle_indices)+1))'];
         end
         if compact_colours ~= 0
             error(['compact_colours option is not relevant when colour_indices ',...
