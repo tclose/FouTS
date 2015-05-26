@@ -34,7 +34,7 @@
 const double RADII_DEFAULT = 0.03;
 const size_t NUM_LENGTH_SECTIONS_DEFAULT = 100;
 
-using namespace BTS;
+using namespace FTS;
 SET_VERSION_DEFAULT
 ;
 SET_AUTHOR("Thomas G. Close");

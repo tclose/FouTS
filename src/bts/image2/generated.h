@@ -27,7 +27,7 @@
 #include "bts/image2/voxel/generated.h"
 #include "bts/image2/index.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image2 {
         

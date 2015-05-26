@@ -27,7 +27,7 @@
 //#include "bts/fibre/tractlet/set.h"
 //#include "bts/fibre/tensor/writer2.h"
 //
-//namespace BTS {
+//namespace FTS {
 //
 //	namespace Fibre {
 //

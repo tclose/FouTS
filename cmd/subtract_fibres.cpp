@@ -3,20 +3,20 @@
 
  Created by Tom Close on 13/03/09.
 
- This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Fourier Tract Sampling (FouTS).
 
- BTS is free software: you can redistribute it and/or modify
+ FouTS is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- BTS is distributed in the hope that it will be useful,
+ FouTS is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ along with FTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
 
@@ -31,7 +31,7 @@
 
 #include "bts/inline_functions.h"
 
-using namespace BTS;
+using namespace FTS;
 SET_VERSION_DEFAULT
 ;
 SET_AUTHOR("Thomas G. Close");
@@ -76,8 +76,8 @@ EXECUTE {
             
             MR::ProgressBar progress_bar("Subtracting strands...");
             
-            BTS::Fibre::Strand::Set input(input_location);
-            BTS::Fibre::Strand::Set subtract(subtract_location);
+            FTS::Fibre::Strand::Set input(input_location);
+            FTS::Fibre::Strand::Set subtract(subtract_location);
             
             if (input.size() != subtract.size())
                 throw Exception("Number of points don't match.");
@@ -105,8 +105,8 @@ EXECUTE {
             
             MR::ProgressBar progress_bar("Subtracting tractlets...");
             
-            BTS::Fibre::Tractlet::Set input(input_location);
-            BTS::Fibre::Tractlet::Set subtract(subtract_location);
+            FTS::Fibre::Tractlet::Set input(input_location);
+            FTS::Fibre::Tractlet::Set subtract(subtract_location);
             
             if (input.size() != subtract.size())
                 throw Exception("Number of points don't match.");
@@ -134,8 +134,8 @@ EXECUTE {
             
             MR::ProgressBar progress_bar("Subtracting tracks...");
             
-            BTS::Fibre::Track::Set input(input_location);
-            BTS::Fibre::Track::Set subtract(subtract_location);
+            FTS::Fibre::Track::Set input(input_location);
+            FTS::Fibre::Track::Set subtract(subtract_location);
             
             double base_intensity = input.base_intensity();
             

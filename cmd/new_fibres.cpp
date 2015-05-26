@@ -31,7 +31,7 @@
 
 #include "bts/inline_functions.h"
 
-using namespace BTS;
+using namespace FTS;
 
 const double ACS_DEFAULT = 1.0;
 const double BASE_INTENSITY_DEFAULT = 0.0;

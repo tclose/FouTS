@@ -32,7 +32,7 @@
 #include "bts/fibre/tractlet/set.h"
 #include "bts/math/common.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

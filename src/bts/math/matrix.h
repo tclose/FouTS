@@ -1,6 +1,6 @@
 #include "math/matrix"
 
-namespace BTS {
+namespace FTS {
     
     namespace Math {
         

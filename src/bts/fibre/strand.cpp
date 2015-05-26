@@ -28,7 +28,7 @@
 #include "bts/fibre/tractlet.h"
 #include "bts/fibre/strand/section.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

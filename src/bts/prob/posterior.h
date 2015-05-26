@@ -23,7 +23,7 @@
 #ifndef __bts_prob_posterior_h__
 #define __bts_prob_posterior_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace Prob {
         

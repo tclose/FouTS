@@ -23,7 +23,7 @@
 #include "bts/utilities/writer.h"
 #include "bts/file.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Utilities {
         

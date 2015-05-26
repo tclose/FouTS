@@ -28,7 +28,7 @@
 
 #include "bts/mcmc/proposal/momentum/weighted/non_separable.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

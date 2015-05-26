@@ -33,7 +33,7 @@
 
 #include "bts/inline_functions.h"
 
-using namespace BTS;
+using namespace FTS;
 
 const size_t DEGREE_DEFAULT = 3;
 SET_VERSION_DEFAULT

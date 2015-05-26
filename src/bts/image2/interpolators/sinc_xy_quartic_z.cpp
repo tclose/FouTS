@@ -26,7 +26,7 @@
 #include "bts/math/vector.h"
 #include "bts/math/matrix.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image2 {
         

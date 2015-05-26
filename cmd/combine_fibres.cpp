@@ -3,20 +3,20 @@
 
  Written by Thomas G. Close, 04/03/2009.
 
- This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Fourier Tract Sampling (FouTS).
 
- BTS is free software: you can redistribute it and/or modify
+ FouTS is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- BTS is distributed in the hope that it will be useful,
+ FouTS is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ along with FTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
 
@@ -32,7 +32,7 @@
 
 #include "bts/inline_functions.h"
 
-using namespace BTS;
+using namespace FTS;
 SET_VERSION_DEFAULT
 ;
 SET_AUTHOR("Thomas G. Close");
@@ -46,7 +46,7 @@ DESCRIPTION = {
 
 ARGUMENTS= {
     Argument ("input", "The input strands to be merged into the output file.").allow_multiple().type_file (),
-    Argument ("output", "The merged strands file in BTS format").type_file(),
+    Argument ("output", "The merged strands file in FTS format").type_file(),
     Argument()
 };
 

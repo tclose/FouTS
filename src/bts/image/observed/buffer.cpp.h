@@ -25,7 +25,7 @@
 
 #include "dataset/loop.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

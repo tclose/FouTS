@@ -22,7 +22,7 @@
 
 #include "bts/fibre/strand/set/momentum.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

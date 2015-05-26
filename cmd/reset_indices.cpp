@@ -29,7 +29,7 @@
 
 #include "bts/inline_functions.h"
 
-using namespace BTS;
+using namespace FTS;
 
 template<typename T> void reset_indices(T& input_location);
 SET_VERSION_DEFAULT

@@ -38,7 +38,7 @@ extern "C" {
 
 #include "bts/inline_functions.h"
 
-using namespace BTS;
+using namespace FTS;
 
 const double BASE_INTENSITY_DEFAULT = 0.0;
 const size_t DEGREE_DEFAULT = 3;

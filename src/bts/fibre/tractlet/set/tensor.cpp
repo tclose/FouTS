@@ -22,7 +22,7 @@
 
 //#include "bts/fibre/tractlet/set/tensor.h"
 //
-//namespace BTS {
+//namespace FTS {
 //
 //	namespace Fibre {
 //

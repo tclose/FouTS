@@ -23,7 +23,7 @@
 #ifndef __bts_fibre_tensor_writer2_h__
 #define __bts_fibre_tensor_writer2_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

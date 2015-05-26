@@ -26,7 +26,7 @@
 #include "bts/image/noise/rician.h"
 #include "bts/image/buffer.cpp.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

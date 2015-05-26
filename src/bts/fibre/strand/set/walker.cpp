@@ -22,7 +22,7 @@
 
 #include "bts/fibre/strand/set/walker.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

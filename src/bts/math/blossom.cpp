@@ -32,7 +32,7 @@ include "blossom5/CheckPerfectMatching.h"
 
 const double WEIGHTS_RANGE = 1e6;
 
-namespace BTS {
+namespace FTS {
     
     namespace Math {
         
@@ -64,7 +64,7 @@ namespace BTS {
                 if (nodes.size() & 1)
                     throw Exception(
                             "Odd number of nodes (" + str(edges.size())
-                            + "), run BTS::Math::Blossom::if_odd_remove_worst() first to remove worst match (in a greedy sense).");
+                            + "), run FTS::Math::Blossom::if_odd_remove_worst() first to remove worst match (in a greedy sense).");
                 
                 size_t mapped_node = 0;
                 std::map<size_t, size_t> mapped_nodes;

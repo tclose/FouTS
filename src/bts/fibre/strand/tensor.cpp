@@ -25,7 +25,7 @@
 #include "bts/fibre/strand/tensor.h"
 #include "bts/fibre/strand/basic_section/tensor.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

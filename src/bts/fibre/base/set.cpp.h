@@ -3,20 +3,20 @@
 
  Written by Thomas G Close on Jun 3, 2010.
 
- This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Fourier Tract Sampling (FouTS).
 
- BTS is free software: you can redistribute it and/or modify
+ FouTS is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- BTS is distributed in the hope that it will be useful,
+ FouTS is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ along with FTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
 
@@ -31,7 +31,7 @@
 #include "bts/fibre/base/writer.h"
 #include "bts/fibre/base/reader.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         
@@ -875,7 +875,7 @@ namespace BTS {
             
             template<typename T> double Set<T>::distance(
                     const Set<T>& reference, std::vector<size_t>& matched_indices,
-                    BTS::Math::Munkres<double>&munkres_algorithm,
+                    FTS::Math::Munkres<double>&munkres_algorithm,
                     MR::Math::Matrix<double>& similarity, double strands_per_acs,
                     bool add_extra) const {
                 
@@ -925,7 +925,7 @@ namespace BTS {
                                                          std::vector<size_t>& matched_indices,
                                                          double strands_per_acs,
                                                          bool add_extra) const {
-                BTS::Math::Munkres<double> munkres_algorithm(this->size(), reference.size());
+                FTS::Math::Munkres<double> munkres_algorithm(this->size(), reference.size());
                 MR::Math::Matrix<double> similarity(this->size(), reference.size());
                 return distance(reference, matched_indices, munkres_algorithm, similarity,
                         strands_per_acs, add_extra);

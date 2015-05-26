@@ -23,7 +23,7 @@
 #ifndef __bts_mcmc_naninfexception_h__
 #define __bts_mcmc_naninfexception_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

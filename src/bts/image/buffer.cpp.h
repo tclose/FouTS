@@ -35,7 +35,7 @@ for (int z = 0; z < dims[Z]; z++) { \
   } \
 }
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

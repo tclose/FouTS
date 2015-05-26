@@ -34,7 +34,7 @@
 #include "bts/fibre/strand/tensor.h"
 #include "bts/fibre/tractlet/tensor.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

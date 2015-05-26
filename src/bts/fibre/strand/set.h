@@ -3,20 +3,20 @@
 
  Written by Thomas G Close, 5/05/09.
 
- This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Fourier Tract Sampling (FouTS).
 
- BTS is free software: you can redistribute it and/or modify
+ FouTS is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- BTS is distributed in the hope that it will be useful,
+ FouTS is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ along with FTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
 
@@ -39,7 +39,7 @@
 #include "bts/fibre/properties.h"
 
 #include "k_means/KMlocal.h"	// k-means algorithms
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         
@@ -340,7 +340,7 @@ namespace BTS {
         
         double distance(Strand::Set& strands, Strand::Set& reference,
                         std::vector<size_t>& matched_indices,
-                        BTS::Math::Munkres<double>&munkres_algorithm,
+                        FTS::Math::Munkres<double>&munkres_algorithm,
                         MR::Math::Matrix<double>& similarity);
         
         inline Strand::Set operator*(double c, Strand::Set set) {

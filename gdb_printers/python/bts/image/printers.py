@@ -1,4 +1,4 @@
-# Pretty-printers for 'BTS::Image::*'.
+# Pretty-printers for 'FTS::Image::*'.
 
 # Copyright (C) 2008, 2009 Free Software Foundation, Inc.
 
@@ -44,7 +44,7 @@ class ImageVoxelPrinter:
     def __init__(self, typename, template_type, val):
         self.typename = typename
         self.template_type = template_type
-        self.base_val = val.cast(gdb.lookup_type('BTS::Image::Voxel<%s>' % template_type))
+        self.base_val = val.cast(gdb.lookup_type('FTS::Image::Voxel<%s>' % template_type))
 
 
     def children(self):
@@ -160,20 +160,20 @@ class ImageBufferPrinter:
         
         self.val = val
         
-        if typename == 'BTS::Image::Buffer':
-            self.typename = 'BTS::Image::Buffer'
-            self.voxel_typename = 'BTS::Image::Voxel<double>'
-        if typename == 'BTS::Image::Density::Buffer':
-            self.typename = 'BTS::Image::Density::Buffer'
-            self.voxel_typename = 'BTS::Image::Density::Voxel'
-        elif typename == 'BTS::Image::Container::Buffer':
-            self.typename = 'BTS::Image::Container::Buffer< %s >' % val.type.template_argument(0)
-            self.voxel_typename = 'BTS::Image::Container::Voxel< %s >' % val.type.template_argument(0)
-        elif typename == 'BTS::Image::Expected::Buffer_tpl':
-            self.typename = 'BTS::Image::Expected::Buffer_tpl< %s >' % val.type.template_argument(0)
+        if typename == 'FTS::Image::Buffer':
+            self.typename = 'FTS::Image::Buffer'
+            self.voxel_typename = 'FTS::Image::Voxel<double>'
+        if typename == 'FTS::Image::Density::Buffer':
+            self.typename = 'FTS::Image::Density::Buffer'
+            self.voxel_typename = 'FTS::Image::Density::Voxel'
+        elif typename == 'FTS::Image::Container::Buffer':
+            self.typename = 'FTS::Image::Container::Buffer< %s >' % val.type.template_argument(0)
+            self.voxel_typename = 'FTS::Image::Container::Voxel< %s >' % val.type.template_argument(0)
+        elif typename == 'FTS::Image::Expected::Buffer_tpl':
+            self.typename = 'FTS::Image::Expected::Buffer_tpl< %s >' % val.type.template_argument(0)
             self.voxel_typename = '%s' % val.type.template_argument(0)            
-        elif typename == 'BTS::Image::Observed::Buffer_tpl':
-            self.typename = 'BTS::Image::Observed::Buffer_tpl< %s >' % val.type.template_argument(0)
+        elif typename == 'FTS::Image::Observed::Buffer_tpl':
+            self.typename = 'FTS::Image::Observed::Buffer_tpl< %s >' % val.type.template_argument(0)
             self.voxel_typename = '%s' % val.type.template_argument(0)     
         else:
             self.typename = typename
@@ -186,7 +186,7 @@ class ImageBufferPrinter:
         return '%s' % (self.typename)
 
     def children (self):
-        nodetype = gdb.lookup_type('std::_Rb_tree_node< std::pair< const BTS::Image::Coord, %s > >' % self.voxel_typename)
+        nodetype = gdb.lookup_type('std::_Rb_tree_node< std::pair< const FTS::Image::Coord, %s > >' % self.voxel_typename)
         nodetype = nodetype.pointer()
         return self._iter (VoxelIterator (self.val['voxels']), nodetype)
 
@@ -228,7 +228,7 @@ class ImageReferencePrinter:
         return '%s' % (self.typename)
 
     def children (self):
-        nodetype = gdb.lookup_type('std::_Rb_tree_node< std::pair< const BTS::Image::Coord, %s > >' % self.voxel_typename)
+        nodetype = gdb.lookup_type('std::_Rb_tree_node< std::pair< const FTS::Image::Coord, %s > >' % self.voxel_typename)
         nodetype = nodetype.pointer()
         return self._iter (VoxelIterator (self.val['voxels']), nodetype)
 
@@ -244,32 +244,32 @@ class ImagePrinter:
 
     def to_string(self):
         if self.val['type'].string() == 'trilinear':
-            return self.val.cast(gdb.lookup_type('BTS::Image::Expected::Trilinear::Buffer'))
+            return self.val.cast(gdb.lookup_type('FTS::Image::Expected::Trilinear::Buffer'))
 
         elif self.val['type'].string() == 'top_hat':
-            return self.val.cast(gdb.lookup_type('BTS::Image::Expected::TopHat::Buffer'))
+            return self.val.cast(gdb.lookup_type('FTS::Image::Expected::TopHat::Buffer'))
             
         elif self.val['type'].string() == 'gaussian':
-            return self.val.cast(gdb.lookup_type('BTS::Image::Expected::Gaussian::Buffer'))
+            return self.val.cast(gdb.lookup_type('FTS::Image::Expected::Gaussian::Buffer'))
     
         elif self.val['type'].string() == 'quartic':
-            return self.val.cast(gdb.lookup_type('BTS::Image::Expected::Quartic::Buffer'))
+            return self.val.cast(gdb.lookup_type('FTS::Image::Expected::Quartic::Buffer'))
     
         elif self.val['type'].string() == 'realistic':
-            return self.val.cast(gdb.lookup_type('BTS::Image::Expected::Realistic::Buffer'))
+            return self.val.cast(gdb.lookup_type('FTS::Image::Expected::Realistic::Buffer'))
                         
         elif self.val['type'].string() == 'sinc':
-            return self.val.cast(gdb.lookup_type('BTS::Image::Expected::Sinc::Buffer'))
+            return self.val.cast(gdb.lookup_type('FTS::Image::Expected::Sinc::Buffer'))
    
         elif self.val['type'].string() == 'reverse_sqrt':
-            return self.val.cast(gdb.lookup_type('BTS::Image::Expected::ReverseSqrt::Buffer'))            
+            return self.val.cast(gdb.lookup_type('FTS::Image::Expected::ReverseSqrt::Buffer'))            
                     
         else:
             return ("Unknown observed/expected image type '%s'." % self.val['type'].string())
 
 
 def register_bts_image_printers (obj):
-    "Register Bayesian Tractlet Sampling (BTS) Image pretty-printers with objfile Obj."
+    "Register Bayesian Tractlet Sampling (FTS) Image pretty-printers with objfile Obj."
 
     if obj == None:
         obj = gdb
@@ -307,30 +307,30 @@ def lookup_function (val):
 def build_bts_image_dictionary ():
     # bts objects requiring pretty-printing.
     # In order from:
-    pretty_printers_dict[re.compile('^BTS::Image::Buffer$')] = lambda val: ImageBufferPrinter("BTS::Image::Buffer", val)        
-    pretty_printers_dict[re.compile('^BTS::Image::Expected::Quartic::Buffer$')] = lambda val: ImageBufferPrinter("BTS::Image::Expected::Quartic::Buffer", val)    
-    pretty_printers_dict[re.compile('^BTS::Image::Expected::Gaussian::Buffer$')] = lambda val: ImageBufferPrinter("BTS::Image::Expected::Gaussian::Buffer", val)    
-    pretty_printers_dict[re.compile('^BTS::Image::Expected::Trilinear::Buffer$')] = lambda val: ImageBufferPrinter("BTS::Image::Expected::Trilinear::Buffer", val)    
-    pretty_printers_dict[re.compile('^BTS::Image::Observed::Buffer$')] = lambda val: ImageBufferPrinter("BTS::Image::Observed::Buffer", val)    
-    pretty_printers_dict[re.compile('^BTS::Image::Density::Buffer$')] = lambda val: ImageBufferPrinter("BTS::Image::Density::Buffer", val)    
-    pretty_printers_dict[re.compile('^BTS::Image::Container::Buffer<.*>$')] = lambda val: ImageBufferPrinter("BTS::Image::Container::Buffer", val)     
-    pretty_printers_dict[re.compile('^BTS::Image::Reference::Buffer<.*>$')] = lambda val: ImageReferencePrinter("BTS::Image::Reference::Buffer", val)     
-    pretty_printers_dict[re.compile('^BTS::Image::Expected::Buffer$')] = lambda val: ImagePrinter(val)  
-    pretty_printers_dict[re.compile('^BTS::Image::Expected::Buffer_tpl<.*>$')] = lambda val: ImageBufferPrinter('BTS::Image::Expected::Buffer_tpl', val)
-    pretty_printers_dict[re.compile('^BTS::Image::Observed::Buffer_tpl<.*>$')] = lambda val: ImageBufferPrinter('BTS::Image::Observed::Buffer_tpl', val)
-    pretty_printers_dict[re.compile('^BTS::Image::Voxel<double>$')] = lambda val: ImageVoxelPrinter("BTS::Image::Voxel<double>", 'double', val)
-    pretty_printers_dict[re.compile('^BTS::Image::Expected::Quartic::Voxel$')] = lambda val: ImageVoxelPrinter("BTS::Image::Expected::Quartic::Voxel", 'double', val)
-    pretty_printers_dict[re.compile('^BTS::Image::Expected::Gaussian::Voxel$')] = lambda val: ImageVoxelPrinter("BTS::Image::Expected::Gaussian::Voxel", 'double', val)
-    pretty_printers_dict[re.compile('^BTS::Image::Expected::Trilinear::Voxel$')] = lambda val: ImageVoxelPrinter("BTS::Image::Expected::Trilinear::Voxel", 'double', val)        
-    pretty_printers_dict[re.compile('^BTS::Image::Expected::TopHat::Voxel$')] = lambda val: ImageVoxelPrinter("BTS::Image::Expected::TopHat::Voxel",'double',  val)        
-    pretty_printers_dict[re.compile('^BTS::Image::Observed::Voxel$')] = lambda val: ImageVoxelPrinter("BTS::Image::Observed::Voxel", 'double', val)
-    pretty_printers_dict[re.compile('^BTS::Image::Container::Voxel<BTS::Fibre::Strand>$')] = lambda val: ImageVoxelPrinter("BTS::Image::Container::Voxel<BTS::Fibre::Strand>", 'BTS::Fibre::Strand', val)
-    pretty_printers_dict[re.compile('^BTS::Image::Container::Voxel<BTS::Fibre::Tractlet>$')] = lambda val: ImageVoxelPrinter("BTS::Image::Container::Voxel<BTS::Fibre::Tractlet>", 'BTS::Fibre::Tractlet', val)
-    pretty_printers_dict[re.compile('^BTS::Image::Container::Voxel<BTS::Fibre::Strand::Tensor>$')] = lambda val: ImageVoxelPrinter("BTS::Image::Container::Voxel<BTS::Fibre::Strand::Tensor>", 'BTS::Fibre::Strand::Tensor', val)
-    pretty_printers_dict[re.compile('^BTS::Image::Container::Voxel<BTS::Fibre::Tractlet::Tensor>$')] = lambda val: ImageVoxelPrinter("BTS::Image::Container::Voxel<BTS::Fibre::Tractlet::Tensor>", 'BTS::Fibre::Tractlet::Tensor', val)        
-    pretty_printers_dict[re.compile('^BTS::Image::Container::Voxel< MR::Math::Vector<double> >$')] = lambda val: ImageVoxelPrinter("BTS::Image::Container::Voxel<MR::Math::Vector<double>>", ' MR::Math::Vector<double> ', val)                    
-    pretty_printers_dict[re.compile('^BTS::Image::Container::Voxel< MR::Math::Matrix<double> >$')] = lambda val: ImageVoxelPrinter("BTS::Image::Container::Voxel<MR::Math::Matrix<double>>", ' MR::Math::Matrix<double> ', val)                    
-    pretty_printers_dict[re.compile('^BTS::Image::Density::Voxel$')] = lambda val: ImageDensityVoxelPrinter(val)
+    pretty_printers_dict[re.compile('^FTS::Image::Buffer$')] = lambda val: ImageBufferPrinter("FTS::Image::Buffer", val)        
+    pretty_printers_dict[re.compile('^FTS::Image::Expected::Quartic::Buffer$')] = lambda val: ImageBufferPrinter("FTS::Image::Expected::Quartic::Buffer", val)    
+    pretty_printers_dict[re.compile('^FTS::Image::Expected::Gaussian::Buffer$')] = lambda val: ImageBufferPrinter("FTS::Image::Expected::Gaussian::Buffer", val)    
+    pretty_printers_dict[re.compile('^FTS::Image::Expected::Trilinear::Buffer$')] = lambda val: ImageBufferPrinter("FTS::Image::Expected::Trilinear::Buffer", val)    
+    pretty_printers_dict[re.compile('^FTS::Image::Observed::Buffer$')] = lambda val: ImageBufferPrinter("FTS::Image::Observed::Buffer", val)    
+    pretty_printers_dict[re.compile('^FTS::Image::Density::Buffer$')] = lambda val: ImageBufferPrinter("FTS::Image::Density::Buffer", val)    
+    pretty_printers_dict[re.compile('^FTS::Image::Container::Buffer<.*>$')] = lambda val: ImageBufferPrinter("FTS::Image::Container::Buffer", val)     
+    pretty_printers_dict[re.compile('^FTS::Image::Reference::Buffer<.*>$')] = lambda val: ImageReferencePrinter("FTS::Image::Reference::Buffer", val)     
+    pretty_printers_dict[re.compile('^FTS::Image::Expected::Buffer$')] = lambda val: ImagePrinter(val)  
+    pretty_printers_dict[re.compile('^FTS::Image::Expected::Buffer_tpl<.*>$')] = lambda val: ImageBufferPrinter('FTS::Image::Expected::Buffer_tpl', val)
+    pretty_printers_dict[re.compile('^FTS::Image::Observed::Buffer_tpl<.*>$')] = lambda val: ImageBufferPrinter('FTS::Image::Observed::Buffer_tpl', val)
+    pretty_printers_dict[re.compile('^FTS::Image::Voxel<double>$')] = lambda val: ImageVoxelPrinter("FTS::Image::Voxel<double>", 'double', val)
+    pretty_printers_dict[re.compile('^FTS::Image::Expected::Quartic::Voxel$')] = lambda val: ImageVoxelPrinter("FTS::Image::Expected::Quartic::Voxel", 'double', val)
+    pretty_printers_dict[re.compile('^FTS::Image::Expected::Gaussian::Voxel$')] = lambda val: ImageVoxelPrinter("FTS::Image::Expected::Gaussian::Voxel", 'double', val)
+    pretty_printers_dict[re.compile('^FTS::Image::Expected::Trilinear::Voxel$')] = lambda val: ImageVoxelPrinter("FTS::Image::Expected::Trilinear::Voxel", 'double', val)        
+    pretty_printers_dict[re.compile('^FTS::Image::Expected::TopHat::Voxel$')] = lambda val: ImageVoxelPrinter("FTS::Image::Expected::TopHat::Voxel",'double',  val)        
+    pretty_printers_dict[re.compile('^FTS::Image::Observed::Voxel$')] = lambda val: ImageVoxelPrinter("FTS::Image::Observed::Voxel", 'double', val)
+    pretty_printers_dict[re.compile('^FTS::Image::Container::Voxel<FTS::Fibre::Strand>$')] = lambda val: ImageVoxelPrinter("FTS::Image::Container::Voxel<FTS::Fibre::Strand>", 'FTS::Fibre::Strand', val)
+    pretty_printers_dict[re.compile('^FTS::Image::Container::Voxel<FTS::Fibre::Tractlet>$')] = lambda val: ImageVoxelPrinter("FTS::Image::Container::Voxel<FTS::Fibre::Tractlet>", 'FTS::Fibre::Tractlet', val)
+    pretty_printers_dict[re.compile('^FTS::Image::Container::Voxel<FTS::Fibre::Strand::Tensor>$')] = lambda val: ImageVoxelPrinter("FTS::Image::Container::Voxel<FTS::Fibre::Strand::Tensor>", 'FTS::Fibre::Strand::Tensor', val)
+    pretty_printers_dict[re.compile('^FTS::Image::Container::Voxel<FTS::Fibre::Tractlet::Tensor>$')] = lambda val: ImageVoxelPrinter("FTS::Image::Container::Voxel<FTS::Fibre::Tractlet::Tensor>", 'FTS::Fibre::Tractlet::Tensor', val)        
+    pretty_printers_dict[re.compile('^FTS::Image::Container::Voxel< MR::Math::Vector<double> >$')] = lambda val: ImageVoxelPrinter("FTS::Image::Container::Voxel<MR::Math::Vector<double>>", ' MR::Math::Vector<double> ', val)                    
+    pretty_printers_dict[re.compile('^FTS::Image::Container::Voxel< MR::Math::Matrix<double> >$')] = lambda val: ImageVoxelPrinter("FTS::Image::Container::Voxel<MR::Math::Matrix<double>>", ' MR::Math::Matrix<double> ', val)                    
+    pretty_printers_dict[re.compile('^FTS::Image::Density::Voxel$')] = lambda val: ImageDensityVoxelPrinter(val)
     
 pretty_printers_dict = {}
 

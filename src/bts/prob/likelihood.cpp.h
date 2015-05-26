@@ -29,7 +29,7 @@
 #include "bts/fibre/tractlet/set/tensor.h"
 #include "bts/image/expected/quartic/buffer.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Prob {
         

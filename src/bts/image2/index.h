@@ -23,7 +23,7 @@
 #ifndef __bts_image2_index_h__
 #define __bts_image2_index_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace Image2 {
         

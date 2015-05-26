@@ -28,7 +28,7 @@
 
 #include "bts/prob/likelihood.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Prob {
         

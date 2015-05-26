@@ -1,4 +1,4 @@
-# Pretty-printers for 'BTS::Fibre::*'.
+# Pretty-printers for 'FTS::Fibre::*'.
 
 # Copyright (C) 2008, 2009 Free Software Foundation, Inc.
 
@@ -160,10 +160,10 @@ def build_mr_math_dictionary ():
     # In order from:
     pretty_printers_dict[re.compile('^MR::Math::Vector<.*>$')] = lambda val: MathVectorPrinter('MR::Math::Vector', val)
     pretty_printers_dict[re.compile('^MR::Math::Matrix<.*>$')] = lambda val: MathMatrixPrinter('MR::Math::Matrix', val)
-    pretty_printers_dict[re.compile('^BTS::Fibre::Strand::Set::Tensor$')] = lambda val: MathMatrixPrinter('BTS::Fibre::Strand::Set::Tensor', val)
-    pretty_printers_dict[re.compile('^BTS::Fibre::Tract::Set::Tensor$')] = lambda val: MathMatrixPrinter('BTS::Fibre::Tract::Set::Tensor', val)  
-    pretty_printers_dict[re.compile('^BTS::MCMC::State$')] = lambda val: MathVectorPrinter('BTS::MCMC::State', val)
-    pretty_printers_dict[re.compile('^BTS::MCMC::State::Tensor$')] = lambda val: MathMatrixPrinter('BTS::MCMC::State::Tensor', val) 
+    pretty_printers_dict[re.compile('^FTS::Fibre::Strand::Set::Tensor$')] = lambda val: MathMatrixPrinter('FTS::Fibre::Strand::Set::Tensor', val)
+    pretty_printers_dict[re.compile('^FTS::Fibre::Tract::Set::Tensor$')] = lambda val: MathMatrixPrinter('FTS::Fibre::Tract::Set::Tensor', val)  
+    pretty_printers_dict[re.compile('^FTS::MCMC::State$')] = lambda val: MathVectorPrinter('FTS::MCMC::State', val)
+    pretty_printers_dict[re.compile('^FTS::MCMC::State::Tensor$')] = lambda val: MathMatrixPrinter('FTS::MCMC::State::Tensor', val) 
             
 pretty_printers_dict = {}
 

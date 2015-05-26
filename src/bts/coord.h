@@ -23,7 +23,7 @@
 #ifndef __bts_coord_h__
 #define __bts_coord_h__
 
-namespace BTS {
+namespace FTS {
     
     class Coord;
 
@@ -32,7 +32,7 @@ namespace BTS {
 #include "math/vector.h"
 #include "bts/triple.h"
 
-namespace BTS {
+namespace FTS {
     
     class Coord: public MR::Math::Vector<double> {
             

@@ -22,7 +22,7 @@
 
 #include "bts/mcmc/annealer.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

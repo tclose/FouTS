@@ -23,7 +23,7 @@
 #ifndef __bts_mcmc_proposal_walker_h__
 #define __bts_mcmc_proposal_walker_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         
@@ -106,7 +106,7 @@ namespace BTS {
 #include "bts/mcmc/proposal/distribution.h"
 #include "bts/mcmc/state.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

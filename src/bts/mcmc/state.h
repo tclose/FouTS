@@ -28,7 +28,7 @@
 
 #include <map>
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         
@@ -41,7 +41,7 @@ namespace BTS {
 #include "bts/utilities/reader.h"
 #include "bts/utilities/writer.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

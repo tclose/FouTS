@@ -3,20 +3,20 @@
 
  Created by Tom Close on 13/03/09.
 
- This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Fourier Tract Sampling (FouTS).
 
- BTS is free software: you can redistribute it and/or modify
+ FouTS is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- BTS is distributed in the hope that it will be useful,
+ FouTS is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ along with FTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
 
@@ -38,7 +38,7 @@
 const size_t NUM_LENGTH_SECTIONS_DEFAULT = 50;
 const size_t NUM_WIDTH_SECTIONS_DEFAULT = 40;
 
-using namespace BTS;
+using namespace FTS;
 SET_VERSION_DEFAULT
 ;
 SET_AUTHOR("Thomas G. Close");
@@ -80,11 +80,11 @@ OPTIONS= {
 
     Option()};
 
-BTS::Fibre::Track::Set trim_tcks(BTS::Fibre::Track::Set& input_tcks, double sphere_r,
+FTS::Fibre::Track::Set trim_tcks(FTS::Fibre::Track::Set& input_tcks, double sphere_r,
                                  double length_reject_threshold, bool trim_to_cube,
                                  const Triple<double>& offsets);
 
-BTS::Fibre::Tractlet::Set trim_tractlets(BTS::Fibre::Tractlet::Set& input_tractlets,
+FTS::Fibre::Tractlet::Set trim_tractlets(FTS::Fibre::Tractlet::Set& input_tractlets,
                                          double distance, double length_reject_threshold,
                                          bool trim_to_cube, size_t num_length_sections,
                                          size_t num_width_sections,
@@ -136,35 +136,35 @@ EXECUTE {
         if (opt.size())
           offsets = parse_triple<double>(std::string(opt[0][0]));
 
-        if (File::has_or_txt_extension<BTS::Fibre::Strand>(input_location) || File::has_or_txt_extension<
-                    BTS::Fibre::Track>(input_location)) {
+        if (File::has_or_txt_extension<FTS::Fibre::Strand>(input_location) || File::has_or_txt_extension<
+                    FTS::Fibre::Track>(input_location)) {
             
-            BTS::Fibre::Track::Set input(input_location, num_length_sections);
+            FTS::Fibre::Track::Set input(input_location, num_length_sections);
             
             MR::ProgressBar progress_bar("Trimming strands/tracks...");
             
-            BTS::Fibre::Track::Set output = trim_tcks(input, distance, length_reject_threshold,
+            FTS::Fibre::Track::Set output = trim_tcks(input, distance, length_reject_threshold,
                     cube, offsets);
             
             output.save(output_location, degree);
             
-        } else if (File::has_or_txt_extension<BTS::Fibre::Tractlet>(input_location)) {
+        } else if (File::has_or_txt_extension<FTS::Fibre::Tractlet>(input_location)) {
             
             MR::ProgressBar progress_bar("Trimming tractlets...");
             
-            BTS::Fibre::Tractlet::Set input(input_location);
+            FTS::Fibre::Tractlet::Set input(input_location);
             
-            BTS::Fibre::Tractlet::Set output = trim_tractlets(input, distance,
+            FTS::Fibre::Tractlet::Set output = trim_tractlets(input, distance,
                     length_reject_threshold, cube, num_length_sections,
                     num_width_sections, offsets);
             
             output.save(output_location);
             
-        } else if (File::has_or_txt_extension<BTS::Fibre::Strand::Set>(input_location)) {
+        } else if (File::has_or_txt_extension<FTS::Fibre::Strand::Set>(input_location)) {
             
             MR::ProgressBar progress_bar("Trimming strand sets...");
             
-            BTS::Fibre::Strand::Set::Reader reader(input_location);
+            FTS::Fibre::Strand::Set::Reader reader(input_location);
             
             std::map<std::string, std::string> props = reader.get_extend_props();
             
@@ -174,20 +174,20 @@ EXECUTE {
             
             std::vector<std::string> elem_header;
             
-            elem_header.push_back(BTS::Fibre::Track::BUNDLE_INDEX_EPROP);
+            elem_header.push_back(FTS::Fibre::Track::BUNDLE_INDEX_EPROP);
             
-            BTS::Fibre::Strand::Set::Writer writer(output_location, reader,
+            FTS::Fibre::Strand::Set::Writer writer(output_location, reader,
                     reader.extend_prop_keys(), elem_header, props);
             
-            BTS::Fibre::Strand::Set strands;
+            FTS::Fibre::Strand::Set strands;
             
             while (reader.next(strands)) {
                 
-                BTS::Fibre::Track::Set tcks = strands.to_tracks(num_length_sections);
+                FTS::Fibre::Track::Set tcks = strands.to_tracks(num_length_sections);
                 
                 std::map<std::string, std::string> props = strands.get_extend_props();
                 
-                BTS::Fibre::Track::Set trimmed_tcks = trim_tcks(tcks, distance,
+                FTS::Fibre::Track::Set trimmed_tcks = trim_tcks(tcks, distance,
                         length_reject_threshold, cube, offsets);
                 
                 //FIXME: Remove explicit as it should be handled by the "loaded_degree" property
@@ -201,16 +201,16 @@ EXECUTE {
                 
             }
             
-        } else if (File::has_or_txt_extension<BTS::Fibre::Track::Set>(input_location)) {
+        } else if (File::has_or_txt_extension<FTS::Fibre::Track::Set>(input_location)) {
             
             MR::ProgressBar progress_bar("Trimming track sets...");
             
-            BTS::Fibre::Track::Set::Reader reader(input_location);
-            BTS::Fibre::Track::Set::Writer writer(output_location, reader,
+            FTS::Fibre::Track::Set::Reader reader(input_location);
+            FTS::Fibre::Track::Set::Writer writer(output_location, reader,
                     reader.extend_prop_keys(), reader.extend_elem_prop_keys(),
                     reader.get_extend_props());
             
-            BTS::Fibre::Track::Set tracks;
+            FTS::Fibre::Track::Set tracks;
             
             while (reader.next(tracks)) {
                 writer.append(trim_tcks(tracks, distance, length_reject_threshold, cube, offsets));
@@ -218,11 +218,11 @@ EXECUTE {
                 ++progress_bar;
             }
             
-        } else if (File::has_or_txt_extension<BTS::Fibre::Tractlet::Set>(input_location)) {
+        } else if (File::has_or_txt_extension<FTS::Fibre::Tractlet::Set>(input_location)) {
             
             MR::ProgressBar progress_bar("Trimming tractlet sets...");
             
-            BTS::Fibre::Tractlet::Set::Reader reader(input_location);
+            FTS::Fibre::Tractlet::Set::Reader reader(input_location);
             
             std::map<std::string, std::string> props = reader.get_extend_props();
             
@@ -232,12 +232,12 @@ EXECUTE {
             
             std::vector<std::string> elem_header;
             
-            elem_header.push_back(BTS::Fibre::Track::BUNDLE_INDEX_EPROP);
+            elem_header.push_back(FTS::Fibre::Track::BUNDLE_INDEX_EPROP);
             
-            BTS::Fibre::Tractlet::Set::Writer writer(output_location, reader,
+            FTS::Fibre::Tractlet::Set::Writer writer(output_location, reader,
                     reader.extend_prop_keys(), elem_header, props);
             
-            BTS::Fibre::Tractlet::Set tractlets;
+            FTS::Fibre::Tractlet::Set tractlets;
             
             while (reader.next(tractlets)) {
                 writer.append(
@@ -253,11 +253,11 @@ EXECUTE {
         
     }
     
-    BTS::Fibre::Track::Set trim_tcks(BTS::Fibre::Track::Set& input_tcks, double distance,
+    FTS::Fibre::Track::Set trim_tcks(FTS::Fibre::Track::Set& input_tcks, double distance,
                                      double length_reject_threshold, bool trim_to_cube,
                                      const Triple<double>& offsets) {
         
-        BTS::Fibre::Track::Set trimmed_tcks(input_tcks.get_extend_props());
+        FTS::Fibre::Track::Set trimmed_tcks(input_tcks.get_extend_props());
         
         std::vector<Triple<double> > pre_points;
         std::vector<Triple<double> > post_points;
@@ -283,7 +283,7 @@ EXECUTE {
         
     }
     
-    BTS::Fibre::Tractlet::Set trim_tractlets(BTS::Fibre::Tractlet::Set& input_tractlets,
+    FTS::Fibre::Tractlet::Set trim_tractlets(FTS::Fibre::Tractlet::Set& input_tractlets,
                                              double distance, double length_reject_threshold,
                                              bool trim_to_cube, size_t num_length_sections,
                                              size_t num_width_sections,
@@ -292,13 +292,13 @@ EXECUTE {
         //FIXME: Remove this as it should be handled by the "loaded_degree" property
         size_t degree = input_tractlets[0].degree();
         
-        BTS::Fibre::Track::Set input_tcks = input_tractlets.to_tracks(num_length_sections,
+        FTS::Fibre::Track::Set input_tcks = input_tractlets.to_tracks(num_length_sections,
                 num_width_sections);
         
-        BTS::Fibre::Track::Set trimmed_tcks = trim_tcks(input_tcks, distance,
+        FTS::Fibre::Track::Set trimmed_tcks = trim_tcks(input_tcks, distance,
                 length_reject_threshold, trim_to_cube, offsets);
         
-        BTS::Fibre::Tractlet::Set trimmed_tractlets = trimmed_tcks.to_tractlets(degree);
+        FTS::Fibre::Tractlet::Set trimmed_tractlets = trimmed_tcks.to_tractlets(degree);
         
         trimmed_tractlets.set_extend_props(input_tractlets.get_extend_props());
         

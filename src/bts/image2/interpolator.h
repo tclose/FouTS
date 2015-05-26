@@ -23,7 +23,7 @@
 #ifndef __bts_image2_interpolator_h__
 #define __bts_image2_interpolator_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace Image2 {
         

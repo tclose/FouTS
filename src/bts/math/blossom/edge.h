@@ -23,7 +23,7 @@
 #ifndef __bts_math_blossom_edge_h__
 #define __bts_math_blossom_edge_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace Math {
         

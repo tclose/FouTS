@@ -105,7 +105,7 @@
     { Derived answer (*this); answer -= f; return answer;} \
 
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         
@@ -124,7 +124,7 @@ namespace BTS {
              *
              * Objectd on MR::Math::Vector<double> it can be treated as a one dimensional vector by statically casting it to
              * MR::Math::Vector<double>. However, note that the operator[]() is overidden in Fibre::Object to return a
-             * BTS::Triple<double>.
+             * FTS::Triple<double>.
              *
              */
             class Object: public MR::Math::Vector<double> {
@@ -150,7 +150,7 @@ namespace BTS {
 
                 public:
                     
-                    /*! Loads a BTS data file and converts the loaded fibre object into a string that is readable by the MATLAB
+                    /*! Loads a FTS data file and converts the loaded fibre object into a string that is readable by the MATLAB
                      *  software package. Is used to store fibre objects used as parameters (such as step sizes) withinness fibre object
                      *  file headers.
                      *
@@ -301,7 +301,7 @@ namespace BTS {
                         return this->MR::Math::Vector<double>::owner;
                     }
                     
-                    //! Returns the "size" of the object, i.e. the number of @see BTS::Triple<double> objects it contains
+                    //! Returns the "size" of the object, i.e. the number of @see FTS::Triple<double> objects it contains
                     size_t size() const {
                         return sze;
                     }

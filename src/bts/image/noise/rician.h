@@ -27,7 +27,7 @@
 #include "bts/image/observed/buffer.h"
 #include "bts/image/expected/buffer.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

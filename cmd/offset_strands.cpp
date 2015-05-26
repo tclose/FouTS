@@ -3,20 +3,20 @@
 
  Created by Tom Close on 13/03/09.
 
- This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Fourier Tract Sampling (FouTS).
 
- BTS is free software: you can redistribute it and/or modify
+ FouTS is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- BTS is distributed in the hope that it will be useful,
+ FouTS is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ along with FTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
 
@@ -30,7 +30,7 @@
 
 #include "bts/inline_functions.h"
 
-using namespace BTS;
+using namespace FTS;
 SET_VERSION_DEFAULT
 ;
 SET_AUTHOR("Thomas G. Close");
@@ -78,7 +78,7 @@ EXECUTE {
         if (opt.size())
             offset = parse_triple<double>(std::string(opt[0][0]));
         
-        BTS::Fibre::Track::Set tcks(input_location, num_points);
+        FTS::Fibre::Track::Set tcks(input_location, num_points);
         
         for (size_t tck_i = 0; tck_i < tcks.size(); tck_i++)
             for (size_t point_i = 0; point_i < tcks[tck_i].size(); point_i++)

@@ -23,7 +23,7 @@
 #include "bts/triple.h"
 #include "bts/coord.h"
 
-namespace BTS {
+namespace FTS {
     
     template<> const Triple<double> Triple<double>::Invalid(NAN, NAN, NAN);
     template<> const Triple<double> Triple<double>::Zeros(0.0, 0.0, 0.0);

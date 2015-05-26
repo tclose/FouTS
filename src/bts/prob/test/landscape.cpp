@@ -3,20 +3,20 @@
 
  Created by Tom Close on 13/03/09.
 
- This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Fourier Tract Sampling (FouTS).
 
- BTS is free software: you can redistribute it and/or modify
+ FouTS is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- BTS is distributed in the hope that it will be useful,
+ FouTS is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ along with FTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
 
@@ -35,7 +35,7 @@ extern "C" {
 #include "bts/image/buffer.cpp.h"
 #include "bts/math/common.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Prob {
         
@@ -205,7 +205,7 @@ namespace BTS {
                     gradient -= 2.0 * barrier_rate * state * (state.norm() - roi_radius)
                             / state.norm();
                     
-                    MR::Math::Matrix<double> hess_part = BTS::Math::outer(state, state);
+                    MR::Math::Matrix<double> hess_part = FTS::Math::outer(state, state);
                     hess_part *= 2.0
                             * barrier_rate
                             * (-1.0 * (state.norm() - roi_radius) / MR::Math::pow3(state.norm()) + 1
@@ -261,7 +261,7 @@ namespace BTS {
                     gradient -= 2.0 * barrier_rate * state * (state.norm() - roi_radius)
                             / state.norm();
                     
-                    MR::Math::Matrix<double> hess_part = BTS::Math::outer(state, state);
+                    MR::Math::Matrix<double> hess_part = FTS::Math::outer(state, state);
                     hess_part *= -2.0
                             * barrier_rate
                             * (-1.0 * (state.norm() - roi_radius) / MR::Math::pow3(state.norm()) + 1

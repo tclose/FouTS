@@ -26,7 +26,7 @@
 #include "bts/prob/test/landscape.h"
 #include "bts/inline_functions.h"
 
-using namespace BTS;
+using namespace FTS;
 SET_VERSION_DEFAULT
 ;
 SET_AUTHOR("Thomas G. Close");

@@ -1,4 +1,4 @@
-# Pretty-printers for 'BTS::MCMC::*'.
+# Pretty-printers for 'FTS::MCMC::*'.
 
 # Copyright (C) 2008, 2009 Free Software Foundation, Inc.
 
@@ -47,7 +47,7 @@ class ProposalMomentumPrinter:
         if typename == 'MCMC::Proposal::Momentum':
             self.val = val
         else:
-            self.val = val.cast(gdb.lookup_type('BTS::MCMC::Proposal::Momentum'))
+            self.val = val.cast(gdb.lookup_type('FTS::MCMC::Proposal::Momentum'))
 
     def children(self):
         return self._iterator(self.val['momen']['size'],
@@ -63,7 +63,7 @@ class ProposalMomentumPrinter:
 
 
 def register_bts_mcmc_printers (obj):
-    "Register Bayesian Tract Sampling (BTS) MCMC pretty-printers with objfile Obj."
+    "Register Fourier Tract Sampling (FTS) MCMC pretty-printers with objfile Obj."
 
     if obj == None:
         obj = gdb
@@ -101,9 +101,9 @@ def lookup_function (val):
 def build_bts_mcmc_dictionary ():
     # bts objects requiring pretty-printing.
     # In order from:
-    pretty_printers_dict[re.compile('^BTS::MCMC::Proposal::Momentum$')] = lambda val: ProposalMomentumPrinter("MCMC::Proposal::Momentum", val)
-    pretty_printers_dict[re.compile('^BTS::MCMC::Proposal::Momentum::Weighted$')] = lambda val: ProposalMomentumPrinter("MCMC::Proposal::Momentum::Weighted", val)
-    pretty_printers_dict[re.compile('^BTS::MCMC::Proposal::Momentum::Weighted::NonSeparable$')] = lambda val: ProposalMomentumPrinter("MCMC::Proposal::Momentum::Weighted::NonSeparable", val)
+    pretty_printers_dict[re.compile('^FTS::MCMC::Proposal::Momentum$')] = lambda val: ProposalMomentumPrinter("MCMC::Proposal::Momentum", val)
+    pretty_printers_dict[re.compile('^FTS::MCMC::Proposal::Momentum::Weighted$')] = lambda val: ProposalMomentumPrinter("MCMC::Proposal::Momentum::Weighted", val)
+    pretty_printers_dict[re.compile('^FTS::MCMC::Proposal::Momentum::Weighted::NonSeparable$')] = lambda val: ProposalMomentumPrinter("MCMC::Proposal::Momentum::Weighted::NonSeparable", val)
             
 pretty_printers_dict = {}
 

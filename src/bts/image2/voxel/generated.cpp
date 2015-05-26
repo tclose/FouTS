@@ -22,7 +22,7 @@
 
 #include "bts/image2/voxel/generated.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image2 {
         

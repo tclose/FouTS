@@ -22,7 +22,7 @@
 
 #include "bts/fibre/strand/tensor.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
     

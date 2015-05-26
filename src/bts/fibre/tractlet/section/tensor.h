@@ -29,7 +29,7 @@
 //
 //#include "bts/fibre/tensor/writer.h"
 //
-//namespace BTS {
+//namespace FTS {
 //
 //  namespace Fibre {
 //

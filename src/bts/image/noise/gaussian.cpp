@@ -27,7 +27,7 @@
 
 #include "bts/image/inline_functions.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

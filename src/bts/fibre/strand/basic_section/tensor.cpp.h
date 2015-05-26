@@ -23,7 +23,7 @@
 //#ifndef __bts_fibre_strand_section_tensor_cpp_h__
 //#define __bts_fibre_strand_section_tensor_cpp_h__
 //
-//namespace BTS {
+//namespace FTS {
 //
 //	namespace Fibre {
 //

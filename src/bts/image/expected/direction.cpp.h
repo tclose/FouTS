@@ -25,7 +25,7 @@
 
 #include "bts/image/expected/voxel.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

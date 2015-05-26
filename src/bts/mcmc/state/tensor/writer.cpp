@@ -22,7 +22,7 @@
 
 #include "bts/mcmc/state/tensor/writer.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

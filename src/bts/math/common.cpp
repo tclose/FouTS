@@ -22,7 +22,7 @@
 
 #include "bts/math/common.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Math {
         

@@ -33,7 +33,7 @@
 
 #include "bts/inline_functions.h"
 
-using namespace BTS;
+using namespace FTS;
 
 template<typename T> void svd_fibres(const std::string& input_location,
                                      const std::string& output_location, size_t max_num_components);

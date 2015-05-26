@@ -22,7 +22,7 @@
 
 #include "bts/image/index.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

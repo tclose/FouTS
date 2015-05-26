@@ -918,7 +918,7 @@ extern "C" {\n\
 #include "bts/fibre/base/set.h"\n\
 \n\
 \n\
-using namespace BTS;\n\
+using namespace FTS;\n\
 \n\
 \n\
 std::vector< std::vector<Fibre::Base::Object> >  recreate_objects(const std::vector<const char*>& elem_props) {\n\

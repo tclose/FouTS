@@ -14,7 +14,7 @@
 
 #include "bts/image/buffer.cpp.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Prob {
         

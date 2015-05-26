@@ -1,4 +1,4 @@
-# Pretty-printers for 'BTS::Fibre::*'.
+# Pretty-printers for 'FTS::Fibre::*'.
 
 # Copyright (C) 2008, 2009 Free Software Foundation, Inc.
 
@@ -226,7 +226,7 @@ class FibreSetPrinter:
 
 
 def register_bts_fibre_printers (obj):
-    "Register Bayesian Tractlet Sampling (BTS) Fibre pretty-printers with objfile Obj."
+    "Register Bayesian Tractlet Sampling (FTS) Fibre pretty-printers with objfile Obj."
 
     if obj == None:
         obj = gdb
@@ -266,26 +266,26 @@ def build_bts_fibre_dictionary ():
     # bts objects requiring pretty-printing.
     # In order from:
     pretty_printers_dict[re.compile('^CoordView$')] = lambda val: CoordViewPrinter(val)
-    pretty_printers_dict[re.compile('^BTS::Triple<.*>$')] = lambda val: TriplePrinter(val)
-    pretty_printers_dict[re.compile('^BTS::Coord$')] = lambda val: CoordPrinter(val)
-    pretty_printers_dict[re.compile('^BTS::Fibre::Strand$')] = lambda val: FibreStrandTrackPrinter("Fibre::Strand", val)
-    pretty_printers_dict[re.compile('^BTS::Fibre::Tractlet$')] = lambda val: FibreTractletPrinter(val)
-    pretty_printers_dict[re.compile('^BTS::Fibre::Track$')] = lambda val: FibreStrandTrackPrinter("Fibre::Track", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Strand::Set$')] = lambda val: FibreSetPrinter("Fibre::Strand::Set", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Tractlet::Set$')] = lambda val: FibreSetPrinter("Fibre::Tractlet::Set", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Set<.*>$')] = lambda val: FibreSetPrinter("Fibre::Set", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Track::Set$')] = lambda val: FibreSetPrinter("Fibre::Track::Set", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Strand::Tensor$')] = lambda val: FibreStrandPrinter("Fibre::Strand::Tensor", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Tractlet::Tensor$')] = lambda val: FibreTractletPrinter("Fibre::Tractlet::Tensor", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Track::Tensor$')] = lambda val: FibreTrackPrinter("Fibre::Track::Tensor", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Strand::Set::Tensor$')] = lambda val: FibreSetPrinter("Fibre::Strand::Set::Tensor", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Tractlet::Set::Tensor$')] = lambda val: FibreSetPrinter("Fibre::Tractlet::Set::Tensor", val)
-    pretty_printers_dict[re.compile('^BTS::Fibre::Tractlet::Section$')] = lambda val: FibreSectionPrinter("Fibre::Tractlet::Section", val)
-    pretty_printers_dict[re.compile('^BTS::Fibre::Strand::BasicSection$')] = lambda val: FibreSectionPrinter("Fibre::Strand::BasicSection", val)
-    pretty_printers_dict[re.compile('^BTS::Fibre::Strand::Section$')] = lambda val: FibreSectionPrinter("Fibre::Strand::Section", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Tractlet::Section::Tensor$')] = lambda val: FibreTractletSectionPrinter("Fibre::Tractlet::Section::Tensor", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Strand::Section::Tensor$')] = lambda val: FibreStrandSectionPrinter("Fibre::Strand::Section::Tensor", val)
-#    pretty_printers_dict[re.compile('^BTS::Fibre::Strand::BasicSection::Tensor$')] = lambda val: FibreStrandSectionPrinter("Fibre::Strand::BasicSection::Tensor", val)
+    pretty_printers_dict[re.compile('^FTS::Triple<.*>$')] = lambda val: TriplePrinter(val)
+    pretty_printers_dict[re.compile('^FTS::Coord$')] = lambda val: CoordPrinter(val)
+    pretty_printers_dict[re.compile('^FTS::Fibre::Strand$')] = lambda val: FibreStrandTrackPrinter("Fibre::Strand", val)
+    pretty_printers_dict[re.compile('^FTS::Fibre::Tractlet$')] = lambda val: FibreTractletPrinter(val)
+    pretty_printers_dict[re.compile('^FTS::Fibre::Track$')] = lambda val: FibreStrandTrackPrinter("Fibre::Track", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Strand::Set$')] = lambda val: FibreSetPrinter("Fibre::Strand::Set", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Tractlet::Set$')] = lambda val: FibreSetPrinter("Fibre::Tractlet::Set", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Set<.*>$')] = lambda val: FibreSetPrinter("Fibre::Set", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Track::Set$')] = lambda val: FibreSetPrinter("Fibre::Track::Set", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Strand::Tensor$')] = lambda val: FibreStrandPrinter("Fibre::Strand::Tensor", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Tractlet::Tensor$')] = lambda val: FibreTractletPrinter("Fibre::Tractlet::Tensor", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Track::Tensor$')] = lambda val: FibreTrackPrinter("Fibre::Track::Tensor", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Strand::Set::Tensor$')] = lambda val: FibreSetPrinter("Fibre::Strand::Set::Tensor", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Tractlet::Set::Tensor$')] = lambda val: FibreSetPrinter("Fibre::Tractlet::Set::Tensor", val)
+    pretty_printers_dict[re.compile('^FTS::Fibre::Tractlet::Section$')] = lambda val: FibreSectionPrinter("Fibre::Tractlet::Section", val)
+    pretty_printers_dict[re.compile('^FTS::Fibre::Strand::BasicSection$')] = lambda val: FibreSectionPrinter("Fibre::Strand::BasicSection", val)
+    pretty_printers_dict[re.compile('^FTS::Fibre::Strand::Section$')] = lambda val: FibreSectionPrinter("Fibre::Strand::Section", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Tractlet::Section::Tensor$')] = lambda val: FibreTractletSectionPrinter("Fibre::Tractlet::Section::Tensor", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Strand::Section::Tensor$')] = lambda val: FibreStrandSectionPrinter("Fibre::Strand::Section::Tensor", val)
+#    pretty_printers_dict[re.compile('^FTS::Fibre::Strand::BasicSection::Tensor$')] = lambda val: FibreStrandSectionPrinter("Fibre::Strand::BasicSection::Tensor", val)
 
 
 pretty_printers_dict = {}

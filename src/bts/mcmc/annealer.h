@@ -25,7 +25,7 @@
 
 #include "bts/common.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

@@ -8,7 +8,7 @@
 
 #include "bts/cmd.h"
 
-namespace BTS {
+namespace FTS {
 //
 //  void App::print_help () const
 //  {

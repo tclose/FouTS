@@ -23,7 +23,7 @@
 #ifndef /Tractography/src/bts/fibre/tensor.cpp.h
 #define 
 
-namespace BTS {
+namespace FTS {
 
     namespace {
 

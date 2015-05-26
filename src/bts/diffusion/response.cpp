@@ -26,7 +26,7 @@
 #include "bts/diffusion/response.h"
 #include "bts/coord/tensor.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Diffusion {
         

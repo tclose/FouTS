@@ -25,7 +25,7 @@
 
 #include "bts/fibre/base/tensor_writer.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

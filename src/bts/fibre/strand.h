@@ -30,7 +30,7 @@
 #include "bts/fibre/base/reader.h"
 #include "bts/fibre/base/set.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

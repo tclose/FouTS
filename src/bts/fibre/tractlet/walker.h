@@ -27,7 +27,7 @@
 #include "bts/mcmc/proposal/walker.h"
 #include "bts/mcmc/proposal/distribution.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

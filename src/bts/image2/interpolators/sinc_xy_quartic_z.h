@@ -27,13 +27,13 @@
 #include "bts/math/matrix.h"
 #include "bts/math/vector.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image2 {
         
         namespace Interpolators {
             
-            class SincXYQuarticZ: public BTS::Image2::Interpolator {
+            class SincXYQuarticZ: public FTS::Image2::Interpolator {
                     
                     //Public static variables, nested classes and typedefs
                 public:

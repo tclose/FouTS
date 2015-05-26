@@ -27,7 +27,7 @@
 #include "bts/coord.h"
 #include "bts/fibre/base/tensor_writer.h"
 
-namespace BTS {
+namespace FTS {
     
     class Coord::Tensor: public MR::Math::Matrix<double> {
             

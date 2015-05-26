@@ -23,7 +23,7 @@
 #ifndef __bts_mcmc_proposal_momentum_cpp_h__
 #define __bts_mcmc_proposal_momentum_cpp_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

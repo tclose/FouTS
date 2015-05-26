@@ -27,7 +27,7 @@
 #include "bts/mcmc/naninf_exception.h"
 #include "bts/mcmc/proposal/momentum/weighted.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

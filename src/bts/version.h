@@ -23,16 +23,16 @@
 #ifndef __bts_version_h__
 #define __bts_version_h__
 
-namespace BTS {
+namespace FTS {
     
-    const size_t BTS_MAJOR_VERSION = 0;
-    const size_t BTS_MINOR_VERSION = 0;
-    const size_t BTS_MICRO_VERSION = 3;
-    const size_t BTS_NANO_VERSION = 24;
+    const size_t FTS_MAJOR_VERSION = 0;
+    const size_t FTS_MINOR_VERSION = 0;
+    const size_t FTS_MICRO_VERSION = 3;
+    const size_t FTS_NANO_VERSION = 24;
     
     inline std::string version_number_string() {
-        return str(BTS_MAJOR_VERSION) + "." + str(BTS_MINOR_VERSION) + "." + str(BTS_MICRO_VERSION)
-               + "." + str(BTS_NANO_VERSION);
+        return str(FTS_MAJOR_VERSION) + "." + str(FTS_MINOR_VERSION) + "." + str(FTS_MICRO_VERSION)
+               + "." + str(FTS_NANO_VERSION);
     }
     
     inline bool before_version(const std::string& version_number_string, size_t major_version,

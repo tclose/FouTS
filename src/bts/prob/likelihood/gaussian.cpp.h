@@ -23,7 +23,7 @@
 #ifndef ___bts_prob_likelihood_imagediff_gaussian_cpp_h__
 #define ___bts_prob_likelihood_imagediff_gaussian_cpp_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace Prob {
         

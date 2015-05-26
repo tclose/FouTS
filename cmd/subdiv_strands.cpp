@@ -3,20 +3,20 @@
 
  Created by Tom Close on 13/03/09.
 
- This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Fourier Tract Sampling (FouTS).
 
- BTS is free software: you can redistribute it and/or modify
+ FouTS is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- BTS is distributed in the hope that it will be useful,
+ FouTS is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ along with FTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
 
@@ -36,7 +36,7 @@
 
 #include "phantom/interface.h"
 
-using namespace BTS;
+using namespace FTS;
 SET_VERSION_DEFAULT
 ;
 SET_AUTHOR("Thomas G. Close");
@@ -117,8 +117,8 @@ EXECUTE {
         if (strands_per_acs > 0)
             new_strand_r = old_strand_r / MR::Math::sqrt(strands_per_acs);
         
-        BTS::Fibre::Track::Set tcks(input_location, num_points);
-        BTS::Fibre::Track::Set subdivided_tcks(tcks.get_extend_props());
+        FTS::Fibre::Track::Set tcks(input_location, num_points);
+        FTS::Fibre::Track::Set subdivided_tcks(tcks.get_extend_props());
         
         std::vector<Triple<double> > pre_points;
         std::vector<Triple<double> > post_points;
@@ -131,7 +131,7 @@ EXECUTE {
         
         MR::ProgressBar progress_bar("Subdividing strands...", 0);
         
-        tcks.add_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP, str(old_strand_r));
+        tcks.add_extend_elem_prop(FTS::Fibre::Track::RADIUS_PROP, str(old_strand_r));
         
         convert_mr_to_nfg(&c, tcks, pre_points, post_points);
         progress_bar++;
@@ -141,19 +141,19 @@ EXECUTE {
         progress_bar++;
         convert_nfg_to_mr(subdivided_tcks, pre_points, post_points, &subdivided_c);
         
-        if (tcks.has_extend_elem_prop(BTS::Fibre::Track::Set::ORIGINAL_DEGREE_PROP)) {
+        if (tcks.has_extend_elem_prop(FTS::Fibre::Track::Set::ORIGINAL_DEGREE_PROP)) {
             
-            subdivided_tcks.add_extend_elem_prop(BTS::Fibre::Track::Set::ORIGINAL_DEGREE_PROP,
-                    str(BTS::Fibre::Strand::DEFAULT_DEGREE));
+            subdivided_tcks.add_extend_elem_prop(FTS::Fibre::Track::Set::ORIGINAL_DEGREE_PROP,
+                    str(FTS::Fibre::Strand::DEFAULT_DEGREE));
             
             for (size_t tck_i = 0; tck_i < tcks.size(); ++tck_i) {
                 
                 size_t bundle_index = to<size_t>(
-                        subdivided_tcks.get_extend_elem_prop(BTS::Fibre::Track::BUNDLE_INDEX_EPROP,
+                        subdivided_tcks.get_extend_elem_prop(FTS::Fibre::Track::BUNDLE_INDEX_EPROP,
                                 tck_i));
                 std::string original_degree = tcks.get_extend_elem_prop(
-                        BTS::Fibre::Track::Set::ORIGINAL_DEGREE_PROP, bundle_index);
-                subdivided_tcks.set_extend_elem_prop(BTS::Fibre::Track::Set::ORIGINAL_DEGREE_PROP,
+                        FTS::Fibre::Track::Set::ORIGINAL_DEGREE_PROP, bundle_index);
+                subdivided_tcks.set_extend_elem_prop(FTS::Fibre::Track::Set::ORIGINAL_DEGREE_PROP,
                         original_degree, tck_i);
                 
             }

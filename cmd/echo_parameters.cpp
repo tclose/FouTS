@@ -61,7 +61,7 @@
  #include "bts/inline_functions.h"
 
 
- using namespace BTS;
+ using namespace FTS;
 
 
  void                              check_parameter(std::map<std::string, std::string>& echo_options,

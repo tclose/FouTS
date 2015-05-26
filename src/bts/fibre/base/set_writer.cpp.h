@@ -25,7 +25,7 @@
 
 #include "bts/fibre/base/set.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

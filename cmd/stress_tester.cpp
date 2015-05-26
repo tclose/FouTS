@@ -13,7 +13,7 @@ extern "C" {
 #include "bts/fibre/base/set.h"
 #include "bts/fibre/track/set.h"
 
-using namespace BTS;
+using namespace FTS;
 
 std::vector<std::vector<Fibre::Base::Object> > recreate_objects(
         const std::vector<const char*>& elem_props) {

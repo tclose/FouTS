@@ -25,7 +25,7 @@
 
 #include <map>
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

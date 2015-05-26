@@ -27,7 +27,7 @@
 #include "bts/mcmc/proposal/distribution.h"
 #include "bts/mcmc/proposal/momentum.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

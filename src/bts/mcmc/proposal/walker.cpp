@@ -23,7 +23,7 @@
 #include "bts/common.h"
 #include "bts/mcmc/proposal/walker.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

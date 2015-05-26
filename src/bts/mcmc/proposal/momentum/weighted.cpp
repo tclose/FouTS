@@ -23,7 +23,7 @@
 #include "bts/mcmc/proposal/momentum/weighted.h"
 #include "math/cholesky.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

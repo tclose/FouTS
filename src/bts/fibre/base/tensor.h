@@ -25,7 +25,7 @@
 
 #include "math/matrix.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

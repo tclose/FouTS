@@ -3,20 +3,20 @@
 
  Written by Thomas G Close, 5/05/09.
 
- This file is part of Bayesian Tractlet Sampling (BTS).
+ This file is part of Fourier Tract Sampling (FouTS).
 
- BTS is free software: you can redistribute it and/or modify
+ FouTS is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- BTS is distributed in the hope that it will be useful,
+ FouTS is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ along with FTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
 
@@ -41,7 +41,7 @@
 
 //#include "bts/image/expected/buffer.h"
 
-namespace BTS {
+namespace FTS {
 
     namespace Fibre {
 
@@ -115,7 +115,7 @@ namespace BTS {
             ::generate_post_points(tcks, post_points);
 
             //Assign the radius of the primary axis to be that of the desired width.
-            tcks.add_extend_elem_prop(BTS::Fibre::Track::RADIUS_PROP, str(radius));
+            tcks.add_extend_elem_prop(FTS::Fibre::Track::RADIUS_PROP, str(radius));
 
             ::convert_mr_to_nfg(&c, tcks, pre_points, post_points);
 

@@ -22,7 +22,7 @@
 
 #include "bts/image2/generated.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image2 {
     

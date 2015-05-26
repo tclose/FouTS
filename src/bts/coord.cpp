@@ -23,7 +23,7 @@
 #include "bts/coord.h"
 #include "bts/coord/tensor.h"
 
-namespace BTS {
+namespace FTS {
     
     const Coord Coord::Invalid(NAN, NAN, NAN);
     const Coord Coord::Zeros(0.0, 0.0, 0.0);

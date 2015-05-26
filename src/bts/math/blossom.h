@@ -28,7 +28,7 @@
 
 #include "bts/math/blossom/edge.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Math {
         

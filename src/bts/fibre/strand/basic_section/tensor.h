@@ -28,7 +28,7 @@
 #include "bts/fibre/base/tensor.h"
 #include "bts/coord/tensor.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Fibre {
         

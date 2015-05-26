@@ -23,7 +23,7 @@
 #ifndef __bts_image_expected_buffertpl_h__
 #define __bts_image_expected_buffertpl_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         
@@ -73,7 +73,7 @@ for (size_t z = 0; z < this->dim(Z); z++) { \
   } \
 }
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

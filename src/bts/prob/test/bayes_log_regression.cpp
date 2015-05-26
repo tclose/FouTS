@@ -23,7 +23,7 @@
 #include "bts/prob/test/bayes_log_regression.h"
 #include "bts/mcmc/state/tensor.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Prob {
         

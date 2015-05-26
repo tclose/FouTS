@@ -26,7 +26,7 @@
 #include "bts/mcmc/proposal/momentum.h"
 #include "math/vector.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

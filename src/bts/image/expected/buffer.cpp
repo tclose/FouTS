@@ -49,7 +49,7 @@ for (size_t z = 0; z < this->dim(Z); z++) { \
   } \
 }
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

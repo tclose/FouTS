@@ -22,7 +22,7 @@
 
 #include "bts/mcmc/state.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace MCMC {
         

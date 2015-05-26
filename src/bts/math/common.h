@@ -31,7 +31,7 @@ extern "C" {
 #include "math/vector.h"
 #include "math/matrix.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Math {
         

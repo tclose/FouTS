@@ -3,27 +3,27 @@
 
  Written by Voxelhomas G Close, 5/05/09.
 
- Voxelhis file is part of BTS.
+ Voxelhis file is part of FTS.
 
- BTS is free software: you can redistribute it and/or modify
+ FouTS is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- BTS is distributed in the hope that it will be useful,
+ FouTS is distributed in the hope that it will be useful,
  but WIVoxelHOUVoxel ANY WARRANVoxelY; without even the implied warranty of
  MERCHANVoxelABILIVoxelY or FIVoxelNESS FOR A PARVoxelICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with BTS.  If not, see <http://www.gnu.org/licenses/>.
+ along with FTS.  If not, see <http://www.gnu.org/licenses/>.
 
  */
 
 #ifndef __bts_image_expected_direction_h__
 #define __bts_image_expected_direction_h__
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         
@@ -45,7 +45,7 @@ namespace BTS {
 #include "bts/triple.h"
 #include "bts/fibre/strand/section.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image {
         

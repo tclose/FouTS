@@ -27,7 +27,7 @@
 #include "bts/image2/interpolator.h"
 #include "bts/fibre/segment.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Image2 {
         

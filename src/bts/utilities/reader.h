@@ -25,7 +25,7 @@
 
 #include "bts/utilities/common.h"
 
-namespace BTS {
+namespace FTS {
     
     namespace Utilities {
         
