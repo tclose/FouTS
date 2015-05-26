@@ -122,7 +122,7 @@ please run "./configure" prior to invoking this script
 if ld_enabled:
   with open (os.path.join (src_dir, 'bts', 'version.h'), 'r') as f:
       for line in f:
-        match = re.match('    const size_t BTS_(\w+)_VERSION = (.*);', line)
+        match = re.match('    const size_t FTS_(\w+)_VERSION = (.*);', line)
         if match:
             if match.group(1) == 'MAJOR':
                 major = match.group(2)
