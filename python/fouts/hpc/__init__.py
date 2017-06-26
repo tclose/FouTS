@@ -7,18 +7,20 @@
 import sys
 if float(sys.version[0:3]) < 2.7:
     raise Exception("This script requires python version 2.7 or greater, you should add python 2.7 to your path (i.e. PATH=$PATH:/apps/python/272/bin)")
-import os
-import time
-import shutil
-import subprocess
-from copy import copy, deepcopy
-from collections import defaultdict
+import os  # @IgnorePep8
+import time  # @IgnorePep8
+import shutil  # @IgnorePep8
+import subprocess  # @IgnorePep8
+from copy import copy, deepcopy  # @IgnorePep8
+from collections import defaultdict  # @IgnorePep8
+
 
 def get_project_dir():
     """
     Returns the root directory of the project
     """
     return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')) # Root directory of the project code
+
 
 def create_seed(seed):
     if not seed:
@@ -27,11 +29,12 @@ def create_seed(seed):
         seed = int(seed)
     return seed
 
+
 def combo_params(args, ranging_params, combo=False):
-    """ 
+    """
     Permutes the params (stored in the args variable) by the other variables provided or if combo is false replicate
     singleton dimensions to match the multiple parameters.
-    
+
     @param args [namespace]: a namespace containing the members referenced in the 'ranging_params' list, usually the args passed by the ArgumentParser
     @param ranging_params [list(str)]: A list of strings that match selected fields in the 'args' namespace
     @param combo [bool]: A flag to decide whether the parameters with multiple values are combod or whether they are checked to be either the same length or singletons
@@ -61,11 +64,12 @@ def combo_params(args, ranging_params, combo=False):
             ranged_params.append(param)
     return ranged_params
 
+
 def create_work_dir(script_name, output_dir_parent=None, required_dirs=[]):
     """
     Generates unique paths for the work and output directories, creating the work directory in the 
     process.
-    
+
     @param script_name: The name of the script, used to name the directories appropriately
     @param output_dir_parent: The name of the parent directory in which the output directory will be created (defaults \
 to $HOME/Output).
@@ -100,10 +104,11 @@ filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
     init_work_dir(work_dir, required_dirs, time_str)
     return work_dir, output_dir
 
+
 def init_work_dir(work_dir, required_dirs, time_str):
     """
     Copies directories from the project directory to the work directory
-    
+
     @param work_dir: The destination work directory
     @param required_dirs: The required sub-directories to be copied to the work directory
     """
@@ -120,11 +125,10 @@ def init_work_dir(work_dir, required_dirs, time_str):
     f.close()
 
 
-
 def create_env(work_dir):
     """
     Creates a dictionary containing the appropriate environment variables
-    
+
     @param work_dir: The work directory to set the envinroment variables for
     """
     env = os.environ.copy()
@@ -139,11 +143,13 @@ def create_env(work_dir):
     return env
 
 
-def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', env=None, copy_to_output=[],
-               max_memory='4G', virtual_memory='4G', time_limit=None, dry_run=False):
+def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP',
+               env=None, copy_to_output=[], max_memory='4G',
+               virtual_memory='4G', time_limit=None, dry_run=False,
+               scheduler='slurm'):
     """
     Create a jobscript in the work directory and then submit it to the HPC que
-    
+
     @param script_name: The name of the script (used to give a meaningful name to the job)
     @param cmds: The commands to run on the cluster
     @param np: The number of processors to request for the job
@@ -159,25 +165,100 @@ def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP', en
         env = copy(env)
     if time_limit:
         if type(time_limit) != str or len(time_limit.split(':')) != 3:
-            raise Exception("Poorly formatted time limit string '{}' passed to submit job"
-                            .format(time_limit))
-        time_limit_option= "\n# Set the maximum run time\n#$ -l h_rt {}\n".format(time_limit)
+            raise Exception(
+                "Poorly formatted time limit string '{}' passed to submit job"
+                .format(time_limit))
+        time_limit_option = (
+            "\n# Set the maximum run time\n#$ -l h_rt {}\n".format(time_limit))
     else:
-        time_limit_option=''
+        time_limit_option = ''
     copy_cmd = ''
     for to_copy in copy_to_output:
         origin = work_dir + os.path.sep + to_copy
         destination = output_dir + os.path.sep + to_copy
-        base_dir = os.path.dirname(destination[:-1] if destination.endswith('/') else destination)
+        base_dir = os.path.dirname(
+            destination[:-1] if destination.endswith('/') else destination)
         copy_cmd += """
 mkdir -p {base_dir}
 cp -r {origin} {destination}
 """.format(base_dir=base_dir, origin=origin, destination=destination)
-    #Create jobscript
+    # Create jobscript
     jobscript_path = os.path.join(work_dir, script_name + '.job')
-    f = open(jobscript_path, 'w')
-    f.write("""#!/usr/bin/env sh
-    
+    if scheduler == 'slurm':
+        template = slurm_template + core_template
+        sub_cmd = 'sbatch'
+    elif scheduler == 'sge':
+        template = sge_template + core_template
+        sub_cmd = 'qsub'
+    else:
+        raise Exception(
+            "Unrecognised scheduler '{}'".format(scheduler))
+    with open(jobscript_path, 'w') as f:
+        f.write(template.format(
+            work_dir=work_dir, np=np, path=env['PATH'],
+            pythonpath=env['PYTHONPATH'],
+            ld_library_path=env['LD_LIBRARY_PATH'], que_name=que_name,
+            cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd,
+            jobscript_path=jobscript_path, max_mem=max_memory,
+            virt_mem=virtual_memory, time_limit=time_limit,
+            time_limit_option=time_limit_option,
+            email=env['EMAIL']))
+        # Submit job
+    print "Submitting job '%s' to que" % jobscript_path
+    if not dry_run:
+        subprocess.check_call('{} {}'.format(sub_cmd, jobscript_path),
+                              shell=True)
+    print "Your job '%s' has been submitted" % jobscript_path
+    print "The output stream can be viewed by:"
+    print "less " + os.path.join(work_dir, 'output_stream')
+    print ("Once completed the output files (including the output stream and "
+           "job script) of this job will be copied to:")
+    print output_dir
+
+
+def write_slurm_jobscript(fid, work_dir, env, np, que_name, cmds, output_dir,
+                          copy_cmd, jobscript_path, max_memory,
+                          virtual_memory, time_limit_option):
+    pass
+
+
+slurm_template = """#!/bin/bash
+
+# To give your job a name, replace "MyJob" with an appropriate name
+# SBATCH --job-name=MyJob
+
+# Set the partition to run the job on
+#SBATCH --partition={que_name}
+
+# To set a project account for credit charging,
+# SBATCH --account=pmosp
+
+# Request CPU resource for a parallel job, for example:
+#   4 Nodes each with 12 Cores/MPI processes
+#SBATCH --ntasks={np}
+# SBATCH --ntasks-per-node=12
+# SBATCH --cpus-per-task=1
+
+# Memory usage (MB)
+#SBATCH --mem-per-cpu={max_mem}
+
+# Set your minimum acceptable walltime, format: day-hours:minutes:seconds
+#SBATCH --time={time_limit}
+
+# To receive an email when job completes or fails
+#SBATCH --mail-user={email}
+#SBATCH --mail-type=END
+
+# Set the file for output (stdout)
+# SBATCH --output={work_dir}/output.log
+
+# Set the file for error log (stderr)
+# SBATCH --error={work_dir}/error.log
+"""
+
+
+sge_template = """#!/usr/bin/env sh
+
 # Parse the job script using this shell
 #$ -S /bin/bash
 
@@ -203,18 +284,21 @@ cp -r {origin} {destination}
 #$ -l h_vmem={max_mem}
 #$ -l virtual_free={virt_mem}
 
-{time_limit}
+{time_limit_option}
+"""
 
+
+core_template = """
 ###################################################
 ### Copy the model to all machines we are using ###
 ###################################################
 
-# Set up the correct paths 
+# Set up the correct paths
 export PATH={path}:$PATH
 export PYTHONPATH={pythonpath}
 export LD_LIBRARY_PATH={ld_library_path}
 
-echo "============== Starting mpirun ===============" 
+echo "============== Starting mpirun ==============="
 
 cd {work_dir}
 {cmds}
@@ -225,23 +309,6 @@ echo "Copying files to output directory '{output_dir}'"
 cp -r {work_dir}/output {output_dir}
 cp {jobscript_path} {output_dir}/job
 {copy_cmd}
-echo "============== Done ===============" 
+echo "============== Done ==============="
 cp {work_dir}/output_stream {output_dir}/output
-""".format(work_dir=work_dir, path=env['PATH'], pythonpath=env['PYTHONPATH'],
-      ld_library_path=env['LD_LIBRARY_PATH'], np=np,
-      que_name=que_name, cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd,
-      jobscript_path=jobscript_path, max_mem=max_memory, virt_mem=virtual_memory, 
-      time_limit=time_limit_option))
-    f.close()
-    # Submit job
-    print "Submitting job '%s' to que" % jobscript_path
-    if not dry_run:
-        subprocess.check_call('qsub %s' % jobscript_path, shell=True)
-    print "Your job '%s' has been submitted" % jobscript_path
-    print "The output stream can be viewed by:"
-    print "less " + os.path.join(work_dir, 'output_stream')
-    print "Once completed the output files (including the output stream and job script) of this job will be copied to:"
-    print output_dir
-
-def create_jobscript():
-    pass
+"""
