@@ -242,3 +242,6 @@ cp {work_dir}/output_stream {output_dir}/output
     print "less " + os.path.join(work_dir, 'output_stream')
     print "Once completed the output files (including the output stream and job script) of this job will be copied to:"
     print output_dir
+
+def create_jobscript():
+    pass
