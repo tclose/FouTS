@@ -15,7 +15,7 @@ import os.path
 SCRIPT_NAME = 'prior_shapes'
 
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--img_dims', default=10, type=int,
+parser.add_argument('--img_dims', default=3, type=int,
                     help=('The size of the noisy image to fit against'))
 parser.add_argument('--prior_acs', nargs=2, default=(1000, 0.1), type=float,
                     help=('The standard deviation and mean of the ACS '
@@ -25,7 +25,7 @@ parser.add_argument('--img_snr', default=5, type=float,
 parser.add_argument('--like_snr', default=20, type=float,
                     help=('The assumed snr to used in the likelihood function '
                           'in the metropolis sampling'))
-parser.add_argument('--degree', default=7, type=int,
+parser.add_argument('--degree', default=2, type=int,
                     help=('The degree of the generated Fourier tracts'))
 parser.add_argument('--output_dir', default=None, type=str,
                     help=('The parent directory in which the output directory '
@@ -51,6 +51,8 @@ parser.add_argument('--prior_density_low', default=[0.01], type=float,
                     nargs='+', help=('The scaling of the density prior'))
 parser.add_argument('--prior_hook', default=[100000.0], type=float, nargs='+',
                     help=('The scaling of the density prior'))
+parser.add_argument('--num_jobs', default=1, type=int,
+                    help=('The number of jobs to launch'))
 parser.add_argument('--combo', action='store_true',
                     help=('Instead of treating each ranging parameter sequence'
                           ' as the 1..N values for that parameter, all '
@@ -82,21 +84,26 @@ for i in xrange(args.num_runs):
                                                 val=eval(par_name)))
         # Set up command to run the script
         cmd_line = """
+# Create array specific work dir
+TASK_WORK_DIR={work_dir}/$SLURM_ARRAY_TASK_ID
+mkdir -p $TASK_WORK_DIR/output
+cd $TASK_WORK_DIR
+
 # Select one of the 60 orientations and write it to a new file
 head -n $(( $RANDOM * 60 / 32767 )) {work_dir}/params/diffusion/encoding_60.b \
-| tail -n 1 > {work_dir}/output/encoding.b \
+| tail -n 1 > $TASK_WORK_DIR/output/encoding.b \
 
-generate_image dummy.tct {work_dir}/output/noise.mif --empty \
+generate_image dummy.tct $TASK_WORK_DIR/output/noise.mif --empty \
 --img_dims "{dim} {dim} {dim}" --noise_ref_signal 1 \
---noise_snr {img_snr} --diff_encodings {work_dir}/output/encoding.b
+--noise_snr {img_snr} --diff_encodings $TASK_WORK_DIR/output/encoding.b
 
-init_fibres {work_dir}/output/init.tct --degree {degree} --acs {acs_mean} \
+init_fibres $TASK_WORK_DIR/output/init.tct --degree {degree} --acs {acs_mean} \
 --base_intensity 1.0 --num_fibres 1 --img_dims "{dim} {dim} {dim}" \
 --width_epsilon 0.01 --length_epsilon 0.01
 
-time metropolis {work_dir}/output/noise.mif {work_dir}/output/init.tct \
-{work_dir}/output/samples.tst --like_snr {like_snr} \
---diff_encodings {work_dir}/output/encoding.b \
+time metropolis $TASK_WORK_DIR/output/noise.mif $TASK_WORK_DIR/output/init.tct \
+$TASK_WORK_DIR/output/samples.tst --like_snr {like_snr} \
+--diff_encodings $TASK_WORK_DIR/output/encoding.b \
 --prior_acs {acs_stddev} {acs_mean} \
 --walk_step_location \
 {work_dir}/params/fibre/tract/masks/mcmc/metropolis/default{degree}.tct \
@@ -112,4 +119,5 @@ time metropolis {work_dir}/output/noise.mif {work_dir}/output/init.tct \
         # Submit job to que
         hpc.submit_job(SCRIPT_NAME, cmd_line, args.np, work_dir, output_dir,
                        que_name=args.que_name, copy_to_output=required_dirs,
-                       scheduler='slurm')
+                       scheduler='slurm', dry_run=args.dry_run,
+                       num_jobs=args.num_jobs)

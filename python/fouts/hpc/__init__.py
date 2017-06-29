@@ -82,9 +82,9 @@ to $HOME/Output).
         raise Exception("Symbolic link to your work directory is missing from your home directory \
 (i.e. $HOME/work). A symbolic link should be created that points to an appropriate \
 directory in your units sub-directory of '/work' (i.e. ln -s /work/<unit-name>/<user-name> $HOME/work)")
-    if not work_dir_parent.startswith('/work'):
-        raise Exception("$HOME/work must be a symbolic link to a sub-directory of the high-performance \
-filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
+#     if not work_dir_parent.startswith('/work'):
+#         raise Exception("$HOME/work must be a symbolic link to a sub-directory of the high-performance \
+# filesystem mounted at '/work' (typically /work/<unit-name>/<user-name>).")
     # Automatically generate paths
     time_str = time.strftime('%Y-%m-%d-%A_%H-%M-%S', time.localtime()) # Unique time for distinguishing runs    
     work_dir = os.path.join(work_dir_parent, script_name + "." + time_str + ".1") # Working directory path
@@ -146,7 +146,7 @@ def create_env(work_dir):
 def submit_job(script_name, cmds, np, work_dir, output_dir, que_name='longP',
                env=None, copy_to_output=[], max_memory='4G',
                virtual_memory='4G', time_limit=None, dry_run=False,
-               scheduler='slurm'):
+               scheduler='slurm', num_jobs=1):
     """
     Create a jobscript in the work directory and then submit it to the HPC que
 
@@ -201,7 +201,7 @@ cp -r {origin} {destination}
             cmds=cmds, output_dir=output_dir, copy_cmd=copy_cmd,
             jobscript_path=jobscript_path, max_mem=max_memory,
             virt_mem=virtual_memory, time_limit=time_limit,
-            time_limit_option=time_limit_option,
+            time_limit_option=time_limit_option, num_jobs=num_jobs,
             email=env['EMAIL']))
         # Submit job
     print "Submitting job '%s' to que" % jobscript_path
@@ -225,19 +225,15 @@ def write_slurm_jobscript(fid, work_dir, env, np, que_name, cmds, output_dir,
 slurm_template = """#!/bin/bash
 
 # To give your job a name, replace "MyJob" with an appropriate name
-# SBATCH --job-name=MyJob
+#SBATCH --job-name=MyJob
+#SBATCH --array=1-{num_jobs}
 
 # Set the partition to run the job on
 #SBATCH --partition={que_name}
 
-# To set a project account for credit charging,
-# SBATCH --account=pmosp
-
 # Request CPU resource for a parallel job, for example:
 #   4 Nodes each with 12 Cores/MPI processes
 #SBATCH --ntasks={np}
-# SBATCH --ntasks-per-node=12
-# SBATCH --cpus-per-task=1
 
 # Memory usage (MB)
 #SBATCH --mem-per-cpu={max_mem}
@@ -250,10 +246,10 @@ slurm_template = """#!/bin/bash
 #SBATCH --mail-type=END
 
 # Set the file for output (stdout)
-# SBATCH --output={work_dir}/output.log
+#SBATCH --output={work_dir}/output.log
 
 # Set the file for error log (stderr)
-# SBATCH --error={work_dir}/error.log
+#SBATCH --error={work_dir}/error.log
 """
 
 
@@ -292,6 +288,9 @@ core_template = """
 ###################################################
 ### Copy the model to all machines we are using ###
 ###################################################
+
+# Load modules
+module load gsl
 
 # Set up the correct paths
 export PATH={path}:$PATH
