@@ -93,6 +93,7 @@ function plot_test_bed(varargin)
               'gauss_relative_scale',    1,     'float',         'Relative scale of the quadratic in the ''y'' dimension compared to the ''x'' dimension.';...
             };         
 
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;

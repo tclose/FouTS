@@ -71,6 +71,7 @@ function plot_scan(varargin)
 
   multiple_last_arguments = 0;
           
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;

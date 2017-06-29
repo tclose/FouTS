@@ -122,6 +122,7 @@ function fig = plot_image(varargin)
             'maxes_only'     ,         0,        'bool', 'Don''t attempt to plot the image and only print the max values'};
                                      
   
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;

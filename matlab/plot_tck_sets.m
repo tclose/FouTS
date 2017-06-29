@@ -110,6 +110,7 @@ function [main_fig, colour_indices] = plot_tcks_sets(varargin)
             'no_voxline_highlight', 0, 'bool', 'Doesn''t highlight corner axes of voxel lines.';...
             'invisible', 0,     'bool', 'Makes the figure invisible (for automatically saving afterwards).'};         
 
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;

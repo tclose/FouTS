@@ -92,6 +92,7 @@ function plot_test_peaks(varargin)
               'include_samples' , [],          'matrix_1x:','Samples to include in the plots.';...                                
             };         
 
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;

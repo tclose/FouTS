@@ -99,6 +99,7 @@ function [main_fig, colour_indices] = plot_strands(varargin)
             'invisible', 0,     'bool', 'Makes the figure invisible (for automatically saving afterwards).'};         
 
 
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;

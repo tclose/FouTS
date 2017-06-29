@@ -151,6 +151,7 @@ function [main_fig, colour_indices] = plot_tracts(varargin)
             'slice_z',                  [],         'matrix_:x:',   'Overlays slices of observed image along the given indices.'};         
 
 
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;
@@ -206,7 +207,7 @@ function [main_fig, colour_indices] = plot_tracts(varargin)
   
   num_tracts = size(tracts,1); 
   
-  colour_indices = set_bundle_colours(bundle_indices, colour_indices, compact_colours); %#ok<NODEF>
+  [colours, colour_indices] = set_bundle_colours(bundle_indices, colour_indices, compact_colours); %#ok<NODEF>
 
   %Set up the figure
   if ~hold_on

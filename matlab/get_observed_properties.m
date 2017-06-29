@@ -58,7 +58,8 @@ function [dims, true_location, voxel_lengths, offset, obs_image_location] = get_
       if strcmp(key, 'dim')
         dims = str2num(char(split_strings (value, ',')))';
       elseif strcmp(key, 'vox')
-        voxel_lengths = str2num(char(split_strings (value, ',')))';        
+        voxel_lengths = str2num(char(split_strings (value, ',')))';
+        voxel_lengths = voxel_lengths(1:3);
       elseif strcmp(key, 'transform')
         row = str2num(char(split_strings (value, ',')))'; %#ok<*ST2NM>
         offset{end+1} = row(4);  %#ok<AGROW>

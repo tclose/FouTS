@@ -73,6 +73,7 @@ function [samples, colours_of_strands] = plot_strand_samples(varargin)
             };         
 
 
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;

@@ -21,6 +21,7 @@ function plot_peaks(varargin)
               'transparency  ', 0.5,         'float',    'Transparency of the plot.';...                                         
             };         
 
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;

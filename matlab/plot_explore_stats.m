@@ -21,6 +21,7 @@ function plot_explore_stats(varargin)
   % Call a script called 'parse_arguments' to parse all arguments and
   % options and set the desired variables.
   
+  num_args = nargin;
   parse_arguments      
   if (help_display) return; end
          

@@ -45,6 +45,7 @@ function plot_gradient(varargin)
             };         
 
 
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;

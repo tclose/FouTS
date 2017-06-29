@@ -69,7 +69,7 @@ function add_tracts_to_plot (tracts, colours, intensities, base_widths, tube_cor
 
     h = surf(X,Y,Z);
 
-    set(h,'facecolor', colours(colour_indices(bundle_indices(tract_i)+1),:));
+    set(h,'facecolor', colours(colour_indices(bundle_indices(tract_i)+1)+1,:));
     set(h,'edgecolor', 'none');
     
     if fixed_transparency ~= 0

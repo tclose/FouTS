@@ -101,6 +101,7 @@ function [main_fig, colour_indices] = plot_tcks(varargin)
             'campos',      [],      'matrix_1x3', 'Position of the camera'};         
 
 
+  num_args = nargin;
   parse_arguments      
   if (help_display) 
     return;
