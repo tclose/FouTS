@@ -125,8 +125,8 @@ function [main_fig, num_voxels, voxel_lengths, voxel_offsets, colour_indices] = 
             'slice_y', [],     'matrix_:x:', 'Overlays slices of observed image along the given indices.';...
             'slice_z', [],     'matrix_:x:', 'Overlays slices of observed image along the given indices.'};         
 
-  parse_arguments      
-  if (help_display) 
+  args = parse_arguments(description, arguments, options, varargin);
+  if (args == 'help') 
     return;
   end
 
